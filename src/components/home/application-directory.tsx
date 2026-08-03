@@ -1,13 +1,18 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Shuffle } from "lucide-react";
-import { PublicAppIcon, type PublicAppSummary } from "@/components/public-app-card";
+import { mediaUrl, type PublicAppSummary } from "@/components/public-app-card";
 
 const PICK_COUNT = 30;
 
-function randomPicks(applications: PublicAppSummary[]) {
+type DirectoryApp = PublicAppSummary & {
+  preview: { storageKey: string; altText: string | null; width: number | null; height: number | null } | null;
+};
+
+function randomPicks(applications: DirectoryApp[]) {
   const pool = [...applications];
   const randomValues = new Uint32Array(pool.length);
   crypto.getRandomValues(randomValues);
@@ -18,7 +23,7 @@ function randomPicks(applications: PublicAppSummary[]) {
   return pool.slice(0, PICK_COUNT);
 }
 
-export function ApplicationDirectory({ applications }: { applications: PublicAppSummary[] }) {
+export function ApplicationDirectory({ applications }: { applications: DirectoryApp[] }) {
   const [visibleApplications, setVisibleApplications] = useState(() => applications.slice(0, PICK_COUNT));
   const [revision, setRevision] = useState(0);
 
@@ -40,7 +45,18 @@ export function ApplicationDirectory({ applications }: { applications: PublicApp
       <div className="directory-app-grid" key={revision}>
         {visibleApplications.map((app) => (
           <Link className="directory-app-row" href={`/apps/${app.slug}`} key={app.id}>
-            <PublicAppIcon app={app} size={76} />
+            <span className="directory-app-image">
+              {app.preview ? (
+                <Image
+                  alt={app.preview.altText ?? `${app.name} preview`}
+                  height={app.preview.height ?? 630}
+                  sizes="(max-width: 608px) calc(100vw - 32px), (max-width: 832px) 46vw, (max-width: 1088px) 30vw, 22vw"
+                  src={mediaUrl(app.preview.storageKey)}
+                  unoptimized
+                  width={app.preview.width ?? 1200}
+                />
+              ) : <span className="directory-app-image-fallback" aria-hidden="true">{app.name}</span>}
+            </span>
             <span className="directory-app-copy">
               <strong>{app.name}</strong>
               <span>{app.tagline}</span>

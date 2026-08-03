@@ -51,11 +51,10 @@
   .directory-heading { margin-bottom: 2rem; align-items: end; gap: 1rem; }
   .directory-heading h2 { max-width: 8ch; font-size: clamp(2.2rem, 10vw, 3rem); }
   .surprise-button { flex: 0 0 auto; font-size: 0.88rem; }
-  .directory-app-grid { gap: 1.6rem 1rem; }
-  .directory-app-row { grid-template-columns: 4rem minmax(0, 1fr); gap: 0.8rem; }
-  .directory-app-row .public-app-icon { width: 4rem; height: 4rem; }
-  .directory-app-copy strong { font-size: 0.94rem; }
-  .directory-app-copy > span { font-size: 0.73rem; }
+  .directory-app-grid { grid-template-columns: 1fr; gap: 2.2rem; }
+  .directory-app-row { gap: 0.72rem; }
+  .directory-app-copy strong { font-size: 1.05rem; }
+  .directory-app-copy > span { font-size: 0.82rem; }
 
   .application-page { padding: 2.8rem 0 4rem; }
   .application-hero { min-height: 0; }

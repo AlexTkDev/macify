@@ -4,7 +4,7 @@
     gap: 2.5rem;
   }
 
-  .directory-app-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .directory-app-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
   .application-hero {
     min-height: 0;
@@ -58,12 +58,7 @@
 
   .home-hero-copy { padding-top: 1rem; }
   .home-feature-stage { width: min(100%, 42rem); }
-  .directory-app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; }
-  .directory-app-row { aspect-ratio: auto; padding: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); place-items: center start; gap: 1rem; overflow: visible; background: transparent !important; }
-  .directory-app-row .public-app-icon { width: 4.75rem; height: 4.75rem; }
-  .directory-app-copy { max-width: 100%; padding: 0; position: static; border: 0; background: transparent; box-shadow: none; backdrop-filter: none; }
-  .directory-app-copy strong { font-size: 1rem; }
-  .directory-app-copy > span { margin-top: 0.25rem; display: -webkit-box; overflow: hidden; color: #6b7380; font-size: 0.78rem; line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; }
+  .directory-app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.1rem 1.35rem; }
 
   .related-application-shelf { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
