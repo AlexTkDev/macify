@@ -3,10 +3,8 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { UploadCloud } from "lucide-react";
-import {
-  type MediaUploadState,
-  uploadApplicationMedia,
-} from "@/app/dashboard/actions";
+import type { MediaUploadState } from "@/app/dashboard/actions/action-types";
+import { uploadApplicationMedia } from "@/app/dashboard/actions/upload-media";
 import { ImageSourcePicker } from "@/components/image-source-picker";
 
 const initialState: MediaUploadState = {};

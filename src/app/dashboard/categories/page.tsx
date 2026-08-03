@@ -2,7 +2,7 @@ import { Plus, Save, Trash2 } from "lucide-react";
 import { DashboardNotice } from "@/components/dashboard-notice";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getCategoryManagementData } from "@/lib/dashboard-data";
-import { createCategory, deleteCategory, updateCategory } from "../manage-actions";
+import { createCategory, deleteCategory, updateCategory } from "@/app/dashboard/manage/categories";
 
 export const dynamic = "force-dynamic";
 

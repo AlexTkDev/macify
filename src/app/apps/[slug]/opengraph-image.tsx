@@ -19,8 +19,8 @@ export default async function OpenGraphImage({
     <div
       style={{
         alignItems: "stretch",
-        background: "#f2f0e9",
-        color: "#171714",
+        background: "#f3f5f6",
+        color: "#171b1e",
         display: "flex",
         height: "100%",
         padding: "48px",
@@ -29,7 +29,8 @@ export default async function OpenGraphImage({
     >
       <div
         style={{
-          border: "2px solid #171714",
+          border: "2px solid #c4cbd0",
+          borderRadius: 28,
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -38,11 +39,11 @@ export default async function OpenGraphImage({
         }}
       >
         <div style={{ alignItems: "center", display: "flex", fontSize: 30, fontWeight: 700, letterSpacing: "-0.03em" }}>
-          <span style={{ alignItems: "center", background: "#171714", borderRadius: 12, color: "#f2f0e9", display: "flex", height: 48, justifyContent: "center", marginRight: 18, width: 48 }}>M</span>
+          <span style={{ alignItems: "center", background: "#171b1e", borderRadius: 14, color: "#ffffff", display: "flex", height: 48, justifyContent: "center", marginRight: 18, width: 48 }}>M</span>
           Macify
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ color: "#68665f", fontSize: 24, letterSpacing: "0.08em", marginBottom: 18, textTransform: "uppercase" }}>
+          <div style={{ color: "#42647d", fontSize: 24, letterSpacing: "0.08em", marginBottom: 18, textTransform: "uppercase" }}>
             Useful macOS application
           </div>
           <div style={{ fontSize: application.name.length > 24 ? 72 : 92, fontWeight: 750, letterSpacing: "-0.055em", lineHeight: 0.94 }}>
@@ -50,7 +51,7 @@ export default async function OpenGraphImage({
           </div>
         </div>
         <div style={{ alignItems: "center", display: "flex", fontSize: 24, justifyContent: "space-between" }}>
-          <span style={{ color: "#68665f" }}>{application.tagline}</span>
+          <span style={{ color: "#69747c" }}>{application.tagline}</span>
           <span style={{ marginLeft: 36, whiteSpace: "nowrap" }}>macify.app</span>
         </div>
       </div>

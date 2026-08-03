@@ -3,7 +3,7 @@ import { ArrowRight, Download, FileJson, FileSpreadsheet, Upload } from "lucide-
 import { DashboardNotice } from "@/components/dashboard-notice";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getImportJobsData } from "@/lib/dashboard-data";
-import { uploadImportFile } from "../manage-actions";
+import { uploadImportFile } from "@/app/dashboard/manage/import-upload";
 
 export const dynamic = "force-dynamic";
 

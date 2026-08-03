@@ -1,0 +1,153 @@
+@media (max-width: 68rem) {
+  .home-hero {
+    grid-template-columns: 1fr;
+    gap: 5rem;
+  }
+
+  .home-hero-copy {
+    max-width: 49rem;
+  }
+
+  .home-feature-stage {
+    max-width: 48rem;
+  }
+
+  .application-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .application-preview {
+    min-height: 28rem;
+    grid-row: 1;
+  }
+
+  .application-body {
+    gap: 4rem;
+  }
+
+  .management-row-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .management-description {
+    grid-column: 1 / -1;
+  }
+
+  .management-order {
+    max-width: 6rem;
+  }
+
+  .management-row-actions {
+    justify-self: end;
+  }
+
+  .media-library,
+  .media-upload-grid,
+  .media-management-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 52rem) {
+  .public-header-inner {
+    grid-template-columns: 1fr auto;
+  }
+
+  .inline-app-search { width: min(46vw, 18rem); }
+
+  .public-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .public-footer-links {
+    max-width: 30rem;
+  }
+
+  .app-list-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .directory-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .directory-app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .directory-app-row:nth-child(3n + 2) { border-inline: 0; }
+  .directory-app-row:nth-child(2n) { border-left: 1px solid var(--line); }
+
+  .application-body {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-detail-header { align-items: flex-start; flex-direction: column; }
+  .dashboard-detail-layout { grid-template-columns: 1fr; }
+  .dashboard-detail-sidebar { position: static; }
+
+  .application-facts {
+    position: static;
+  }
+
+  .dashboard-topbar,
+  .dashboard-navigation,
+  .dashboard-main {
+    width: min(calc(100% - 2rem), 86rem);
+  }
+
+  .dashboard-navigation {
+    padding: 0.5rem 0;
+    overflow-x: auto;
+  }
+
+  .dashboard-nav-link {
+    white-space: nowrap;
+  }
+
+  .dashboard-header,
+  .editor-header,
+  .editor-header-row,
+  .panel-toolbar,
+  .media-editor-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .status-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .status-strip > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .status-strip > div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .management-layout,
+  .import-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .form-section {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .form-section-copy {
+    position: static;
+  }
+
+  .related-app-options {
+    grid-template-columns: 1fr;
+  }
+
+  .related-app-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .related-app-search {
+    width: 100%;
+  }
+}

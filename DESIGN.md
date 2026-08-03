@@ -35,7 +35,7 @@ The signature composition is the **Mac shelf**: one editorial recommendation pai
 2. **Restraint communicates trust.** Use white space, rules, typography, and tonal surfaces. Avoid gradients, translucent glass, decorative glow, and nested card stacks.
 3. **Mac-native, independently branded.** Borrow the clarity and density users expect from macOS without reproducing Apple interfaces or assets.
 4. **Editorial hierarchy is visible.** Distinguish verified facts, publisher claims, and Macify opinion through labels and placement.
-5. **Media owns the color.** Application artwork remains prominent against a mostly neutral interface. Honey amber is reserved for selection and action; aubergine marks curated collections.
+5. **Media owns the color.** Application artwork remains prominent against a mostly neutral interface. Honey amber is reserved for selection and action; aubergine supports occasional editorial campaigns.
 6. **Dense does not mean cramped.** Tables and metadata remain compact while preserving 40px minimum interactive targets and clear grouping.
 
 # 3. Tokens
@@ -50,7 +50,7 @@ The signature composition is the **Mac shelf**: one editorial recommendation pai
 - `line` and `line-strong` provide hierarchy without shadows.
 - `primary` is a dark burnished amber that preserves white-text contrast. Use for the single primary action, selected state, and verified editorial emphasis.
 - `primary-soft` supports selected navigation, featured content, and draft badges.
-- `accent` is deep aubergine and is reserved for collection features or editorial campaigns.
+- `accent` is deep aubergine and is reserved for occasional editorial campaigns.
 - `success` communicates connected or published states and must always be paired with text or an icon.
 
 All new colors must be authored in OKLCH. Do not introduce hex, RGB, or HSL tokens.
@@ -75,11 +75,11 @@ Borders and tonal changes are the default means of separation. Shadows are limit
 
 ## Navigation
 
-The public header uses a centered three-link navigation, left-aligned brand, and right-aligned command search. The active route is marked with a two-pixel underline. The dashboard uses a fixed-width white sidebar over a soft canvas; the selected destination is a honey-tinted row.
+The public header keeps the brand at the left and inline search at the right. It avoids extra navigation so application discovery remains the primary task. The dashboard uses a fixed-width white sidebar over a soft canvas; the selected destination is a honey-tinted row.
 
 ## Search
 
-The homepage search is the primary entry point and receives the only prominent soft shadow. It must accept plain-language tasks as well as app names. Keyboard search uses a visible `⌘ K` affordance. Focus is represented by a high-contrast amber outline and never by color alone.
+The header search returns published applications inline as the user types. It searches application names, taglines, descriptions, categories, and tags without sending the user to a separate search page. Enhanced keyboard search navigation is deferred. Focus is represented by a high-contrast amber outline and never by color alone.
 
 ## Application presentation
 
@@ -87,7 +87,7 @@ Use three related densities:
 
 - **Feature:** large icon, name, concise pitch, three factual attributes, and one primary action.
 - **Index row:** 52px icon, name, one-line tagline, category, and price.
-- **Table row:** 40px icon, name, compatibility, category, pricing, source, and publication state.
+- **Table row:** 40px icon, name, category, pricing, source, and publication state.
 
 Related applications use the index-row language. A relationship can be stored once and queried from either direction; users should never see duplicate reciprocal entries.
 
@@ -103,7 +103,7 @@ Tables use uppercase 10px column labels, 68px data rows, and horizontal scrollin
 
 ## Public directory
 
-The page follows a clear sequence: header, discovery statement, search, category rail, editor selection, application shelf, collection feature, and footer. Individual application pages should place identity and key facts first, followed by screenshots, detailed description, pricing and source facts, alternatives, related apps, and editorial context.
+The page follows a quiet sequence: header with inline search, a concise discovery statement, a shuffleable application grid, and footer. Application cards prioritize artwork and automatically sourced metadata over interface copy. Individual application pages should place identity and key facts first, followed by detailed description, pricing and source facts, alternatives, related apps, and editorial context.
 
 ## Editorial dashboard
 
@@ -117,5 +117,4 @@ Application editing should group fields as identity, editorial content, availabi
 
 Target WCAG 2.2 AA. Preserve semantic landmarks, table headings, labels, visible focus, 200% zoom, reduced-motion support, and meaningful source order. Never encode draft, published, free, paid, open-source, or compatibility status with color alone.
 
-Editorial content uses short sentences and specific facts. Taglines explain the outcome, not the marketing claim. Pricing labels distinguish free, freemium, paid once, subscription, open source, and enterprise. Compatibility text names the minimum supported macOS version and architecture when known. Images require factual alt text; decorative icon marks use hidden semantics.
-
+Editorial content uses short sentences and specific facts. Taglines explain the outcome, not the marketing claim. Pricing separates access tier from billing method. Images require factual alt text; decorative icon marks use hidden semantics.

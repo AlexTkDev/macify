@@ -1,0 +1,91 @@
+.public-app-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22%;
+  object-fit: cover;
+  box-shadow: 0 0.45rem 1rem rgb(var(--shadow-color) / 0.17), inset 0 0 0 1px rgb(255 255 255 / 0.36);
+}
+
+.public-app-icon-fallback {
+  background: var(--accent);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.public-app-icon-50 { width: 3.125rem; height: 3.125rem; }
+.public-app-icon-56 { width: 3.5rem; height: 3.5rem; }
+.public-app-icon-58 { width: 3.625rem; height: 3.625rem; }
+.public-app-icon-60 { width: 3.75rem; height: 3.75rem; }
+.public-app-icon-66 { width: 4.125rem; height: 4.125rem; }
+.public-app-icon-76 { width: 4.75rem; height: 4.75rem; }
+
+.app-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.app-list-card {
+  min-width: 0;
+  min-height: 6.9rem;
+  margin: 0 0 -1px -1px;
+  padding: 1.1rem 1.25rem;
+  display: grid;
+  grid-template-columns: 2rem auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.9rem;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.app-list-card:hover {
+  color: var(--paper-strong);
+  background: var(--ink);
+}
+
+.app-list-index {
+  color: var(--faint);
+  font: 600 0.65rem/1 var(--font-utility);
+}
+
+.app-list-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-list-copy strong {
+  font: 650 0.94rem/1.2 var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+.app-list-copy small {
+  margin-top: 0.22rem;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-list-card:hover .app-list-copy small,
+.app-list-card:hover .app-list-price,
+.app-list-card:hover .app-list-index {
+  color: var(--line-strong);
+}
+
+.app-list-price {
+  max-width: 9rem;
+  color: var(--muted);
+  font-size: 0.66rem;
+  text-align: right;
+}
+
+.app-list-card > svg {
+  color: var(--faint);
+}

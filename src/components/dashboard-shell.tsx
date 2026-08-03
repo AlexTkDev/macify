@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import {
   AppWindow,
+  ArrowUpRight,
   FileUp,
   FolderKanban,
   Image as ImageIcon,
@@ -27,28 +28,18 @@ export function DashboardShell({
 }) {
   return (
     <div className="dashboard-shell">
-      <aside className="dashboard-sidebar">
-        <MacifyLogo />
-        <nav aria-label="Dashboard navigation">
-          {navigation.map(({ id, label, icon: Icon, href }) => (
-            <Link
-              aria-current={active === id ? "page" : undefined}
-              className={cn("dashboard-nav-link", active === id && "dashboard-nav-active")}
-              href={href}
-              key={id}
-            >
-              <Icon size={17} /> {label}
-            </Link>
-          ))}
-        </nav>
-        <div className="sidebar-bottom">
-          <Link className="dashboard-nav-link" href="/">
-            <AppWindow size={17} /> View directory
+      <header className="dashboard-topbar">
+        <div className="dashboard-brand"><MacifyLogo /><span>Editorial desk</span></div>
+        <Link className="dashboard-site-link" href="/">View directory <ArrowUpRight size={14} /></Link>
+      </header>
+      <nav className="dashboard-navigation" aria-label="Dashboard navigation">
+        {navigation.map(({ id, label, icon: Icon, href }) => (
+          <Link aria-current={active === id ? "page" : undefined} className={cn("dashboard-nav-link", active === id && "dashboard-nav-active")} href={href} key={id}>
+            <Icon size={16} /> {label}
           </Link>
-        </div>
-      </aside>
-
-      <main className="dashboard-main">{children}</main>
+        ))}
+      </nav>
+      <main className="dashboard-main" id="main-content">{children}</main>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { DashboardNotice } from "@/components/dashboard-notice";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getImportJobData } from "@/lib/dashboard-data";
-import { commitImportJob } from "../../manage-actions";
+import { commitImportJob } from "@/app/dashboard/manage/import-commit";
 
 export const dynamic = "force-dynamic";
 

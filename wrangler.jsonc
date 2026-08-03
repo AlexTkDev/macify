@@ -4,6 +4,9 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-08-03",
   "compatibility_flags": ["nodejs_compat"],
+  "images": {
+    "binding": "IMAGES"
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS",
@@ -17,7 +20,8 @@
   ],
   "r2_buckets": [
     {
-      "binding": "MEDIA"
+      "binding": "MEDIA",
+      "bucket_name": "macify-local-media"
     }
   ],
   "vars": {
@@ -33,6 +37,9 @@
   "env": {
     "staging": {
       "name": "macify-staging",
+      "images": {
+        "binding": "IMAGES"
+      },
       "vars": {
         "APP_ENV": "staging"
       },
@@ -50,6 +57,9 @@
     },
     "production": {
       "name": "macify",
+      "images": {
+        "binding": "IMAGES"
+      },
       "vars": {
         "APP_ENV": "production"
       },
@@ -67,4 +77,3 @@
     }
   }
 }
-

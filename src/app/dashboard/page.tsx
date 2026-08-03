@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   Database,
   FileUp,
-  FlaskConical,
   Pencil,
   Plus,
 } from "lucide-react";
@@ -37,7 +37,6 @@ export default async function DashboardPage({
           <h1>Applications</h1>
         </div>
         <div className="dashboard-actions">
-          {process.env.NODE_ENV !== "production" && <Link className="button-secondary" href="/demo"><FlaskConical size={16} /> View demo data</Link>}
           <Link className="button-secondary" href="/dashboard/imports">
             <FileUp size={16} /> Import file
           </Link>
@@ -67,11 +66,6 @@ export default async function DashboardPage({
             <h2 id="recent-apps">Recent applications</h2>
             <p>Review application details before publishing them.</p>
           </div>
-          <div className="table-filters" aria-label="Application filters">
-            <button className="filter-active" type="button">All</button>
-            <button disabled type="button">Draft</button>
-            <button disabled type="button">Published</button>
-          </div>
         </div>
 
         {applications.length === 0 ? (
@@ -99,12 +93,21 @@ export default async function DashboardPage({
                 {applications.map((app) => (
                   <tr key={app.id}>
                     <td>
-                      <div className="table-app">
-                        <span className="app-icon app-icon-table app-icon-graphite" aria-hidden="true">
-                          {app.name.slice(0, 1).toUpperCase()}
-                        </span>
+                      <Link className="table-app table-app-link" href={`/dashboard/apps/${app.id}`}>
+                        {app.iconStorageKey ? (
+                          <Image
+                            alt={app.iconAltText ?? `${app.name} icon`}
+                            className="app-icon-table"
+                            height={40}
+                            src={`/dashboard/media/${app.iconStorageKey.split("/").map(encodeURIComponent).join("/")}`}
+                            unoptimized
+                            width={40}
+                          />
+                        ) : (
+                          <span className="app-icon app-icon-table app-icon-graphite" aria-hidden="true">{app.name.slice(0, 1).toUpperCase()}</span>
+                        )}
                         <span><strong>{app.name}</strong><small>/{app.slug}</small></span>
-                      </div>
+                      </Link>
                     </td>
                     <td>{formatPricing(app)}</td>
                     <td>{app.sourceType === "open_source" ? "Open source" : <span className="table-muted">Not displayed</span>}</td>

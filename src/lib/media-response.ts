@@ -58,7 +58,12 @@ export async function serveMedia(
   if (object === null) return new Response("Not found", { status: 404 });
 
   const headers = new Headers();
-  object.writeHttpMetadata(headers);
+  const metadata = object.httpMetadata;
+  if (metadata?.contentType) headers.set("Content-Type", metadata.contentType);
+  if (metadata?.contentLanguage) headers.set("Content-Language", metadata.contentLanguage);
+  if (metadata?.contentDisposition) headers.set("Content-Disposition", metadata.contentDisposition);
+  if (metadata?.contentEncoding) headers.set("Content-Encoding", metadata.contentEncoding);
+  if (metadata?.cacheExpiry) headers.set("Expires", metadata.cacheExpiry.toUTCString());
   headers.set("Accept-Ranges", "bytes");
   headers.set("ETag", object.httpEtag);
   headers.set("X-Content-Type-Options", "nosniff");
@@ -71,7 +76,7 @@ export async function serveMedia(
   );
 
   let status = 200;
-  if (object.range && "offset" in object.range) {
+  if (requestedRange && object.range && "offset" in object.range) {
     const offset = object.range.offset ?? 0;
     const length = object.range.length ?? object.size - offset;
     headers.set("Content-Range", `bytes ${offset}-${offset + length - 1}/${object.size}`);

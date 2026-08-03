@@ -30,6 +30,8 @@ Detailed descriptions are authored and stored as plain Markdown. The dashboard i
 
 Application media consists of one icon, one main preview image, and multiple screenshots stored in Cloudflare R2 and referenced from the database. The preview image is the wide editorial visual shown within the public application page; it is not used as the social-sharing image. Media can be attached during initial creation or later editing, and its R2 paths use the permanent application ID generated during submission. Audio is outside the product scope.
 
+Every uploaded or remotely imported image passes through Cloudflare Images before it is written to R2. The pipeline preserves the original pixel dimensions, removes unnecessary encoding overhead, and prefers high-quality WebP when that produces a smaller file. If conversion would increase the byte size, Macify keeps the original. D1 records the delivered format, optimized byte size, width, height, and checksum. Existing unmeasured assets can be optimized safely in small batches from the media dashboard.
+
 Tags use autocomplete against the existing taxonomy while allowing editors to create a missing tag inline. New tags are normalized and created when the application is saved.
 
 Editors can provide media as a local file or a public HTTPS image URL. URL imports are downloaded, validated, copied into R2, and recorded with their original source URL; public pages never hotlink third-party media. Remote fetches reject local or private destinations, unsafe redirects, unsupported formats, mismatched file signatures, and files over the editorial size limit.

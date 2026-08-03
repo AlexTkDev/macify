@@ -15,6 +15,12 @@
     "db:generate": "drizzle-kit generate",
     "db:check": "drizzle-kit check",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:seed:initial": "node scripts/import-local-drafts.mjs",
+    "data:generate:csv": "node scripts/generate-initial-apps-csv.mjs",
+    "data:prepare:expanded": "node scripts/prepare-expanded-apps.mjs",
+    "db:seed:expanded": "node scripts/import-local-drafts.mjs --dataset=data/expanded-apps.json",
+    "data:prepare:additional": "node scripts/prepare-expanded-apps.mjs --source=data/additional-apps-source.mjs --destination=data/additional-apps.json",
+    "db:seed:additional": "node scripts/import-local-drafts.mjs --dataset=data/additional-apps.json",
     "db:migrate:staging": "wrangler d1 migrations apply DB --remote --env staging",
     "db:migrate:production": "wrangler d1 migrations apply DB --remote --env production"
   },

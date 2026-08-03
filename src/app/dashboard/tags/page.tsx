@@ -2,7 +2,7 @@ import { Plus, Save, Trash2 } from "lucide-react";
 import { DashboardNotice } from "@/components/dashboard-notice";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getTagManagementData } from "@/lib/dashboard-data";
-import { createTag, deleteTag, updateTag } from "../manage-actions";
+import { createTag, deleteTag, updateTag } from "@/app/dashboard/manage/tags";
 
 export const dynamic = "force-dynamic";
 

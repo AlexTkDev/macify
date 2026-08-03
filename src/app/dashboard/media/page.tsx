@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Trash2 } from "lucide-react";
+import { ExternalLink, Minimize2, Trash2 } from "lucide-react";
 import { DashboardNotice } from "@/components/dashboard-notice";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getMediaManagementData } from "@/lib/dashboard-data";
-import { deleteMediaAsset } from "../manage-actions";
+import { deleteMediaAsset } from "@/app/dashboard/manage/media";
+import { optimizeExistingMedia } from "@/app/dashboard/manage/optimize-media";
 
 export const dynamic = "force-dynamic";
 const labels: Record<string, string> = { icon: "Icon", preview_image: "Main preview", screenshot: "Screenshot" };
@@ -15,7 +16,7 @@ export default async function MediaPage({ searchParams }: { searchParams: Promis
   const [{ records, totals }, query] = await Promise.all([getMediaManagementData(), searchParams]);
   return (
     <DashboardShell active="media">
-      <header className="dashboard-header"><div><p>R2 asset inventory</p><h1>Media</h1></div><div className="dashboard-actions"><span className="storage-summary">{totals.count} files · {bytes(Number(totals.bytes))}</span></div></header>
+      <header className="dashboard-header"><div><p>R2 asset inventory</p><h1>Media</h1></div><div className="dashboard-actions"><span className="storage-summary">{totals.count} files · {bytes(Number(totals.bytes))}</span><form action={optimizeExistingMedia}><button className="button-secondary" type="submit"><Minimize2 size={15} /> Optimize existing</button></form></div></header>
       <DashboardNotice error={query.error} success={query.success} />
       <section className="dashboard-panel media-management-panel" aria-labelledby="media-list-heading">
         <div className="panel-toolbar"><div><h2 id="media-list-heading">Stored application media</h2><p>Every item is referenced in D1 and served through Macify’s controlled R2 route.</p></div></div>

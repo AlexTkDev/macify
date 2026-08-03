@@ -4,10 +4,8 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { ArrowUpRight, Eye, EyeOff } from "lucide-react";
-import {
-  setApplicationPublicationState,
-  type PublicationState,
-} from "@/app/dashboard/actions";
+import type { PublicationState } from "@/app/dashboard/actions/action-types";
+import { setApplicationPublicationState } from "@/app/dashboard/actions/publication";
 
 const initialState: PublicationState = {};
 

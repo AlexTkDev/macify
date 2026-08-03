@@ -124,10 +124,11 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] YouTube demo link
 - [x] Related applications
 - [x] Development-only demo catalog with 12 fictional applications
-- [ ] Complete production search and filtering
+- [x] Complete production search and filtering across names, taglines, descriptions, categories, tags, pricing, billing, and source status
 - [ ] Add real editorial seed content
 - [ ] Review all public responsive breakpoints with production media
-- [ ] Complete keyboard-navigation and screen-reader QA
+- [ ] Add enhanced keyboard search navigation later (explicitly deferred)
+- [ ] Complete screen-reader QA
 
 ## SEO and sharing
 
