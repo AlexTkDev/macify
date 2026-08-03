@@ -87,9 +87,6 @@ async function discoverMedia(app) {
 
 function description(app) {
   return [
-    `## ${app.tagline.replace(/[.!?]+$/, "")}`,
-    app.lead,
-    "## What it does",
     app.lead,
     "## What you can do",
     ...app.features.map((feature) => `- ${feature}`),

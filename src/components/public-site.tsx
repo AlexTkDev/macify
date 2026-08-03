@@ -19,21 +19,12 @@ export function PublicHeader() {
 export function PublicFooter() {
   return (
     <footer className="public-footer">
-      <div className="public-footer-lead">
-        <MacifyLogo />
-        <p>Useful Mac applications, selected carefully and explained clearly.</p>
-      </div>
-      <div className="public-footer-links">
-        <nav aria-label="Explore Macify">
-          <strong>Explore</strong>
-          <Link href="/">Discover</Link>
-        </nav>
-        <nav aria-label="Macify policies">
-          <strong>About</strong>
-          <Link href="/editorial-policy">Editorial policy</Link>
-          <Link href="/privacy">Privacy</Link>
-        </nav>
-      </div>
+      <MacifyLogo />
+      <p className="public-footer-description">Useful Mac applications, selected carefully and explained clearly.</p>
+      <nav aria-label="Macify information">
+        <Link href="/editorial-policy">Editorial policy</Link>
+        <Link href="/privacy">Privacy</Link>
+      </nav>
       <p className="public-footer-note">Macify is an independent directory. Product names and artwork belong to their respective owners.</p>
     </footer>
   );

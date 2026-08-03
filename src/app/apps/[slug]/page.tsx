@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { ArrowLeft } from "lucide-react";
 import { ApplicationHero } from "@/components/application-detail/application-hero";
 import { ApplicationOverview } from "@/components/application-detail/application-overview";
 import { RelatedApplications } from "@/components/application-detail/related-applications";
@@ -34,6 +32,7 @@ export default async function ApplicationPage({ params }: { params: Promise<{ sl
   if (!application) notFound();
   const icon = application.media.find(({ role }) => role === "icon");
   const preview = application.media.find(({ role }) => role === "preview_image");
+  const screenshots = application.media.filter(({ role }) => role === "screenshot");
   const free = application.pricingType !== "paid";
   const schema = {
     "@context": "https://schema.org",
@@ -51,9 +50,8 @@ export default async function ApplicationPage({ params }: { params: Promise<{ sl
   return (
     <PublicShell>
       <main className="application-page" id="main-content">
-        <Link className="back-link" href="/#all-apps"><ArrowLeft size={14} /> Back to directory</Link>
-        <ApplicationHero application={application} icon={icon} preview={preview} />
-        <ApplicationOverview application={application} />
+        <ApplicationHero application={application} icon={icon} />
+        <ApplicationOverview application={application} preview={preview} screenshots={screenshots} />
         <RelatedApplications applications={application.related} />
       </main>
       <script dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} type="application/ld+json" />

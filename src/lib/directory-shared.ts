@@ -48,6 +48,8 @@ export async function getCardMedia(appIds: string[]) {
       role: mediaAssets.role,
       storageKey: mediaAssets.storageKey,
       altText: mediaAssets.altText,
+      width: mediaAssets.width,
+      height: mediaAssets.height,
     })
     .from(mediaAssets)
     .where(and(

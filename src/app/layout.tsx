@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Urbanist } from "next/font/google";
 import "./globals.css";
 import "../styles/tokens.css";
 import "../styles/base.css";
@@ -17,6 +18,11 @@ import "../styles/dashboard-form-widgets.css";
 import "../styles/dashboard-media.css";
 import "../styles/responsive.css";
 import "../styles/responsive-small.css";
+
+const urbanist = Urbanist({
+  subsets: ["latin"],
+  variable: "--font-urbanist",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://macify.app"),
@@ -47,7 +53,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html data-scroll-behavior="smooth" lang="en">
-      <body>{children}</body>
+      <body className={urbanist.variable}>{children}</body>
     </html>
   );
 }

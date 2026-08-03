@@ -1,46 +1,52 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { PublicAppIcon, mediaUrl, type PublicAppSummary } from "@/components/public-app-card";
 
 type HomeApp = PublicAppSummary & {
-  preview: { storageKey: string; altText: string | null } | null;
+  preview: { storageKey: string; altText: string | null; width: number | null; height: number | null } | null;
 };
 
+const headlineSlugs = ["swish", "mimestream", "things-3"];
+
 export function HomeHero({ applications }: { applications: HomeApp[] }) {
-  const featured = applications.find((app) => app.preview) ?? applications[0];
+  const featured = applications.find((app) => app.slug === "droppy" && app.preview)
+    ?? applications.find((app) => app.preview)
+    ?? applications[0];
+  const headlineApps = headlineSlugs
+    .map((slug) => applications.find((app) => app.slug === slug && app.icon))
+    .filter((app): app is HomeApp => Boolean(app));
   return (
     <section className="home-hero" aria-labelledby="home-title">
       <div className="home-hero-copy">
-        <p className="eyebrow">Independent macOS directory</p>
-        <h1 id="home-title">Mac apps worth making room for.</h1>
-        <p className="home-hero-intro">A focused directory of useful, thoughtfully made software. Clear descriptions, honest pricing, and no filler.</p>
-        <div className="home-hero-links">
-          <Link href="#all-apps">See every application</Link>
-        </div>
+        <h1 id="home-title">
+          <span className="sr-only">Mac apps worth making room for.</span>
+          <span className="home-title-art" aria-hidden="true">
+            <span className="home-title-line"><span>Mac</span>{headlineApps[0] && <span className="home-title-icon"><PublicAppIcon app={headlineApps[0]} size={96} /></span>}<span>apps</span></span>
+            <span className="home-title-line"><span>worth</span>{headlineApps[1] && <span className="home-title-icon home-title-icon-orange"><PublicAppIcon app={headlineApps[1]} size={96} /></span>}<span>making</span></span>
+            <span className="home-title-line">{headlineApps[2] && <span className="home-title-icon home-title-icon-yellow"><PublicAppIcon app={headlineApps[2]} size={96} /></span>}<span>room for.</span></span>
+          </span>
+        </h1>
+        <p className="home-hero-intro">An accurate list of the most useful macOS applications.</p>
       </div>
 
       {featured && (
         <Link className="home-feature-stage" href={`/apps/${featured.slug}`} aria-label={`View ${featured.name}`}>
+          <div className="home-feature-caption">
+            <PublicAppIcon app={featured} size={76} />
+            <span><strong>{featured.name}</strong><p>{featured.tagline}</p></span>
+          </div>
           <div className="home-feature-image">
             {featured.preview ? (
               <Image
                 alt={featured.preview.altText ?? `${featured.name} preview`}
-                fill
+                height={featured.preview.height ?? 900}
                 priority
                 sizes="(max-width: 900px) 100vw, 52vw"
                 src={mediaUrl(featured.preview.storageKey)}
                 unoptimized
+                width={featured.preview.width ?? 1600}
               />
             ) : <span>{featured.name}</span>}
-          </div>
-          <div className="home-feature-caption">
-            <PublicAppIcon app={featured} size={66} />
-            <span><small>Featured this week</small><strong>{featured.name}</strong><p>{featured.tagline}</p></span>
-            <ArrowRight size={18} />
-          </div>
-          <div className="home-feature-stack" aria-hidden="true">
-            {applications.slice(1, 5).map((app) => <PublicAppIcon app={app} key={app.id} size={50} />)}
           </div>
         </Link>
       )}

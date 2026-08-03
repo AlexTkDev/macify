@@ -1,25 +1,87 @@
-import Link from "next/link";
-import { ArrowUpRight, Code2, Play, ReceiptText } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, Play } from "lucide-react";
 import { MarkdownContent } from "@/components/markdown-content";
-import type { PublishedApplication } from "@/components/application-detail/types";
-import { formatPricing } from "@/lib/pricing";
+import { mediaUrl } from "@/components/public-app-card";
+import type { ApplicationMedia, PublishedApplication } from "@/components/application-detail/types";
 
-export function ApplicationOverview({ application }: { application: PublishedApplication }) {
+type EditorialSection = { title: string; body: string };
+
+function normalize(value: string) {
+  return value.replace(/[.!?]+$/, "").trim().toLowerCase();
+}
+
+function descriptionParts(description: string, tagline: string) {
+  const chunks = description.trim().split(/(?=^##\s+)/m).filter(Boolean);
+  let lead = "";
+  const sections: EditorialSection[] = [];
+
+  for (const chunk of chunks) {
+    const heading = chunk.match(/^##\s+(.+)$/m)?.[1]?.trim();
+    const body = heading ? chunk.replace(/^##\s+.+\n*/m, "").trim() : chunk.trim();
+
+    if (!heading) {
+      if (!lead) lead = body;
+      continue;
+    }
+
+    const title = normalize(heading);
+    if (title === normalize(tagline)) {
+      if (!lead) lead = body;
+      continue;
+    }
+
+    if (title === "what it does") {
+      if (!lead) lead = body;
+      continue;
+    }
+
+    sections.push({ title: heading, body });
+  }
+
+  if (!lead && sections.length > 0) lead = sections.shift()?.body ?? "";
+  return { lead, sections };
+}
+
+function EditorialImage({ application, media, priority = false }: { application: PublishedApplication; media: ApplicationMedia; priority?: boolean }) {
   return (
-    <div className="application-body">
-      <article className="application-description">
-        <p className="eyebrow">About the application</p>
-        <MarkdownContent>{application.description}</MarkdownContent>
-      </article>
-      <aside className="application-facts" aria-label="Application details">
-        <section>
-          <div className="application-fact-label"><ReceiptText size={15} /> Pricing</div>
-          <strong>{formatPricing(application)}</strong>
-        </section>
-        {application.sourceType === "open_source" && <section><div className="application-fact-label"><Code2 size={15} /> Source</div><strong>Open source</strong></section>}
-        {application.youtubeUrl && <a href={application.youtubeUrl} rel="noreferrer" target="_blank"><span><Play size={15} /> Watch the demo</span><ArrowUpRight size={14} /></a>}
-        <Link href="/editorial-policy"><span>How Macify reviews listings</span><ArrowUpRight size={14} /></Link>
-      </aside>
+    <Image
+      alt={media.altText ?? `${application.name} application preview`}
+      height={media.height ?? 900}
+      priority={priority}
+      sizes="(max-width: 900px) 100vw, 76rem"
+      src={mediaUrl(media.storageKey)}
+      unoptimized
+      width={media.width ?? 1600}
+    />
+  );
+}
+
+export function ApplicationOverview({ application, preview, screenshots }: { application: PublishedApplication; preview?: ApplicationMedia; screenshots: ApplicationMedia[] }) {
+  const description = descriptionParts(application.description, application.tagline);
+  return (
+    <div className="application-overview">
+      {preview && <figure className="application-preview"><EditorialImage application={application} media={preview} priority /></figure>}
+      <div className="application-body">
+        <article className="application-story">
+          {description.lead && <div className="application-story-lead"><MarkdownContent>{description.lead}</MarkdownContent></div>}
+          {description.sections.length > 0 && (
+            <div className="application-story-sections">
+              {description.sections.map((section) => (
+                <section key={section.title}>
+                  <h2>{section.title}</h2>
+                  <MarkdownContent>{section.body}</MarkdownContent>
+                </section>
+              ))}
+            </div>
+          )}
+        </article>
+        {application.youtubeUrl && <aside className="application-demo"><a href={application.youtubeUrl} rel="noreferrer" target="_blank"><span><Play size={15} /> Watch the demo</span><ArrowUpRight size={14} /></a></aside>}
+      </div>
+      {screenshots.length > 0 && (
+        <div className="application-screenshots" aria-label={`${application.name} screenshots`}>
+          {screenshots.map((screenshot) => <figure key={screenshot.id}><EditorialImage application={application} media={screenshot} /></figure>)}
+        </div>
+      )}
     </div>
   );
 }

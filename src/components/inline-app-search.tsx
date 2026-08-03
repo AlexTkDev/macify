@@ -4,14 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { ArrowUpRight, LoaderCircle, Search, X } from "lucide-react";
+import { LoaderCircle, Search, X } from "lucide-react";
 
 type SearchResult = {
   id: string;
   slug: string;
   name: string;
   tagline: string;
-  category: string;
   iconStorageKey: string | null;
   iconAltText: string | null;
 };
@@ -130,8 +129,7 @@ export function InlineAppSearch() {
                     {app.iconStorageKey ? (
                       <Image alt={app.iconAltText ?? `${app.name} icon`} height={42} src={iconUrl(app.iconStorageKey)} unoptimized width={42} />
                     ) : <span className="inline-search-icon-fallback" aria-hidden="true">{app.name.slice(0, 2).toUpperCase()}</span>}
-                    <span className="inline-search-copy"><small>{app.category}</small><strong>{app.name}</strong><span>{app.tagline}</span></span>
-                    <ArrowUpRight aria-hidden="true" size={14} />
+                    <span className="inline-search-copy"><strong>{app.name}</strong><span>{app.tagline}</span></span>
                   </Link>
                 ))}
               </div>

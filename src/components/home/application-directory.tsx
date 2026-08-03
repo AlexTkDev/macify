@@ -2,69 +2,53 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowUpRight, Shuffle } from "lucide-react";
+import { Shuffle } from "lucide-react";
 import { PublicAppIcon, type PublicAppSummary } from "@/components/public-app-card";
-import { formatPricing } from "@/lib/pricing";
 
-const batchSize = 30;
+const PICK_COUNT = 30;
 
-function randomIndex(maximum: number) {
-  const values = new Uint32Array(1);
-  crypto.getRandomValues(values);
-  return values[0] % maximum;
-}
-
-function sampleApplications(applications: PublicAppSummary[]) {
+function randomPicks(applications: PublicAppSummary[]) {
   const pool = [...applications];
+  const randomValues = new Uint32Array(pool.length);
+  crypto.getRandomValues(randomValues);
   for (let index = pool.length - 1; index > 0; index -= 1) {
-    const target = randomIndex(index + 1);
-    [pool[index], pool[target]] = [pool[target], pool[index]];
+    const swapIndex = randomValues[index] % (index + 1);
+    [pool[index], pool[swapIndex]] = [pool[swapIndex], pool[index]];
   }
-  return pool.slice(0, Math.min(batchSize, pool.length));
+  return pool.slice(0, PICK_COUNT);
 }
 
 export function ApplicationDirectory({ applications }: { applications: PublicAppSummary[] }) {
-  const [visible, setVisible] = useState(() => applications.slice(0, batchSize));
-  const [batch, setBatch] = useState(1);
+  const [visibleApplications, setVisibleApplications] = useState(() => applications.slice(0, PICK_COUNT));
+  const [revision, setRevision] = useState(0);
 
-  function showNewApplications() {
-    setVisible((current) => {
-      const currentIds = new Set(current.map((app) => app.id));
-      const unseen = applications.filter((app) => !currentIds.has(app.id));
-      return sampleApplications(unseen.length >= batchSize ? unseen : applications);
-    });
-    setBatch((value) => value + 1);
+  function surpriseMe() {
+    setVisibleApplications(randomPicks(applications));
+    setRevision((current) => current + 1);
   }
 
   return (
     <section className="home-section application-directory" id="all-apps" aria-labelledby="all-apps-title">
       <div className="directory-heading">
         <h2 id="all-apps-title">Apps worth trying.</h2>
-        <div className="directory-heading-actions">
-          <button className="button-secondary directory-shuffle" disabled={applications.length <= batchSize} onClick={showNewApplications} type="button">
-            <Shuffle aria-hidden="true" size={15} /> Surprise me
-          </button>
-          <span className="sr-only" aria-live="polite">Application selection refreshed.</span>
-        </div>
+        <button aria-label="Show 30 different applications" className="surprise-button" onClick={surpriseMe} type="button">
+          Surprise me
+          <Shuffle aria-hidden="true" size={17} />
+        </button>
       </div>
 
-      <div className="directory-app-grid" key={batch}>
-        {visible.map((app, index) => (
+      <div className="directory-app-grid" key={revision}>
+        {visibleApplications.map((app) => (
           <Link className="directory-app-row" href={`/apps/${app.slug}`} key={app.id}>
-            <span className="directory-app-number">{String(index + 1).padStart(2, "0")}</span>
-            <PublicAppIcon app={app} size={50} />
+            <PublicAppIcon app={app} size={76} />
             <span className="directory-app-copy">
-              <small>{app.category ?? "Mac application"}</small>
               <strong>{app.name}</strong>
               <span>{app.tagline}</span>
-            </span>
-            <span className="directory-app-meta">
-              <small>{formatPricing(app)}</small>
-              <ArrowUpRight aria-hidden="true" size={15} />
             </span>
           </Link>
         ))}
       </div>
+      <span className="sr-only" aria-live="polite">{revision > 0 ? `Showing new application selection ${revision}.` : ""}</span>
     </section>
   );
 }
