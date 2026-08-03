@@ -1,0 +1,70 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "macify-local",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-03",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+    "run_worker_first": false
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA"
+    }
+  ],
+  "vars": {
+    "APP_ENV": "local"
+  },
+  "limits": {
+    "cpu_ms": 500
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.1
+  },
+  "env": {
+    "staging": {
+      "name": "macify-staging",
+      "vars": {
+        "APP_ENV": "staging"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "MEDIA"
+        }
+      ]
+    },
+    "production": {
+      "name": "macify",
+      "vars": {
+        "APP_ENV": "production"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "MEDIA"
+        }
+      ]
+    }
+  }
+}
+

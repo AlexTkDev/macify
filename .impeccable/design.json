@@ -1,0 +1,56 @@
+{
+  "$schema": "https://impeccable.style/schemas/design-system-v2.json",
+  "name": "Macify Product Interface",
+  "source": "DESIGN.md",
+  "tokens": {
+    "color": {
+      "background": "oklch(1 0 0)",
+      "surface": "oklch(0.975 0.004 90)",
+      "surfaceStrong": "oklch(0.944 0.007 90)",
+      "foreground": "oklch(0.19 0.014 65)",
+      "foregroundSoft": "oklch(0.46 0.012 65)",
+      "foregroundFaint": "oklch(0.61 0.01 65)",
+      "line": "oklch(0.9 0.008 90)",
+      "lineStrong": "oklch(0.82 0.012 90)",
+      "primary": "oklch(0.47 0.13 75)",
+      "primaryHover": "oklch(0.42 0.12 75)",
+      "primarySoft": "oklch(0.94 0.055 91)",
+      "primaryBright": "oklch(0.842 0.165 91.3)",
+      "accent": "oklch(0.29 0.07 326)",
+      "success": "oklch(0.48 0.11 150)"
+    },
+    "radius": {
+      "control": "7px",
+      "panel": "12px",
+      "appIcon": "23%",
+      "pill": "999px"
+    },
+    "space": {
+      "1": "4px",
+      "2": "8px",
+      "3": "12px",
+      "4": "16px",
+      "6": "24px",
+      "8": "32px",
+      "12": "48px",
+      "18": "72px"
+    }
+  },
+  "components": {
+    "publicHeader": "Three-column brand, centered navigation, command search and dashboard link.",
+    "macShelf": "One large editorial feature beside a compact Finder-like application index.",
+    "applicationRow": "App icon, identity, one-line task description, category, pricing and destination affordance.",
+    "collectionBand": "Deep aubergine editorial feature with restrained honey label and white secondary action.",
+    "dashboardSidebar": "Fixed-width white navigation rail with a honey selected state.",
+    "statusStrip": "Four contiguous factual cells inside one bordered panel.",
+    "dataTable": "Compact editorial record table with internal responsive horizontal overflow."
+  },
+  "constraints": [
+    "No gradients or glass effects.",
+    "Use OKLCH for every authored color.",
+    "Use one filled primary action per local action group.",
+    "Reserve pills for categories, status and compact filters.",
+    "Meet WCAG 2.2 AA for core workflows.",
+    "Let application media supply most of the page color."
+  ]
+}

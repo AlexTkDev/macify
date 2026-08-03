@@ -1,0 +1,17 @@
+INSERT OR IGNORE INTO `categories` (`id`, `slug`, `name`, `description`, `sort_order`) VALUES
+  ('category-productivity', 'productivity', 'Productivity', 'Tools for planning, focus, automation, and getting work done.', 10),
+  ('category-utilities', 'utilities', 'Utilities', 'Focused tools that make everyday Mac workflows easier.', 20),
+  ('category-writing', 'writing', 'Writing', 'Editors, note-taking tools, and publishing applications.', 30),
+  ('category-design', 'design', 'Design', 'Tools for visual design, prototyping, and creative production.', 40),
+  ('category-developer-tools', 'developer-tools', 'Developer Tools', 'Applications for building, testing, and maintaining software.', 50),
+  ('category-audio', 'audio', 'Audio', 'Recording, editing, playback, and audio workflow applications.', 60),
+  ('category-video', 'video', 'Video', 'Video capture, editing, playback, and production tools.', 70),
+  ('category-photography', 'photography', 'Photography', 'Photo capture, organization, editing, and delivery tools.', 80),
+  ('category-window-management', 'window-management', 'Window Management', 'Tools for arranging windows and managing screen space.', 90),
+  ('category-menu-bar', 'menu-bar', 'Menu Bar', 'Small utilities that live in or improve the macOS menu bar.', 100),
+  ('category-browsers', 'browsers', 'Browsers', 'Web browsers and browser-adjacent applications.', 110),
+  ('category-communication', 'communication', 'Communication', 'Messaging, meetings, email, and team communication tools.', 120),
+  ('category-system', 'system', 'System', 'System monitoring, maintenance, customization, and administration.', 130),
+  ('category-security', 'security', 'Security', 'Privacy, credential, encryption, and device security applications.', 140),
+  ('category-finance', 'finance', 'Finance', 'Budgeting, accounting, investing, and financial workflow tools.', 150),
+  ('category-ai', 'ai', 'AI', 'Artificial intelligence tools built for or available on macOS.', 160);
