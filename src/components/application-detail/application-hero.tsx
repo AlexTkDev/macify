@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
 import { mediaUrl } from "@/components/public-app-card";
 import type { ApplicationMedia, PublishedApplication } from "@/components/application-detail/types";
 import { formatPricing } from "@/lib/pricing";
@@ -22,15 +21,15 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
           </span>
           <span className="application-title-tagline">{application.tagline}</span>
         </h1>
+        {application.tags.length > 0 && (
+          <div className="application-tags" aria-label="Application tags">
+            {application.tags.map((tag) => <span className="application-tag" key={tag.id}>{tag.name}</span>)}
+          </div>
+        )}
         <div className="application-facts" aria-label="Application details">
           <span className="application-price">{formatPricing(application)}</span>
-          {application.tags.slice(0, 4).map((tag) => <span key={tag.id}>{tag.name}</span>)}
           {application.sourceType === "open_source" && <span className="application-source">Open source</span>}
         </div>
-        <a aria-label={`Visit ${application.name}'s official website`} className="application-website" href={application.websiteUrl} rel="noreferrer" target="_blank">
-          Official website
-          <ArrowUpRight aria-hidden="true" size={19} strokeWidth={1.8} />
-        </a>
       </div>
     </header>
   );

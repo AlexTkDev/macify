@@ -74,6 +74,10 @@ export function ApplicationOverview({ application, preview, screenshots }: { app
               ))}
             </div>
           )}
+          <a aria-label={`Visit ${application.name}'s official website`} className="application-website" href={application.websiteUrl} rel="noreferrer" target="_blank">
+            Visit website
+            <ArrowUpRight aria-hidden="true" size={19} strokeWidth={1.8} />
+          </a>
         </article>
         {application.youtubeUrl && <aside className="application-demo"><a href={application.youtubeUrl} rel="noreferrer" target="_blank"><span><Play size={15} /> Watch the demo</span><ArrowUpRight size={14} /></a></aside>}
       </div>
