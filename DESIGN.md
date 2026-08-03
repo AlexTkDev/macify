@@ -20,9 +20,9 @@ Macify is a playful studio table, not an App Store clone and not a SaaS card gri
 
 # Homepage
 
-The hero is a two-column composition on desktop. The left side carries “Mac apps worth making room for.” with three real app icons woven into the words. The right side carries one naturally proportioned preview and a compact overlapping identity label. The supporting sentence is “An accurate list of the most useful macOS applications.”
+The hero is a two-column composition on desktop. The left side carries “Mac apps worth making room for.” with three real app icons woven into the words. The right side carries one naturally proportioned preview and a compact overlapping identity label. The supporting sentence is “A curated list of the most useful macOS applications.”
 
-The second fold shows exactly ten apps in a five-by-two sample wall. Color fields create the visual rhythm; each sample still exposes its name. On mobile the wall becomes a clean two-column scan of icon, name, and short tagline. “Surprise me” is the only secondary action and replaces the ten items with a new random selection.
+The second fold shows 30 apps in a five-column sample wall. Color fields create the visual rhythm; each sample still exposes its name. On mobile the wall becomes a clean two-column scan of icon, name, and short tagline. “Surprise me” is the only secondary action and replaces the 30 items with a new random selection.
 
 # Application page
 

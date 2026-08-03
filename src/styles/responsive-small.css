@@ -35,7 +35,7 @@
   .home-title-line { white-space: normal; }
   .home-title-line:nth-child(2) { flex-wrap: nowrap; }
   .home-title-icon { width: 0.98em; height: 0.98em; }
-  .home-hero-intro { max-width: 22rem; margin-top: 1.25rem; font-size: 1.05rem; white-space: normal; }
+  .home-hero-intro { max-width: 100%; margin-top: 0.5rem; font-size: clamp(0.72rem, 3.9vw, 1.05rem); letter-spacing: -0.035em; white-space: nowrap; }
   .home-feature-image { border-radius: 1rem; }
   .home-feature-caption { max-width: calc(100% - 2rem); margin: -1.6rem 0 0 1.25rem; }
 

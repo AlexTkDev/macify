@@ -26,7 +26,15 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
             <span className="home-title-line">{headlineApps[2] && <span className="home-title-icon home-title-icon-yellow"><PublicAppIcon app={headlineApps[2]} size={96} /></span>}<span>room for.</span></span>
           </span>
         </h1>
-        <p className="home-hero-intro">An accurate list of the most useful macOS applications.</p>
+        <p className="home-hero-intro">
+          A curated list of the{" "}
+          <span className="home-hero-intro-emphasis">
+            most useful macOS applications.
+            <svg aria-hidden="true" className="home-hero-intro-squiggle" focusable="false" preserveAspectRatio="none" viewBox="0 0 180 18">
+              <path d="M2 9c15 0 15-6 30-6s15 12 30 12S77 3 92 3s15 12 30 12 15-12 30-12 15 6 26 6" vectorEffect="non-scaling-stroke" />
+            </svg>
+          </span>
+        </p>
       </div>
 
       {featured && (
