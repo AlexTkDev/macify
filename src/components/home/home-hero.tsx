@@ -30,8 +30,8 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
           A curated list of the{" "}
           <span className="home-hero-intro-emphasis">
             most useful macOS applications.
-            <svg aria-hidden="true" className="home-hero-intro-squiggle" focusable="false" preserveAspectRatio="none" viewBox="0 0 180 18">
-              <path d="M2 9c15 0 15-6 30-6s15 12 30 12S77 3 92 3s15 12 30 12 15-12 30-12 15 6 26 6" vectorEffect="non-scaling-stroke" />
+            <svg aria-hidden="true" className="home-hero-intro-squiggle" focusable="false" preserveAspectRatio="none" viewBox="0 0 242 20">
+              <path d="M1 10c8-8 16-8 24 0s16 6 24 0 16-7 24 0 16 8 24 0 16-6 24 0 16 7 24 0 16-8 24 0 16 6 24 0 16-7 24 0 16 8 24 0" vectorEffect="non-scaling-stroke" />
             </svg>
           </span>
         </p>

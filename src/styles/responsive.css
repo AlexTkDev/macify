@@ -4,7 +4,7 @@
     gap: 2.5rem;
   }
 
-  .home-hero h1 { font-size: clamp(4rem, 7.9vw, 5.2rem); }
+  .home-hero h1 { font-size: clamp(4rem, 7.6vw, 5.1rem); }
   .directory-app-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
   .application-hero {
@@ -57,7 +57,7 @@
   }
 
   .home-hero-copy { padding-top: 1rem; }
-  .home-hero h1 { font-size: clamp(4.4rem, 13vw, 6.3rem); }
+  .home-hero h1 { font-size: clamp(4.4rem, 12.5vw, 6rem); }
   .home-feature-stage { width: min(100%, 42rem); }
   .directory-app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; }
   .directory-app-row { aspect-ratio: auto; padding: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); place-items: center start; gap: 1rem; overflow: visible; background: transparent !important; }

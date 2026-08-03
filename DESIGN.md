@@ -11,7 +11,7 @@ Macify is a playful studio table, not an App Store clone and not a SaaS card gri
 
 # Component grammar
 
-- Public display type uses Urbanist at heavy weights, a tight but readable line height, and no tracking tighter than `-0.055em`.
+- The homepage hero uses Gabarito ExtraBold for a clean, rounded display voice with a little playfulness. Urbanist remains the body and interface family. Display tracking is never tighter than `-0.04em`.
 - App icons keep their authentic artwork, 22% corner radius, and one soft depth shadow.
 - Corners are gently rounded, never uniformly pill-shaped. Buttons use compact rectangles; tags are text with small colored shapes.
 - Public pages avoid card chrome. Hierarchy comes from scale, color fields, whitespace, and artwork.

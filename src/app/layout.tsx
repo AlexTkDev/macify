@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Urbanist } from "next/font/google";
+import { Gabarito, Urbanist } from "next/font/google";
 import "./globals.css";
 import "../styles/tokens.css";
 import "../styles/base.css";
@@ -22,6 +22,12 @@ import "../styles/responsive-small.css";
 const urbanist = Urbanist({
   subsets: ["latin"],
   variable: "--font-urbanist",
+});
+
+const gabarito = Gabarito({
+  subsets: ["latin"],
+  variable: "--font-gabarito",
+  weight: "800",
 });
 
 export const metadata: Metadata = {
@@ -53,7 +59,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html data-scroll-behavior="smooth" lang="en">
-      <body className={urbanist.variable}>{children}</body>
+      <body className={`${urbanist.variable} ${gabarito.variable}`}>{children}</body>
     </html>
   );
 }

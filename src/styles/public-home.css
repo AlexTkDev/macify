@@ -19,10 +19,11 @@
 
 .home-hero h1 {
   margin: 0;
-  font-size: clamp(4.6rem, 7vw, 6.45rem);
-  font-weight: 900;
-  line-height: 0.88;
-  letter-spacing: -0.055em;
+  font-family: var(--font-gabarito), var(--font-urbanist), "Avenir Next", sans-serif;
+  font-size: clamp(4.5rem, 6.8vw, 6rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
 }
 
 .home-title-art { display: grid; gap: 0.06em; }
