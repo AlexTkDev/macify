@@ -3,19 +3,11 @@ import Link from "next/link";
 import { ArrowUpRight, ChevronRight, Command, Search } from "lucide-react";
 import { MacifyLogo } from "@/components/macify-logo";
 import { getHomepageDirectoryData } from "@/lib/apps-data";
+import { formatPricing } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
 const tones = ["amber", "blue", "purple", "green", "red", "graphite"] as const;
-
-const pricingLabels = {
-  free: "Free",
-  freemium: "Freemium",
-  paid_once: "Paid once",
-  subscription: "Subscription",
-  open_source: "Open source",
-  enterprise: "Enterprise",
-} as const;
 
 function mediaUrl(storageKey: string) {
   return `/media/${storageKey.split("/").map(encodeURIComponent).join("/")}`;
@@ -109,8 +101,8 @@ export default async function Home() {
                   <p>{featured.tagline}</p>
                   <dl className="app-facts">
                     <div><dt>Category</dt><dd>{featured.category}</dd></div>
-                    <div><dt>Pricing</dt><dd>{featured.pricingDetails || pricingLabels[featured.pricingType]}</dd></div>
-                    <div><dt>Compatibility</dt><dd>{featured.minimumMacos ?? "macOS"}</dd></div>
+                    <div><dt>Pricing</dt><dd>{formatPricing(featured)}</dd></div>
+                    <div><dt>Platform</dt><dd>macOS</dd></div>
                   </dl>
                   <Link className="primary-action" href={`/apps/${featured.slug}`}>View {featured.name} <ArrowUpRight size={16} /></Link>
                 </div>
@@ -126,7 +118,7 @@ export default async function Home() {
                     </span>
                     <span className="app-row-meta">
                       <span>{app.category}</span>
-                      <span>{app.pricingDetails || pricingLabels[app.pricingType]}</span>
+                      <span>{formatPricing(app)}</span>
                     </span>
                     <ArrowUpRight size={16} aria-hidden="true" />
                   </Link>

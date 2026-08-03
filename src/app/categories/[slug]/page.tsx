@@ -6,14 +6,10 @@ import { cache } from "react";
 import { ArrowLeft, ArrowUpRight, Search } from "lucide-react";
 import { MacifyLogo } from "@/components/macify-logo";
 import { getPublishedCategoryBySlug } from "@/lib/apps-data";
+import { formatPricing } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 const getCategory = cache(getPublishedCategoryBySlug);
-
-const pricingLabels = {
-  free: "Free", freemium: "Freemium", paid_once: "Paid once", subscription: "Subscription",
-  open_source: "Open source", enterprise: "Enterprise",
-} as const;
 
 function mediaUrl(storageKey: string) {
   return `/media/${storageKey.split("/").map(encodeURIComponent).join("/")}`;
@@ -51,7 +47,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             {category.applications.map((app) => (
               <Link href={`/apps/${app.slug}`} key={app.id}>
                 {app.icon ? <Image alt={app.icon.altText ?? `${app.name} icon`} height={58} src={mediaUrl(app.icon.storageKey)} unoptimized width={58} /> : <span className="category-app-fallback" aria-hidden="true">{app.name.slice(0, 2).toUpperCase()}</span>}
-                <span><strong>{app.name}</strong><small>{app.tagline}</small><em>{app.pricingDetails || pricingLabels[app.pricingType]} · {app.minimumMacos ?? "macOS"}</em></span>
+                <span><strong>{app.name}</strong><small>{app.tagline}</small><em>{formatPricing(app)}</em></span>
                 <ArrowUpRight size={16} />
               </Link>
             ))}

@@ -8,6 +8,7 @@ import { z } from "zod";
 import { getDatabase } from "@/db/client";
 import {
   appCategories,
+  appRelationships,
   appTags,
   apps,
   categories,
@@ -18,6 +19,7 @@ import {
   tags,
 } from "@/db/schema";
 import { normalizeTags } from "@/lib/application-schema";
+import { isAllowedRemoteImageUrl, prepareMediaSource, putPreparedMedia, type PreparedMedia } from "@/lib/media-upload";
 
 const slugSchema = z.string().trim().min(2).max(90).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const taxonomySchema = z.object({
@@ -188,35 +190,48 @@ const importSchema = z.object({
   slug: slugSchema,
   websiteUrl: z.url().refine((value) => ["http:", "https:"].includes(new URL(value).protocol)),
   tagline: z.string().trim().min(10).max(140),
-  summary: z.string().trim().min(20).max(320),
   description: z.string().trim().min(40).max(20_000),
-  pricingType: z.enum(["free", "freemium", "paid_once", "subscription", "open_source", "enterprise"]),
+  pricingType: z.enum(["free", "freemium", "paid"]),
+  billingType: z.enum(["one_time", "subscription"]).or(z.literal("")).default(""),
   pricingDetails: z.string().trim().max(240).default(""),
-  sourceType: z.enum(["open_source", "closed_source"]),
-  sourceUrl: z.string().trim().default("").refine((value) => {
-    if (!value) return true;
-    const parsed = z.url().safeParse(value);
-    return parsed.success && ["http:", "https:"].includes(new URL(parsed.data).protocol);
-  }, "Use a complete http:// or https:// URL."),
+  sourceType: z.enum(["open_source", "closed_source"]).default("closed_source"),
   youtubeUrl: z.string().trim().default("").refine((value) => {
     if (!value) return true;
     const parsed = z.url().safeParse(value);
     return parsed.success && ["youtube.com", "www.youtube.com", "youtu.be"].includes(new URL(parsed.data).hostname);
   }, "Use a youtube.com or youtu.be URL."),
-  minimumMacos: z.string().trim().max(40).default(""),
   category: z.string().trim().min(1),
   tags: z.string().trim().max(500).default(""),
+  iconUrl: z.string().trim().max(2_000).default("").refine(isAllowedRemoteImageUrl, "Use a public HTTPS image URL."),
+  iconAltText: z.string().trim().max(300).default(""),
+  previewImageUrl: z.string().trim().max(2_000).default("").refine(isAllowedRemoteImageUrl, "Use a public HTTPS image URL."),
+  previewImageAltText: z.string().trim().max(300).default(""),
+  screenshotUrls: z.string().trim().max(16_000).default("").refine((value) => splitList(value).length <= 8, "Use no more than 8 screenshot URLs.").refine((value) => splitList(value).every(isAllowedRemoteImageUrl), "Every screenshot must use a public HTTPS image URL."),
+  relatedAppSlugs: z.string().trim().max(2_000).default(""),
+}).superRefine((data, context) => {
+  if (data.pricingType !== "free" && data.billingType === "") context.addIssue({ code: "custom", path: ["billingType"], message: "Choose one_time or subscription." });
 });
+
+function splitList(value: string) {
+  return value.split(/[|;\n\r]+/).map((item) => item.trim()).filter(Boolean);
+}
 
 function normalizeSourceRow(input: unknown) {
   const source: SourceRow = typeof input === "object" && input !== null && !Array.isArray(input) ? input as SourceRow : {};
   const value = (camel: string, snake: string) => String(source[camel] ?? source[snake] ?? "");
+  const listValue = (camel: string, snake: string, separator: string) => {
+    const raw = source[camel] ?? source[snake] ?? "";
+    return Array.isArray(raw) ? raw.map(String).join(separator) : String(raw);
+  };
   return {
     name: value("name", "name"), slug: value("slug", "slug"), websiteUrl: value("websiteUrl", "website_url"),
-    tagline: value("tagline", "tagline"), summary: value("summary", "summary"), description: value("description", "description"),
-    pricingType: value("pricingType", "pricing_type"), pricingDetails: value("pricingDetails", "pricing_details"),
-    sourceType: value("sourceType", "source_type"), sourceUrl: value("sourceUrl", "source_url"), youtubeUrl: value("youtubeUrl", "youtube_url"),
-    minimumMacos: value("minimumMacos", "minimum_macos"), category: value("category", "category"), tags: value("tags", "tags"),
+    tagline: value("tagline", "tagline"), description: value("description", "description"),
+    pricingType: value("pricingType", "pricing_type"), billingType: value("billingType", "billing_type"), pricingDetails: value("pricingDetails", "pricing_details"),
+    sourceType: value("sourceType", "source_type") || "closed_source", youtubeUrl: value("youtubeUrl", "youtube_url"),
+    category: value("category", "category"), tags: value("tags", "tags"),
+    iconUrl: value("iconUrl", "icon_url"), iconAltText: value("iconAltText", "icon_alt_text"),
+    previewImageUrl: value("previewImageUrl", "preview_image_url"), previewImageAltText: value("previewImageAltText", "preview_image_alt_text"),
+    screenshotUrls: listValue("screenshotUrls", "screenshot_urls", "|"), relatedAppSlugs: listValue("relatedAppSlugs", "related_app_slugs", ","),
   };
 }
 
@@ -239,14 +254,23 @@ export async function uploadImportFile(formData: FormData) {
   if (sourceRows.length === 0 || sourceRows.length > 250) redirect(messageUrl("/dashboard/imports", "error", "Use a file containing between 1 and 250 rows."));
 
   const database = await getDatabase();
-  const categoryRows = await database.select({ id: categories.id, slug: categories.slug, name: categories.name }).from(categories);
+  const [categoryRows, existingAppRows] = await Promise.all([
+    database.select({ id: categories.id, slug: categories.slug, name: categories.name }).from(categories),
+    database.select({ slug: apps.slug }).from(apps).where(isNull(apps.deletedAt)),
+  ]);
   const categoryMap = new Map(categoryRows.flatMap((category) => [[category.slug.toLowerCase(), category.id], [category.name.toLowerCase(), category.id]]));
+  const sourceSlugs = new Set(sourceRows.map((source) => normalizeSourceRow(source).slug).filter(Boolean));
+  const availableSlugs = new Set([...existingAppRows.map((app) => app.slug), ...sourceSlugs]);
   const jobId = crypto.randomUUID();
   const now = new Date();
   const normalizedRows = sourceRows.map((source, index) => {
     const parsed = importSchema.safeParse(normalizeSourceRow(source));
     const categoryId = parsed.success ? categoryMap.get(parsed.data.category.toLowerCase()) : undefined;
     const errors = parsed.success ? (categoryId ? [] : ["Category does not match an existing category name or slug."]) : parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`);
+    if (parsed.success) {
+      const unknownRelated = parsed.data.relatedAppSlugs.split(/[|;,\n\r]+/).map((slug) => slug.trim()).filter(Boolean).filter((slug) => slug !== parsed.data.slug && !availableSlugs.has(slug));
+      if (unknownRelated.length) errors.push(`Unknown related application slug${unknownRelated.length === 1 ? "" : "s"}: ${unknownRelated.join(", ")}.`);
+    }
     const safeSource: SourceRow = typeof source === "object" && source !== null && !Array.isArray(source) ? source as SourceRow : { value: source };
     return { id: crypto.randomUUID(), importJobId: jobId, rowNumber: index + 1, status: errors.length ? "invalid" : "valid", sourceData: safeSource, normalizedData: parsed.success && categoryId ? { ...parsed.data, categoryId } : null, errors, createdAt: now };
   });
@@ -269,6 +293,23 @@ export async function uploadImportFile(formData: FormData) {
 
 type NormalizedImport = z.infer<typeof importSchema> & { categoryId: string };
 
+async function prepareImportedMedia(appId: string, data: NormalizedImport) {
+  const selections: Array<{ role: "icon" | "preview_image" | "screenshot"; url: string; altText: string }> = [];
+  if (data.iconUrl) selections.push({ role: "icon", url: data.iconUrl, altText: data.iconAltText });
+  if (data.previewImageUrl) selections.push({ role: "preview_image", url: data.previewImageUrl, altText: data.previewImageAltText });
+  for (const url of splitList(data.screenshotUrls)) selections.push({ role: "screenshot", url, altText: "" });
+  const media: PreparedMedia[] = [];
+  for (const selection of selections) {
+    const result = await prepareMediaSource(appId, selection.role, null, selection.url, selection.altText);
+    if (!result.ok) return { ok: false, error: `${selection.role}: ${result.error}` } as const;
+    media.push(result.media);
+  }
+  if (media.reduce((sum, asset) => sum + asset.byteSize, 0) > 40 * 1024 * 1024) {
+    return { ok: false, error: "Combined media is larger than the 40 MB per-application limit." } as const;
+  }
+  return { ok: true, media } as const;
+}
+
 export async function commitImportJob(formData: FormData) {
   const id = z.uuid().safeParse(formData.get("id"));
   if (!id.success) redirect(messageUrl("/dashboard/imports", "error", "Invalid import job."));
@@ -276,9 +317,12 @@ export async function commitImportJob(formData: FormData) {
   const jobs = await database.select().from(importJobs).where(eq(importJobs.id, id.data)).limit(1);
   if (!jobs[0] || jobs[0].status !== "validated") redirect(messageUrl("/dashboard/imports", "error", "This import cannot be committed."));
   const rows = await database.select().from(importRows).where(and(eq(importRows.importJobId, id.data), eq(importRows.status, "valid")));
-  const existing = await database.select({ slug: apps.slug, websiteUrl: apps.websiteUrl }).from(apps).where(isNull(apps.deletedAt));
+  const existing = await database.select({ id: apps.id, slug: apps.slug, websiteUrl: apps.websiteUrl }).from(apps).where(isNull(apps.deletedAt));
   const slugs = new Set(existing.map((app) => app.slug));
   const websites = new Set(existing.map((app) => app.websiteUrl));
+  const appIdsBySlug = new Map(existing.map((app) => [app.slug, app.id]));
+  const pendingRelationships: Array<{ appId: string; slugs: string[] }> = [];
+  const { env } = await getCloudflareContext({ async: true });
   let imported = 0;
   let duplicates = 0;
   for (const row of rows) {
@@ -291,19 +335,45 @@ export async function commitImportJob(formData: FormData) {
     const appId = crypto.randomUUID();
     const now = new Date();
     const normalizedTags = normalizeTags(data.tags);
+    const prepared = await prepareImportedMedia(appId, data);
+    if (!prepared.ok) {
+      await database.update(importRows).set({ status: "failed", errors: [prepared.error] }).where(eq(importRows.id, row.id));
+      continue;
+    }
+    const uploadedKeys: string[] = [];
     try {
+      for (const asset of prepared.media) {
+        await putPreparedMedia(env.MEDIA, asset);
+        uploadedKeys.push(asset.storageKey);
+      }
       await database.batch([
-        database.insert(apps).values({ id: appId, name: data.name, slug: data.slug, websiteUrl: data.websiteUrl, tagline: data.tagline, summary: data.summary, description: data.description, pricingType: data.pricingType, pricingDetails: data.pricingDetails || null, sourceType: data.sourceType, sourceUrl: data.sourceUrl || null, youtubeUrl: data.youtubeUrl || null, minimumMacos: data.minimumMacos || null, status: "draft", createdAt: now, updatedAt: now }),
+        database.insert(apps).values({ id: appId, name: data.name, slug: data.slug, websiteUrl: data.websiteUrl, tagline: data.tagline, description: data.description, pricingType: data.pricingType, billingType: data.pricingType === "free" ? null : data.billingType || null, pricingDetails: data.pricingDetails || null, sourceType: data.sourceType, youtubeUrl: data.youtubeUrl || null, status: "draft", createdAt: now, updatedAt: now }),
         database.insert(appCategories).values({ appId, categoryId: data.categoryId, isPrimary: true }),
         ...normalizedTags.flatMap((tag) => [
           database.insert(tags).values({ id: `tag-${tag.slug}`, ...tag, createdAt: now }).onConflictDoUpdate({ target: tags.slug, set: { name: tag.name } }),
           database.insert(appTags).values({ appId, tagId: sql`(select ${tags.id} from ${tags} where ${tags.slug} = ${tag.slug})` }),
         ]),
+        ...prepared.media.map((asset) => database.insert(mediaAssets).values({ id: asset.id, appId, role: asset.role, storageKey: asset.storageKey, mimeType: asset.mimeType, byteSize: asset.byteSize, checksum: asset.checksum, sourceUrl: asset.sourceUrl, altText: asset.altText, createdAt: now })),
         database.update(importRows).set({ status: "imported", appId }).where(eq(importRows.id, row.id)),
       ]);
-      slugs.add(data.slug); websites.add(data.websiteUrl); imported += 1;
-    } catch {
-      await database.update(importRows).set({ status: "failed", errors: ["The row could not be committed."] }).where(eq(importRows.id, row.id));
+      slugs.add(data.slug);
+      websites.add(data.websiteUrl);
+      appIdsBySlug.set(data.slug, appId);
+      pendingRelationships.push({ appId, slugs: data.relatedAppSlugs.split(/[|;,\n\r]+/).map((slug) => slug.trim()).filter(Boolean) });
+      imported += 1;
+    } catch (error) {
+      await Promise.all(uploadedKeys.map((key) => env.MEDIA.delete(key)));
+      const message = error instanceof Error ? error.message : "Unknown import error";
+      console.error(JSON.stringify({ event: "application.import.failed", importJobId: id.data, rowId: row.id, message }));
+      await database.update(importRows).set({ status: "failed", errors: ["The row or its media could not be committed."] }).where(eq(importRows.id, row.id));
+    }
+  }
+  for (const relationship of pendingRelationships) {
+    for (const targetSlug of [...new Set(relationship.slugs)]) {
+      const targetAppId = appIdsBySlug.get(targetSlug);
+      if (!targetAppId || targetAppId === relationship.appId) continue;
+      const [sourceAppId, targetId] = [relationship.appId, targetAppId].sort();
+      await database.insert(appRelationships).values({ id: crypto.randomUUID(), sourceAppId, targetAppId: targetId, relationshipType: "related", confidence: 1, origin: "import", reviewedAt: new Date(), createdAt: new Date() }).onConflictDoNothing();
     }
   }
   await database.update(importJobs).set({ status: "completed", duplicateRows: duplicates, validRows: imported, completedAt: new Date() }).where(eq(importJobs.id, id.data));

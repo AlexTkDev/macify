@@ -20,11 +20,17 @@ Success means visitors can identify a trustworthy application in a few minutes, 
 
 ## Editorial Content Model
 
-Each application record contains its identity, official website, tagline, brief summary, detailed description, classification, pricing, source model, macOS requirement, tags, optional source repository, optional YouTube demo, and mutually related applications.
+Each application record contains its identity, official website, tagline, detailed description, classification, pricing, source model, tags, optional YouTube demo, and mutually related applications.
+
+Pricing is recorded in two parts. The access tier is free, freemium, or paid. Freemium and paid applications also record whether payment is one-time or subscription-based. Editors can add literal pricing details when the simple classification is not enough.
+
+Source status is retained internally. Public pages display an Open source fact only when applicable; closed-source applications do not display a source label. Repository URLs and minimum macOS versions are outside the current content model.
 
 Detailed descriptions are authored and stored as plain Markdown. The dashboard intentionally provides a normal textarea without a rich-text editor, formatting toolbar, or preview. Public application pages render the Markdown as semantic HTML with GitHub Flavored Markdown support for headings, lists, links, emphasis, tables, task lists, strikethrough, blockquotes, and code. Raw HTML from Markdown is never executed.
 
 Application media consists of one icon, one main preview image, and multiple screenshots stored in Cloudflare R2 and referenced from the database. The preview image is the wide editorial visual shown within the public application page; it is not used as the social-sharing image. Media can be attached during initial creation or later editing, and its R2 paths use the permanent application ID generated during submission. Audio is outside the product scope.
+
+Tags use autocomplete against the existing taxonomy while allowing editors to create a missing tag inline. New tags are normalized and created when the application is saved.
 
 Editors can provide media as a local file or a public HTTPS image URL. URL imports are downloaded, validated, copied into R2, and recorded with their original source URL; public pages never hotlink third-party media. Remote fetches reject local or private destinations, unsafe redirects, unsupported formats, mismatched file signatures, and files over the editorial size limit.
 
@@ -49,7 +55,7 @@ The voice is calm and specific. It explains what an application does, who it sui
 
 ## Design Principles
 
-1. **Lead with utility.** Search, categories, compatibility, pricing, and download context must be visible before editorial decoration.
+1. **Lead with utility.** Search, categories, pricing, and download context must be visible before editorial decoration.
 2. **Make curation legible.** Explain why an application is listed and distinguish verified facts from editorial opinion.
 3. **Feel native without imitation.** Use familiar macOS clarity, density, and interaction patterns while maintaining an independent Macify identity.
 4. **Let application media do the color work.** The interface remains restrained so icons, screenshots, and preview images stay recognizable.

@@ -22,16 +22,14 @@ export const apps = sqliteTable(
     name: text("name").notNull(),
     websiteUrl: text("website_url").notNull(),
     tagline: text("tagline").notNull(),
-    summary: text("summary").notNull(),
     description: text("description").notNull(),
     pricingType: text("pricing_type", {
-      enum: ["free", "freemium", "paid_once", "subscription", "open_source", "enterprise"],
+      enum: ["free", "freemium", "paid"],
     }).notNull(),
+    billingType: text("billing_type", { enum: ["one_time", "subscription"] }),
     pricingDetails: text("pricing_details"),
     sourceType: text("source_type", { enum: ["open_source", "closed_source"] }).notNull(),
-    sourceUrl: text("source_url"),
     youtubeUrl: text("youtube_url"),
-    minimumMacos: text("minimum_macos"),
     appleSilicon: integer("apple_silicon", { mode: "boolean" }).notNull().default(true),
     intel: integer("intel", { mode: "boolean" }).notNull().default(false),
     status: text("status", { enum: ["draft", "published", "archived"] })

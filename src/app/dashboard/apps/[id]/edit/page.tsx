@@ -83,6 +83,7 @@ export default async function EditApplicationPage({
         categories={options.categories}
         mode="edit"
         relatedApplications={options.relatedApplications}
+        tags={options.tags}
       />
 
       <section className="media-editor" aria-labelledby="media-heading">

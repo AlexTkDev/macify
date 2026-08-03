@@ -9,6 +9,8 @@ import {
   type ApplicationFormState,
   updateApplication,
 } from "@/app/dashboard/actions";
+import { ImageSourcePicker } from "@/components/image-source-picker";
+import { TagInput } from "@/components/tag-input";
 
 const initialState: ApplicationFormState = {};
 
@@ -31,14 +33,12 @@ type EditableApplication = {
   slug: string;
   websiteUrl: string;
   tagline: string;
-  summary: string;
   description: string;
-  pricingType: "free" | "freemium" | "paid_once" | "subscription" | "open_source" | "enterprise";
+  pricingType: "free" | "freemium" | "paid";
+  billingType: "one_time" | "subscription" | null;
   pricingDetails: string | null;
   sourceType: "open_source" | "closed_source";
-  sourceUrl: string | null;
   youtubeUrl: string | null;
-  minimumMacos: string | null;
   categoryId: string;
   tagsText: string;
   relatedAppIds: string[];
@@ -64,11 +64,13 @@ export function ApplicationForm({
   application,
   categories,
   relatedApplications,
+  tags,
   mode = "create",
 }: {
   application?: EditableApplication;
   categories: CategoryOption[];
   relatedApplications: RelatedApplicationOption[];
+  tags: string[];
   mode?: "create" | "edit";
 }) {
   const formAction = mode === "edit" ? updateApplication : createApplication;
@@ -76,6 +78,7 @@ export function ApplicationForm({
   const [name, setName] = useState(application?.name ?? "");
   const [slug, setSlug] = useState(application?.slug ?? "");
   const [slugEdited, setSlugEdited] = useState(mode === "edit");
+  const [pricingType, setPricingType] = useState<"free" | "freemium" | "paid">(application?.pricingType ?? "free");
 
   return (
     <form action={action} className="editor-form">
@@ -144,17 +147,6 @@ export function ApplicationForm({
             <FieldError errors={state.errors?.tagline} />
           </label>
           <label className="field field-wide">
-            <span>Brief description</span>
-            <textarea
-              name="summary"
-              defaultValue={application?.summary}
-              placeholder="Explain the app’s main job and who will find it useful."
-              required
-              rows={3}
-            />
-            <FieldError errors={state.errors?.summary} />
-          </label>
-          <label className="field field-wide">
             <span>Detailed description <small>Markdown</small></span>
             <textarea
               className="markdown-source"
@@ -179,16 +171,12 @@ export function ApplicationForm({
           <div className="form-fields create-media-fields">
             <div className="create-media-card field-wide">
               <div><strong>Application icon</strong><span>Square PNG, JPEG, WebP, or AVIF. Used in listings and the app header.</span></div>
-              <label className="file-field"><span>Choose icon</span><input accept="image/png,image/jpeg,image/webp,image/avif" name="iconFile" type="file" /></label>
-              <div className="media-source-divider"><span>or fetch from URL</span></div>
-              <label className="field create-media-url"><span>Icon URL <small>Optional</small></span><input name="iconUrl" placeholder="https://example.com/icon.png" type="url" /></label>
+              <ImageSourcePicker accept="image/png,image/jpeg,image/webp,image/avif" fileLabel="Choose icon" fileName="iconFile" previewAlt="Application icon preview" previewShape="icon" urlLabel="Icon URL" urlName="iconUrl" urlPlaceholder="https://example.com/icon.png" />
               <label className="field"><span>Icon alt text <small>Optional</small></span><input name="iconAltText" placeholder="Raycast application icon" /></label>
             </div>
             <div className="create-media-card field-wide">
               <div><strong>Main preview image</strong><span>Wide editorial image displayed on the public application page.</span></div>
-              <label className="file-field"><span>Choose preview image</span><input accept="image/png,image/jpeg,image/webp,image/avif" name="previewImageFile" type="file" /></label>
-              <div className="media-source-divider"><span>or fetch from URL</span></div>
-              <label className="field create-media-url"><span>Preview image URL <small>Optional</small></span><input name="previewImageUrl" placeholder="https://example.com/preview.jpg" type="url" /></label>
+              <ImageSourcePicker accept="image/png,image/jpeg,image/webp,image/avif" fileLabel="Choose preview image" fileName="previewImageFile" previewAlt="Main preview image" urlLabel="Preview image URL" urlName="previewImageUrl" urlPlaceholder="https://example.com/preview.jpg" />
               <label className="field"><span>Preview alt text <small>Optional</small></span><input name="previewImageAltText" placeholder="Raycast command interface" /></label>
             </div>
             <div className="create-media-card field-wide">
@@ -219,59 +207,48 @@ export function ApplicationForm({
             </select>
             <FieldError errors={state.errors?.categoryId} />
           </label>
-          <label className="field field-wide">
+          <div className="field field-wide">
             <span>Tags <small>Optional, up to 12</small></span>
-            <input
-              defaultValue={application?.tagsText ?? ""}
-              name="tagsText"
-              placeholder="launcher, automation, keyboard-first"
-            />
-            <small className="field-hint">Separate tags with commas. Reuse simple nouns and short phrases.</small>
+            <TagInput initialValue={application?.tagsText ?? ""} options={tags} />
             <FieldError errors={state.errors?.tagsText} />
-          </label>
+          </div>
         </div>
       </section>
 
       <section className="form-section" aria-labelledby="availability-heading">
         <div className="form-section-copy">
           <h2 id="availability-heading">Availability</h2>
-          <span>Pricing, source model, compatibility, and supporting links.</span>
+          <span>Access tier, billing method, source status, and supporting links.</span>
         </div>
         <div className="form-fields">
           <label className="field">
             <span>Pricing model</span>
-            <select defaultValue={application?.pricingType ?? "free"} name="pricingType">
+            <select name="pricingType" onChange={(event) => setPricingType(event.target.value as "free" | "freemium" | "paid")} value={pricingType}>
               <option value="free">Free</option>
-              <option value="freemium">Free with paid upgrade</option>
-              <option value="paid_once">Paid once</option>
-              <option value="subscription">Subscription</option>
-              <option value="open_source">Open source</option>
-              <option value="enterprise">Enterprise</option>
+              <option value="freemium">Freemium</option>
+              <option value="paid">Paid</option>
             </select>
             <FieldError errors={state.errors?.pricingType} />
           </label>
-          <label className="field">
-            <span>Source model</span>
-            <select defaultValue={application?.sourceType ?? "closed_source"} name="sourceType">
-              <option value="closed_source">Closed source</option>
-              <option value="open_source">Open source</option>
-            </select>
-            <FieldError errors={state.errors?.sourceType} />
-          </label>
+          {pricingType === "free" ? <input name="billingType" type="hidden" value="" /> : (
+            <label className="field">
+              <span>Billing method</span>
+              <select defaultValue={application?.billingType ?? ""} name="billingType" required>
+                <option disabled value="">Choose billing method</option>
+                <option value="one_time">One-time payment</option>
+                <option value="subscription">Subscription</option>
+              </select>
+              <FieldError errors={state.errors?.billingType} />
+            </label>
+          )}
           <label className="field field-wide">
             <span>Pricing details <small>Optional</small></span>
             <input defaultValue={application?.pricingDetails ?? ""} name="pricingDetails" placeholder="$29 once, or free for personal use" />
             <FieldError errors={state.errors?.pricingDetails} />
           </label>
-          <label className="field">
-            <span>Minimum macOS <small>Optional</small></span>
-            <input defaultValue={application?.minimumMacos ?? ""} name="minimumMacos" placeholder="macOS 13 Ventura" />
-            <FieldError errors={state.errors?.minimumMacos} />
-          </label>
-          <label className="field">
-            <span>Source repository <small>Optional</small></span>
-            <input defaultValue={application?.sourceUrl ?? ""} name="sourceUrl" placeholder="https://github.com/…" type="url" />
-            <FieldError errors={state.errors?.sourceUrl} />
+          <label className="choice-field field-wide">
+            <input defaultChecked={application?.sourceType === "open_source"} name="sourceType" type="checkbox" value="open_source" />
+            <span><strong>Open source</strong><small>Show an Open source label on the public application page. Closed-source applications show no source label.</small></span>
           </label>
           <label className="field field-wide">
             <span>YouTube demo <small>Optional</small></span>

@@ -7,10 +7,7 @@ const httpUrl = z
     return protocol === "https:" || protocol === "http:";
   }, "Use an http:// or https:// URL.");
 
-const optionalHttpUrl = z
-  .string()
-  .trim()
-  .refine((value) => value === "" || httpUrl.safeParse(value).success, "Enter a valid URL.");
+const optionalHttpUrl = z.string().trim().refine((value) => value === "" || httpUrl.safeParse(value).success, "Enter a valid URL.");
 
 const optionalYouTubeUrl = optionalHttpUrl.refine((value) => {
   if (value === "") return true;
@@ -28,21 +25,12 @@ export const applicationSchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens."),
   websiteUrl: httpUrl,
   tagline: z.string().trim().min(10, "Write a more descriptive tagline.").max(140),
-  summary: z.string().trim().min(20, "Write at least 20 characters.").max(320),
   description: z.string().trim().min(40, "Write at least 40 characters.").max(20_000),
-  pricingType: z.enum([
-    "free",
-    "freemium",
-    "paid_once",
-    "subscription",
-    "open_source",
-    "enterprise",
-  ]),
+  pricingType: z.enum(["free", "freemium", "paid"]),
+  billingType: z.enum(["one_time", "subscription"]).or(z.literal("")),
   pricingDetails: z.string().trim().max(240),
   sourceType: z.enum(["open_source", "closed_source"]),
-  sourceUrl: optionalHttpUrl,
   youtubeUrl: optionalYouTubeUrl,
-  minimumMacos: z.string().trim().max(40),
   categoryId: z.string().trim().min(1, "Choose a primary category."),
   tagsText: z
     .string()
@@ -58,6 +46,10 @@ export const applicationSchema = z.object({
       "Use comma-separated tags between 2 and 40 characters each.",
     ),
   relatedAppIds: z.array(z.uuid()).max(12, "Choose no more than 12 related applications."),
+}).superRefine((data, context) => {
+  if (data.pricingType !== "free" && data.billingType === "") {
+    context.addIssue({ code: "custom", path: ["billingType"], message: "Choose one-time payment or subscription." });
+  }
 });
 
 export type ApplicationFields = z.infer<typeof applicationSchema>;
@@ -68,14 +60,12 @@ export function applicationFieldsFromFormData(formData: FormData) {
     slug: formData.get("slug"),
     websiteUrl: formData.get("websiteUrl"),
     tagline: formData.get("tagline"),
-    summary: formData.get("summary"),
     description: formData.get("description"),
     pricingType: formData.get("pricingType"),
+    billingType: formData.get("billingType") ?? "",
     pricingDetails: formData.get("pricingDetails"),
-    sourceType: formData.get("sourceType"),
-    sourceUrl: formData.get("sourceUrl"),
+    sourceType: formData.get("sourceType") ?? "closed_source",
     youtubeUrl: formData.get("youtubeUrl"),
-    minimumMacos: formData.get("minimumMacos"),
     categoryId: formData.get("categoryId"),
     tagsText: formData.get("tagsText"),
     relatedAppIds: formData.getAll("relatedAppIds"),

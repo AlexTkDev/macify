@@ -1,0 +1,166 @@
+# Macify Project Checklist
+
+Last updated: August 3, 2026
+
+Macify.app is a curated directory of useful macOS applications. This checklist records the implemented foundation and the work remaining before a production launch.
+
+## Product decisions
+
+- [x] Product name: Macify
+- [x] Website: Macify.app
+- [x] Public product type: curated macOS application directory
+- [x] Phase 1 prioritizes the dashboard, public UI, database, media, and editorial workflow
+- [x] Authentication, user accounts, and payments are deferred to a later phase
+- [x] Detailed descriptions are stored as plain Markdown and rendered safely for public visitors
+- [x] Application audio is outside the product scope
+- [x] Application pages may link to an optional YouTube demo
+- [x] Related-application relationships are mutual
+- [ ] Confirm pricing terminology: clarify the exact distinction between **Premium** and **Paid** before changing the current Free, Freemium, and Paid schema
+
+## Technical foundation
+
+- [x] Next.js, React, and TypeScript application
+- [x] Cloudflare Workers/OpenNext deployment configuration
+- [x] Cloudflare D1 relational database binding
+- [x] Cloudflare R2 media storage binding
+- [x] Drizzle ORM schema and versioned SQL migrations
+- [x] Local Cloudflare development environment
+- [x] Local D1 migrations applied through migration `0005`
+- [x] Generated Cloudflare binding types
+- [x] Structured migration directory and migration documentation
+- [ ] Apply pending migrations to staging D1
+- [ ] Apply pending migrations to production D1
+- [ ] Deploy the current Worker to staging and complete a staging smoke test
+- [ ] Deploy the approved release to production
+- [ ] Connect and verify the Macify.app custom domain
+
+## Application content model
+
+- [x] Application name
+- [x] Automatically suggested, editable slug
+- [x] Official website URL
+- [x] Tagline
+- [x] Detailed Markdown description
+- [x] Primary category
+- [x] Tags with normalization and a 12-tag limit
+- [x] Open-source status stored internally
+- [x] Closed-source status omitted from the public UI
+- [x] Optional YouTube demo URL
+- [x] Up to 12 related applications
+- [x] Removed the brief-description field
+- [x] Removed the minimum macOS field
+- [x] Removed the source-repository field
+- [x] Current pricing schema separates access tier from billing method
+- [ ] Finalize and implement the confirmed Free, Premium, and Paid definitions
+
+## Dashboard and editorial workflow
+
+- [x] Dashboard shell and application listing
+- [x] Create application form
+- [x] Edit application form
+- [x] Draft and publication controls
+- [x] Category management
+- [x] Tag management
+- [x] Media management
+- [x] Import history and row-level validation review
+- [x] Tag autocomplete using existing tags
+- [x] Inline creation of new tags when an application is saved
+- [x] Related-application selector
+- [x] Required icon and main-preview checks before publishing
+- [ ] Add dashboard authentication and authorization before public deployment
+- [ ] Add an audit log for editorial changes
+- [ ] Add pagination and filtering for a large application catalog
+- [ ] Add a reliable application search experience to the dashboard
+
+## Media pipeline
+
+- [x] Application icon upload from a local file
+- [x] Application icon import from a public HTTPS URL
+- [x] Main preview upload from a local file
+- [x] Main preview import from a public HTTPS URL
+- [x] Multiple screenshot uploads
+- [x] Screenshot URL imports
+- [x] Live file and URL previews in create and edit workflows
+- [x] Media copied into R2 only when the application is saved
+- [x] Original remote source URL recorded as metadata
+- [x] Public pages load Macify-controlled R2 copies instead of hotlinking sources
+- [x] Remote image timeout, redirect, type, signature, and size validation
+- [x] Private-network and localhost URL protection
+- [x] R2 cleanup when a related D1 write fails
+- [x] Maximum 10 MB per image and 40 MB combined during application creation
+- [ ] Extract and store image width and height
+- [ ] Add icon and preview aspect-ratio warnings
+- [ ] Decide whether production image transformations and responsive variants are needed
+- [ ] Add rate limiting to URL-based media import before exposing the dashboard publicly
+
+## CSV and JSON import/export
+
+- [x] CSV import
+- [x] JSON import
+- [x] Validation before committing rows
+- [x] Duplicate detection using slug and official website URL
+- [x] Safe default behavior that skips duplicates without overwriting existing data
+- [x] Icon URL and alt-text import/export
+- [x] Main preview URL and alt-text import/export
+- [x] Multiple screenshot URL import/export
+- [x] Related application slug import/export
+- [x] Tags and category import/export
+- [x] Imported media uses the same secure R2 pipeline as manually added media
+- [x] Failed media imports fail the affected row instead of creating an incomplete record
+- [ ] Add update/merge conflict handling only when the product needs bulk updates
+- [ ] Add downloadable example CSV and JSON templates
+- [ ] Move very large media imports to a background queue or workflow if synchronous imports become slow
+
+## Public directory
+
+- [x] Public directory homepage
+- [x] Published application pages
+- [x] Category directory pages
+- [x] Application icons and main previews
+- [x] Screenshot gallery
+- [x] Safe GitHub Flavored Markdown rendering
+- [x] Pricing display
+- [x] Open-source label shown only when applicable
+- [x] YouTube demo link
+- [x] Related applications
+- [x] Development-only demo catalog with 12 fictional applications
+- [ ] Complete production search and filtering
+- [ ] Add real editorial seed content
+- [ ] Review all public responsive breakpoints with production media
+- [ ] Complete keyboard-navigation and screen-reader QA
+
+## SEO and sharing
+
+- [x] Per-application metadata
+- [x] Canonical application URLs
+- [x] SoftwareApplication structured data
+- [x] Generated application-specific Open Graph cards
+- [x] Main preview image kept separate from social-sharing artwork
+- [x] Category metadata
+- [ ] Add and verify sitemap generation
+- [ ] Add and verify robots.txt behavior
+- [ ] Connect Google Search Console and Bing Webmaster Tools after deployment
+- [ ] Run production Core Web Vitals and crawlability audits
+
+## Reliability, security, and operations
+
+- [x] TypeScript checks
+- [x] ESLint checks
+- [x] Drizzle migration consistency checks
+- [x] Explicit R2 failure cleanup in write operations
+- [ ] Add automated unit and integration tests for critical actions
+- [ ] Add end-to-end tests for create, edit, publish, and import workflows
+- [ ] Configure production logging, error monitoring, and alerts
+- [ ] Configure Cloudflare usage and billing notifications
+- [ ] Establish D1 backup/export and recovery procedures
+- [ ] Establish R2 retention and orphan-cleanup procedures
+- [ ] Add Turnstile or equivalent protection to future public submission forms
+
+## Later phases
+
+- [ ] User accounts
+- [ ] Authentication and account recovery
+- [ ] Saved or favorited applications
+- [ ] User-submitted application workflow
+- [ ] Payments and subscriptions, if required by the final business model
+- [ ] Administrative roles and permissions

@@ -21,7 +21,7 @@ export async function getTaxonomyOptions() {
 
 export async function getEditorialOptions(excludeAppId?: string) {
   const database = await getDatabase();
-  const [categoryOptions, relatedApplicationOptions] = await Promise.all([
+  const [categoryOptions, relatedApplicationOptions, tagOptions] = await Promise.all([
     database
       .select({ id: categories.id, name: categories.name })
       .from(categories)
@@ -35,9 +35,10 @@ export async function getEditorialOptions(excludeAppId?: string) {
           : isNull(apps.deletedAt),
       )
       .orderBy(asc(apps.name)),
+    database.select({ name: tags.name }).from(tags).orderBy(asc(tags.name)),
   ]);
 
-  return { categories: categoryOptions, relatedApplications: relatedApplicationOptions };
+  return { categories: categoryOptions, relatedApplications: relatedApplicationOptions, tags: tagOptions.map(({ name }) => name) };
 }
 
 const publicApplicationFields = {
@@ -46,14 +47,12 @@ const publicApplicationFields = {
   name: apps.name,
   websiteUrl: apps.websiteUrl,
   tagline: apps.tagline,
-  summary: apps.summary,
   description: apps.description,
   pricingType: apps.pricingType,
+  billingType: apps.billingType,
   pricingDetails: apps.pricingDetails,
   sourceType: apps.sourceType,
-  sourceUrl: apps.sourceUrl,
   youtubeUrl: apps.youtubeUrl,
-  minimumMacos: apps.minimumMacos,
   seoTitle: apps.seoTitle,
   seoDescription: apps.seoDescription,
   publishedAt: apps.publishedAt,
@@ -68,8 +67,9 @@ export async function getApplicationsDashboardData() {
         id: apps.id,
         name: apps.name,
         slug: apps.slug,
-        minimumMacos: apps.minimumMacos,
         pricingType: apps.pricingType,
+        billingType: apps.billingType,
+        pricingDetails: apps.pricingDetails,
         sourceType: apps.sourceType,
         status: apps.status,
         updatedAt: apps.updatedAt,
@@ -111,8 +111,8 @@ export async function getHomepageDirectoryData() {
         name: apps.name,
         tagline: apps.tagline,
         pricingType: apps.pricingType,
+        billingType: apps.billingType,
         pricingDetails: apps.pricingDetails,
-        minimumMacos: apps.minimumMacos,
         category: categories.name,
       })
       .from(apps)
@@ -159,14 +159,12 @@ export async function getApplicationEditorData(id: string) {
         slug: apps.slug,
         websiteUrl: apps.websiteUrl,
         tagline: apps.tagline,
-        summary: apps.summary,
         description: apps.description,
         pricingType: apps.pricingType,
+        billingType: apps.billingType,
         pricingDetails: apps.pricingDetails,
         sourceType: apps.sourceType,
-        sourceUrl: apps.sourceUrl,
         youtubeUrl: apps.youtubeUrl,
-        minimumMacos: apps.minimumMacos,
         status: apps.status,
       })
       .from(apps)
@@ -378,8 +376,8 @@ export async function getPublishedCategoryBySlug(slug: string) {
       name: apps.name,
       tagline: apps.tagline,
       pricingType: apps.pricingType,
+      billingType: apps.billingType,
       pricingDetails: apps.pricingDetails,
-      minimumMacos: apps.minimumMacos,
     })
     .from(appCategories)
     .innerJoin(apps, eq(apps.id, appCategories.appId))

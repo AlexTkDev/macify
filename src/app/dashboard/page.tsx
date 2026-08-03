@@ -8,23 +8,10 @@ import {
 } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getApplicationsDashboardData } from "@/lib/apps-data";
+import { formatPricing } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
-
-const pricingLabels: Record<string, string> = {
-  free: "Free",
-  freemium: "Free + paid",
-  paid_once: "Paid once",
-  subscription: "Subscription",
-  open_source: "Open source",
-  enterprise: "Enterprise",
-};
-
-const sourceLabels: Record<string, string> = {
-  open_source: "Open source",
-  closed_source: "Closed source",
-};
 
 function formatBytes(bytes: number) {
   if (bytes === 0) return "0 B";
@@ -102,7 +89,6 @@ export default async function DashboardPage({
               <thead>
                 <tr>
                   <th scope="col">Application</th>
-                  <th scope="col">Compatibility</th>
                   <th scope="col">Pricing</th>
                   <th scope="col">Source</th>
                   <th scope="col">Status</th>
@@ -120,9 +106,8 @@ export default async function DashboardPage({
                         <span><strong>{app.name}</strong><small>/{app.slug}</small></span>
                       </div>
                     </td>
-                    <td>{app.minimumMacos || "Not specified"}</td>
-                    <td>{pricingLabels[app.pricingType] ?? app.pricingType}</td>
-                    <td>{sourceLabels[app.sourceType] ?? app.sourceType}</td>
+                    <td>{formatPricing(app)}</td>
+                    <td>{app.sourceType === "open_source" ? "Open source" : <span className="table-muted">Not displayed</span>}</td>
                     <td>
                       <span className={cn(app.status === "published" ? "published-badge" : "draft-badge")}>
                         {app.status === "published" ? "Published" : "Draft"}

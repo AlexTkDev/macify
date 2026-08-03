@@ -10,26 +10,17 @@ import {
   ArrowUpRight,
   Code2,
   ExternalLink,
-  Laptop,
   Search,
   Video,
   WalletCards,
 } from "lucide-react";
 import { MacifyLogo } from "@/components/macify-logo";
 import { getPublishedApplicationBySlug } from "@/lib/apps-data";
+import { formatPricing } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
 const getApplication = cache(getPublishedApplicationBySlug);
-
-const pricingLabels = {
-  free: "Free",
-  freemium: "Free with paid upgrade",
-  paid_once: "One-time purchase",
-  subscription: "Subscription",
-  open_source: "Open source",
-  enterprise: "Enterprise pricing",
-} as const;
 
 function mediaUrl(storageKey: string) {
   return `/media/${storageKey.split("/").map(encodeURIComponent).join("/")}`;
@@ -46,7 +37,7 @@ export async function generateMetadata({
 
   const canonical = `/apps/${application.slug}`;
   const title = application.seoTitle ?? application.name;
-  const description = application.seoDescription ?? application.summary;
+  const description = application.seoDescription ?? application.tagline;
   const images = [{ url: `${canonical}/opengraph-image`, alt: `${application.name} on Macify` }];
 
   return {
@@ -77,15 +68,15 @@ export default async function ApplicationPage({
   const icon = application.media.find(({ role }) => role === "icon");
   const previewImage = application.media.find(({ role }) => role === "preview_image");
   const screenshots = application.media.filter(({ role }) => role === "screenshot");
-  const free = application.pricingType === "free" || application.pricingType === "open_source";
+  const free = application.pricingType !== "paid";
   const schema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: application.name,
-    description: application.summary,
+    description: application.tagline,
     url: `https://macify.app/apps/${application.slug}`,
     applicationCategory: application.category?.name,
-    operatingSystem: application.minimumMacos ?? "macOS",
+    operatingSystem: "macOS",
     image: previewImage ? `https://macify.app${mediaUrl(previewImage.storageKey)}` : undefined,
     downloadUrl: application.websiteUrl,
     isAccessibleForFree: free,
@@ -165,7 +156,6 @@ export default async function ApplicationPage({
             <section aria-labelledby="overview-heading">
               <p className="app-detail-section-label">Overview</p>
               <h2 id="overview-heading">What {application.name} does</h2>
-              <p className="app-detail-summary">{application.summary}</p>
               <div className="app-detail-prose markdown-content">
                 <ReactMarkdown
                   components={{
@@ -203,15 +193,9 @@ export default async function ApplicationPage({
 
           <aside className="app-detail-sidebar" aria-label="Application facts">
             <dl className="app-detail-facts">
-              <div><dt><WalletCards size={15} /> Pricing</dt><dd>{application.pricingDetails || pricingLabels[application.pricingType]}</dd></div>
-              <div><dt><Code2 size={15} /> Source</dt><dd>{application.sourceType === "open_source" ? "Open source" : "Closed source"}</dd></div>
-              <div><dt><Laptop size={15} /> Compatibility</dt><dd>{application.minimumMacos ?? "macOS version not specified"}</dd></div>
+              <div><dt><WalletCards size={15} /> Pricing</dt><dd>{formatPricing(application)}</dd></div>
+              {application.sourceType === "open_source" && <div><dt><Code2 size={15} /> Source</dt><dd>Open source</dd></div>}
             </dl>
-            {application.sourceUrl && (
-              <a className="source-link" href={application.sourceUrl} rel="noreferrer" target="_blank">
-                View source repository <ArrowUpRight size={15} />
-              </a>
-            )}
             {application.youtubeUrl && (
               <a className="source-link" href={application.youtubeUrl} rel="noreferrer" target="_blank">
                 <span><Video size={15} /> Watch video on YouTube</span><ArrowUpRight size={15} />

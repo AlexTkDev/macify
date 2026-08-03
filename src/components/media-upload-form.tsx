@@ -7,6 +7,7 @@ import {
   type MediaUploadState,
   uploadApplicationMedia,
 } from "@/app/dashboard/actions";
+import { ImageSourcePicker } from "@/components/image-source-picker";
 
 const initialState: MediaUploadState = {};
 
@@ -42,16 +43,16 @@ export function MediaUploadForm({
         <h3>{label}</h3>
         <p>{description}</p>
       </div>
-      <label className="file-field">
-        <span>Upload a local file</span>
-        <input accept={accept} name="file" type="file" />
-      </label>
-      <div className="media-source-divider"><span>or fetch from URL</span></div>
-      <label className="field media-url-field">
-        <span>Public image URL</span>
-        <input inputMode="url" name="mediaUrl" placeholder="https://example.com/image.png" type="url" />
-        <small className="field-hint">Macify downloads a copy into R2. HTTPS only.</small>
-      </label>
+      <ImageSourcePicker
+        accept={accept}
+        fileLabel={`Choose ${label.toLowerCase()}`}
+        fileName="file"
+        previewAlt={`${label} preview`}
+        previewShape={role === "icon" ? "icon" : "landscape"}
+        urlLabel={`${label} URL`}
+        urlName="mediaUrl"
+        urlPlaceholder="https://example.com/image.png"
+      />
       <label className="field media-alt-field">
         <span>Alt text</span>
         <input name="altText" placeholder="Describe what the media shows" />
