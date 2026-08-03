@@ -8,6 +8,9 @@ export function PublicHeader() {
     <header className="public-header">
       <div className="public-header-inner">
         <MacifyLogo />
+        <nav className="public-navigation" aria-label="Primary navigation">
+          <Link href="/#all-apps">Apps</Link>
+        </nav>
         <div className="public-header-actions">
           <InlineAppSearch />
         </div>

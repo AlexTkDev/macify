@@ -10,7 +10,7 @@ function normalize(value: string) {
   return value.replace(/[.!?]+$/, "").trim().toLowerCase();
 }
 
-function descriptionParts(description: string, tagline: string) {
+function descriptionParts(description: string, tagline: string, applicationName: string) {
   const chunks = description.trim().split(/(?=^##\s+)/m).filter(Boolean);
   let lead = "";
   const sections: EditorialSection[] = [];
@@ -30,7 +30,7 @@ function descriptionParts(description: string, tagline: string) {
       continue;
     }
 
-    if (title === "what it does") {
+    if (title === "what it does" || title === `what ${normalize(applicationName)} does`) {
       if (!lead) lead = body;
       continue;
     }
@@ -57,7 +57,7 @@ function EditorialImage({ application, media, priority = false }: { application:
 }
 
 export function ApplicationOverview({ application, preview, screenshots }: { application: PublishedApplication; preview?: ApplicationMedia; screenshots: ApplicationMedia[] }) {
-  const description = descriptionParts(application.description, application.tagline);
+  const description = descriptionParts(application.description, application.tagline, application.name);
   return (
     <div className="application-overview">
       {preview && <figure className="application-preview"><EditorialImage application={application} media={preview} priority /></figure>}

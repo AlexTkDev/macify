@@ -4,19 +4,12 @@
     gap: 2.5rem;
   }
 
-  .home-hero h1 { font-size: clamp(4rem, 7.6vw, 5.1rem); }
   .directory-app-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
   .application-hero {
-    grid-template-columns: 10.5rem minmax(0, 1fr);
-    min-height: 15rem;
+    min-height: 0;
   }
 
-  .application-icon { width: 9.25rem; height: 9.25rem; }
-  .application-play-shapes { display: none; }
-  .application-story { gap: 3.5rem; }
-  .application-story-sections { gap: 2rem; }
-  .application-story-sections > section { padding-left: 1.5rem; }
   .related-application-shelf { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
   .management-row-form {
@@ -43,7 +36,14 @@
 }
 
 @media (max-width: 52rem) {
-  .inline-app-search { width: min(46vw, 18rem); }
+  .public-header-inner {
+    width: min(calc(100% - 2rem), 44rem);
+    gap: 1rem;
+  }
+  .public-navigation { display: none; }
+  .public-header-actions { justify-self: end; }
+  .inline-app-search { width: min(48vw, 18.5rem); }
+  .inline-app-search:focus-within { width: min(56vw, 21rem); }
 
   .public-footer {
     grid-template-columns: 1fr;
@@ -57,7 +57,6 @@
   }
 
   .home-hero-copy { padding-top: 1rem; }
-  .home-hero h1 { font-size: clamp(4.4rem, 12.5vw, 6rem); }
   .home-feature-stage { width: min(100%, 42rem); }
   .directory-app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; }
   .directory-app-row { aspect-ratio: auto; padding: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); place-items: center start; gap: 1rem; overflow: visible; background: transparent !important; }
@@ -66,11 +65,6 @@
   .directory-app-copy strong { font-size: 1rem; }
   .directory-app-copy > span { margin-top: 0.25rem; display: -webkit-box; overflow: hidden; color: #6b7380; font-size: 0.78rem; line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; }
 
-  .application-hero { grid-template-columns: 8rem minmax(0, 1fr); gap: 2rem; }
-  .application-icon { width: 7rem; height: 7rem; }
-  .application-identity-copy h1 { font-size: clamp(3.7rem, 10vw, 5rem); }
-  .application-story { grid-template-columns: 1fr; gap: 3rem; }
-  .application-story-sections > section:first-child { padding-left: 0; border-left: 0; }
   .related-application-shelf { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
   .dashboard-detail-header { align-items: flex-start; flex-direction: column; }
