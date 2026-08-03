@@ -1,61 +1,58 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { Shuffle } from "lucide-react";
-import { mediaUrl, type PublicAppSummary } from "@/components/public-app-card";
+import { ArrowUpRight, Shuffle } from "lucide-react";
+import { mediaUrl, PublicAppIcon, type PublicAppSummary } from "@/components/public-app-card";
 
 const PICK_COUNT = 30;
+const REVEAL_TONES = ["blue", "orange", "yellow", "mint", "lilac"] as const;
 
 type DirectoryApp = PublicAppSummary & {
   preview: { storageKey: string; altText: string | null; width: number | null; height: number | null } | null;
 };
 
-function randomPicks(applications: DirectoryApp[]) {
-  const pool = [...applications];
-  const randomValues = new Uint32Array(pool.length);
-  crypto.getRandomValues(randomValues);
-  for (let index = pool.length - 1; index > 0; index -= 1) {
-    const swapIndex = randomValues[index] % (index + 1);
-    [pool[index], pool[swapIndex]] = [pool[swapIndex], pool[index]];
-  }
-  return pool.slice(0, PICK_COUNT);
+function revealTone(id: string) {
+  let hash = 0;
+  for (const character of id) hash = (hash * 31 + character.charCodeAt(0)) >>> 0;
+  return REVEAL_TONES[hash % REVEAL_TONES.length];
 }
 
 export function ApplicationDirectory({ applications }: { applications: DirectoryApp[] }) {
-  const [visibleApplications, setVisibleApplications] = useState(() => applications.slice(0, PICK_COUNT));
-  const [revision, setRevision] = useState(0);
-
-  function surpriseMe() {
-    setVisibleApplications(randomPicks(applications));
-    setRevision((current) => current + 1);
-  }
+  const visibleApplications = applications.slice(0, PICK_COUNT);
 
   return (
     <section className="home-section application-directory" id="all-apps" aria-labelledby="all-apps-title">
       <div className="directory-heading">
         <h2 id="all-apps-title">Apps worth trying.</h2>
-        <button aria-label="Show 30 different applications" className="surprise-button" onClick={surpriseMe} type="button">
+        <a
+          aria-label="Open a random application"
+          className="surprise-button"
+          href="/surprise"
+        >
           Surprise me
           <Shuffle aria-hidden="true" size={17} />
-        </button>
+        </a>
       </div>
 
-      <div className="directory-app-grid" key={revision}>
+      <div className="directory-app-grid">
         {visibleApplications.map((app) => (
-          <Link className="directory-app-row" href={`/apps/${app.slug}`} key={app.id}>
-            <span className="directory-app-image">
-              {app.preview ? (
-                <Image
-                  alt={app.preview.altText ?? `${app.name} preview`}
-                  height={app.preview.height ?? 630}
-                  sizes="(max-width: 608px) calc(100vw - 32px), (max-width: 832px) 46vw, (max-width: 1088px) 30vw, 22vw"
-                  src={mediaUrl(app.preview.storageKey)}
-                  unoptimized
-                  width={app.preview.width ?? 1200}
-                />
-              ) : <span className="directory-app-image-fallback" aria-hidden="true">{app.name}</span>}
+          <Link className="directory-app-row" data-reveal-tone={revealTone(app.id)} href={`/apps/${app.slug}`} key={app.id}>
+            <span className="directory-app-art">
+              <span className="directory-app-image">
+                {app.preview ? (
+                  <Image
+                    alt={app.preview.altText ?? `${app.name} preview`}
+                    height={app.preview.height ?? 630}
+                    sizes="(max-width: 608px) calc(100vw - 32px), (max-width: 832px) 46vw, (max-width: 1088px) 30vw, 22vw"
+                    src={mediaUrl(app.preview.storageKey)}
+                    unoptimized
+                    width={app.preview.width ?? 1200}
+                  />
+                ) : <span className="directory-app-image-fallback" aria-hidden="true">{app.name}</span>}
+                <span className="directory-app-reveal" aria-hidden="true">
+                  <span className="directory-app-reveal-icon"><PublicAppIcon app={app} size={76} /></span>
+                  <span className="directory-app-reveal-action">View app <ArrowUpRight size={17} strokeWidth={2.2} /></span>
+                </span>
+              </span>
             </span>
             <span className="directory-app-copy">
               <strong>{app.name}</strong>
@@ -64,7 +61,6 @@ export function ApplicationDirectory({ applications }: { applications: Directory
           </Link>
         ))}
       </div>
-      <span className="sr-only" aria-live="polite">{revision > 0 ? `Showing new application selection ${revision}.` : ""}</span>
     </section>
   );
 }

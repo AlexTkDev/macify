@@ -33,22 +33,37 @@
 
 .directory-app-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: start;
-  gap: 2.25rem 1.4rem;
+  gap: 3.6rem 4rem;
   animation: tray-refresh 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .directory-app-row {
+  --directory-reveal-bg: var(--play-blue);
+  --directory-reveal-ink: #fff;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.78rem;
 }
 
+.directory-app-row[data-reveal-tone="orange"] { --directory-reveal-bg: var(--play-orange); --directory-reveal-ink: #080a0d; }
+.directory-app-row[data-reveal-tone="yellow"] { --directory-reveal-bg: var(--play-yellow); --directory-reveal-ink: #080a0d; }
+.directory-app-row[data-reveal-tone="mint"] { --directory-reveal-bg: var(--play-mint); --directory-reveal-ink: #080a0d; }
+.directory-app-row[data-reveal-tone="lilac"] { --directory-reveal-bg: var(--play-lilac); --directory-reveal-ink: #080a0d; }
+
+.directory-app-art {
+  width: 100%;
+  position: relative;
+  display: block;
+}
+
 .directory-app-image {
   width: 100%;
   aspect-ratio: 1200 / 630;
+  position: relative;
+  z-index: 1;
   display: block;
   overflow: hidden;
   border-radius: 0.7rem;
@@ -61,7 +76,6 @@
   display: block;
   object-fit: cover;
   object-position: center;
-  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .directory-app-image-fallback {
@@ -75,6 +89,52 @@
   font-weight: 850;
   line-height: 1;
   text-align: center;
+}
+
+.directory-app-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.78rem;
+  color: var(--directory-reveal-ink);
+  background: var(--directory-reveal-bg);
+  clip-path: circle(0 at 88% 18%);
+  pointer-events: none;
+  text-align: center;
+}
+
+.directory-app-reveal-icon {
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: translateY(0.35rem) scale(0.78);
+}
+
+.directory-app-reveal-icon .public-app-icon {
+  width: 4.75rem;
+  height: 4.75rem;
+}
+
+.directory-app-reveal-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  font-size: 0.9rem;
+  font-weight: 850;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(0.4rem);
+}
+
+.directory-app-reveal-action svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
 }
 
 .directory-app-copy {
@@ -105,11 +165,31 @@
   -webkit-line-clamp: 2;
 }
 
-.directory-app-row:hover .directory-app-image img,
-.directory-app-row:focus-visible .directory-app-image img { transform: scale(1.025); }
+.directory-app-row:focus-visible .directory-app-reveal { clip-path: circle(150% at 88% 18%); }
+.directory-app-row:focus-visible .directory-app-reveal-icon,
+.directory-app-row:focus-visible .directory-app-reveal-action { opacity: 1; transform: none; }
 
-.directory-app-row:hover .directory-app-copy strong,
-.directory-app-row:focus-visible .directory-app-copy strong { color: var(--play-blue); }
+@media (hover: hover) and (pointer: fine) {
+  .directory-app-reveal {
+    transition: clip-path 240ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .directory-app-reveal-icon,
+  .directory-app-reveal-action {
+    transition: opacity 120ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .directory-app-row:hover .directory-app-reveal { clip-path: circle(150% at 88% 18%); }
+
+  .directory-app-row:hover .directory-app-reveal-icon,
+  .directory-app-row:hover .directory-app-reveal-action { opacity: 1; transform: none; }
+
+  .directory-app-row:active .directory-app-reveal-icon { transform: scale(0.92); }
+
+  .directory-app-row:focus-visible .directory-app-reveal,
+  .directory-app-row:focus-visible .directory-app-reveal-icon,
+  .directory-app-row:focus-visible .directory-app-reveal-action { transition: none; }
+}
 
 @keyframes tray-refresh {
   from { opacity: 0; transform: translateY(0.75rem) scale(0.985); }
@@ -118,6 +198,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .directory-app-grid { animation: none; }
-  .directory-app-image img,
+  .directory-app-reveal,
+  .directory-app-reveal-icon,
+  .directory-app-reveal-action,
   .surprise-button svg { transition: none; }
 }

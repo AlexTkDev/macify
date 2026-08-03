@@ -51,7 +51,7 @@
   .directory-heading { margin-bottom: 2rem; align-items: end; gap: 1rem; }
   .directory-heading h2 { max-width: 8ch; font-size: clamp(2.2rem, 10vw, 3rem); }
   .surprise-button { flex: 0 0 auto; font-size: 0.88rem; }
-  .directory-app-grid { grid-template-columns: 1fr; gap: 2.2rem; }
+  .directory-app-grid { grid-template-columns: 1fr; gap: 3rem; }
   .directory-app-row { gap: 0.72rem; }
   .directory-app-copy strong { font-size: 1.05rem; }
   .directory-app-copy > span { font-size: 0.82rem; }
