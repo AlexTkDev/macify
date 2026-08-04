@@ -123,7 +123,13 @@
   font-size: 0.82rem;
   font-weight: 680;
   line-height: 1.2;
+  transition: color 160ms ease, background 160ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+.application-tag:hover { color: #fff; background: var(--play-blue); transform: translateY(-0.12rem); }
+.application-tag:active { transform: translateY(0); }
+.application-tag:focus-visible { outline-color: var(--play-blue); }
+.application-tag:hover::before { background: #fff; transform: rotate(45deg); }
 
 .application-tag::before {
   content: "";
@@ -133,6 +139,7 @@
   border-radius: 0.12rem;
   background: var(--play-blue);
   transform: rotate(8deg);
+  transition: background 160ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .application-tag:nth-child(2)::before { background: var(--play-orange); }

@@ -11,8 +11,8 @@ export function PublicHeader() {
         <MacifyLogo />
         <nav className="public-navigation" aria-label="Primary navigation">
           <a className="public-surprise-link" href="/surprise">
-            <Shuffle aria-hidden="true" size={15} />
-            Surprise me
+            <span className="public-surprise-icon" aria-hidden="true"><Shuffle size={15} /></span>
+            <span className="public-surprise-label">Surprise me</span>
           </a>
         </nav>
         <div className="public-header-actions">

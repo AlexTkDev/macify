@@ -3,7 +3,13 @@
   .public-footer,
   .home-hero,
   .home-section,
+  .tag-page,
   .application-page { width: min(calc(100% - 2rem), var(--content-width)); }
+
+  .tag-page { padding: 1.5rem 0 4.5rem; }
+  .tag-page-header { margin-bottom: 3.25rem; }
+  .tag-page-header h1 { font-size: clamp(3rem, 15vw, 4.7rem); }
+  .tag-page-header p { margin-left: 0; }
 
   .public-header {
     min-height: 4.4rem;

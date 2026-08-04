@@ -20,10 +20,10 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
       <div className="home-hero-copy">
         <h1 id="home-title">
           <span className="sr-only">Mac apps worth making room for.</span>
-          <span className="home-title-art" aria-hidden="true">
-            <span className="home-title-line"><span>Mac</span>{headlineApps[0] && <span className="home-title-icon"><PublicAppIcon app={headlineApps[0]} size={96} /></span>}<span>apps</span></span>
-            <span className="home-title-line"><span>worth</span>{headlineApps[1] && <span className="home-title-icon home-title-icon-orange"><PublicAppIcon app={headlineApps[1]} size={96} /></span>}<span>making</span></span>
-            <span className="home-title-line">{headlineApps[2] && <span className="home-title-icon home-title-icon-yellow"><PublicAppIcon app={headlineApps[2]} size={96} /></span>}<span>room for.</span></span>
+          <span className="home-title-art">
+            <span className="home-title-line"><span aria-hidden="true">Mac</span>{headlineApps[0] && <Link aria-label={`Open ${headlineApps[0].name}`} className="home-title-icon" href={`/apps/${headlineApps[0].slug}`}><PublicAppIcon app={headlineApps[0]} size={96} /></Link>}<span aria-hidden="true">apps</span></span>
+            <span className="home-title-line"><span aria-hidden="true">worth</span>{headlineApps[1] && <Link aria-label={`Open ${headlineApps[1].name}`} className="home-title-icon home-title-icon-orange" href={`/apps/${headlineApps[1].slug}`}><PublicAppIcon app={headlineApps[1]} size={96} /></Link>}<span aria-hidden="true">making</span></span>
+            <span className="home-title-line">{headlineApps[2] && <Link aria-label={`Open ${headlineApps[2].name}`} className="home-title-icon home-title-icon-yellow" href={`/apps/${headlineApps[2].slug}`}><PublicAppIcon app={headlineApps[2]} size={96} /></Link>}<span aria-hidden="true">room for.</span></span>
           </span>
         </h1>
         <p className="home-hero-intro">

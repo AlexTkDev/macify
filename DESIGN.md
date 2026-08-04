@@ -17,6 +17,7 @@ Macify is a playful studio table, not an App Store clone and not a SaaS card gri
 - Public pages avoid card chrome. Hierarchy comes from scale, color fields, whitespace, and artwork.
 - Preview images and screenshots always use intrinsic dimensions: `width: 100%`, `height: auto`, no forced crop, fixed height, letterbox, or decorative padding.
 - Motion is reserved for the Surprise refresh and direct hover feedback. Reduced-motion preferences remove both.
+- The persistent Surprise Me control stays monochrome and unfilled, using only a restrained shuffle rotation on direct interaction; at narrow widths it reduces to the icon without losing its accessible label.
 
 # Homepage
 
@@ -29,6 +30,8 @@ The second fold shows 30 apps in a five-column sample wall. Color fields create 
 The application hero is a centered two-line editorial composition. “Meet”, the authentic app icon, and the application name form the larger first line; the official tagline always forms the second line at roughly two-thirds of the identity scale. Both use independent container-relative `clamp()` scales with explicit minimum and maximum sizes. A restrained amber underline accents the tagline. Concise pricing, up to three tags, and an open-source label only when true form one dot-separated fact row. “Official website” is a quiet text action with an external arrow.
 
 The centered preview follows the identity and keeps its natural aspect ratio. The editorial body is a single, left-aligned article column with ordinary paragraph typography. The redundant tagline heading and generic or app-named “What it does” section are removed at render time. “What you can do” is a normal heading followed by a standard bulleted list; “Where it fits” is the next heading followed by body copy. Related apps form a loose icon shelf instead of repeating homepage tiles.
+
+Tags are clickable discovery links. Their destination pages use one oversized tag-led heading followed by the homepage preview wall, preserving the same color rhythm, natural app imagery, and direct hover feedback without introducing a second filtering interface.
 
 # Responsive behavior
 

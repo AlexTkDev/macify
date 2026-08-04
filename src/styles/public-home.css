@@ -38,22 +38,37 @@
 }
 
 .home-title-icon {
+  --home-icon-rotation: -5deg;
   width: 0.88em;
   height: 0.88em;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  transform: rotate(-5deg);
+  border-radius: 22%;
+  transform: rotate(var(--home-icon-rotation));
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), filter 200ms ease;
 }
 
-.home-title-icon-orange { transform: rotate(7deg); }
-.home-title-icon-yellow { transform: rotate(-8deg); }
+.home-title-icon-orange { --home-icon-rotation: 7deg; }
+.home-title-icon-yellow { --home-icon-rotation: -8deg; }
+
+.home-title-icon:hover,
+.home-title-icon:focus-visible {
+  filter: saturate(1.08);
+  transform: rotate(0deg) translateY(-0.06em) scale(1.06);
+}
+
+.home-title-icon:active { transform: rotate(0deg) scale(0.98); }
 
 .home-title-icon .public-app-icon {
   width: 100%;
   height: 100%;
   box-shadow: 0 0.14em 0.28em rgb(21 31 49 / 0.2), inset 0 0 0 1px rgb(255 255 255 / 0.42);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-title-icon { transition: none; }
 }
 
 .home-hero-intro {

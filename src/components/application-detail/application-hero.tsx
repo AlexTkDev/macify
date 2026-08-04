@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { mediaUrl } from "@/components/public-app-card";
 import type { ApplicationMedia, PublishedApplication } from "@/components/application-detail/types";
 import { formatPricing } from "@/lib/pricing";
@@ -23,7 +24,11 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
         </h1>
         {application.tags.length > 0 && (
           <div className="application-tags" aria-label="Application tags">
-            {application.tags.map((tag) => <span className="application-tag" key={tag.id}>{tag.name}</span>)}
+            {application.tags.map((tag) => (
+              <Link className="application-tag" href={`/tags/${tag.slug}`} key={tag.id}>
+                {tag.name}
+              </Link>
+            ))}
           </div>
         )}
         <div className="application-facts" aria-label="Application details">

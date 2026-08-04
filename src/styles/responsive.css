@@ -29,12 +29,12 @@
   }
   .public-navigation { display: flex; }
   .public-navigation a {
-    width: 2.55rem;
-    padding: 0.32rem;
+    width: 2.5rem;
+    padding: 0.25rem;
     justify-content: center;
-    font-size: 0;
   }
-  .public-surprise-link svg { width: 1.8rem; height: 1.8rem; flex: 0 0 auto; }
+  .public-surprise-label { width: 1px; height: 1px; position: absolute; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  .public-surprise-icon { width: 1.45rem; height: 1.45rem; }
   .public-header-actions { justify-self: end; }
   .inline-app-search { width: min(48vw, 18.5rem); }
   .inline-app-search:focus-within { width: min(56vw, 21rem); }

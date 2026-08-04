@@ -32,7 +32,7 @@ Application media consists of one icon, one main preview image, and multiple scr
 
 Every uploaded or remotely imported image passes through Cloudflare Images before it is written to R2. The pipeline preserves the original pixel dimensions, removes unnecessary encoding overhead, and prefers high-quality WebP when that produces a smaller file. If conversion would increase the byte size, Macify keeps the original. D1 records the delivered format, optimized byte size, width, height, and checksum. Existing unmeasured assets can be optimized safely in small batches from the media dashboard.
 
-Each application uses one to three focused tags for classification and discovery. Tags use autocomplete against the existing taxonomy while allowing editors to create a missing tag inline; new tags are normalized and created when the application is saved.
+Each application uses one to three focused tags for classification and discovery. Public tags link to dedicated pages containing every published application assigned to that tag. Tags use autocomplete against the existing taxonomy while allowing editors to create a missing tag inline; new tags are normalized and created when the application is saved.
 
 Editors can provide media as a local file or a public HTTPS image URL. URL imports are downloaded, validated, copied into R2, and recorded with their original source URL; public pages never hotlink third-party media. Remote fetches reject local or private destinations, unsafe redirects, unsupported formats, mismatched file signatures, and files over the editorial size limit.
 
