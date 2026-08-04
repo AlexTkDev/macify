@@ -1,7 +1,7 @@
 .application-page {
   width: min(calc(100% - 4rem), 82rem);
   margin-inline: auto;
-  padding: clamp(2.4rem, 3vw, 3.1rem) 0 7rem;
+  padding: 1.4rem 0 7rem;
 }
 
 .application-hero {
@@ -57,7 +57,7 @@
   font-size: var(--application-title-size);
   font-weight: 900;
   line-height: 0.95;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.04em;
   white-space: nowrap;
 }
 
@@ -75,7 +75,7 @@
   font-size: var(--application-title-size);
   font-weight: 900;
   line-height: 0.95;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.04em;
   white-space: nowrap;
 }
 
@@ -333,8 +333,9 @@
   font-size: clamp(2rem, 3vw, 2.8rem);
   font-weight: 900;
   line-height: 1;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.04em;
 }
+
 
 .related-application-shelf {
   display: grid;

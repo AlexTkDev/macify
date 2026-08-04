@@ -544,26 +544,6 @@ Stats is for people who want readable system telemetry without a subscription or
 
 It requires macOS Monterey or newer, and some readings depend on the machine and macOS release. Fan control is retained as a legacy feature and should not be chosen as the reason to install the app.`,
 
-  screengen: `ScreenGen is a browser-based workspace for turning raw app captures into finished store-listing artwork. It gives product screenshots a consistent visual treatment—device frames, backgrounds, perspective, and explanatory text—without starting each composition from an empty design file.
-
-The natural workflow is to bring in a working set of product screens, compose one visual direction, and adapt it across the device sizes required by the App Store or Google Play. This is especially helpful when release artwork needs to be consistent but a small team does not have a dedicated marketing-design pipeline.
-
-Its focus is store presentation rather than product design. ScreenGen gives screenshots a composed outer layer; the quality of the result still depends on clear source captures, legible copy, and knowing the platform’s current submission requirements.
-
-## Features
-
-- Place app captures in two-dimensional and three-dimensional device mockups to show the product in context.
-- Adjust backgrounds, text, rotation, and perspective to create a coordinated visual treatment for a listing.
-- Build related screenshot sets for multiple device sizes rather than recreating the same layout by hand for every export.
-- Export marketing images intended for application-store presentation after reviewing the relevant platform’s current size and content rules.
-- Work in a browser-based design environment instead of requiring a separate native graphics application for this focused task.
-
-## Where it fits
-
-ScreenGen fits independent developers and small product teams preparing launch or update artwork for mobile application stores. It is a useful middle ground between a basic screenshot utility and a general-purpose design tool such as Sketch.
-
-It does not replace careful copywriting, accessibility review, or a brand system. For complex illustration, bespoke typography, or broad marketing campaigns, a full design tool remains the better home.`,
-
   'cold-turkey-blocker': `Cold Turkey Blocker is a desktop website and application blocker for people who want a boundary that is deliberately harder to dismiss than a browser extension. You define what should be unavailable, decide when the restriction runs, and can lock an active block so changing course takes more than closing a tab.
 
 It is useful when distraction has a familiar shape: a group of sites, a game launcher, a shopping site, or an entire internet connection that reliably interrupts a work, study, sleep, or recovery period. Schedules and allowances let a block become a routine rather than a decision remade whenever attention slips.
@@ -646,25 +626,6 @@ Session also syncs progress through its own service across Apple devices. That c
 Session fits people who want a focus timer to actively protect attention and provide a record for reflection. It is more structured than a bare Pomodoro timer but lighter than a full task-management suite.
 
 The web blocker should be tested with the browsers and work sites you actually use, and sync means your data is backed up on the provider’s servers. A simpler local timer may be preferable if blocking, cross-device history, or a subscription is not important.`,
-
-  'wake-up-time': `Wake Up Time is a Mac alarm-clock app with a deliberately simple, large-format interface. It turns a Mac on a desk, bedside table, or studio counter into a visible clock and alarm rather than another background notification.
-
-Set an alarm for a single occasion or repeat it, choose the sound, and use snooze or volume controls when it rings. The interaction is intentionally familiar: it is for waking, reminders, or an audible time boundary, not task planning or calendar management.
-
-Its value is the dedicated presentation. A Mac needs to be awake and able to play sound for an alarm to be useful, so it is best treated as a convenience beside—not a replacement for—a reliable phone, hardware alarm, or calendar alert for anything critical.
-
-## Features
-
-- Set one-time and repeating alarms from a clear alarm-clock interface.
-- Choose built-in sounds or a personal alarm sound to make alerts easier to recognize.
-- Use snooze and adjustable volume controls for the immediate wake-up workflow.
-- Keep a large, readable clock visible on a Mac used as a bedside, desk, or studio display.
-
-## Where it fits
-
-Wake Up Time fits someone who wants a straightforward alarm on a Mac without a full productivity suite. It is useful for a shared room, a work station, or a Mac that is already part of a daily routine.
-
-It depends on the computer’s power, audio, and sleep settings, so it should not be the only alarm for an appointment or safety-critical event.`,
 
   capcut: `CapCut Desktop is a video editor for Mac and Windows that combines a conventional timeline editor with templates, effects, captions, and a growing set of AI-assisted tools. It is aimed at quick social video production as well as more detailed editing, letting a creator move from raw clips to a short, platform-specific export in one environment.
 
@@ -1052,27 +1013,6 @@ Monocle fits people whose desktop becomes visually noisy while they still need s
 
 It will not prevent a distracting site or app from being opened. Use a true blocker for access restrictions, and consider reduced-motion or accessibility preferences before relying on cursor-triggered effects.`,
 
-  'highlight-ai': `Highlight is an AI coordination layer for teams that captures decisions and commitments across meetings, messages, and documents, then drafts the next actions. It connects the tools where work is already happening so a follow-up, ticket, reminder, or document update does not depend entirely on someone remembering it later.
-
-The intended workflow is capture, connection, then review: Highlight surfaces context from the team’s shared memory and stages actions for approval. It can be used for handoffs, project updates, recruiting, meetings, and recurring processes where information otherwise becomes scattered across Slack, calendars, Notion, and issue trackers.
-
-This is an early, high-access category of service. Its effectiveness depends on trustworthy connections, review discipline, and clear access control; automatic drafts should be checked before they affect a ticket, calendar, customer, or team record.
-
-## Features
-
-- Capture commitments and decisions from calls, messages, and documents as shared team context.
-- Draft follow-up actions such as Linear tickets, Slack messages, emails, Notion pages, and reminders for review.
-- Track commitments and set reminders so stated follow-ups do not disappear after a meeting.
-- Define recurring Skills that run a staged sequence when a chosen trigger occurs.
-- Connect current tools including Google Calendar, GitHub, Notion, Gmail, and Slack.
-- Provide a shared memory layer to retrieve institutional context across connected work.
-
-## Where it fits
-
-Highlight fits teams with frequent meetings, handoffs, and decisions spread across several collaboration systems. It is for coordination work, not a replacement for ownership, project management, or human review.
-
-Verify integration permissions, retention, and current privacy terms before exposing sensitive data. Keep approvals in the loop for external messages and system-of-record updates.`,
-
   'mac-mouse-fix': `Mac Mouse Fix is a macOS utility that makes a non-Apple mouse behave more naturally on a Mac. It remaps mouse buttons, improves scrolling and gesture behavior, and gives common desktop actions a direct mouse input instead of requiring a keyboard shortcut or trackpad gesture.
 
 Set buttons for the actions you actually use—such as back and forward navigation, Mission Control, or window movement—then keep the mouse interaction consistent across apps. It is particularly helpful for people who use a multi-button Logitech, gaming, or standard USB mouse alongside a MacBook or desktop Mac.
@@ -1193,25 +1133,6 @@ Shottr has a broad set of pixel-focused tools, but it is still a screenshot util
 Shottr fits design, front-end, support, and documentation workflows that need small, exact screenshots quickly. It can be a lighter alternative to larger screen-capture suites when still images, precise markup, and OCR matter most.
 
 Review the image before sharing: redaction and capture mistakes are easy to propagate. Recording, advanced cloud collaboration, and broad media editing belong in other tools.`,
-
-  ice: `Ice is a free, open-source macOS menu-bar manager. It gives a crowded menu bar a way to hide, show, reorder, and access items without uninstalling the apps that placed them there.
-
-Configure which icons remain visible, which are hidden behind a trigger, and how the bar behaves across displays or changing screen widths. This is useful on laptops and compact displays where status utilities, sync apps, audio controls, and menu extras quickly compete for a small horizontal space.
-
-Ice changes the presentation of menu-bar items, not the apps behind them. It is best treated as a tidy layer over existing utilities; a hidden icon still represents a running app and may retain the same resource or permission footprint.
-
-## Features
-
-- Hide and reveal selected macOS menu-bar items to reduce persistent visual clutter.
-- Configure item order and access behavior for a preferred working layout.
-- Use an open-source tool whose current source, releases, and issue history are available on GitHub.
-- Keep rarely used utilities accessible without reserving permanent space for each icon.
-
-## Where it fits
-
-Ice fits people with a crowded Mac menu bar who want a simple organization layer rather than replacing individual utilities. It is especially useful on MacBooks where the available bar width changes with notch and screen size.
-
-It does not solve problems caused by too many background apps. Review the apps themselves if battery, CPU, privacy, or startup behavior is the real issue.`,
 
   dato: `Dato is a menu-bar calendar, clock, and time-zone utility for macOS. It keeps the current date, upcoming events, multiple clocks, and a compact calendar within a click or shortcut, which reduces the need to open a full calendar app just to orient around the day.
 

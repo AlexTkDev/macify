@@ -31,7 +31,7 @@
 .skip-link:focus { transform: translateY(0); }
 
 .public-header {
-  min-height: 4.75rem;
+  min-height: 5.25rem;
   position: sticky;
   top: 0;
   z-index: var(--z-header);
@@ -41,20 +41,20 @@
 }
 
 .public-header-inner {
-  width: min(calc(100% - 3rem), 61rem);
-  min-height: 3.75rem;
-  margin-top: 0.75rem;
+  width: min(calc(100% - 3rem), var(--content-width));
+  min-height: 4.1rem;
+  margin-top: 0.55rem;
   position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: clamp(1.25rem, 2.5vw, 2.5rem);
-  padding: 0.45rem 0.55rem 0.45rem 0.9rem;
-  border: 1px solid #ececf0;
-  border-radius: 1.35rem;
+  gap: clamp(1rem, 2vw, 2rem);
+  padding: 0.45rem 0.5rem 0.45rem 0.7rem;
+  border: 1px solid #e0e3e9;
+  border-radius: 0.9rem;
   color: #080a0d;
   background: #fff;
-  box-shadow: 0 0.65rem 2rem rgb(26 29 36 / 0.08);
+  box-shadow: 0 0.2rem 0.75rem rgb(26 29 36 / 0.05);
   pointer-events: auto;
 }
 
@@ -102,11 +102,14 @@
 
 .public-navigation a {
   min-height: 2.45rem;
-  padding: 0 0.8rem;
+  padding: 0 0.7rem 0 0.48rem;
   display: inline-flex;
   align-items: center;
-  border-radius: 0.72rem;
-  color: #626874;
+  gap: 0.48rem;
+  border: 1px solid #e4e6eb;
+  border-radius: 0.58rem;
+  color: #333943;
+  background: #f7f8fa;
   font-size: 0.82rem;
   font-weight: 650;
   transition: color 160ms ease, background-color 160ms ease;
@@ -115,7 +118,17 @@
 .public-navigation a:hover,
 .public-navigation a:focus-visible {
   color: #080a0d;
-  background: #f1f2f4;
+  border-color: #cfd4de;
+  background: #fff;
+}
+
+.public-surprise-link svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  padding: 0.4rem;
+  border-radius: 0.42rem;
+  color: #080a0d;
+  background: var(--play-yellow);
 }
 
 .public-header-actions {
@@ -139,7 +152,7 @@
   align-items: center;
   gap: 0.65rem;
   border: 1px solid #d8dce4;
-  border-radius: 1.15rem;
+  border-radius: 0.7rem;
   color: #596271;
   background: #f7f8fa;
   transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
@@ -194,7 +207,7 @@
   overflow-y: auto;
   z-index: var(--z-menu);
   border: 1px solid #e0e2e6;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   background: #fff;
   box-shadow: 0 1.4rem 4rem rgb(15 22 34 / 0.18);
 }

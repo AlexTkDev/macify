@@ -2,6 +2,7 @@ import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { excludedAppSlugs, iconOverrides, previewImageOverrides } from "../data/media-overrides.mjs";
+import { appTagAssignments, tagNamesForApp } from "../data/tag-taxonomy.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceArgument = process.argv.find((argument) => argument.startsWith("--source="))?.slice("--source=".length);
@@ -12,6 +13,9 @@ const sourceModule = await import(pathToFileURL(sourcePath));
 const unfilteredSourceApps = sourceModule.apps ?? sourceModule.expandedApps;
 if (!Array.isArray(unfilteredSourceApps)) throw new Error(`No application array exported from ${path.relative(root, sourcePath)}.`);
 const sourceApps = unfilteredSourceApps.filter((app) => !excludedAppSlugs.has(app.slug));
+for (const app of sourceApps) {
+  if (!Object.hasOwn(appTagAssignments, app.slug)) throw new Error(`Missing curated tag assignment for ${app.name} (${app.slug}).`);
+}
 const acceptedTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/avif"]);
 const headers = { Accept: "text/html,application/xhtml+xml", "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 MacifyCatalog/1.0" };
 
@@ -106,6 +110,7 @@ for (const [index, app] of sourceApps.entries()) {
   const media = await discoverMedia(app);
   prepared.push({
     ...app,
+    tags: tagNamesForApp(app.slug).join(", "),
     relatedAppSlugs: String(app.relatedAppSlugs || "")
       .split(",")
       .map((slug) => slug.trim())

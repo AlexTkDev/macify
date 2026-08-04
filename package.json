@@ -27,6 +27,7 @@
     "media:audit-og": "node scripts/audit-og-images.mjs",
     "media:sync:local": "node scripts/sync-local-media.mjs --local",
     "media:optimize:local": "node scripts/optimize-local-media.mjs --local",
+    "tags:sync:local": "node scripts/sync-local-tags.mjs --local",
     "db:migrate:staging": "wrangler d1 migrations apply DB --remote --env staging",
     "db:migrate:production": "wrangler d1 migrations apply DB --remote --env production"
   },

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { Shuffle } from "lucide-react";
 import { InlineAppSearch } from "@/components/inline-app-search";
 import { MacifyLogo } from "@/components/macify-logo";
 
@@ -9,7 +10,10 @@ export function PublicHeader() {
       <div className="public-header-inner">
         <MacifyLogo />
         <nav className="public-navigation" aria-label="Primary navigation">
-          <a href="/surprise">Surprise me</a>
+          <a className="public-surprise-link" href="/surprise">
+            <Shuffle aria-hidden="true" size={15} />
+            Surprise me
+          </a>
         </nav>
         <div className="public-header-actions">
           <InlineAppSearch />

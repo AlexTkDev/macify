@@ -12,21 +12,8 @@
 
   .related-application-shelf { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
-  .management-row-form {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .management-description {
-    grid-column: 1 / -1;
-  }
-
-  .management-order {
-    max-width: 6rem;
-  }
-
-  .management-row-actions {
-    justify-self: end;
-  }
+  .management-layout { grid-template-columns: 1fr; grid-template-areas: "records" "create"; }
+  .management-create { position: static; }
 
   .media-library,
   .media-upload-grid,
@@ -40,7 +27,14 @@
     width: min(calc(100% - 2rem), 44rem);
     gap: 1rem;
   }
-  .public-navigation { display: none; }
+  .public-navigation { display: flex; }
+  .public-navigation a {
+    width: 2.55rem;
+    padding: 0.32rem;
+    justify-content: center;
+    font-size: 0;
+  }
+  .public-surprise-link svg { width: 1.8rem; height: 1.8rem; flex: 0 0 auto; }
   .public-header-actions { justify-self: end; }
   .inline-app-search { width: min(48vw, 18.5rem); }
   .inline-app-search:focus-within { width: min(56vw, 21rem); }
@@ -66,20 +60,57 @@
   .dashboard-detail-layout { grid-template-columns: 1fr; }
   .dashboard-detail-sidebar { position: static; }
 
-  .dashboard-topbar,
-  .dashboard-navigation,
-  .dashboard-main {
-    width: min(calc(100% - 2rem), 86rem);
+  .dashboard-shell {
+    display: block;
   }
+
+  .dashboard-rail {
+    height: auto;
+    padding: 0.7rem 1rem 0.75rem;
+    position: relative;
+  }
+
+  .dashboard-brand { min-height: 3rem; padding-inline: 0.15rem; }
+  .dashboard-rail-label,
+  .dashboard-environment { display: none; }
 
   .dashboard-navigation {
-    padding: 0.5rem 0;
+    margin-top: 0.65rem;
+    display: flex;
+    gap: 0.35rem;
     overflow-x: auto;
+    scrollbar-width: none;
   }
 
+  .dashboard-navigation::-webkit-scrollbar { display: none; }
+
   .dashboard-nav-link {
+    min-width: max-content;
+    min-height: 2.8rem;
+    padding: 0.32rem 0.65rem 0.32rem 0.35rem;
+    grid-template-columns: 2rem auto;
+    gap: 0.48rem;
     white-space: nowrap;
   }
+
+  .dashboard-nav-icon { width: 2rem; height: 2rem; }
+  .dashboard-nav-copy small { display: none; }
+  .dashboard-rail-footer { display: none; }
+
+  .dashboard-workspace-bar {
+    height: 4rem;
+    padding-inline: 1rem;
+  }
+
+  .dashboard-site-link-mobile {
+    min-height: 2.35rem;
+    display: inline-flex;
+    border-color: var(--line);
+    color: var(--ink-soft);
+    background: #fff;
+  }
+
+  .dashboard-main { padding: 2.5rem 1rem 5rem; }
 
   .dashboard-header,
   .editor-header,
@@ -103,9 +134,10 @@
   }
 
   .management-layout,
-  .import-layout {
-    grid-template-columns: 1fr;
-  }
+  .import-layout { grid-template-columns: 1fr; }
+
+  .management-layout { grid-template-areas: "records" "create"; }
+  .management-create { position: static; }
 
   .form-section {
     grid-template-columns: 1fr;
@@ -115,6 +147,10 @@
   .form-section-copy {
     position: static;
   }
+
+  .form-section-copy > span { margin-left: 2.65rem; }
+
+  .form-footer { position: static; }
 
   .related-app-options {
     grid-template-columns: 1fr;
