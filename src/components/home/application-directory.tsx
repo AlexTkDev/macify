@@ -16,8 +16,19 @@ function revealTone(id: string) {
   return REVEAL_TONES[hash % REVEAL_TONES.length];
 }
 
+function randomSelection(applications: DirectoryApp[], count: number) {
+  const shuffled = [...applications];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomValue = new Uint32Array(1);
+    crypto.getRandomValues(randomValue);
+    const swapIndex = randomValue[0] % (index + 1);
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled.slice(0, count);
+}
+
 export function ApplicationDirectory({ applications }: { applications: DirectoryApp[] }) {
-  const visibleApplications = applications.slice(0, PICK_COUNT);
+  const visibleApplications = randomSelection(applications, PICK_COUNT);
 
   return (
     <section className="home-section application-directory" id="all-apps" aria-labelledby="all-apps-title">

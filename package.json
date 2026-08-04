@@ -22,7 +22,11 @@
     "data:prepare:additional": "node scripts/prepare-expanded-apps.mjs --source=data/additional-apps-source.mjs --destination=data/additional-apps.json",
     "db:seed:additional": "node scripts/import-local-drafts.mjs --dataset=data/additional-apps.json",
     "editorial:check": "node scripts/check-editorial-descriptions.mjs",
+    "editorial:prune-excluded": "node scripts/prune-excluded-editorial.mjs",
     "editorial:sync:local": "node scripts/sync-editorial-descriptions.mjs --local",
+    "media:audit-og": "node scripts/audit-og-images.mjs",
+    "media:sync:local": "node scripts/sync-local-media.mjs --local",
+    "media:optimize:local": "node scripts/optimize-local-media.mjs --local",
     "db:migrate:staging": "wrangler d1 migrations apply DB --remote --env staging",
     "db:migrate:production": "wrangler d1 migrations apply DB --remote --env production"
   },

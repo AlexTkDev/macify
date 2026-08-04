@@ -5,6 +5,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { editorialDescriptions } from "../data/editorial-descriptions.mjs";
+import { optimizeLocalImage } from "./lib/optimize-local-image.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
@@ -61,14 +62,31 @@ async function prepareAsset(app, role, sourceUrl, altText) {
   const bytes = Buffer.from(await response.arrayBuffer());
   if (bytes.byteLength > 10 * 1024 * 1024) throw new Error(`${app.name} ${role} is larger than 10 MB.`);
   if (!hasValidSignature(bytes, mimeType)) throw new Error(`${app.name} ${role} does not match its declared image type.`);
-  const checksum = createHash("sha256").update(bytes).digest("hex");
+  const optimized = await optimizeLocalImage(bytes, role);
+  const storedBytes = optimized.bytes;
+  const storedMimeType = optimized.mimeType || mimeType;
+  const checksum = createHash("sha256").update(storedBytes).digest("hex");
   const id = randomUUID();
   const sourceName = decodeURIComponent(new URL(response.url).pathname.split("/").pop() || `${role}.${extensions[mimeType]}`);
-  const fileName = `${id}.${extensions[mimeType]}`;
+  const fileName = `${id}.${extensions[storedMimeType]}`;
   const localPath = path.join(workDirectory, fileName);
-  const storageKey = ["apps", app.id, role, `${checksum.slice(0, 16)}-${id}-${safeFileName(sourceName)}`].join("/");
-  await writeFile(localPath, bytes);
-  return { id, appId: app.id, role, sourceUrl, altText, mimeType, checksum, byteSize: bytes.byteLength, localPath, storageKey };
+  const storedName = optimized.optimized ? sourceName.replace(/\.[^.]+$/, "") + ".webp" : sourceName;
+  const storageKey = ["apps", app.id, role, `${checksum.slice(0, 16)}-${id}-${safeFileName(storedName)}`].join("/");
+  await writeFile(localPath, storedBytes);
+  return {
+    id,
+    appId: app.id,
+    role,
+    sourceUrl,
+    altText,
+    mimeType: storedMimeType,
+    checksum,
+    byteSize: storedBytes.byteLength,
+    width: optimized.width,
+    height: optimized.height,
+    localPath,
+    storageKey,
+  };
 }
 
 function parseLists(value) {
@@ -136,7 +154,7 @@ try {
       statements.push(`INSERT OR IGNORE INTO app_tags (app_id, tag_id) SELECT ${sql(app.id)}, id FROM tags WHERE slug = ${sql(tagSlug)};`);
     }
     for (const asset of app.assets) {
-      statements.push(`INSERT INTO media_assets (id, app_id, role, storage_key, mime_type, byte_size, checksum, source_url, alt_text, created_at) VALUES (${sql(asset.id)}, ${sql(app.id)}, ${sql(asset.role)}, ${sql(asset.storageKey)}, ${sql(asset.mimeType)}, ${asset.byteSize}, ${sql(asset.checksum)}, ${sql(asset.sourceUrl)}, ${sql(asset.altText)}, ${now});`);
+      statements.push(`INSERT INTO media_assets (id, app_id, role, storage_key, mime_type, byte_size, width, height, checksum, source_url, alt_text, created_at) VALUES (${sql(asset.id)}, ${sql(app.id)}, ${sql(asset.role)}, ${sql(asset.storageKey)}, ${sql(asset.mimeType)}, ${asset.byteSize}, ${asset.width ?? "NULL"}, ${asset.height ?? "NULL"}, ${sql(asset.checksum)}, ${sql(asset.sourceUrl)}, ${sql(asset.altText)}, ${now});`);
     }
   }
 

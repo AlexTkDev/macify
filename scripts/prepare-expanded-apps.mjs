@@ -1,6 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { excludedAppSlugs, iconOverrides, previewImageOverrides } from "../data/media-overrides.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceArgument = process.argv.find((argument) => argument.startsWith("--source="))?.slice("--source=".length);
@@ -8,8 +9,9 @@ const destinationArgument = process.argv.find((argument) => argument.startsWith(
 const sourcePath = path.resolve(root, sourceArgument || "data/expanded-apps-source.mjs");
 const destination = path.resolve(root, destinationArgument || "data/expanded-apps.json");
 const sourceModule = await import(pathToFileURL(sourcePath));
-const sourceApps = sourceModule.apps ?? sourceModule.expandedApps;
-if (!Array.isArray(sourceApps)) throw new Error(`No application array exported from ${path.relative(root, sourcePath)}.`);
+const unfilteredSourceApps = sourceModule.apps ?? sourceModule.expandedApps;
+if (!Array.isArray(unfilteredSourceApps)) throw new Error(`No application array exported from ${path.relative(root, sourcePath)}.`);
+const sourceApps = unfilteredSourceApps.filter((app) => !excludedAppSlugs.has(app.slug));
 const acceptedTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/avif"]);
 const headers = { Accept: "text/html,application/xhtml+xml", "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 MacifyCatalog/1.0" };
 
@@ -69,15 +71,17 @@ async function discoverMedia(app) {
     .map((tag) => absolute(tag.href, finalUrl));
   const domain = new URL(finalUrl).hostname;
   const iconUrl = await firstUsable([
+    iconOverrides[app.slug],
     app.iconUrl,
     ...linkedIcons,
     absolute("/apple-touch-icon.png", finalUrl),
     `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=256`,
   ]);
   const previewImageUrl = await firstUsable([
-    app.previewImageUrl,
+    previewImageOverrides[app.slug],
     ...meta("og:image"),
     ...meta("twitter:image"),
+    app.previewImageUrl,
     `https://image.thum.io/get/width/1200/crop/630/noanimate/${finalUrl}`,
     `https://s.wordpress.com/mshots/v1/${encodeURIComponent(finalUrl)}?w=1200&h=630`,
   ]);
@@ -102,6 +106,11 @@ for (const [index, app] of sourceApps.entries()) {
   const media = await discoverMedia(app);
   prepared.push({
     ...app,
+    relatedAppSlugs: String(app.relatedAppSlugs || "")
+      .split(",")
+      .map((slug) => slug.trim())
+      .filter((slug) => slug && !excludedAppSlugs.has(slug))
+      .join(","),
     description: description(app),
     youtubeUrl: "",
     iconUrl: media.iconUrl,

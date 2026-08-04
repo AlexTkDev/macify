@@ -335,27 +335,6 @@ Screen Studio is best for people who need polished software demos quickly and do
 
 It is not a replacement for a full post-production workflow involving complex edits, broadcast tools, or deep audio mixing. Automatic effects also need review so a video’s motion matches the story rather than becoming distracting.`,
 
-  zed: `Zed is an open-source code editor built in Rust for fast, collaborative software work. It combines a modern editor, language-server support, terminal and task workflows, real-time collaboration, and AI-assisted coding tools in one application for macOS, Linux, and Windows.
-
-The editor is designed to keep the feedback loop short. You can open a project, navigate symbols, edit with language-aware features, run tasks, work in a terminal, and collaborate with another person without rebuilding the workflow from a collection of separate windows.
-
-Zed is most compelling for developers who care about a responsive editor and a focused native interface. It is not trying to be a clone of every established IDE, so its extension ecosystem and some advanced integrations should be checked against the needs of a specific language or team.
-
-## Features
-
-- Edit code with language-server features such as completion, diagnostics, formatting, navigation, and refactoring where the relevant language support is installed.
-- Work with projects, Git-aware changes, tasks, and an integrated terminal without leaving the editor.
-- Collaborate in real time through Zed’s multiplayer features when a pair or team wants to share an editing context.
-- Use built-in AI and agent-oriented tools according to the selected provider, account, and current plan.
-- Customize settings, key bindings, themes, and extensions to fit a language, framework, or personal workflow.
-- Run Zed on macOS, Linux, or Windows while keeping the core editor open source.
-
-## Where it fits
-
-Zed is a strong fit for developers who want a fast, modern code editor with collaboration and AI available inside the same workspace. It is especially appealing for people who find a heavyweight IDE slower or more visually busy than they need.
-
-Some language ecosystems and team workflows still depend on extensions or integrations that may be deeper elsewhere. Check current support for debugging, source control, remote development, and the exact languages you use before making it a full replacement.`,
-
   anybox: `Anybox is a bookmark manager and read-later library for Apple devices. It gives links a home outside a browser’s default bookmarks, with tags, folders, notes, screenshots, full-text context, and capture methods designed for saving a page before it disappears into an open-tab pile.
 
 The workflow begins wherever a useful link appears. You can save the current browser tab through a shortcut, extension, menu bar item, share sheet, AppleScript, Siri Shortcut, or URL scheme, then decide later whether it belongs in a collection, needs a tag, or should simply remain searchable.
@@ -482,27 +461,6 @@ Claude Desktop suits people who want a capable writing, analysis, and coding ass
 
 It is not a replacement for verification, editing, or human accountability. The most advanced workflows may require a specific plan, supported permissions, or separate tools such as Claude Code.`,
 
-  burrow: `Burrow is a free, open-source desktop utility for Mac cleanup, application removal, storage analysis, software management, and system status. It is an independent project built around the same underlying engine as Mole, but it has its own interface, branding, and development path.
-
-The app collects several maintenance jobs that are usually scattered across separate utilities. You can inspect disk use, clean temporary material, remove an app and its leftovers, review installed software, and check live system information from a single native workspace.
-
-Burrow is useful for people who want a transparent, local maintenance tool they can inspect and run without a subscription. Its power also requires restraint: a cleanup recommendation is not automatically a safe deletion, and system changes should be reviewed before they are applied.
-
-## Features
-
-- Review cleanup candidates such as caches, logs, browser remnants, and temporary files before removing them.
-- Uninstall applications together with related support files, preferences, and launch items that may remain after a normal deletion.
-- Analyze disk usage and locate large files or folders that explain a shrinking free-space total.
-- View live system status for resources such as CPU, memory, disk, battery, and network activity.
-- Use maintenance and software-management tools for selected tasks rather than treating the app as a one-click optimization service.
-- Explore the open-source project and current MCP-server support when a local automation or assistant workflow needs access to approved status data.
-
-## Where it fits
-
-Burrow is a good fit for technically comfortable Mac users who want a broad, local, open-source maintenance utility. It can replace a collection of occasional cleanup and inspection apps when you prefer one review-first workspace.
-
-It is not a substitute for backups or for understanding what a file does before removing it. People who only need one narrow job may be better served by a focused disk, uninstall, or monitoring tool.`,
-
   paste: `Paste is a clipboard manager for Mac, iPhone, and iPad that keeps a searchable history of copied text, links, images, files, and other content. Instead of losing an item as soon as the next copy happens, you can retrieve it later, organize it, and reuse it from a shortcut in the app you are already using.
 
 It becomes most useful in repetitive work. A writer can reuse excerpts and links, a designer can revisit copied assets, and a developer can recover a command or snippet without rebuilding it from memory or switching through a chain of recent copies.
@@ -586,27 +544,6 @@ Stats is for people who want readable system telemetry without a subscription or
 
 It requires macOS Monterey or newer, and some readings depend on the machine and macOS release. Fan control is retained as a legacy feature and should not be chosen as the reason to install the app.`,
 
-  screenfloat: `ScreenFloat is a Mac capture utility built around screenshots that remain available while you work. A capture can float above other windows as a movable reference, then be edited, searched, organized, shared, or hidden instead of becoming another file lost on the Desktop.
-
-That model works well for documentation, research, visual comparison, support work, and any task that involves transferring details between apps. You can recapture a saved area, keep a setup instruction visible while you configure something, or pull text and colors from a shot without reconstructing the original view.
-
-ScreenFloat is much broader than the built-in screenshot shortcut, but the floating-shot concept is its defining advantage. Its feature set rewards an intentional setup of shortcuts and folders; leaving many floating windows open can also create visual and resource clutter.
-
-## Features
-
-- Capture selected regions or windows, make timed captures, and re-capture a previous area without framing it again.
-- Record screen video with system and microphone audio, cursor, clicks, key presses, pause controls, and edit markers for later trimming.
-- Keep shots floating across spaces and fullscreen apps, hide or pin them when needed, and adjust translucency or click-through behavior.
-- Extract and copy recognized text and barcodes, pick colors, and use non-destructive redaction, annotations, crop, resize, rotation, and other markup tools.
-- Organize screenshots and recordings in the Shots Browser with names, notes, tags, ratings, favorites, folders, smart folders, and content-aware search.
-- Share by drag and drop, copy or export in common formats, create GIFs from recordings, sync selected material through iCloud, and connect workflows through Shortcuts or AppleScript.
-
-## Where it fits
-
-ScreenFloat is best for people whose screenshots are working material, not merely files to send once. It can complement a cleaner, presentation-focused capture tool by emphasizing durable visual references, OCR, organization, and automation.
-
-The breadth means there is more to learn than in macOS Screenshot or a simple snipping tool. Use a few core shortcuts first and establish a cleanup habit for floating shots and the library.`,
-
   screengen: `ScreenGen is a browser-based workspace for turning raw app captures into finished store-listing artwork. It gives product screenshots a consistent visual treatment—device frames, backgrounds, perspective, and explanatory text—without starting each composition from an empty design file.
 
 The natural workflow is to bring in a working set of product screens, compose one visual direction, and adapt it across the device sizes required by the App Store or Google Play. This is especially helpful when release artwork needs to be consistent but a small team does not have a dedicated marketing-design pipeline.
@@ -647,66 +584,6 @@ The important idea is commitment, not perfection. Cold Turkey stores its setting
 Cold Turkey is for someone who has already decided which distractions need a firm boundary and wants the computer to enforce that decision. It is more forceful than a reminder timer and can be valuable for focused work, exam preparation, gaming limits, or a planned break from particular sites.
 
 Set blocks carefully: an overly broad schedule can also prevent legitimate work, and some Mac apps or browser setups need testing. It cannot cover devices where it is not installed, and no software blocker is a guarantee against every technical workaround.`,
-
-  flow: `Flow is a Pomodoro-style focus timer for Mac, iPhone, iPad, and Apple Watch. It alternates chosen work intervals and breaks, keeping the rhythm visible without turning the timer into a full task-management system.
-
-Start a session when a concrete piece of work needs a boundary, take the break when the interval ends, and use the completed cycles as a simple record of effort. On Mac, its blockers can also keep selected websites and applications out of the way during a focus period.
-
-The product is deliberately lightweight at its core: its free basics do not require an account, advertisements, or a credit card. That makes it easy to trial, while the broader Apple-device experience and advanced options should be evaluated against the current plan and platform capabilities.
-
-## Features
-
-- Run focus sessions that alternate work and short breaks, with the timer available across Flow’s supported Apple-device apps.
-- Keep a straightforward, ad-free timer workflow without requiring sign-up for the basic features.
-- Block selected applications and websites during a focus session on supported platforms to reduce predictable interruptions.
-- Use a menu-bar-oriented Mac experience and global shortcuts for starting or controlling a session without leaving the current task.
-- Review completed flows as a lightweight indication of time spent in the chosen rhythm.
-- Use the current paid offering only when its additional features and subscription terms make sense for your setup.
-
-## Where it fits
-
-Flow is a good match for people who want a gentle work-and-break cadence across Apple devices but do not want their focus timer to become a second project manager. Its blend of a visible timer and optional blocking is useful when a simple reminder alone is too easy to ignore.
-
-The blocking is a nudge rather than the purpose of the app, and the method only helps if the intervals suit the work. Users who need strict, difficult-to-bypass restrictions may prefer a dedicated blocker; those who need deep task planning may prefer a timer integrated with their chosen task manager.`,
-
-  pomodoro: `Pomodoro is a macOS focus timer based on alternating work intervals with short and long breaks. It gives the technique a small, dedicated home on the Mac: start a cycle, work until the timer changes state, and let the notification mark the moment to pause or return.
-
-This kind of timer is useful when starting is harder than working. A writer can use one interval for a draft, a student can use a set of cycles for reading and recall, and a developer can make a contained investigation feel less open-ended without moving work into a new productivity system.
-
-The appeal is restraint. Pomodoro’s value is the rhythm and the low setup cost, so it works best when the task list already lives elsewhere and the timer is allowed to be a timer rather than a dashboard full of metrics.
-
-## Features
-
-- Start focus, short-break, and long-break intervals to follow a repeatable work-and-rest cycle.
-- Adjust session lengths so the rhythm can fit a task, attention span, or existing study routine rather than a fixed twenty-five-minute rule.
-- Receive notifications when an interval ends, helping the timer remain useful even while another application is in front.
-- Review completed cycles as a simple record of focus sessions.
-- Keep the interaction centered on an unobtrusive Mac timer instead of a larger task or project-management workspace.
-
-## Where it fits
-
-Pomodoro suits someone who wants the basic technique on macOS with minimal ceremony. It complements a separate task manager, calendar, or paper list by providing the time boundary that those tools do not enforce.
-
-It does not block distractions or decide what to work on for you. If cross-device sync, strict website blocking, detailed analytics, or task planning matters more than a clean timer, choose a broader focus product instead.`,
-
-  screenbrush: `ScreenBrush is a presentation utility that lets you draw directly over the current Mac screen. Rather than creating a separate annotation document, it makes a cursor-driven mark on top of slides, demonstrations, and other visible material while an audience is watching.
-
-It is most useful in a live explanation. Draw attention to one control during a software demo, sketch a relationship over a slide, or use the pointer mode to guide the eye without modifying the underlying presentation.
-
-The app is a live layer, not a screenshot editor. Its value is immediate visual emphasis, and it works best when the presenter has chosen a small set of markings that clarifies the point instead of competing with the material beneath it.
-
-## Features
-
-- Draw directly on the current screen to annotate a live presentation, demonstration, or shared display.
-- Use ScreenBrush Remote as a clicker to advance Keynote or Microsoft PowerPoint slides.
-- Use the app as a laser-pointer-style visual guide when an annotation is not needed.
-- Keep the underlying slide or application intact because the annotation is used as a presentation overlay rather than a permanent edit.
-
-## Where it fits
-
-ScreenBrush fits teachers, trainers, presenters, and anyone explaining a Mac screen live. It complements Keynote, PowerPoint, and screen-sharing tools by adding a lightweight way to direct attention in the moment.
-
-It is not the right tool for polished, reusable annotations or recorded tutorials that need editing afterward. Capture or author those in a dedicated screenshot, video, or slide-design tool.`,
 
   sorted: `Sorted³ is a task, calendar, and notes app organized around a single timeline for the day. Its central idea is hyper-scheduling: put a task next to real events, give it a time, and see the day as one practical sequence instead of separate lists and calendars.
 
@@ -788,27 +665,6 @@ Its value is the dedicated presentation. A Mac needs to be awake and able to pla
 Wake Up Time fits someone who wants a straightforward alarm on a Mac without a full productivity suite. It is useful for a shared room, a work station, or a Mac that is already part of a daily routine.
 
 It depends on the computer’s power, audio, and sleep settings, so it should not be the only alarm for an appointment or safety-critical event.`,
-
-  'in-your-face': `In Your Face is a meeting and reminder app that uses full-screen alerts when an event is about to start. It is designed for people who routinely overlook ordinary notification banners while concentrating, switching contexts, or sharing their screen.
-
-Connect the calendars you use, allow the app to identify the events worth interrupting for, and use the alert to join a video call or return attention to a time-critical reminder. Filters and per-event settings make it possible to reserve the strongest interruption for meetings that matter.
-
-This is intentionally assertive software. It can be especially useful for time blindness or hyperfocus, but a full-screen alert is disruptive by design, so a good configuration includes pauses for presentations and events you do not want to be interrupted during.
-
-## Features
-
-- Show full-screen alerts before calendar events and supported Apple Reminders rather than relying on a small notification.
-- Detect meeting links in events and provide one-click joining for more than 30 supported video-conferencing services.
-- Work with current Mac, Windows, iPhone, iPad, and Apple Watch apps, with direct Google and Microsoft connections on desktop where available.
-- Filter events and override alert behavior for individual events so only the right commitments interrupt you.
-- Pause alerts temporarily for screen sharing or other periods when interruptions would be inappropriate.
-- Customize alert themes, sounds, and keyboard shortcuts for pausing, resuming, and creating reminders.
-
-## Where it fits
-
-In Your Face fits remote workers and anyone who misses meetings because the normal macOS alert is too easy to dismiss. It complements a calendar by making its most urgent moments hard to overlook rather than trying to replace the calendar itself.
-
-The Mac version requires macOS 14 or later, and its strongest behavior may be too intrusive for every event. Start with a narrow set of calendar filters before enabling it for an entire schedule.`,
 
   capcut: `CapCut Desktop is a video editor for Mac and Windows that combines a conventional timeline editor with templates, effects, captions, and a growing set of AI-assisted tools. It is aimed at quick social video production as well as more detailed editing, letting a creator move from raw clips to a short, platform-specific export in one environment.
 
@@ -1317,25 +1173,6 @@ Alfred fits Mac users who want a fast, private-feeling launcher and enjoy buildi
 
 Its automation potential comes with configuration time. Start with launch, search, and a few snippets, then add workflows only after a repeated task proves worth automating.`,
 
-  notchnook: `NotchNook is a macOS utility that turns the area around the notch into a compact shelf for files, clipboard items, media controls, and small live activities. It brings temporary working material to a predictable top-of-screen place instead of forcing every drag-and-drop or copied item into a Finder window.
-
-Drag a file toward the notch to hold it temporarily, open the shelf to retrieve an earlier clipboard item, or use its media and status features while working in another app. The interaction is designed to feel immediate on a MacBook with a notch, while the app’s behavior on other displays depends on the current version and configuration.
-
-Notch utilities are about convenience rather than necessity. The shelf should contain the few kinds of information that benefit from fast access; if it is overloaded with widgets, it can become another distraction instead of a working surface.
-
-## Features
-
-- Use the notch area as a temporary drop shelf for files being moved between apps or folders.
-- Keep and retrieve clipboard history from the shelf.
-- Access media controls and current live activities from a compact top-of-screen interface.
-- Use the app as a lightweight alternative to keeping Finder windows or temporary files on the Desktop.
-
-## Where it fits
-
-NotchNook fits MacBook users who want an accessible holding area for dragged files and frequently copied items. It can complement a clipboard manager and a file shelf without replacing either tool’s deeper organization features.
-
-It is most compelling when the notch interaction feels natural in the existing setup. Users who work mainly on an external display or avoid top-screen overlays may get more value from a conventional shelf utility.`,
-
   shottr: `Shottr is a lightweight Mac screenshot tool aimed at designers, front-end engineers, and anyone who needs precise capture and markup. It combines fast region and scrolling capture with visual annotation, OCR, pixel tools, backgrounds, pinning, and optional upload workflows.
 
 Capture a screen area, long page, or application window, then crop, annotate, redact, measure, or copy the relevant result. The app is particularly useful for design feedback, bug reports, documentation, visual comparison, and extracting text or colors from material that is not otherwise selectable.
@@ -1433,27 +1270,6 @@ QSpace changes the file-management interface, not the underlying macOS filesyste
 QSpace fits people who spend substantial time organizing files, working between folders, or handling assets across drives. It can complement Finder or replace it for selected workflows.
 
 It does not replace backups or careful file naming. Start with a small number of tabs and panes so the interface remains clearer than the Finder setup it is meant to improve.`,
-
-  monarch: `Monarch is a macOS productivity overlay that provides commands, calculation, clipboard history, browser bookmarks, notes, and system controls without requiring a switch to a separate app or workspace. It is built around short keyboard interactions that keep small operational tasks close to the current context.
-
-Open Monarch to calculate a value, retrieve a clipboard item, search browser bookmarks, create a local note, or change a system setting. Custom commands and hotkeys can turn frequent actions into a quick interaction rather than a sequence of menus and app launches.
-
-Monarch combines several utility categories, so it works best when its shortcut and feature set replace a repeated pattern rather than becoming another general-purpose launcher to configure. Notes are stored locally, while the other functions should be checked against the current release and permissions.
-
-## Features
-
-- Run standard calculations, date and time comparisons, unit and currency conversion, and variables from the overlay.
-- Access system controls and commands for settings, volume, microphone, lock screen, sleep, and focused-app visibility.
-- Keep an unlimited searchable clipboard history and filter it by app or content type.
-- Retrieve browser bookmarks and control how a selected bookmark opens.
-- Write local Markdown notes from a shortcut, including while working fullscreen.
-- Create custom commands and assign applications or commands to personal hotkeys.
-
-## Where it fits
-
-Monarch fits Mac users who want one keyboard-driven place for small commands, notes, clipboard recall, and system navigation. It can replace several lightweight utilities when its interaction style feels natural.
-
-It is not a full task manager or a substitute for a careful automation system. Begin with calculator, clipboard, and a few commands before building a large shortcut collection.`,
 
   pearcleaner: `Pearcleaner is a free, source-available Mac app cleaner that finds an application and its associated files before uninstalling it. Instead of moving only the app bundle to the Trash, it can search for related preferences, support files, caches, and launch items so the removal can be reviewed as one operation.
 
@@ -1553,25 +1369,6 @@ Magnet changes window placement, not the content of the applications. It works b
 Magnet fits people who routinely work with two or more apps side by side and want a simple, dedicated tiling layer. It is useful on large displays and laptops with an external monitor.
 
 It is not necessary if the built-in macOS layouts already cover the workflow. Check for shortcut conflicts with other window managers before enabling it.`,
-
-  'keyboard-maestro': `Keyboard Maestro is a powerful macOS automation tool for building macros that react to hotkeys, typed strings, application state, time, device events, and many other triggers. A macro can perform a sequence of actions: manipulate windows, control apps, move files, transform text, run scripts, ask for input, or connect pieces of a personal workflow.
-
-Build an automation around a task you repeatedly perform, test it on a harmless example, then add conditions and notifications until it is dependable. This makes Keyboard Maestro valuable for people who need more depth than a launcher workflow but do not want to build every automation as a custom program.
-
-Keyboard Maestro has substantial reach inside a Mac, so permissions and side effects matter. The most useful macros are documented, narrowly triggered, and safe to stop; a poorly scoped macro can act on the wrong app, file, or clipboard at speed.
-
-## Features
-
-- Trigger macros with hotkeys, typed strings, schedules, application state, device events, and other conditions.
-- Combine system actions, window control, text processing, file operations, web requests, scripts, prompts, and notifications in one macro.
-- Use variables, conditions, loops, and clipboard tools to make repeatable workflows adapt to context.
-- Automate across macOS apps without requiring every workflow to be written as a standalone program.
-
-## Where it fits
-
-Keyboard Maestro fits Mac power users who have recurring multi-step tasks and want to remove manual repetition. It can connect existing apps and services even when they have no direct integration.
-
-Start with small, reversible macros and test them carefully. It is more powerful than necessary for a simple launch or text shortcut, and a macro should always be reviewed before it makes consequential changes.`,
 
   displaybuddy: `DisplayBuddy is a Mac utility for controlling compatible external monitors without reaching for their physical buttons. It uses DDC when a display supports it, letting macOS adjust hardware brightness, contrast, volume, input source, resolution, rotation, and power controls from one place.
 
