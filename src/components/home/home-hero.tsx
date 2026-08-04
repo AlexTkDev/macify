@@ -6,7 +6,7 @@ type HomeApp = PublicAppSummary & {
   preview: { storageKey: string; altText: string | null; width: number | null; height: number | null } | null;
 };
 
-const headlineSlugs = ["swish", "mimestream", "things-3"];
+const headlineSlugs = ["dayflow", "cleanshot-x", "swish"];
 
 export function HomeHero({ applications }: { applications: HomeApp[] }) {
   const featured = applications.find((app) => app.slug === "droppy" && app.preview)
