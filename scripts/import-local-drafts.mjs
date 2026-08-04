@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { editorialDescriptions } from "../data/editorial-descriptions.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
@@ -76,7 +77,10 @@ function parseLists(value) {
 
 const uploadedKeys = [];
 try {
-  const dataset = JSON.parse(await readFile(datasetPath, "utf8"));
+  const dataset = JSON.parse(await readFile(datasetPath, "utf8")).map((application) => ({
+    ...application,
+    description: editorialDescriptions[application.slug] ?? application.description,
+  }));
   const lookupResponse = runWrangler([
     "d1", "execute", "DB", "--local", "--json", "--command",
     "SELECT 'app' AS kind, id, slug FROM apps WHERE deleted_at IS NULL UNION ALL SELECT 'category' AS kind, id, slug FROM categories;",

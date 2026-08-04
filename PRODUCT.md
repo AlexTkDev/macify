@@ -26,7 +26,7 @@ Pricing is recorded in two parts. The access tier is free, freemium, or paid. Fr
 
 Source status is retained internally. Public pages display an Open source fact only when applicable; closed-source applications do not display a source label. Repository URLs and minimum macOS versions are outside the current content model.
 
-Detailed descriptions are authored and stored as plain Markdown. The dashboard intentionally provides a normal textarea without a rich-text editor, formatting toolbar, or preview. Public application pages render the Markdown as semantic HTML with GitHub Flavored Markdown support for headings, lists, links, emphasis, tables, task lists, strikethrough, blockquotes, and code. Raw HTML from Markdown is never executed.
+Detailed descriptions are researched and written according to `EDITORIAL.md`, then stored as plain Markdown. The dashboard intentionally provides a normal textarea without a rich-text editor, formatting toolbar, or preview. Public application pages render the Markdown as semantic HTML with GitHub Flavored Markdown support for headings, lists, links, emphasis, tables, task lists, strikethrough, blockquotes, and code. Raw HTML from Markdown is never executed.
 
 Application media consists of one icon, one main preview image, and multiple screenshots stored in Cloudflare R2 and referenced from the database. The preview image is the wide editorial visual shown within the public application page; it is not used as the social-sharing image. Media can be attached during initial creation or later editing, and its R2 paths use the permanent application ID generated during submission. Audio is outside the product scope.
 

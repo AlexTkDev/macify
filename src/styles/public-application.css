@@ -238,6 +238,7 @@
 }
 
 .application-story-lead .markdown-content p { margin: 0; }
+.application-story-lead .markdown-content p + p { margin-top: 1.25rem; }
 
 .application-story-sections {
   width: 100%;

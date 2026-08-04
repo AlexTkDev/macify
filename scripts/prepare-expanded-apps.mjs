@@ -86,6 +86,7 @@ async function discoverMedia(app) {
 }
 
 function description(app) {
+  if (app.description) return app.description;
   return [
     app.lead,
     "## What you can do",

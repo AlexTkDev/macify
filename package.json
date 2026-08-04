@@ -21,6 +21,8 @@
     "db:seed:expanded": "node scripts/import-local-drafts.mjs --dataset=data/expanded-apps.json",
     "data:prepare:additional": "node scripts/prepare-expanded-apps.mjs --source=data/additional-apps-source.mjs --destination=data/additional-apps.json",
     "db:seed:additional": "node scripts/import-local-drafts.mjs --dataset=data/additional-apps.json",
+    "editorial:check": "node scripts/check-editorial-descriptions.mjs",
+    "editorial:sync:local": "node scripts/sync-editorial-descriptions.mjs --local",
     "db:migrate:staging": "wrangler d1 migrations apply DB --remote --env staging",
     "db:migrate:production": "wrangler d1 migrations apply DB --remote --env production"
   },

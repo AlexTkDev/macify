@@ -2,7 +2,7 @@
 
 ## Product
 
-Macify.app is a curated directory of useful macOS applications. Read `PRODUCT.md` before changing product behavior and `DESIGN.md` before changing the interface.
+Macify.app is a curated directory of useful macOS applications. Read `PRODUCT.md` before changing product behavior, `DESIGN.md` before changing the interface, and `EDITORIAL.md` before creating or editing application descriptions or other public editorial copy.
 
 Phase 1 includes the public directory, editorial dashboard, D1 schema, R2 media pipeline, imports and exports, search, and technical SEO. Accounts, authentication, saved apps, payments, and subscriptions belong to Phase 2 unless the user explicitly changes the scope.
 
@@ -39,3 +39,10 @@ Phase 1 includes the public directory, editorial dashboard, D1 schema, R2 media 
 - Use OKLCH tokens, pure white as the public background, restrained honey amber for primary/selected states, and deep aubergine only for editorial emphasis.
 - Avoid gradients, glass effects, excessive pills, nested cards, low-contrast copy, and decorative motion.
 - Target WCAG 2.2 AA and honor reduced motion.
+
+## Editorial content
+
+- Follow `EDITORIAL.md` for research, structure, Markdown formatting, voice, fact verification, and quality checks.
+- Research each application independently. Do not generate catalogue descriptions by mechanically expanding taglines or feature fields.
+- Treat official documentation as the authority for product facts and independent reviews as evidence of real-world experience.
+- Never alter a remote application record unless the user explicitly approves that remote change.
