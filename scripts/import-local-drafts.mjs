@@ -101,11 +101,10 @@ try {
   }));
   const lookupResponse = runWrangler([
     "d1", "execute", "DB", "--local", "--json", "--command",
-    "SELECT 'app' AS kind, id, slug FROM apps WHERE deleted_at IS NULL UNION ALL SELECT 'category' AS kind, id, slug FROM categories;",
+    "SELECT 'app' AS kind, id, slug FROM apps WHERE deleted_at IS NULL;",
   ], { json: true });
   const lookupRows = lookupResponse[0]?.results ?? [];
   const existingApps = new Map(lookupRows.filter((row) => row.kind === "app").map((row) => [row.slug, row.id]));
-  const categoryIds = new Map(lookupRows.filter((row) => row.kind === "category").map((row) => [row.slug, row.id]));
   const pending = dataset.filter((app) => !existingApps.has(app.slug));
   if (pending.length === 0) {
     console.log("All applications in this dataset already exist; nothing to import.");
@@ -113,7 +112,6 @@ try {
   }
 
   for (const app of pending) {
-    if (!categoryIds.has(app.category)) throw new Error(`Unknown category '${app.category}' for ${app.name}.`);
     app.id = randomUUID();
   }
   const preparedApps = await Promise.allSettled(pending.map(async (app) => ({
@@ -147,7 +145,6 @@ try {
     const status = app.status === "published" ? "published" : "draft";
     const publishedAt = status === "published" ? now : null;
     statements.push(`INSERT INTO apps (id, slug, name, website_url, tagline, description, pricing_type, billing_type, pricing_details, source_type, youtube_url, status, published_at, created_at, updated_at) VALUES (${sql(app.id)}, ${sql(app.slug)}, ${sql(app.name)}, ${sql(app.websiteUrl)}, ${sql(app.tagline)}, ${sql(app.description)}, ${sql(app.pricingType)}, ${sql(app.billingType)}, ${sql(app.pricingDetails)}, ${sql(app.sourceType)}, ${sql(app.youtubeUrl)}, ${sql(status)}, ${sql(publishedAt)}, ${now}, ${now});`);
-    statements.push(`INSERT INTO app_categories (app_id, category_id, is_primary) VALUES (${sql(app.id)}, ${sql(categoryIds.get(app.category))}, 1);`);
     for (const name of parseLists(app.tags)) {
       const tagSlug = slugify(name);
       statements.push(`INSERT INTO tags (id, slug, name, created_at) VALUES (${sql(`tag-${tagSlug}`)}, ${sql(tagSlug)}, ${sql(name)}, ${now}) ON CONFLICT(slug) DO UPDATE SET name = excluded.name;`);

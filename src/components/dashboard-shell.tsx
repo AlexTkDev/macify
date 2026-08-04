@@ -4,7 +4,6 @@ import {
   AppWindow,
   ArrowUpRight,
   FileUp,
-  FolderKanban,
   Image as ImageIcon,
   Tags,
 } from "lucide-react";
@@ -13,7 +12,6 @@ import { cn } from "@/lib/utils";
 
 const navigation = [
   { id: "applications", label: "Applications", description: "Curate the directory", icon: AppWindow, href: "/dashboard", tone: "blue" },
-  { id: "categories", label: "Categories", description: "Shape browsing", icon: FolderKanban, href: "/dashboard/categories", tone: "orange" },
   { id: "tags", label: "Tags", description: "Tune discovery", icon: Tags, href: "/dashboard/tags", tone: "yellow" },
   { id: "media", label: "Media", description: "Manage artwork", icon: ImageIcon, href: "/dashboard/media", tone: "mint" },
   { id: "imports", label: "Imports", description: "Move data", icon: FileUp, href: "/dashboard/imports", tone: "lilac" },

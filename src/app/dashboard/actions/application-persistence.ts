@@ -1,6 +1,6 @@
 import { and, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { appCategories, appRelationships, appTags, apps, tags } from "@/db/schema";
+import { appRelationships, appTags, apps, tags } from "@/db/schema";
 import { normalizeTags, type ApplicationFields } from "@/lib/application-schema";
 
 export function normalizedApplicationValues(data: ApplicationFields) {
@@ -18,15 +18,13 @@ export function normalizedApplicationValues(data: ApplicationFields) {
   };
 }
 
-export function taxonomyQueries(
+export function tagQueries(
   database: Awaited<ReturnType<typeof getDatabase>>,
   appId: string,
   data: ApplicationFields,
 ) {
   const normalizedTags = normalizeTags(data.tagsText);
   return [
-    database.delete(appCategories).where(eq(appCategories.appId, appId)),
-    database.insert(appCategories).values({ appId, categoryId: data.categoryId, isPrimary: true }),
     database.delete(appTags).where(eq(appTags.appId, appId)),
     ...normalizedTags.flatMap(({ name, slug }) => [
       database

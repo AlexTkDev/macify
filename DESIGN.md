@@ -26,7 +26,7 @@ The second fold shows 30 apps in a five-column sample wall. Color fields create 
 
 # Application page
 
-The application hero is a centered two-line editorial composition. “Meet”, the authentic app icon, and the application name form the larger first line; the official tagline always forms the second line at roughly two-thirds of the identity scale. Both use independent container-relative `clamp()` scales with explicit minimum and maximum sizes. A restrained amber underline accents the tagline. Concise pricing, up to four tags, and an open-source label only when true form one dot-separated fact row. “Official website” is a quiet text action with an external arrow. Category is never public.
+The application hero is a centered two-line editorial composition. “Meet”, the authentic app icon, and the application name form the larger first line; the official tagline always forms the second line at roughly two-thirds of the identity scale. Both use independent container-relative `clamp()` scales with explicit minimum and maximum sizes. A restrained amber underline accents the tagline. Concise pricing, up to three tags, and an open-source label only when true form one dot-separated fact row. “Official website” is a quiet text action with an external arrow.
 
 The centered preview follows the identity and keeps its natural aspect ratio. The editorial body is a single, left-aligned article column with ordinary paragraph typography. The redundant tagline heading and generic or app-named “What it does” section are removed at render time. “What you can do” is a normal heading followed by a standard bulleted list; “Where it fits” is the next heading followed by body copy. Related apps form a loose icon shelf instead of repeating homepage tiles.
 
@@ -49,4 +49,4 @@ At tablet width the detail headline scales down while preserving the centered id
 
 # Dashboard boundary
 
-The public visual language does not remove editorial capability. The dashboard may continue to show category, publication state, media roles, pricing structure, and source status because those fields are operational rather than promotional.
+The public visual language does not remove editorial capability. The dashboard continues to show tags, publication state, media roles, pricing structure, and source status because those fields are operational rather than promotional.

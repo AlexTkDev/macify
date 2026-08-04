@@ -12,12 +12,9 @@ export type EditableApplication = {
   pricingDetails: string | null;
   sourceType: "open_source" | "closed_source";
   youtubeUrl: string | null;
-  categoryId: string;
   tagsText: string;
   relatedAppIds: string[];
 };
-
-export type CategoryOption = { id: string; name: string };
 
 export type RelatedApplicationOption = {
   id: string;

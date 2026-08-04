@@ -7,7 +7,7 @@ import { updateApplication } from "@/app/dashboard/actions/update-application";
 import { ApplicationAvailabilitySection } from "@/components/application-availability-section";
 import { ApplicationClassificationSection } from "@/components/application-classification-section";
 import { ApplicationFormActions } from "@/components/application-form-actions";
-import type { CategoryOption, EditableApplication, RelatedApplicationOption } from "@/components/application-form-types";
+import type { EditableApplication, RelatedApplicationOption } from "@/components/application-form-types";
 import { ApplicationIdentitySection } from "@/components/application-identity-section";
 import { ApplicationMediaSection } from "@/components/application-media-section";
 import { ApplicationRelationshipsSection } from "@/components/application-relationships-section";
@@ -16,13 +16,11 @@ const initialState: ApplicationFormState = {};
 
 export function ApplicationForm({
   application,
-  categories,
   relatedApplications,
   tags,
   mode = "create",
 }: {
   application?: EditableApplication;
-  categories: CategoryOption[];
   relatedApplications: RelatedApplicationOption[];
   tags: string[];
   mode?: "create" | "edit";
@@ -54,7 +52,7 @@ export function ApplicationForm({
         slugEdited={slugEdited}
       />
       {mode === "create" && <ApplicationMediaSection errors={state.errors} />}
-      <ApplicationClassificationSection application={application} categories={categories} errors={state.errors} tags={tags} />
+      <ApplicationClassificationSection application={application} errors={state.errors} tags={tags} />
       <ApplicationAvailabilitySection application={application} errors={state.errors} pricingType={pricingType} setPricingType={setPricingType} />
       <ApplicationRelationshipsSection application={application} errors={state.errors} relatedApplications={relatedApplications} />
       <ApplicationFormActions mode={mode} />

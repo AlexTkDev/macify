@@ -1,7 +1,6 @@
 import { and, asc, count, desc, eq, isNull, sql, type SQL } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { appCategories, appTags, apps, categories, tags } from "@/db/schema";
-import { getCategoryDirectoryData } from "@/lib/category-directory-data";
+import { appTags, apps, tags } from "@/db/schema";
 import {
   cardFields,
   getCardMedia,
@@ -16,7 +15,6 @@ function searchConditions(filters?: DirectorySearchFilters) {
       lower(${apps.name}) like ${pattern}
       or lower(${apps.tagline}) like ${pattern}
       or lower(${apps.description}) like ${pattern}
-      or lower(${categories.name}) like ${pattern}
       or exists (
         select 1 from ${appTags}
         inner join ${tags} on ${tags.id} = ${appTags.tagId}
@@ -24,7 +22,6 @@ function searchConditions(filters?: DirectorySearchFilters) {
       )
     )`);
   }
-  if (filters?.category) conditions.push(eq(categories.slug, filters.category));
   if (filters?.pricing) conditions.push(eq(apps.pricingType, filters.pricing));
   if (filters?.billing) conditions.push(eq(apps.billingType, filters.billing));
   if (filters?.openSource) conditions.push(eq(apps.sourceType, "open_source"));
@@ -33,19 +30,11 @@ function searchConditions(filters?: DirectorySearchFilters) {
 
 export async function getHomepageDirectoryData(filters?: DirectorySearchFilters) {
   const database = await getDatabase();
-  const [records, taxonomy] = await Promise.all([
-    database
-      .select(cardFields)
-      .from(apps)
-      .innerJoin(appCategories, and(
-        eq(appCategories.appId, apps.id),
-        eq(appCategories.isPrimary, true),
-      ))
-      .innerJoin(categories, eq(categories.id, appCategories.categoryId))
-      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
-      .orderBy(desc(apps.publishedAt), asc(apps.name)),
-    getCategoryDirectoryData(),
-  ]);
+  const records = await database
+    .select(cardFields)
+    .from(apps)
+    .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
+    .orderBy(desc(apps.publishedAt), asc(apps.name));
 
   const page = filters?.page ?? 1;
   const pageSize = 24;
@@ -54,11 +43,6 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters)
     database
       .select({ ...cardFields, sourceType: apps.sourceType })
       .from(apps)
-      .innerJoin(appCategories, and(
-        eq(appCategories.appId, apps.id),
-        eq(appCategories.isPrimary, true),
-      ))
-      .innerJoin(categories, eq(categories.id, appCategories.categoryId))
       .where(and(...conditions))
       .orderBy(asc(apps.name))
       .limit(pageSize)
@@ -66,11 +50,6 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters)
     database
       .select({ total: count() })
       .from(apps)
-      .innerJoin(appCategories, and(
-        eq(appCategories.appId, apps.id),
-        eq(appCategories.isPrimary, true),
-      ))
-      .innerJoin(categories, eq(categories.id, appCategories.categoryId))
       .where(and(...conditions)),
   ]) : [[], [{ total: 0 }]];
 
@@ -82,7 +61,6 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters)
       icon: icons.get(record.id) ?? null,
       preview: previews.get(record.id) ?? null,
     })),
-    categories: taxonomy,
     search: {
       active: Boolean(filters),
       applications: searchRecords.map((record) => ({

@@ -1,6 +1,6 @@
 import { and, asc, eq, isNull, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { appCategories, appTags, apps, categories, mediaAssets, tags } from "@/db/schema";
+import { appTags, apps, mediaAssets, tags } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -18,13 +18,10 @@ export async function GET(request: Request) {
       slug: apps.slug,
       name: apps.name,
       tagline: apps.tagline,
-      category: categories.name,
       iconStorageKey: sql<string | null>`(select storage_key from ${mediaAssets} where app_id = ${apps.id} and role = 'icon' order by created_at desc limit 1)`,
       iconAltText: sql<string | null>`(select alt_text from ${mediaAssets} where app_id = ${apps.id} and role = 'icon' order by created_at desc limit 1)`,
     })
     .from(apps)
-    .innerJoin(appCategories, and(eq(appCategories.appId, apps.id), eq(appCategories.isPrimary, true)))
-    .innerJoin(categories, eq(categories.id, appCategories.categoryId))
     .where(and(
       eq(apps.status, "published"),
       isNull(apps.deletedAt),
@@ -32,7 +29,6 @@ export async function GET(request: Request) {
         lower(${apps.name}) like ${pattern}
         or lower(${apps.tagline}) like ${pattern}
         or lower(${apps.description}) like ${pattern}
-        or lower(${categories.name}) like ${pattern}
         or exists (
           select 1 from ${appTags}
           inner join ${tags} on ${tags.id} = ${appTags.tagId}

@@ -29,3 +29,5 @@ Never edit an already-applied SQL migration. Add a new migration instead. Commit
 - `0002`: optional YouTube URL on applications.
 - `0003`: rename stored media roles from OG image to preview image.
 - `0004`: synchronize Drizzle metadata after the manually authored `0002` migration.
+- `0005`: simplify pricing, billing, and legacy application fields.
+- `0006`: remove the categories and application-category tables.

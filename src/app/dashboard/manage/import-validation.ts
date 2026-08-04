@@ -1,6 +1,6 @@
 import { isNull } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { apps, categories } from "@/db/schema";
+import { apps } from "@/db/schema";
 import {
   importSchema,
   normalizeSourceRow,
@@ -9,14 +9,7 @@ import {
 
 export async function validateImportRows(sourceRows: unknown[]) {
   const database = await getDatabase();
-  const [categoryRows, existingAppRows] = await Promise.all([
-    database.select({ id: categories.id, slug: categories.slug, name: categories.name }).from(categories),
-    database.select({ slug: apps.slug }).from(apps).where(isNull(apps.deletedAt)),
-  ]);
-  const categoryMap = new Map(categoryRows.flatMap((category) => [
-    [category.slug.toLowerCase(), category.id],
-    [category.name.toLowerCase(), category.id],
-  ]));
+  const existingAppRows = await database.select({ slug: apps.slug }).from(apps).where(isNull(apps.deletedAt));
   const sourceSlugs = new Set(sourceRows
     .map((source) => normalizeSourceRow(source).slug)
     .filter(Boolean));
@@ -28,12 +21,7 @@ export async function validateImportRows(sourceRows: unknown[]) {
   const now = new Date();
   const rows = sourceRows.map((source, index) => {
     const parsed = importSchema.safeParse(normalizeSourceRow(source));
-    const categoryId = parsed.success
-      ? categoryMap.get(parsed.data.category.toLowerCase())
-      : undefined;
-    const errors = parsed.success
-      ? categoryId ? [] : ["Category does not match an existing category name or slug."]
-      : parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`);
+    const errors = parsed.success ? [] : parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`);
     if (parsed.success) {
       const unknownRelated = parsed.data.relatedAppSlugs
         .split(/[|;,\n\r]+/)
@@ -53,7 +41,7 @@ export async function validateImportRows(sourceRows: unknown[]) {
       rowNumber: index + 1,
       status: errors.length ? "invalid" : "valid",
       sourceData: safeSource,
-      normalizedData: parsed.success && categoryId ? { ...parsed.data, categoryId } : null,
+      normalizedData: parsed.success ? parsed.data : null,
       errors,
       createdAt: now,
     };

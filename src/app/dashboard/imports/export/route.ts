@@ -1,6 +1,6 @@
 import { and, asc, eq, isNull } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { appCategories, appRelationships, appTags, apps, categories, mediaAssets, tags } from "@/db/schema";
+import { appRelationships, appTags, apps, mediaAssets, tags } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -25,12 +25,9 @@ export async function GET(request: Request) {
         pricingDetails: apps.pricingDetails,
         sourceType: apps.sourceType,
         youtubeUrl: apps.youtubeUrl,
-        category: categories.slug,
         status: apps.status,
       })
       .from(apps)
-      .leftJoin(appCategories, and(eq(appCategories.appId, apps.id), eq(appCategories.isPrimary, true)))
-      .leftJoin(categories, eq(categories.id, appCategories.categoryId))
       .where(isNull(apps.deletedAt))
       .orderBy(asc(apps.name)),
     database
@@ -78,7 +75,7 @@ export async function GET(request: Request) {
       headers: { "Content-Disposition": 'attachment; filename="macify-applications.json"', "Content-Type": "application/json; charset=utf-8" },
     });
   }
-  const headers = ["name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "category", "tags", "iconUrl", "iconAltText", "previewImageUrl", "previewImageAltText", "screenshotUrls", "relatedAppSlugs", "status"] as const;
+  const headers = ["name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "tags", "iconUrl", "iconAltText", "previewImageUrl", "previewImageAltText", "screenshotUrls", "relatedAppSlugs", "status"] as const;
   const csv = [headers.join(","), ...output.map((row) => headers.map((header) => csvCell(row[header])).join(","))].join("\r\n");
   return new Response(csv, {
     headers: { "Content-Disposition": 'attachment; filename="macify-applications.csv"', "Content-Type": "text/csv; charset=utf-8" },

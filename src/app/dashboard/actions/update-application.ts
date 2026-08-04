@@ -11,7 +11,7 @@ import {
   normalizedApplicationValues,
   relatedApplicationsExist,
   relationshipQueries,
-  taxonomyQueries,
+  tagQueries,
   uniqueConstraintMessage,
 } from "@/app/dashboard/actions/application-persistence";
 import type { ApplicationFormState } from "@/app/dashboard/actions/action-types";
@@ -43,7 +43,7 @@ export async function updateApplication(
         .update(apps)
         .set({ ...normalizedApplicationValues(result.data), updatedAt: new Date() })
         .where(and(eq(apps.id, idResult.data), isNull(apps.deletedAt))),
-      ...taxonomyQueries(database, idResult.data, result.data),
+      ...tagQueries(database, idResult.data, result.data),
       ...relationshipQueries(database, idResult.data, result.data.relatedAppIds),
     ]);
   } catch (error) {

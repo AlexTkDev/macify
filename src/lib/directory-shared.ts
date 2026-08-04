@@ -1,10 +1,9 @@
 import { and, desc, eq, inArray, or } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { apps, categories, mediaAssets } from "@/db/schema";
+import { apps, mediaAssets } from "@/db/schema";
 
 export type DirectorySearchFilters = {
   query: string;
-  category: string;
   pricing: "" | "free" | "freemium" | "paid";
   billing: "" | "one_time" | "subscription";
   openSource: boolean;
@@ -19,7 +18,6 @@ export const cardFields = {
   pricingType: apps.pricingType,
   billingType: apps.billingType,
   pricingDetails: apps.pricingDetails,
-  category: categories.name,
 };
 
 export const publicApplicationFields = {

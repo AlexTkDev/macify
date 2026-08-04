@@ -24,7 +24,6 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
 
   const icon = media.find((asset) => asset.role === "icon");
   const preview = media.find((asset) => asset.role === "preview_image");
-  const category = options.categories.find((item) => item.id === application.categoryId);
   const related = options.relatedApplications.filter((item) => application.relatedAppIds.includes(item.id));
   const tags = application.tagsText.split(",").map((tag) => tag.trim()).filter(Boolean);
 
@@ -76,7 +75,6 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
             <dl>
               <div><dt>Pricing</dt><dd>{formatPricing(application)}</dd></div>
               {application.billingType && <div><dt>Billing</dt><dd>{application.billingType === "one_time" ? "One-time payment" : "Subscription"}</dd></div>}
-              <div><dt>Category</dt><dd>{category?.name ?? "Not assigned"}</dd></div>
               <div><dt>Source</dt><dd>{application.sourceType === "open_source" ? "Open source" : "Closed source"}</dd></div>
             </dl>
           </section>

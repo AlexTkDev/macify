@@ -124,7 +124,6 @@
 
   .record-list-header { display: none; }
 
-  .record-item-category > summary,
   .record-item-tag > summary {
     grid-template-columns: minmax(0, 1fr) auto auto;
     gap: 0.45rem 0.75rem;
@@ -137,9 +136,7 @@
   .record-usage { grid-column: 2; grid-row: 1; }
   .record-chevron { grid-column: 3; grid-row: 1; }
   .record-editor { padding: 1rem; }
-  .record-editor-form-category,
   .record-editor-form-tag { grid-template-columns: 1fr; }
-  .record-editor-form-category .record-editor-actions { grid-column: auto; }
   .record-field-wide { grid-column: auto; }
   .record-editor-actions { justify-content: stretch; }
   .record-editor-actions .button-primary { width: 100%; }

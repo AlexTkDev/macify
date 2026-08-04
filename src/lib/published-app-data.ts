@@ -2,11 +2,9 @@ import { and, asc, desc, eq, isNull, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 import { getDatabase } from "@/db/client";
 import {
-  appCategories,
   appRelationships,
   appTags,
   apps,
-  categories,
   mediaAssets,
   tags,
 } from "@/db/schema";
@@ -33,16 +31,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
     pricingDetails: relatedApp.pricingDetails,
     confidence: appRelationships.confidence,
   };
-  const [categoryRows, tagRows, media, outgoing, incoming] = await Promise.all([
-    database
-      .select({ id: categories.id, slug: categories.slug, name: categories.name })
-      .from(appCategories)
-      .innerJoin(categories, eq(categories.id, appCategories.categoryId))
-      .where(and(
-        eq(appCategories.appId, application.id),
-        eq(appCategories.isPrimary, true),
-      ))
-      .limit(1),
+  const [tagRows, media, outgoing, incoming] = await Promise.all([
     database
       .select({ id: tags.id, slug: tags.slug, name: tags.name })
       .from(appTags)
@@ -102,7 +91,6 @@ export async function getPublishedApplicationBySlug(slug: string) {
   const { icons } = await getCardMedia(relatedRecords.map(({ id }) => id));
   return {
     ...application,
-    category: categoryRows[0] ?? null,
     tags: tagRows,
     media,
     related: relatedRecords.map((record) => ({

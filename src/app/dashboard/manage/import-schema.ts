@@ -23,8 +23,8 @@ export const importSchema = z.object({
     const parsed = z.url().safeParse(value);
     return parsed.success && ["youtube.com", "www.youtube.com", "youtu.be"].includes(new URL(parsed.data).hostname);
   }, "Use a youtube.com or youtu.be URL."),
-  category: z.string().trim().min(1),
-  tags: z.string().trim().max(500).default(""),
+  tags: z.string().trim().min(2).max(500)
+    .refine((value) => value.split(",").map((tag) => tag.trim()).filter(Boolean).length <= 3, "Use no more than 3 tags."),
   iconUrl: z.string().trim().max(2_000).default("").refine(isAllowedRemoteImageUrl, "Use a public HTTPS image URL."),
   iconAltText: z.string().trim().max(300).default(""),
   previewImageUrl: z.string().trim().max(2_000).default("").refine(isAllowedRemoteImageUrl, "Use a public HTTPS image URL."),
@@ -39,7 +39,7 @@ export const importSchema = z.object({
   }
 });
 
-export type NormalizedImport = z.infer<typeof importSchema> & { categoryId: string };
+export type NormalizedImport = z.infer<typeof importSchema>;
 
 export function normalizeSourceRow(input: unknown) {
   const source: SourceRow = typeof input === "object" && input !== null && !Array.isArray(input)
@@ -61,7 +61,6 @@ export function normalizeSourceRow(input: unknown) {
     pricingDetails: value("pricingDetails", "pricing_details"),
     sourceType: value("sourceType", "source_type") || "closed_source",
     youtubeUrl: value("youtubeUrl", "youtube_url"),
-    category: value("category", "category"),
     tags: value("tags", "tags"),
     iconUrl: value("iconUrl", "icon_url"),
     iconAltText: value("iconAltText", "icon_alt_text"),

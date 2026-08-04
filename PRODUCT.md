@@ -12,7 +12,7 @@ The primary public task is finding a useful Mac application quickly. The primary
 
 ## Product Purpose
 
-Macify.app is a curated directory of the best useful macOS applications. It organizes application details, pricing, licensing, platforms, media, categories, alternatives, and editorial context into fast, searchable pages.
+Macify.app is a curated directory of the best useful macOS applications. It organizes application details, pricing, licensing, platforms, media, tags, alternatives, and editorial context into fast, searchable pages.
 
 Phase 1 delivers the public directory, management dashboard, structured database, media pipeline, imports and exports, search, and technical SEO. Public accounts, authentication, saved applications, payments, and subscriptions are intentionally deferred.
 
@@ -32,7 +32,7 @@ Application media consists of one icon, one main preview image, and multiple scr
 
 Every uploaded or remotely imported image passes through Cloudflare Images before it is written to R2. The pipeline preserves the original pixel dimensions, removes unnecessary encoding overhead, and prefers high-quality WebP when that produces a smaller file. If conversion would increase the byte size, Macify keeps the original. D1 records the delivered format, optimized byte size, width, height, and checksum. Existing unmeasured assets can be optimized safely in small batches from the media dashboard.
 
-Tags use autocomplete against the existing taxonomy while allowing editors to create a missing tag inline. New tags are normalized and created when the application is saved.
+Each application uses one to three focused tags for classification and discovery. Tags use autocomplete against the existing taxonomy while allowing editors to create a missing tag inline; new tags are normalized and created when the application is saved.
 
 Editors can provide media as a local file or a public HTTPS image URL. URL imports are downloaded, validated, copied into R2, and recorded with their original source URL; public pages never hotlink third-party media. Remote fetches reject local or private destinations, unsafe redirects, unsupported formats, mismatched file signatures, and files over the editorial size limit.
 
@@ -57,7 +57,7 @@ The voice is calm and specific. It explains what an application does, who it sui
 
 ## Design Principles
 
-1. **Lead with utility.** Search, categories, pricing, and download context must be visible before editorial decoration.
+1. **Lead with utility.** Search, tags, pricing, and download context must be visible before editorial decoration.
 2. **Make curation legible.** Explain why an application is listed and distinguish verified facts from editorial opinion.
 3. **Feel native without imitation.** Use familiar macOS clarity, density, and interaction patterns while maintaining an independent Macify identity.
 4. **Let application media do the color work.** The interface remains restrained so icons, screenshots, and preview images stay recognizable.

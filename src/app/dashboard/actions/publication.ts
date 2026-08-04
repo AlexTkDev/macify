@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getDatabase } from "@/db/client";
-import { appCategories, apps, mediaAssets } from "@/db/schema";
+import { appTags, apps, mediaAssets } from "@/db/schema";
 import type { PublicationState } from "@/app/dashboard/actions/action-types";
 
 export async function setApplicationPublicationState(
@@ -19,16 +19,16 @@ export async function setApplicationPublicationState(
   }
 
   const database = await getDatabase();
-  const [applicationRows, categoryRows, mediaRows] = await Promise.all([
+  const [applicationRows, tagRows, mediaRows] = await Promise.all([
     database
       .select({ id: apps.id, slug: apps.slug, status: apps.status })
       .from(apps)
       .where(and(eq(apps.id, appIdResult.data), isNull(apps.deletedAt)))
       .limit(1),
     database
-      .select({ categoryId: appCategories.categoryId })
-      .from(appCategories)
-      .where(and(eq(appCategories.appId, appIdResult.data), eq(appCategories.isPrimary, true)))
+      .select({ tagId: appTags.tagId })
+      .from(appTags)
+      .where(eq(appTags.appId, appIdResult.data))
       .limit(1),
     database.select({ role: mediaAssets.role }).from(mediaAssets).where(eq(mediaAssets.appId, appIdResult.data)),
   ]);
@@ -38,7 +38,7 @@ export async function setApplicationPublicationState(
   if (intentResult.data === "publish") {
     const roles = new Set(mediaRows.map(({ role }) => role));
     const missing: string[] = [];
-    if (!categoryRows[0]) missing.push("a primary category");
+    if (!tagRows[0]) missing.push("at least one tag");
     if (!roles.has("icon")) missing.push("an application icon");
     if (!roles.has("preview_image")) missing.push("a main preview image");
     if (missing.length > 0) return { message: `Add ${missing.join(", ")} before publishing.` };

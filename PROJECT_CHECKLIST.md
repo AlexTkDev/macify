@@ -41,8 +41,7 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Official website URL
 - [x] Tagline
 - [x] Detailed Markdown description
-- [x] Primary category
-- [x] Tags with normalization and a 12-tag limit
+- [x] One to three curated tags with normalization
 - [x] Open-source status stored internally
 - [x] Closed-source status omitted from the public UI
 - [x] Optional YouTube demo URL
@@ -59,7 +58,6 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Create application form
 - [x] Edit application form
 - [x] Draft and publication controls
-- [x] Category management
 - [x] Tag management
 - [x] Media management
 - [x] Import history and row-level validation review
@@ -104,7 +102,7 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Main preview URL and alt-text import/export
 - [x] Multiple screenshot URL import/export
 - [x] Related application slug import/export
-- [x] Tags and category import/export
+- [x] Tag import/export
 - [x] Imported media uses the same secure R2 pipeline as manually added media
 - [x] Failed media imports fail the affected row instead of creating an incomplete record
 - [ ] Add update/merge conflict handling only when the product needs bulk updates
@@ -115,7 +113,7 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 
 - [x] Public directory homepage
 - [x] Published application pages
-- [x] Category directory pages
+- [x] Tag-based application discovery
 - [x] Application icons and main previews
 - [x] Screenshot gallery
 - [x] Safe GitHub Flavored Markdown rendering
@@ -124,7 +122,7 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] YouTube demo link
 - [x] Related applications
 - [x] Development-only demo catalog with 12 fictional applications
-- [x] Complete production search and filtering across names, taglines, descriptions, categories, tags, pricing, billing, and source status
+- [x] Complete production search and filtering across names, taglines, descriptions, tags, pricing, billing, and source status
 - [ ] Add real editorial seed content
 - [ ] Review all public responsive breakpoints with production media
 - [ ] Add enhanced keyboard search navigation later (explicitly deferred)
@@ -137,7 +135,7 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] SoftwareApplication structured data
 - [x] Generated application-specific Open Graph cards
 - [x] Main preview image kept separate from social-sharing artwork
-- [x] Category metadata
+- [x] Application metadata
 - [ ] Add and verify sitemap generation
 - [ ] Add and verify robots.txt behavior
 - [ ] Connect Google Search Console and Bing Webmaster Tools after deployment

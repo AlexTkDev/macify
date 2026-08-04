@@ -1,4 +1,3 @@
-export { createCategory, deleteCategory, updateCategory } from "@/app/dashboard/manage/categories";
 export { commitImportJob } from "@/app/dashboard/manage/import-commit";
 export { uploadImportFile } from "@/app/dashboard/manage/import-upload";
 export { deleteMediaAsset } from "@/app/dashboard/manage/media";

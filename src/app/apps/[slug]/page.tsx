@@ -40,7 +40,6 @@ export default async function ApplicationPage({ params }: { params: Promise<{ sl
     name: application.name,
     description: application.tagline,
     url: `https://macify.app/apps/${application.slug}`,
-    applicationCategory: application.category?.name,
     operatingSystem: "macOS",
     image: preview ? `https://macify.app${mediaUrl(preview.storageKey)}` : undefined,
     downloadUrl: application.websiteUrl,

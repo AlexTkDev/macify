@@ -80,7 +80,6 @@ export default async function EditApplicationPage({
 
       <ApplicationForm
         application={application}
-        categories={options.categories}
         mode="edit"
         relatedApplications={options.relatedApplications}
         tags={options.tags}

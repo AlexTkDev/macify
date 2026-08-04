@@ -1,30 +1,16 @@
 import { and, asc, count, desc, eq, inArray, isNull, ne, or, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import {
-  appCategories,
   appRelationships,
   appTags,
   apps,
-  categories,
   mediaAssets,
   tags,
 } from "@/db/schema";
 
-export async function getTaxonomyOptions() {
-  const database = await getDatabase();
-  return database
-    .select({ id: categories.id, name: categories.name })
-    .from(categories)
-    .orderBy(asc(categories.sortOrder), asc(categories.name));
-}
-
 export async function getEditorialOptions(excludeAppId?: string) {
   const database = await getDatabase();
-  const [categoryOptions, relatedApplicationOptions, tagOptions] = await Promise.all([
-    database
-      .select({ id: categories.id, name: categories.name })
-      .from(categories)
-      .orderBy(asc(categories.sortOrder), asc(categories.name)),
+  const [relatedApplicationOptions, tagOptions] = await Promise.all([
     database
       .select({ id: apps.id, name: apps.name, status: apps.status })
       .from(apps)
@@ -36,7 +22,6 @@ export async function getEditorialOptions(excludeAppId?: string) {
   ]);
 
   return {
-    categories: categoryOptions,
     relatedApplications: relatedApplicationOptions,
     tags: tagOptions.map(({ name }) => name),
   };
@@ -112,7 +97,7 @@ export async function getApplicationsDashboardData() {
 
 export async function getApplicationEditorData(id: string) {
   const database = await getDatabase();
-  const [applicationRows, media, categoryRows, tagRows, relationshipRows] = await Promise.all([
+  const [applicationRows, media, tagRows, relationshipRows] = await Promise.all([
     database
       .select({
         id: apps.id,
@@ -149,12 +134,6 @@ export async function getApplicationEditorData(id: string) {
       .where(and(eq(mediaAssets.appId, id), sql`${mediaAssets.role} <> 'audio'`))
       .orderBy(desc(mediaAssets.createdAt)),
     database
-      .select({ id: categories.id })
-      .from(appCategories)
-      .innerJoin(categories, eq(categories.id, appCategories.categoryId))
-      .where(and(eq(appCategories.appId, id), eq(appCategories.isPrimary, true)))
-      .limit(1),
-    database
       .select({ name: tags.name })
       .from(appTags)
       .innerJoin(tags, eq(tags.id, appTags.tagId))
@@ -172,7 +151,6 @@ export async function getApplicationEditorData(id: string) {
   const application = applicationRows[0]
     ? {
         ...applicationRows[0],
-        categoryId: categoryRows[0]?.id ?? "",
         tagsText: tagRows.map(({ name }) => name).join(", "),
         relatedAppIds: relationshipRows.map(({ sourceAppId, targetAppId }) =>
           sourceAppId === id ? targetAppId : sourceAppId),

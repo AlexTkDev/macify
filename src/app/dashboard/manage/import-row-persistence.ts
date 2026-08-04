@@ -1,7 +1,6 @@
 import { sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import {
-  appCategories,
   appTags,
   apps,
   importRows,
@@ -40,11 +39,6 @@ export async function insertImportedApplication(
       status: "draft",
       createdAt: now,
       updatedAt: now,
-    }),
-    database.insert(appCategories).values({
-      appId,
-      categoryId: data.categoryId,
-      isPrimary: true,
     }),
     ...normalizedTags.flatMap((tag) => [
       database

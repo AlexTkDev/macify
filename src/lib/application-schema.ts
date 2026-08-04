@@ -31,10 +31,10 @@ export const applicationSchema = z.object({
   pricingDetails: z.string().trim().max(240),
   sourceType: z.enum(["open_source", "closed_source"]),
   youtubeUrl: optionalYouTubeUrl,
-  categoryId: z.string().trim().min(1, "Choose a primary category."),
   tagsText: z
     .string()
     .trim()
+    .min(2, "Choose at least one tag.")
     .max(500, "Keep the tag list under 500 characters.")
     .refine(
       (value) =>
@@ -44,7 +44,8 @@ export const applicationSchema = z.object({
           return length >= 2 && length <= 40;
         }),
       "Use comma-separated tags between 2 and 40 characters each.",
-    ),
+    )
+    .refine((value) => value.split(",").map((tag) => tag.trim()).filter(Boolean).length <= 3, "Choose no more than three tags."),
   relatedAppIds: z.array(z.uuid()).max(12, "Choose no more than 12 related applications."),
 }).superRefine((data, context) => {
   if (data.pricingType !== "free" && data.billingType === "") {
@@ -66,7 +67,6 @@ export function applicationFieldsFromFormData(formData: FormData) {
     pricingDetails: formData.get("pricingDetails"),
     sourceType: formData.get("sourceType") ?? "closed_source",
     youtubeUrl: formData.get("youtubeUrl"),
-    categoryId: formData.get("categoryId"),
     tagsText: formData.get("tagsText"),
     relatedAppIds: formData.getAll("relatedAppIds"),
   };
@@ -88,5 +88,5 @@ export function normalizeTags(value: string) {
         .replace(/^-+|-+$/g, ""),
     }))
     .filter(({ slug }) => slug.length >= 2 && !seen.has(slug) && seen.add(slug))
-    .slice(0, 12);
+    .slice(0, 3);
 }

@@ -1,32 +1,13 @@
 import { and, asc, count, desc, eq, isNull, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import {
-  appCategories,
   appTags,
   apps,
-  categories,
   importJobs,
   importRows,
   mediaAssets,
   tags,
 } from "@/db/schema";
-
-export async function getCategoryManagementData() {
-  const database = await getDatabase();
-  return database
-    .select({
-      id: categories.id,
-      name: categories.name,
-      slug: categories.slug,
-      description: categories.description,
-      sortOrder: categories.sortOrder,
-      applicationCount: count(appCategories.appId),
-    })
-    .from(categories)
-    .leftJoin(appCategories, eq(appCategories.categoryId, categories.id))
-    .groupBy(categories.id)
-    .orderBy(asc(categories.sortOrder), asc(categories.name));
-}
 
 export async function getTagManagementData() {
   const database = await getDatabase();
