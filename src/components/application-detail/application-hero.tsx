@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { mediaUrl } from "@/components/public-app-card";
 import type { ApplicationMedia, PublishedApplication } from "@/components/application-detail/types";
-import { formatPricing } from "@/lib/pricing";
+import { pricingLabels } from "@/lib/pricing";
 
 export function ApplicationHero({ application, icon }: { application: PublishedApplication; icon?: ApplicationMedia }) {
   const displayName = /[.!?]$/.test(application.name) ? application.name : `${application.name}.`;
@@ -32,7 +32,10 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
           </div>
         )}
         <div className="application-facts" aria-label="Application details">
-          <span className="application-price">{formatPricing(application)}</span>
+          <span className="application-pricing-model">{pricingLabels[application.pricingType]}</span>
+          {application.pricingDetails && (
+            <span className="application-price">{application.pricingDetails}</span>
+          )}
           {application.sourceType === "open_source" && <span className="application-source">Open source</span>}
         </div>
       </div>

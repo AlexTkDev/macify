@@ -9,13 +9,27 @@ import { optimizeLocalImage } from "./lib/optimize-local-image.mjs";
 
 if (!process.argv.includes("--local")) throw new Error("Pass --local to update local D1 and R2. This script never updates remote environments.");
 
+function argumentValue(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : null;
+}
+
+const targetSlug = argumentValue("--slug");
+const targetRole = argumentValue("--role");
+if (targetRole && !["icon", "preview_image"].includes(targetRole)) {
+  throw new Error("--role must be icon or preview_image.");
+}
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
 const datasets = await Promise.all(
   ["initial-apps.json", "expanded-apps.json", "additional-apps.json"]
     .map(async (name) => JSON.parse(await readFile(path.join(root, "data", name), "utf8"))),
 );
-const desiredApps = datasets.flat().filter((app) => !excludedAppSlugs.has(app.slug));
+const desiredApps = datasets.flat().filter((app) => (
+  !excludedAppSlugs.has(app.slug) && (!targetSlug || app.slug === targetSlug)
+));
+if (targetSlug && desiredApps.length !== 1) throw new Error(`Could not find one active dataset app with slug ${targetSlug}.`);
 const wranglerConfig = JSON.parse(await readFile(path.join(root, "wrangler.jsonc"), "utf8"));
 const localMediaBucket = wranglerConfig.r2_buckets?.find((bucket) => bucket.binding === "MEDIA")?.bucket_name;
 if (!localMediaBucket) throw new Error("The local MEDIA binding must define a bucket_name in wrangler.jsonc.");
@@ -107,6 +121,7 @@ try {
     if (!existingApp) continue;
     const app = { ...desired, ...existingApp };
     for (const [role, sourceUrl] of [["icon", desired.iconUrl], ["preview_image", desired.previewImageUrl]]) {
+      if (targetRole && role !== targetRole) continue;
       if (!sourceUrl) continue;
       const existing = mediaByAppRole.get(`${app.slug}:${role}`) || [];
       const matching = existing.find((asset) => asset.source_url === sourceUrl);
@@ -131,8 +146,10 @@ try {
   }
 
   const now = Date.now();
-  for (const slug of excludedAppSlugs) {
-    statements.push(`UPDATE apps SET status = 'archived', deleted_at = ${now}, updated_at = ${now} WHERE slug = ${sql(slug)} AND deleted_at IS NULL;`);
+  if (!targetSlug) {
+    for (const slug of excludedAppSlugs) {
+      statements.push(`UPDATE apps SET status = 'archived', deleted_at = ${now}, updated_at = ${now} WHERE slug = ${sql(slug)} AND deleted_at IS NULL;`);
+    }
   }
   if (statements.length) {
     const sqlPath = path.join(workDirectory, "sync.sql");
@@ -142,7 +159,7 @@ try {
   for (const key of new Set(removals)) {
     runWrangler(["r2", "object", "delete", `${localMediaBucket}/${key}`, "--local"]);
   }
-  console.log(`Updated ${uploads.length} local media assets and processed ${excludedAppSlugs.size} excluded app slugs.`);
+  console.log(`Updated ${uploads.length} local media assets${targetSlug ? ` for ${targetSlug}${targetRole ? ` (${targetRole})` : ""}` : ` and processed ${excludedAppSlugs.size} excluded app slugs`}.`);
 } catch (error) {
   for (const asset of uploads.reverse()) {
     try { runWrangler(["r2", "object", "delete", `${localMediaBucket}/${asset.storageKey}`, "--local"]); } catch { /* Best-effort rollback. */ }
