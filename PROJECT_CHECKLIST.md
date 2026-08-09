@@ -162,9 +162,11 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Explicit R2 failure cleanup in write operations
 - [ ] Add automated unit and integration tests for critical actions
 - [ ] Add end-to-end tests for create, edit, publish, and import workflows
-- [ ] Configure production logging, error monitoring, and alerts
+- [ ] Verify production logging and configure the alerts defined in `OPERATIONS.md`
 - [ ] Configure Cloudflare usage and billing notifications
-- [ ] Establish D1 backup/export and recovery procedures
+- [x] Document D1 backup/export and recovery procedures in `OPERATIONS.md`
+- [ ] Automate encrypted daily D1 exports with documented retention
+- [ ] Complete and record a quarterly D1 recovery drill in a disposable database
 - [ ] Establish R2 retention and orphan-cleanup procedures
 - [ ] Add Turnstile or equivalent protection to future public submission forms
 

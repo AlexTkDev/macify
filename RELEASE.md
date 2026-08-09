@@ -61,3 +61,4 @@ Routine application descriptions, tags, pricing, media, and publication changes 
 - Replace production from canonical local data: `npm run production:replace-from-local`
 
 Read [`migrations/README.md`](migrations/README.md) before changing schema or migration history.
+Read [`OPERATIONS.md`](OPERATIONS.md) before production migrations, bulk imports, catalogue replacement, or recovery. Record a Time Travel bookmark and verified SQL export before those operations.

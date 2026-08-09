@@ -40,6 +40,8 @@ See [`migrations/README.md`](migrations/README.md) before changing the database 
 
 See [`RELEASE.md`](RELEASE.md) before deploying. Macify uses proportional validation: isolated, reversible CSS or copy changes may deploy directly to production after lightweight checks and approval, while behavioral, data, authentication, infrastructure, or broad shared-interface changes must pass through staging.
 
+See [`OPERATIONS.md`](OPERATIONS.md) for the D1 backup and recovery runbook, production monitoring plan, and priorities for the remaining operational safeguards.
+
 ## Current status
 
 The local application includes the public directory, application and tag pages, inline search, editorial CRUD workflows, publication controls, tag and relationship management, R2 media ingestion, Cloudflare Images optimization, CSV/JSON imports and exports, generated social cards, sitemap generation, and robots rules.
@@ -52,4 +54,5 @@ The editorial dashboard has single-administrator authentication in code. Staging
 - Review generated migrations before applying them remotely.
 - Run `npm run db:check` before committing schema changes.
 - Follow `RELEASE.md`: use staging for material or uncertain changes; low-risk presentation-only changes may skip it after proportional checks and explicit approval.
+- Follow `OPERATIONS.md` before production migrations, bulk imports, catalogue replacement, or database recovery.
 - Public pages never access D1 or R2 directly from the browser.
