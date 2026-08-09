@@ -24,7 +24,8 @@
 
 @media (max-width: 52rem) {
   .public-header-inner {
-    width: min(calc(100% - 2rem), 44rem);
+    width: fit-content;
+    max-width: min(calc(100% - 2rem), 44rem);
     gap: 1rem;
   }
   .public-navigation { display: flex; }
@@ -36,8 +37,8 @@
   .public-surprise-label { width: 1px; height: 1px; position: absolute; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
   .public-surprise-icon { width: 1.45rem; height: 1.45rem; }
   .public-header-actions { justify-self: end; }
-  .inline-app-search { width: min(48vw, 18.5rem); }
-  .inline-app-search:focus-within { width: min(56vw, 21rem); }
+  .inline-app-search { width: min(38vw, 12.5rem); }
+  .inline-app-search:focus-within { width: min(46vw, 15rem); }
 
   .public-footer {
     grid-template-columns: 1fr;

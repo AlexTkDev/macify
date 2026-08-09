@@ -12,16 +12,17 @@
   .tag-page-header p { margin-left: 0; }
 
   .public-header {
-    min-height: 4.4rem;
+    min-height: 4rem;
   }
   .public-header-inner {
-    width: calc(100% - 1rem);
-    min-height: 3.5rem;
+    width: fit-content;
+    max-width: calc(100% - 1rem);
+    min-height: 3.15rem;
     margin-top: 0.5rem;
-    padding: 0.3rem 0.45rem 0.3rem 0.65rem;
-    grid-template-columns: auto auto minmax(0, 1fr);
+    padding: 0.25rem 0.36rem 0.25rem 0.72rem;
+    grid-template-columns: auto auto auto;
     gap: 0.45rem;
-    border-radius: 0.75rem;
+    border-radius: 999px;
   }
   .public-header .brand-word { color: #080a0d; font-size: 1rem; }
   .public-header .brand-mark { width: 1.85rem; height: 1.85rem; }
@@ -33,10 +34,10 @@
   .inline-app-search:focus-within { width: min(58vw, 16rem); }
 
   .header-search-field {
-    min-height: 2.65rem;
+    min-height: 2.35rem;
     padding-inline: 0.88rem;
     overflow: hidden;
-    border-radius: 0.6rem;
+    border-radius: 999px;
     background: #f7f8fa;
   }
 
@@ -45,7 +46,7 @@
 
   .public-footer { margin-top: 3rem; gap: 2rem; }
   .public-footer > nav { align-items: flex-start; flex-direction: column; gap: 0.65rem; }
-  .inline-search-panel { position: fixed; top: 4.3rem; right: 0.5rem; left: 0.5rem; width: auto; }
+  .inline-search-panel { position: fixed; top: 4rem; right: 0.5rem; left: 0.5rem; width: auto; }
   .section-intro { align-items: flex-start; flex-direction: column; }
 
   .home-hero { padding: 3.1rem 0 5.25rem; gap: 2.7rem; }

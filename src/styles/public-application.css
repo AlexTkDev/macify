@@ -69,6 +69,12 @@
   flex: 0 0 auto;
   font-size: 1em;
   transform: rotate(5deg) translateY(-0.01em);
+  transition: filter 200ms ease, transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.application-title-icon:hover {
+  filter: saturate(1.08);
+  transform: rotate(0deg) translateY(-0.06em) scale(1.06);
 }
 
 .application-title-name {
@@ -372,3 +378,7 @@
 }
 
 .related-application-shelf > a:hover strong { color: var(--play-blue); }
+
+@media (prefers-reduced-motion: reduce) {
+  .application-title-icon { transition: none; }
+}

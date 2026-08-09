@@ -31,7 +31,7 @@
 .skip-link:focus { transform: translateY(0); }
 
 .public-header {
-  min-height: 5.25rem;
+  min-height: 4.35rem;
   position: sticky;
   top: 0;
   z-index: var(--z-header);
@@ -41,17 +41,18 @@
 }
 
 .public-header-inner {
-  width: min(calc(100% - 3rem), var(--content-width));
-  min-height: 4.1rem;
+  width: fit-content;
+  max-width: min(calc(100% - 3rem), var(--content-width));
+  min-height: 3.35rem;
   margin-top: 0.55rem;
   position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto auto auto;
   align-items: center;
-  gap: clamp(1rem, 2vw, 2rem);
-  padding: 0.45rem 0.5rem 0.45rem 0.7rem;
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  padding: 0.32rem 0.42rem 0.32rem 0.9rem;
   border: 1px solid #e0e3e9;
-  border-radius: 0.9rem;
+  border-radius: 999px;
   color: #080a0d;
   background: #fff;
   box-shadow: 0 0.2rem 0.75rem rgb(26 29 36 / 0.05);
@@ -69,7 +70,6 @@
 }
 
 .public-header .brand {
-  gap: 0.65rem;
   color: #080a0d;
 }
 
@@ -90,7 +90,7 @@
   letter-spacing: -0.04em;
 }
 
-.public-header .brand-word { font-size: 1.12rem; letter-spacing: -0.035em; }
+.public-header .brand-word { font-size: 1.02rem; letter-spacing: -0.035em; }
 .public-footer .brand-mark { display: none; }
 .public-footer .brand-word { font-size: 1.35rem; }
 
@@ -101,7 +101,7 @@
 }
 
 .public-navigation a {
-  min-height: 2.5rem;
+  min-height: 2.3rem;
   padding: 0.25rem 0.5rem;
   position: relative;
   display: inline-flex;
@@ -153,23 +153,23 @@
 }
 
 .inline-app-search {
-  width: clamp(15rem, 21vw, 18.5rem);
+  width: clamp(10.5rem, 15vw, 13.5rem);
   position: relative;
 }
 
-.inline-app-search:focus-within { width: clamp(17.5rem, 26vw, 21rem); }
+.inline-app-search:focus-within { width: clamp(13rem, 19vw, 15.5rem); }
 
 .header-search-field {
   width: 100%;
-  min-height: 2.75rem;
-  padding: 0 0.85rem;
+  min-height: 2.35rem;
+  padding: 0 0.72rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.5rem;
   border: 1px solid #d8dce4;
-  border-radius: 0.7rem;
+  border-radius: 999px;
   color: #596271;
-  background: #f7f8fa;
+  background: #f8f9fa;
   transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
@@ -186,7 +186,7 @@
   outline: 0;
   color: #101217;
   background: transparent;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
 }
 
 .header-search-field input::placeholder { color: #68717e; }

@@ -8,7 +8,7 @@ export function PublicHeader() {
   return (
     <header className="public-header">
       <div className="public-header-inner">
-        <MacifyLogo />
+        <MacifyLogo showMark={false} />
         <nav className="public-navigation" aria-label="Primary navigation">
           <a className="public-surprise-link" href="/surprise">
             <span className="public-surprise-icon" aria-hidden="true"><Shuffle size={15} /></span>

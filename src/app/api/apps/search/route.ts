@@ -1,6 +1,7 @@
 import { and, asc, eq, isNull, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { appTags, apps, mediaAssets, tags } from "@/db/schema";
+import { appTags, apps, tags } from "@/db/schema";
+import { getCardMedia } from "@/lib/directory-shared";
 
 export const dynamic = "force-dynamic";
 
@@ -12,14 +13,12 @@ export async function GET(request: Request) {
   const term = query.toLowerCase();
   const pattern = `%${term}%`;
   const prefix = `${term}%`;
-  const results = await database
+  const applicationRows = await database
     .select({
       id: apps.id,
       slug: apps.slug,
       name: apps.name,
       tagline: apps.tagline,
-      iconStorageKey: sql<string | null>`(select storage_key from ${mediaAssets} where app_id = ${apps.id} and role = 'icon' order by created_at desc limit 1)`,
-      iconAltText: sql<string | null>`(select alt_text from ${mediaAssets} where app_id = ${apps.id} and role = 'icon' order by created_at desc limit 1)`,
     })
     .from(apps)
     .where(and(
@@ -41,6 +40,16 @@ export async function GET(request: Request) {
       asc(apps.name),
     )
     .limit(8);
+
+  const { icons } = await getCardMedia(applicationRows.map(({ id }) => id));
+  const results = applicationRows.map((application) => {
+    const icon = icons.get(application.id);
+    return {
+      ...application,
+      iconStorageKey: icon?.storageKey ?? null,
+      iconAltText: icon?.altText ?? null,
+    };
+  });
 
   return Response.json(
     { results },
