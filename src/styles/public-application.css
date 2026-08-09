@@ -1,5 +1,5 @@
 .application-page {
-  width: min(calc(100% - 4rem), 82rem);
+  width: min(calc(100% - var(--public-page-inset)), 82rem);
   margin-inline: auto;
   padding: 1.4rem 0 7rem;
 }

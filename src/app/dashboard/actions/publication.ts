@@ -7,11 +7,13 @@ import { z } from "zod";
 import { getDatabase } from "@/db/client";
 import { appTags, apps, mediaAssets } from "@/db/schema";
 import type { PublicationState } from "@/app/dashboard/actions/action-types";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function setApplicationPublicationState(
   _previousState: PublicationState,
   formData: FormData,
 ): Promise<PublicationState> {
+  await requireAdmin();
   const appIdResult = z.uuid().safeParse(formData.get("appId"));
   const intentResult = z.enum(["publish", "draft"]).safeParse(formData.get("intent"));
   if (!appIdResult.success || !intentResult.success) {

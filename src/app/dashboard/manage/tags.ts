@@ -7,8 +7,10 @@ import { z } from "zod";
 import { getDatabase } from "@/db/client";
 import { appTags, tags } from "@/db/schema";
 import { messageUrl, taxonomySchema } from "@/app/dashboard/manage/shared";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function createTag(formData: FormData) {
+  await requireAdmin();
   const result = taxonomySchema.safeParse(Object.fromEntries(formData));
   if (!result.success) redirect(messageUrl("/dashboard/tags", "error", "Enter a valid tag name and slug."));
   try {
@@ -22,6 +24,7 @@ export async function createTag(formData: FormData) {
 }
 
 export async function updateTag(formData: FormData) {
+  await requireAdmin();
   const result = taxonomySchema.extend({ id: z.string().min(1) }).safeParse(Object.fromEntries(formData));
   if (!result.success) redirect(messageUrl("/dashboard/tags", "error", "The tag values are invalid."));
   try {
@@ -35,6 +38,7 @@ export async function updateTag(formData: FormData) {
 }
 
 export async function deleteTag(formData: FormData) {
+  await requireAdmin();
   const id = z.string().min(1).safeParse(formData.get("id"));
   if (!id.success) redirect(messageUrl("/dashboard/tags", "error", "Invalid tag."));
   const database = await getDatabase();

@@ -1,6 +1,7 @@
 import { asc, eq, isNull } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { appRelationships, appTags, apps, mediaAssets, tags } from "@/db/schema";
+import { requireAdminRequest } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,7 @@ function csvCell(value: unknown) {
 }
 
 export async function GET(request: Request) {
+  if (!(await requireAdminRequest(request))) return new Response("Unauthorized", { status: 401 });
   const database = await getDatabase();
   const [records, tagRows, mediaRows, relationshipRows] = await Promise.all([
     database

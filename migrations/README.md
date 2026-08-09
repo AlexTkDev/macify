@@ -31,5 +31,6 @@ Never edit an already-applied SQL migration. Add a new migration instead. Commit
 - `0004`: synchronize Drizzle metadata after the manually authored `0002` migration.
 - `0005`: simplify pricing, billing, and legacy application fields.
 - `0006`: remove the categories and application-category tables.
+- `0007`: add persistent rate-limit counters for editorial login attempts.
 
-The repository contains the complete generated history through `0006`. The presence of a migration file does not prove that a particular local, staging, or production D1 database has applied it; verify each environment with Wrangler before relying on its schema state.
+The repository contains the complete generated history through `0007`. The presence of a migration file does not prove that a particular local, staging, or production D1 database has applied it; verify each environment with Wrangler before relying on its schema state.

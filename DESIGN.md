@@ -37,6 +37,8 @@ Tags are clickable discovery links. Their destination pages use one oversized ta
 
 At tablet width the detail headline scales down while preserving the centered identity and fact row. At phone width, search collapses to an icon until focused, the homepage stacks, the application title may wrap after the icon-name introduction, and related apps become a horizontal shelf. No headline or app name may clip between 320px and desktop widths.
 
+Public page gutters use one shared responsive inset. Laptop-width desktop layouts receive 3rem on each side—50% more than the original 2rem—while wide displays continue to use the 90rem content ceiling and phone layouts retain their compact 1rem gutters.
+
 # Implementation inventory
 
 | Visible ingredient | Medium | Commitment |

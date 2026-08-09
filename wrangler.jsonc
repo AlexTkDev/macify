@@ -46,12 +46,15 @@
       "d1_databases": [
         {
           "binding": "DB",
+          "database_name": "macify-staging-database",
+          "database_id": "77963989-01c0-41ed-814c-599169cf37ca",
           "migrations_dir": "migrations"
         }
       ],
       "r2_buckets": [
         {
-          "binding": "MEDIA"
+          "binding": "MEDIA",
+          "bucket_name": "macify-staging-media"
         }
       ]
     },
@@ -66,12 +69,15 @@
       "d1_databases": [
         {
           "binding": "DB",
+          "database_name": "macify-production-database",
+          "database_id": "603417fc-1404-4bc4-830c-a0532cbeacac",
           "migrations_dir": "migrations"
         }
       ],
       "r2_buckets": [
         {
-          "binding": "MEDIA"
+          "binding": "MEDIA",
+          "bucket_name": "macify-production-media"
         }
       ]
     }

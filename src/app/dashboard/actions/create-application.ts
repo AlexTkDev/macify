@@ -16,11 +16,13 @@ import {
   uniqueConstraintMessage,
 } from "@/app/dashboard/actions/application-persistence";
 import type { ApplicationFormState } from "@/app/dashboard/actions/action-types";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function createApplication(
   _previousState: ApplicationFormState,
   formData: FormData,
 ): Promise<ApplicationFormState> {
+  await requireAdmin();
   const result = applicationSchema.safeParse(applicationFieldsFromFormData(formData));
   if (!result.success) {
     return {

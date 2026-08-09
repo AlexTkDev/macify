@@ -26,6 +26,8 @@
     "editorial:sync:local": "node scripts/sync-editorial-descriptions.mjs --local",
     "media:audit-og": "node scripts/audit-og-images.mjs",
     "media:sync:local": "node scripts/sync-local-media.mjs --local",
+    "staging:replace-from-local": "node scripts/replace-staging-from-local.mjs --confirm-staging-replacement",
+    "production:replace-from-local": "node scripts/replace-staging-from-local.mjs --confirm-production-replacement",
     "media:optimize:local": "node scripts/optimize-local-media.mjs --local",
     "tags:sync:local": "node scripts/sync-local-tags.mjs --local",
     "db:migrate:staging": "wrangler d1 migrations apply DB --remote --env staging",

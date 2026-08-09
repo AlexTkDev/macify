@@ -1,5 +1,6 @@
 .public-site {
   --content-width: 90rem;
+  --public-page-inset: clamp(4rem, 6.4vw, 6rem);
   --font-body: var(--font-urbanist), "Avenir Next", sans-serif;
   --font-display: var(--font-urbanist), "Avenir Next", sans-serif;
   --play-blue: #1457ff;
@@ -312,7 +313,7 @@
 @keyframes search-spin { to { transform: rotate(360deg); } }
 
 .public-footer {
-  width: min(calc(100% - 4rem), var(--content-width));
+  width: min(calc(100% - var(--public-page-inset)), var(--content-width));
   margin: 4rem auto 0;
   padding: 2.5rem 0 2rem;
   display: grid;

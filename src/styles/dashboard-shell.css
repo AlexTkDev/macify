@@ -204,6 +204,9 @@
   transform: translateY(-1px);
 }
 
+.dashboard-rail-footer form { display: grid; }
+.dashboard-logout { width: 100%; cursor: pointer; font-family: inherit; }
+
 .dashboard-workspace {
   min-width: 0;
   min-height: 100dvh;

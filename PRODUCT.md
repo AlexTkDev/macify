@@ -44,7 +44,7 @@ Related-application links are mutual: connecting application A to application B 
 
 The public experience currently provides a randomized 30-application homepage wall, application pages, tag pages, an accessible inline search over application names, taglines, and tags, and a route that opens a random published application. The underlying directory query layer also supports description, pricing, billing, and source filters, but those filters are not currently exposed as a public interface.
 
-The dashboard currently supports application CRUD, publishing, media, tags, relationships, and reviewed CSV/JSON imports and exports. It is an editorial tool rather than a multi-user administration system: authentication, roles, audit history, catalogue-wide search, filtering, and pagination are not yet implemented.
+The dashboard currently supports application CRUD, publishing, media, tags, relationships, and reviewed CSV/JSON imports and exports. It uses a deliberately isolated single-administrator login backed by Cloudflare secrets, signed sessions, and D1 login throttling. It is not a public account system: public registration, roles, password recovery, audit history, catalogue-wide search, filtering, and pagination are not implemented.
 
 ## Brand Personality
 

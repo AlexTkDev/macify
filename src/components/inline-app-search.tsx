@@ -108,10 +108,11 @@ export function InlineAppSearch() {
   function updateQuery(value: string) {
     setQuery(value);
     setOpen(true);
+    setResults([]);
+    setActiveIndex(-1);
+    setFailed(false);
     if (value.trim().length < 2) {
-      setResults([]);
       setLoading(false);
-      setFailed(false);
     }
   }
 

@@ -15,11 +15,13 @@ import {
   uniqueConstraintMessage,
 } from "@/app/dashboard/actions/application-persistence";
 import type { ApplicationFormState } from "@/app/dashboard/actions/action-types";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function updateApplication(
   _previousState: ApplicationFormState,
   formData: FormData,
 ): Promise<ApplicationFormState> {
+  await requireAdmin();
   const idResult = z.uuid().safeParse(formData.get("appId"));
   const result = applicationSchema.safeParse(applicationFieldsFromFormData(formData));
   if (!idResult.success) return { message: "This application record is invalid." };

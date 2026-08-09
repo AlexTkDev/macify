@@ -4,7 +4,9 @@
 
 Macify.app is a curated directory of useful macOS applications. Read `PRODUCT.md` before changing product behavior, `DESIGN.md` before changing the interface, and `EDITORIAL.md` before creating or editing application descriptions or other public editorial copy.
 
-Phase 1 includes the public directory, editorial dashboard, D1 schema, R2 media pipeline, imports and exports, search, and technical SEO. Public visitor accounts, saved apps, payments, and subscriptions belong to Phase 2 unless the user explicitly changes the scope. Protecting the internal editorial dashboard with Cloudflare Access or equivalent authorization is a Phase 1 deployment requirement, not a public account feature.
+Read `RELEASE.md` before any deployment. Apply its proportional release policy instead of automatically sending every change through staging.
+
+Phase 1 includes the public directory, editorial dashboard, D1 schema, R2 media pipeline, imports and exports, search, and technical SEO. Public visitor accounts, saved apps, payments, and subscriptions belong to Phase 2 unless the user explicitly changes the scope. The internal dashboard uses isolated single-administrator authentication; preserve server-side authorization on every dashboard page, route handler, and mutation.
 
 ## Platform
 
@@ -22,7 +24,8 @@ Phase 1 includes the public directory, editorial dashboard, D1 schema, R2 media 
 - Never deploy, create remote D1/R2 resources, apply remote migrations, change DNS, or add secrets without the user's explicit approval for that step.
 - Never expose D1 or R2 bindings to browser code.
 - Never commit secrets, `.dev.vars`, database exports, or Wrangler local state.
-- Use staging before production and review Cloudflare cost controls before enabling a public write endpoint.
+- Use staging for behavioral, data, authentication, infrastructure, broad shared-interface, or uncertain changes. An isolated and reversible CSS, static-copy, or presentation-only adjustment may skip staging and exhaustive testing when the user explicitly approves direct production deployment; run only relevant lightweight checks and one focused production verification. See `RELEASE.md`.
+- Review Cloudflare cost controls before enabling a public write endpoint.
 - Validate imported files, cap upload size, verify MIME type and checksum, and store originals in a private R2 prefix.
 
 ## Code quality
@@ -31,7 +34,7 @@ Phase 1 includes the public directory, editorial dashboard, D1 schema, R2 media 
 - Public app pages must have canonical metadata, Open Graph data, structured data, semantic headings, and crawlable internal links.
 - Use indexed D1 queries, pagination, and bounded result sets. Avoid full-table reads in request paths.
 - Do not retain mutable request-specific state in module globals. Await promises or pass intentional background work to `waitUntil`.
-- Run `npm run typecheck` and `npm run lint` after material TypeScript changes. Use `npm run preview` before an approved deployment.
+- Run `npm run typecheck` and `npm run lint` after material TypeScript changes. Use `npm run preview` for material Workers/runtime changes before an approved deployment. Do not run unrelated or exhaustive checks for an isolated low-risk CSS or copy edit when `RELEASE.md` permits a narrower validation pass.
 
 ## Design
 
