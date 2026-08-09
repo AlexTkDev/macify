@@ -13,9 +13,9 @@ Macify is a playful studio table, not an App Store clone and not a SaaS card gri
 
 - The homepage hero uses Caprasimo for a chunky, friendly display voice with soft, playful character. Urbanist remains the body and interface family. Display tracking is never tighter than `-0.04em`.
 - App icons keep their authentic artwork, 22% corner radius, and one soft depth shadow.
-- Corners are gently rounded, never uniformly pill-shaped. Buttons use compact rectangles; tags are text with small colored shapes.
+- Content surfaces use gently rounded corners. The compact persistent public header and its search field use a deliberate pill silhouette; buttons remain compact rectangles and tags remain text with small colored shapes.
 - Public pages avoid card chrome. Hierarchy comes from scale, color fields, whitespace, and artwork.
-- Preview images and screenshots always use intrinsic dimensions: `width: 100%`, `height: auto`, no forced crop, fixed height, letterbox, or decorative padding.
+- Detail-page previews and screenshots use their intrinsic dimensions with `width: 100%` and `height: auto`. Directory previews intentionally use one consistent wide aspect ratio with a centered cover crop so mixed source artwork forms a stable, scannable wall.
 - Motion is reserved for the Surprise refresh and direct hover feedback. Reduced-motion preferences remove both.
 - The persistent Surprise Me control stays monochrome and unfilled, using only a restrained shuffle rotation on direct interaction; at narrow widths it reduces to the icon without losing its accessible label.
 
@@ -23,7 +23,7 @@ Macify is a playful studio table, not an App Store clone and not a SaaS card gri
 
 The hero is a two-column composition on desktop. The left side carries “Mac apps worth making room for.” with three real app icons woven into the words. Its type scale responds to the actual width of the copy column, with explicit minimum and maximum sizes; each authored row stays intact, including “Mac [icon] apps” on the first row. The right side carries one naturally proportioned preview and a compact overlapping identity label. The supporting sentence, “A curated list of the most useful macOS applications.”, remains a separate paragraph with its own scale.
 
-The second fold shows 30 apps in a five-column sample wall. Color fields create the visual rhythm; each sample still exposes its name. On mobile the wall becomes a clean two-column scan of icon, name, and short tagline. “Surprise me” is the only secondary action and replaces the 30 items with a new random selection.
+The second fold shows 30 apps in an adaptive sample wall. Color fields create the visual rhythm; each sample still exposes its name. Narrow layouts reduce the column count until the wall becomes a clean single-column scan of preview, name, and short tagline. “Surprise me” is the only secondary action and opens one random published application.
 
 # Application page
 
@@ -44,10 +44,10 @@ At tablet width the detail headline scales down while preserving the centered id
 | Oversized hero language | Semantic HTML + CSS | Three explicit lines with icon interruptions |
 | Application icons | Existing project media | Authentic artwork, never generated substitutes |
 | Featured and detail previews | Existing project media | Natural ratio and no crop |
-| Sample-wall color rhythm | CSS | Ten fields, five columns desktop, open list mobile |
+| Sample-wall color rhythm | CSS | Adaptive directory grid with a consistent cropped preview ratio |
 | Detail identity underline | CSS geometry | Restrained amber hand-drawn accent beneath the tagline |
 | Search | Existing React component + API | Inline results with icon, name, tagline |
-| Surprise interaction | Existing React state + CSS | Ten new apps, one restrained refresh transition |
+| Surprise interaction | Route + CSS | Open one random published application with restrained direct hover feedback |
 | Core text and controls | Semantic HTML | Never rasterized from the comps |
 
 # Dashboard boundary

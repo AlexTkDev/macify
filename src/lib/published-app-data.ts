@@ -8,7 +8,7 @@ import {
   mediaAssets,
   tags,
 } from "@/db/schema";
-import { getCardMedia, publicApplicationFields } from "@/lib/directory-shared";
+import { getAppIcons, publicApplicationFields } from "@/lib/directory-shared";
 
 export async function getPublishedApplicationBySlug(slug: string) {
   const database = await getDatabase();
@@ -88,7 +88,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
       )
       .values(),
   ).slice(0, 6);
-  const { icons } = await getCardMedia(relatedRecords.map(({ id }) => id));
+  const icons = await getAppIcons(relatedRecords.map(({ id }) => id));
   return {
     ...application,
     tags: tagRows,

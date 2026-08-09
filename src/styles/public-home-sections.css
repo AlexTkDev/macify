@@ -38,12 +38,12 @@
 
 .tag-page-header p {
   margin: 1.35rem 0 0 clamp(2rem, 4.7vw, 3.25rem);
-  color: #59616b;
+  color: var(--public-text-secondary);
   font-size: clamp(1rem, 1.6vw, 1.2rem);
   font-weight: 600;
 }
 
-.tag-page-empty { padding: 3rem 0; border-top: 1px solid #d9dee1; color: #59616b; }
+.tag-page-empty { padding: 3rem 0; border-top: 1px solid var(--public-line); color: var(--public-text-secondary); }
 
 .directory-heading {
   margin-bottom: 1.7rem;
@@ -86,17 +86,17 @@
 
 .directory-app-row {
   --directory-reveal-bg: var(--play-blue);
-  --directory-reveal-ink: #fff;
+  --directory-reveal-ink: var(--public-canvas);
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.78rem;
 }
 
-.directory-app-row[data-reveal-tone="orange"] { --directory-reveal-bg: var(--play-orange); --directory-reveal-ink: #080a0d; }
-.directory-app-row[data-reveal-tone="yellow"] { --directory-reveal-bg: var(--play-yellow); --directory-reveal-ink: #080a0d; }
-.directory-app-row[data-reveal-tone="mint"] { --directory-reveal-bg: var(--play-mint); --directory-reveal-ink: #080a0d; }
-.directory-app-row[data-reveal-tone="lilac"] { --directory-reveal-bg: var(--play-lilac); --directory-reveal-ink: #080a0d; }
+.directory-app-row[data-reveal-tone="orange"] { --directory-reveal-bg: var(--play-orange); --directory-reveal-ink: var(--public-ink); }
+.directory-app-row[data-reveal-tone="yellow"] { --directory-reveal-bg: var(--play-yellow); --directory-reveal-ink: var(--public-ink); }
+.directory-app-row[data-reveal-tone="mint"] { --directory-reveal-bg: var(--play-mint); --directory-reveal-ink: var(--public-ink); }
+.directory-app-row[data-reveal-tone="lilac"] { --directory-reveal-bg: var(--play-lilac); --directory-reveal-ink: var(--public-ink); }
 
 .directory-app-art {
   width: 100%;
@@ -128,7 +128,7 @@
   padding: 1.25rem;
   display: grid;
   place-items: center;
-  color: #080a0d;
+  color: var(--public-ink);
   background: var(--play-lilac);
   font-size: clamp(1.1rem, 2vw, 1.65rem);
   font-weight: 850;
@@ -190,7 +190,7 @@
 .directory-app-copy strong {
   display: block;
   overflow: hidden;
-  color: #080a0d;
+  color: var(--public-ink);
   font-size: 1rem;
   font-weight: 850;
   line-height: 1.15;
@@ -247,4 +247,5 @@
   .directory-app-reveal-icon,
   .directory-app-reveal-action,
   .surprise-button svg { transition: none; }
+  .surprise-button:hover svg { transform: none; }
 }

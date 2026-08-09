@@ -4,7 +4,7 @@
 
 Macify.app is a curated directory of useful macOS applications. Read `PRODUCT.md` before changing product behavior, `DESIGN.md` before changing the interface, and `EDITORIAL.md` before creating or editing application descriptions or other public editorial copy.
 
-Phase 1 includes the public directory, editorial dashboard, D1 schema, R2 media pipeline, imports and exports, search, and technical SEO. Accounts, authentication, saved apps, payments, and subscriptions belong to Phase 2 unless the user explicitly changes the scope.
+Phase 1 includes the public directory, editorial dashboard, D1 schema, R2 media pipeline, imports and exports, search, and technical SEO. Public visitor accounts, saved apps, payments, and subscriptions belong to Phase 2 unless the user explicitly changes the scope. Protecting the internal editorial dashboard with Cloudflare Access or equivalent authorization is a Phase 1 deployment requirement, not a public account feature.
 
 ## Platform
 

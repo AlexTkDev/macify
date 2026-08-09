@@ -1,4 +1,4 @@
-import { and, asc, eq, isNull } from "drizzle-orm";
+import { asc, eq, isNull } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { appRelationships, appTags, apps, mediaAssets, tags } from "@/db/schema";
 

@@ -17,7 +17,7 @@
   .public-header-inner {
     width: fit-content;
     max-width: calc(100% - 1rem);
-    min-height: 3.15rem;
+    min-height: 3.35rem;
     margin-top: 0.5rem;
     padding: 0.25rem 0.36rem 0.25rem 0.72rem;
     grid-template-columns: auto auto auto;
@@ -34,7 +34,7 @@
   .inline-app-search:focus-within { width: min(58vw, 16rem); }
 
   .header-search-field {
-    min-height: 2.35rem;
+    min-height: 2.75rem;
     padding-inline: 0.88rem;
     overflow: hidden;
     border-radius: 999px;

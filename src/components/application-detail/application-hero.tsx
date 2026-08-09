@@ -1,6 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
-import { mediaUrl } from "@/components/public-app-card";
+import { PublicAppIcon } from "@/components/public-app-card";
 import type { ApplicationMedia, PublishedApplication } from "@/components/application-detail/types";
 import { pricingLabels } from "@/lib/pricing";
 
@@ -14,9 +13,21 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
           <span className="application-title-line">
             <span className="application-title-intro">
               <span>Meet</span>
-              <span className="application-title-icon">
-                {icon ? <Image alt="" className="application-icon" height={112} priority src={mediaUrl(icon.storageKey)} unoptimized width={112} /> : <span className="application-icon application-icon-fallback"><span>{application.name.slice(0, 2).toUpperCase()}</span></span>}
-              </span>
+              <Link
+                aria-label={`Open ${application.name} details`}
+                className="application-title-icon"
+                href={`/apps/${application.slug}`}
+              >
+                <PublicAppIcon
+                  app={{
+                    name: application.name,
+                    icon: icon ? { storageKey: icon.storageKey, altText: icon.altText } : null,
+                  }}
+                  decorative
+                  priority
+                  size={96}
+                />
+              </Link>
             </span>
             <span className="application-title-name">{displayName}</span>
           </span>

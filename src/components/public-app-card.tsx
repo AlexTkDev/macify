@@ -16,15 +16,26 @@ export function mediaUrl(storageKey: string) {
   return `/media/${storageKey.split("/").map(encodeURIComponent).join("/")}`;
 }
 
-type AppIconSize = 50 | 56 | 58 | 60 | 66 | 76 | 96;
+type AppIconSize = 44 | 50 | 56 | 58 | 60 | 66 | 76 | 96;
 
-export function PublicAppIcon({ app, size = 56 }: { app: Pick<PublicAppSummary, "name" | "icon">; size?: AppIconSize }) {
+export function PublicAppIcon({
+  app,
+  decorative = false,
+  priority = false,
+  size = 56,
+}: {
+  app: Pick<PublicAppSummary, "name" | "icon">;
+  decorative?: boolean;
+  priority?: boolean;
+  size?: AppIconSize;
+}) {
   const className = `public-app-icon public-app-icon-${size}`;
   return app.icon ? (
     <Image
-      alt={app.icon.altText ?? `${app.name} icon`}
+      alt={decorative ? "" : (app.icon.altText ?? `${app.name} icon`)}
       className={className}
       height={size}
+      priority={priority}
       src={mediaUrl(app.icon.storageKey)}
       unoptimized
       width={size}

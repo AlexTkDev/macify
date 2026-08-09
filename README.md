@@ -15,11 +15,13 @@ Macify.app is a curated directory of useful macOS applications. This repository 
 1. Install dependencies with `npm install`.
 2. Copy `.dev.vars.example` to `.dev.vars`.
 3. Generate Cloudflare binding types with `npm run cf-typegen`.
-4. Generate the initial SQL migration with `npm run db:generate`.
-5. Apply migrations locally with `npm run db:migrate:local`.
+4. Apply the committed migrations locally with `npm run db:migrate:local`.
+5. Optionally seed a local catalogue with one of the `db:seed:*` scripts.
 6. Start Next.js with `npm run dev`.
 
-`npm run preview` builds the OpenNext Worker and runs it in the Workers runtime. Cloud resources are automatically provisioned only when a deployment is explicitly run.
+Run `npm run db:generate` only after intentionally changing the Drizzle schema. Review the generated SQL and metadata before applying the new migration.
+
+`npm run preview` builds the OpenNext Worker and runs it in the Workers runtime. The deployment scripts target configured Cloudflare environments; they do not replace the need to provision and identify the intended staging and production D1 databases and R2 buckets.
 
 ## Repository structure
 
@@ -35,6 +37,12 @@ public/           Static assets and response-header configuration
 Configuration stays at the project root because Next.js, TypeScript, Drizzle Kit, and Wrangler discover their configuration files there. Product and design documentation also stays at the root so contributors and interface tooling can find it immediately.
 
 See [`migrations/README.md`](migrations/README.md) before changing the database schema. The migration directory is committed because it is the reproducible history used to build every D1 environment; it does not contain live database data.
+
+## Current status
+
+The local application includes the public directory, application and tag pages, inline search, editorial CRUD workflows, publication controls, tag and relationship management, R2 media ingestion, Cloudflare Images optimization, CSV/JSON imports and exports, generated social cards, sitemap generation, and robots rules.
+
+Before production launch, the editorial dashboard must be access-controlled, staging and production D1/R2 bindings must be completed, remote migrations and deployment must be validated in staging, and the catalogue needs final editorial and accessibility review. See [`PROJECT_CHECKLIST.md`](PROJECT_CHECKLIST.md) for the code-audited status.
 
 ## Safety
 

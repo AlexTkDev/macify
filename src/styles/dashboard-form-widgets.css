@@ -178,6 +178,11 @@
 
 .related-app-options label:has(input:disabled) { opacity: 0.5; cursor: not-allowed; }
 
+@media (prefers-reduced-motion: reduce) {
+  .related-app-search,
+  .related-app-options label { transition: none; }
+}
+
 .related-app-options input {
   width: 1rem;
   height: 1rem;

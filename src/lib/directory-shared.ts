@@ -37,6 +37,38 @@ export const publicApplicationFields = {
   publishedAt: apps.publishedAt,
 };
 
+type AppIconMedia = {
+  appId: string | null;
+  storageKey: string;
+  altText: string | null;
+  width: number | null;
+  height: number | null;
+};
+
+export async function getAppIcons(appIds: string[]): Promise<Map<string, AppIconMedia>> {
+  if (!appIds.length) return new Map<string, AppIconMedia>();
+  const database = await getDatabase();
+  const rows = await database
+    .select({
+      appId: mediaAssets.appId,
+      storageKey: mediaAssets.storageKey,
+      altText: mediaAssets.altText,
+      width: mediaAssets.width,
+      height: mediaAssets.height,
+    })
+    .from(mediaAssets)
+    .where(and(
+      inArray(mediaAssets.appId, appIds),
+      eq(mediaAssets.role, "icon"),
+    ))
+    .orderBy(desc(mediaAssets.createdAt));
+  const icons = new Map<string, (typeof rows)[number]>();
+  for (const row of rows) {
+    if (row.appId && !icons.has(row.appId)) icons.set(row.appId, row);
+  }
+  return icons;
+}
+
 export async function getCardMedia(appIds: string[]) {
   if (!appIds.length) return { icons: new Map(), previews: new Map() };
   const database = await getDatabase();

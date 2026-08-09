@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { LoaderCircle, Search, X } from "lucide-react";
+import { PublicAppIcon } from "@/components/public-app-card";
 
 type SearchResult = {
   id: string;
@@ -15,10 +14,6 @@ type SearchResult = {
   iconAltText: string | null;
 };
 
-function iconUrl(storageKey: string) {
-  return `/media/${storageKey.split("/").map(encodeURIComponent).join("/")}`;
-}
-
 export function InlineAppSearch() {
   const router = useRouter();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -28,6 +23,7 @@ export function InlineAppSearch() {
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   useEffect(() => {
     const handleOutside = (event: PointerEvent) => {
@@ -50,11 +46,13 @@ export function InlineAppSearch() {
         if (!response.ok) throw new Error("Search unavailable");
         const data = await response.json() as { results: SearchResult[] };
         setResults(data.results);
+        setActiveIndex(data.results.length > 0 ? 0 : -1);
         setOpen(true);
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return;
         setFailed(true);
         setResults([]);
+        setActiveIndex(-1);
         setOpen(true);
       } finally {
         if (!controller.signal.aborted) setLoading(false);
@@ -67,17 +65,43 @@ export function InlineAppSearch() {
     };
   }, [query]);
 
+  function openResult(index: number) {
+    const result = results[index];
+    if (!result) return;
+    setOpen(false);
+    router.push(`/apps/${result.slug}`);
+  }
+
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!results[0]) return;
-    setOpen(false);
-    router.push(`/apps/${results[0].slug}`);
+    openResult(activeIndex >= 0 ? activeIndex : 0);
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Escape") {
+      if (!open) return;
+      event.preventDefault();
+      setOpen(false);
+      setActiveIndex(-1);
+      return;
+    }
+
+    if (!results.length || (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Home" && event.key !== "End")) return;
+    event.preventDefault();
+    setOpen(true);
+    setActiveIndex((current) => {
+      if (event.key === "Home") return 0;
+      if (event.key === "End") return results.length - 1;
+      if (event.key === "ArrowDown") return current < results.length - 1 ? current + 1 : 0;
+      return current > 0 ? current - 1 : results.length - 1;
+    });
   }
 
   function clear() {
     setQuery("");
     setResults([]);
     setOpen(false);
+    setActiveIndex(-1);
     inputRef.current?.focus();
   }
 
@@ -99,12 +123,18 @@ export function InlineAppSearch() {
         <Search aria-hidden="true" size={15} />
         <label className="sr-only" htmlFor="header-search-input">Search Mac applications</label>
         <input
+          aria-activedescendant={showPanel && activeIndex >= 0 && results[activeIndex] ? `header-search-option-${results[activeIndex].id}` : undefined}
+          aria-autocomplete="list"
+          aria-controls={showPanel && results.length > 0 ? "header-search-results" : undefined}
+          aria-expanded={showPanel}
           autoComplete="off"
           id="header-search-input"
           onChange={(event) => updateQuery(event.target.value)}
           onFocus={() => query.trim().length >= 2 && setOpen(true)}
+          onKeyDown={handleKeyDown}
           placeholder="Search Mac apps"
           ref={inputRef}
+          role="combobox"
           type="search"
           value={query}
         />
@@ -115,7 +145,7 @@ export function InlineAppSearch() {
       </form>
 
       {showPanel && (
-        <div className="inline-search-panel" role="region" aria-live="polite" aria-label="Search results">
+        <div aria-busy={loading} aria-label="Search results" aria-live="polite" className="inline-search-panel" role="region">
           {failed ? <p className="inline-search-message">Search is temporarily unavailable. Please try again.</p> : loading && results.length === 0 ? (
             <p className="inline-search-message">Looking through the directory…</p>
           ) : results.length === 0 ? (
@@ -123,14 +153,29 @@ export function InlineAppSearch() {
           ) : (
             <>
               <div className="inline-search-summary"><span>Best matches</span><small>{results.length} found</small></div>
-              <div className="inline-search-results">
-                {results.map((app) => (
-                  <Link href={`/apps/${app.slug}`} key={app.id} onClick={() => setOpen(false)}>
-                    {app.iconStorageKey ? (
-                      <Image alt={app.iconAltText ?? `${app.name} icon`} height={42} src={iconUrl(app.iconStorageKey)} unoptimized width={42} />
-                    ) : <span className="inline-search-icon-fallback" aria-hidden="true">{app.name.slice(0, 2).toUpperCase()}</span>}
+              <div className="inline-search-results" id="header-search-results" role="listbox">
+                {results.map((app, index) => (
+                  <button
+                    aria-selected={activeIndex === index}
+                    data-active={activeIndex === index ? "true" : undefined}
+                    id={`header-search-option-${app.id}`}
+                    key={app.id}
+                    onClick={() => openResult(index)}
+                    onPointerMove={() => setActiveIndex(index)}
+                    role="option"
+                    tabIndex={-1}
+                    type="button"
+                  >
+                    <PublicAppIcon
+                      app={{
+                        name: app.name,
+                        icon: app.iconStorageKey ? { storageKey: app.iconStorageKey, altText: app.iconAltText } : null,
+                      }}
+                      decorative
+                      size={44}
+                    />
                     <span className="inline-search-copy"><strong>{app.name}</strong><span>{app.tagline}</span></span>
-                  </Link>
+                  </button>
                 ))}
               </div>
             </>

@@ -14,7 +14,7 @@ The primary public task is finding a useful Mac application quickly. The primary
 
 Macify.app is a curated directory of the best useful macOS applications. It organizes application details, pricing, licensing, platforms, media, tags, alternatives, and editorial context into fast, searchable pages.
 
-Phase 1 delivers the public directory, management dashboard, structured database, media pipeline, imports and exports, search, and technical SEO. Public accounts, authentication, saved applications, payments, and subscriptions are intentionally deferred.
+Phase 1 delivers the public directory, management dashboard, structured database, media pipeline, imports and exports, search, and technical SEO. Public visitor accounts, saved applications, payments, and subscriptions are intentionally deferred. The editorial dashboard is not a public account product, but it must be protected by Cloudflare Access or equivalent authorization before the site is deployed publicly.
 
 Success means visitors can identify a trustworthy application in a few minutes, public pages load quickly worldwide, search engines can understand every application page, and editors can maintain the directory without manually editing code or database rows.
 
@@ -39,6 +39,12 @@ Editors can provide media as a local file or a public HTTPS image URL. URL impor
 Every public application page has a generated Macify social-sharing card containing that application’s name. This consistent card is used for Open Graph and X/Twitter metadata independently of the uploaded preview image.
 
 Related-application links are mutual: connecting application A to application B also makes A available from B. Editors choose these relationships explicitly, while the public page only displays published related records.
+
+## Current implementation boundary
+
+The public experience currently provides a randomized 30-application homepage wall, application pages, tag pages, an accessible inline search over application names, taglines, and tags, and a route that opens a random published application. The underlying directory query layer also supports description, pricing, billing, and source filters, but those filters are not currently exposed as a public interface.
+
+The dashboard currently supports application CRUD, publishing, media, tags, relationships, and reviewed CSV/JSON imports and exports. It is an editorial tool rather than a multi-user administration system: authentication, roles, audit history, catalogue-wide search, filtering, and pagination are not yet implemented.
 
 ## Brand Personality
 

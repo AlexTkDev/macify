@@ -30,12 +30,14 @@
   }
   .public-navigation { display: flex; }
   .public-navigation a {
-    width: 2.5rem;
+    width: 2.75rem;
+    min-height: 2.75rem;
     padding: 0.25rem;
     justify-content: center;
   }
   .public-surprise-label { width: 1px; height: 1px; position: absolute; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
   .public-surprise-icon { width: 1.45rem; height: 1.45rem; }
+  .public-header .brand { min-height: 2.75rem; align-items: center; }
   .public-header-actions { justify-self: end; }
   .inline-app-search { width: min(38vw, 12.5rem); }
   .inline-app-search:focus-within { width: min(46vw, 15rem); }

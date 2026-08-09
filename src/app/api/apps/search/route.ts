@@ -1,7 +1,7 @@
 import { and, asc, eq, isNull, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { appTags, apps, tags } from "@/db/schema";
-import { getCardMedia } from "@/lib/directory-shared";
+import { getAppIcons } from "@/lib/directory-shared";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     )
     .limit(8);
 
-  const { icons } = await getCardMedia(applicationRows.map(({ id }) => id));
+  const icons = await getAppIcons(applicationRows.map(({ id }) => id));
   const results = applicationRows.map((application) => {
     const icon = icons.get(application.id);
     return {

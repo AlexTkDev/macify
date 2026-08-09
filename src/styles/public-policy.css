@@ -17,7 +17,7 @@
   grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.62fr);
   align-items: end;
   gap: 3rem 6rem;
-  border-bottom: 1px solid #e2e4e8;
+  border-bottom: 1px solid var(--public-line);
 }
 
 .policy-intro .eyebrow {
@@ -60,7 +60,7 @@
   min-width: 0;
   padding: 2.2rem 0 2.5rem;
   position: relative;
-  border-top: 1px solid #e2e4e8;
+  border-top: 1px solid var(--public-line);
   counter-increment: policy-section;
 }
 

@@ -165,3 +165,11 @@
 .choice-field > span { display: flex; flex-direction: column; }
 .choice-field strong { font-size: 0.76rem; }
 .choice-field small { margin-top: 0.2rem; color: var(--muted); font-size: 0.65rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .field input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  .field textarea,
+  .field select,
+  .file-field,
+  .choice-field { transition: none; }
+}

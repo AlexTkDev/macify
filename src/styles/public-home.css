@@ -69,6 +69,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .home-title-icon { transition: none; }
+  .home-title-icon:hover,
+  .home-title-icon:focus-visible {
+    filter: none;
+    transform: rotate(var(--home-icon-rotation));
+  }
 }
 
 .home-hero-intro {
@@ -115,7 +120,7 @@
   display: flex;
   flex-direction: column;
   align-self: start;
-  color: #080a0d;
+  color: var(--public-ink);
 }
 
 .home-feature-image {

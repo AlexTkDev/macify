@@ -1,6 +1,6 @@
 # Macify Project Checklist
 
-Last updated: August 3, 2026
+Last code audit: August 9, 2026
 
 Macify.app is a curated directory of useful macOS applications. This checklist records the implemented foundation and the work remaining before a production launch.
 
@@ -10,12 +10,13 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Website: Macify.app
 - [x] Public product type: curated macOS application directory
 - [x] Phase 1 prioritizes the dashboard, public UI, database, media, and editorial workflow
-- [x] Authentication, user accounts, and payments are deferred to a later phase
+- [x] Public visitor accounts, saved apps, and payments are deferred to a later phase
+- [x] Editorial dashboard access protection remains a Phase 1 launch requirement
 - [x] Detailed descriptions are stored as plain Markdown and rendered safely for public visitors
 - [x] Application audio is outside the product scope
 - [x] Application pages may link to an optional YouTube demo
 - [x] Related-application relationships are mutual
-- [ ] Confirm pricing terminology: clarify the exact distinction between **Premium** and **Paid** before changing the current Free, Freemium, and Paid schema
+- [ ] Confirm whether the existing Free, Freemium, and Paid terminology should change; no Premium tier is currently implemented
 
 ## Technical foundation
 
@@ -25,9 +26,11 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Cloudflare R2 media storage binding
 - [x] Drizzle ORM schema and versioned SQL migrations
 - [x] Local Cloudflare development environment
-- [x] Local D1 migrations applied through migration `0005`
+- [x] Committed migration history through migration `0006`
 - [x] Generated Cloudflare binding types
 - [x] Structured migration directory and migration documentation
+- [ ] Verify the active local D1 has applied migration `0006`
+- [ ] Complete staging and production D1/R2 resource identifiers in Wrangler configuration
 - [ ] Apply pending migrations to staging D1
 - [ ] Apply pending migrations to production D1
 - [ ] Deploy the current Worker to staging and complete a staging smoke test
@@ -50,7 +53,7 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Removed the minimum macOS field
 - [x] Removed the source-repository field
 - [x] Current pricing schema separates access tier from billing method
-- [ ] Finalize and implement the confirmed Free, Premium, and Paid definitions
+- [ ] Finalize pricing terminology before changing the current Free, Freemium, and Paid schema
 
 ## Dashboard and editorial workflow
 
@@ -65,7 +68,7 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Inline creation of new tags when an application is saved
 - [x] Related-application selector
 - [x] Required icon and main-preview checks before publishing
-- [ ] Add dashboard authentication and authorization before public deployment
+- [ ] Protect the editorial dashboard with Cloudflare Access or equivalent authorization before public deployment
 - [ ] Add an audit log for editorial changes
 - [ ] Add pagination and filtering for a large application catalog
 - [ ] Add a reliable application search experience to the dashboard
@@ -86,7 +89,7 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Private-network and localhost URL protection
 - [x] R2 cleanup when a related D1 write fails
 - [x] Maximum 10 MB per image and 40 MB combined during application creation
-- [ ] Extract and store image width and height
+- [x] Extract and store image width and height when Cloudflare Images is available
 - [ ] Add icon and preview aspect-ratio warnings
 - [ ] Decide whether production image transformations and responsive variants are needed
 - [ ] Add rate limiting to URL-based media import before exposing the dashboard publicly
@@ -121,11 +124,13 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Open-source label shown only when applicable
 - [x] YouTube demo link
 - [x] Related applications
-- [x] Development-only demo catalog with 12 fictional applications
-- [x] Complete production search and filtering across names, taglines, descriptions, tags, pricing, billing, and source status
-- [ ] Add real editorial seed content
+- [x] Local source datasets and scripts for preparing and seeding catalogue records
+- [x] Inline public search across published application names, taglines, and tags
+- [x] Underlying bounded directory queries for description, pricing, billing, source, and pagination filters
+- [ ] Decide whether to expose the broader directory filters in the public interface
+- [ ] Complete factual and editorial review of local catalogue records before production publication
 - [ ] Review all public responsive breakpoints with production media
-- [ ] Add enhanced keyboard search navigation later (explicitly deferred)
+- [x] Keyboard navigation for inline search results, including arrows, Home, End, Enter, and Escape
 - [ ] Complete screen-reader QA
 
 ## SEO and sharing
@@ -136,8 +141,9 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Generated application-specific Open Graph cards
 - [x] Main preview image kept separate from social-sharing artwork
 - [x] Application metadata
-- [ ] Add and verify sitemap generation
-- [ ] Add and verify robots.txt behavior
+- [x] Add dynamic sitemap generation for public applications and tags
+- [x] Add robots rules that exclude dashboard and API routes
+- [ ] Verify sitemap and robots behavior in staging
 - [ ] Connect Google Search Console and Bing Webmaster Tools after deployment
 - [ ] Run production Core Web Vitals and crawlability audits
 
