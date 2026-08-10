@@ -121,7 +121,14 @@ export function InlineAppSearch() {
   return (
     <div className="inline-app-search" ref={rootRef}>
       <form className="header-search-field" onSubmit={submit} role="search">
-        <Search aria-hidden="true" size={15} />
+        <button
+          aria-label="Open search"
+          className="search-trigger"
+          onClick={() => inputRef.current?.focus()}
+          type="button"
+        >
+          <Search aria-hidden="true" size={15} />
+        </button>
         <label className="sr-only" htmlFor="header-search-input">Search Mac applications</label>
         <input
           aria-activedescendant={showPanel && activeIndex >= 0 && results[activeIndex] ? `header-search-option-${results[activeIndex].id}` : undefined}

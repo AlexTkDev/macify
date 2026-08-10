@@ -44,11 +44,13 @@
   .inline-app-search:focus-within { width: min(58vw, 16rem); }
   .header-search-field {
     min-height: 2.75rem;
-    padding-inline: 0.88rem;
+    padding-inline: 0;
     overflow: hidden;
     border-radius: 999px;
     background: #f7f8fa;
   }
+  .search-trigger { width: 2.75rem; height: 2.75rem; }
+  .inline-app-search:focus-within .header-search-field { padding-inline-end: 0.75rem; }
   .header-search-field input { opacity: 0; }
   .inline-app-search:focus-within .header-search-field input { opacity: 1; }
 

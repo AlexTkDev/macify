@@ -203,6 +203,22 @@
 .header-search-field input::placeholder { color: #68717e; }
 .header-search-field input::-webkit-search-cancel-button { display: none; }
 
+.search-trigger {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 0.4rem;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.search-trigger:hover { color: var(--public-ink-strong); }
+
 .search-clear {
   width: 1.85rem;
   height: 1.85rem;
