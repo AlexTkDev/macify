@@ -13,11 +13,7 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
           <span className="application-title-line">
             <span className="application-title-intro">
               <span>Meet</span>
-              <Link
-                aria-label={`Open ${application.name} details`}
-                className="application-title-icon"
-                href={`/apps/${application.slug}`}
-              >
+              <span className="application-title-icon">
                 <PublicAppIcon
                   app={{
                     name: application.name,
@@ -27,7 +23,7 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
                   priority
                   size={96}
                 />
-              </Link>
+              </span>
             </span>
             <span className="application-title-name">{displayName}</span>
           </span>
@@ -36,7 +32,7 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
         {application.tags.length > 0 && (
           <div className="application-tags" aria-label="Application tags">
             {application.tags.map((tag) => (
-              <Link className="application-tag" href={`/tags/${tag.slug}`} key={tag.id}>
+              <Link className="application-tag" href={`/tags/${tag.slug}`} key={tag.id} prefetch={false}>
                 {tag.name}
               </Link>
             ))}

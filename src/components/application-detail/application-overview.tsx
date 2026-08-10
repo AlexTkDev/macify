@@ -74,7 +74,7 @@ export function ApplicationOverview({ application, preview, screenshots }: { app
               ))}
             </div>
           )}
-          <a aria-label={`Visit ${application.name}'s official website`} className="application-website" href={application.websiteUrl} rel="noreferrer" target="_blank">
+          <a className="application-website" href={application.websiteUrl} rel="noreferrer" target="_blank">
             Visit website
             <ArrowUpRight aria-hidden="true" size={19} strokeWidth={1.8} />
           </a>

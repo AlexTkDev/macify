@@ -44,8 +44,9 @@
   .header-search-field input { opacity: 0; }
   .inline-app-search:focus-within .header-search-field input { opacity: 1; }
 
-  .public-footer { margin-top: 3rem; gap: 2rem; }
-  .public-footer > nav { align-items: flex-start; flex-direction: column; gap: 0.65rem; }
+  .public-footer { margin-top: 3rem; }
+  .public-footer-links { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
+  .public-footer-bottom { align-items: flex-start; flex-direction: column; }
   .inline-search-panel { position: fixed; top: 4rem; right: 0.5rem; left: 0.5rem; width: auto; }
   .section-intro { align-items: flex-start; flex-direction: column; }
 

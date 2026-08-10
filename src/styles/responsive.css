@@ -42,11 +42,8 @@
   .inline-app-search { width: min(38vw, 12.5rem); }
   .inline-app-search:focus-within { width: min(46vw, 15rem); }
 
-  .public-footer {
-    grid-template-columns: 1fr;
-  }
-
-  .public-footer > nav { justify-self: start; }
+  .public-footer-main { grid-template-columns: 1fr; gap: 2.5rem; }
+  .public-footer-links { max-width: 28rem; }
 
   .home-hero {
     grid-template-columns: 1fr;

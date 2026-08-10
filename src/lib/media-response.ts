@@ -71,7 +71,7 @@ export async function serveMedia(
   headers.set(
     "Cache-Control",
     visibility === "published"
-      ? "public, max-age=3600, s-maxage=86400"
+      ? "public, max-age=31536000, s-maxage=31536000, immutable"
       : "private, no-store",
   );
 
