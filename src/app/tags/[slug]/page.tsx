@@ -32,7 +32,10 @@ export default async function TagPage({ params }: { params: Promise<{ slug: stri
     <PublicShell>
       <main className="tag-page" id="main-content">
         <header className="tag-page-header">
-          <h1><span className="tag-page-mark" aria-hidden="true" />{tag.name}<span className="tag-page-period">.</span></h1>
+          <h1>
+            <span className="tag-page-mark" aria-hidden="true" />
+            <span className="tag-page-title">{tag.name}<span className="tag-page-period">.</span></span>
+          </h1>
           <p>{count} {count === 1 ? "app" : "apps"}</p>
         </header>
         {count > 0 ? <DirectoryAppGrid applications={tag.applications} /> : (

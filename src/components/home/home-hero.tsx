@@ -9,9 +9,7 @@ type HomeApp = PublicAppSummary & {
 const headlineSlugs = ["dayflow", "cleanshot-x", "swish"];
 
 export function HomeHero({ applications }: { applications: HomeApp[] }) {
-  const featured = applications.find((app) => app.slug === "droppy" && app.preview)
-    ?? applications.find((app) => app.preview)
-    ?? applications[0];
+  const featured = applications.find((app) => app.slug === "droppy" && app.preview);
   const headlineApps = headlineSlugs
     .map((slug) => applications.find((app) => app.slug === slug && app.icon))
     .filter((app): app is HomeApp => Boolean(app));
@@ -21,9 +19,9 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
         <h1 id="home-title">
           <span className="sr-only">Mac apps worth making room for.</span>
           <span className="home-title-art">
-            <span className="home-title-line"><span aria-hidden="true">Mac</span>{headlineApps[0] && <Link aria-label={`Open ${headlineApps[0].name}`} className="home-title-icon" href={`/apps/${headlineApps[0].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[0]} size={96} /></Link>}<span aria-hidden="true">apps</span></span>
-            <span className="home-title-line"><span aria-hidden="true">worth</span>{headlineApps[1] && <Link aria-label={`Open ${headlineApps[1].name}`} className="home-title-icon home-title-icon-orange" href={`/apps/${headlineApps[1].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[1]} size={96} /></Link>}<span aria-hidden="true">making</span></span>
-            <span className="home-title-line">{headlineApps[2] && <Link aria-label={`Open ${headlineApps[2].name}`} className="home-title-icon home-title-icon-yellow" href={`/apps/${headlineApps[2].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[2]} size={96} /></Link>}<span aria-hidden="true">room for.</span></span>
+            <span className="home-title-line"><span aria-hidden="true">Mac</span>{headlineApps[0] && <Link aria-label={`Open ${headlineApps[0].name}`} className="home-title-icon" href={`/apps/${headlineApps[0].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[0]} priority size={96} /></Link>}<span aria-hidden="true">apps</span></span>
+            <span className="home-title-line"><span aria-hidden="true">worth</span>{headlineApps[1] && <Link aria-label={`Open ${headlineApps[1].name}`} className="home-title-icon home-title-icon-orange" href={`/apps/${headlineApps[1].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[1]} priority size={96} /></Link>}<span aria-hidden="true">making</span></span>
+            <span className="home-title-line">{headlineApps[2] && <Link aria-label={`Open ${headlineApps[2].name}`} className="home-title-icon home-title-icon-yellow" href={`/apps/${headlineApps[2].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[2]} priority size={96} /></Link>}<span aria-hidden="true">room for.</span></span>
           </span>
         </h1>
         <p className="home-hero-intro">
@@ -40,7 +38,7 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
       {featured && (
         <Link className="home-feature-stage" href={`/apps/${featured.slug}`} prefetch={false}>
           <div className="home-feature-caption">
-            <PublicAppIcon app={featured} decorative size={76} />
+            <PublicAppIcon app={featured} decorative priority size={76} />
             <span><strong>{featured.name}</strong><p>{featured.tagline}</p></span>
           </div>
           <div className="home-feature-image">
