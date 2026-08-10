@@ -148,7 +148,7 @@
   box-shadow: none;
   font-size: 0.84rem;
   font-weight: 700;
-  transition: color 160ms ease, background 160ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: color 160ms cubic-bezier(0.22, 1, 0.36, 1), background-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .public-navigation a:hover,
@@ -192,7 +192,6 @@
   background: transparent;
   box-shadow: none;
   transform: none;
-  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .public-surprise-icon svg { width: 1rem; height: 1rem; }
@@ -228,7 +227,7 @@
   color: #525b68;
   background: var(--public-canvas);
   box-shadow: 0 0.45rem 1.4rem rgb(24 31 43 / 0.08);
-  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  transition: border-color 160ms cubic-bezier(0.22, 1, 0.36, 1), background-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .header-search-field:focus-within {
@@ -283,6 +282,8 @@
 .search-spinner {
   flex: 0 0 auto;
   color: var(--play-blue);
+  transform-box: fill-box;
+  transform-origin: center;
   animation: search-spin 700ms linear infinite;
 }
 
@@ -450,13 +451,23 @@
   color: var(--public-text-secondary);
   font-size: 0.88rem;
   font-weight: 600;
-  transition: color 160ms ease, transform 160ms ease;
 }
 
 .public-footer-links a:hover,
 .public-footer-links a:focus-visible {
   color: var(--play-blue);
-  transform: translateX(0.14rem);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .public-surprise-icon {
+    transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .public-footer-links a {
+    transition: color 160ms cubic-bezier(0.22, 1, 0.36, 1), transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .public-footer-links a:hover { transform: translateX(0.1rem); }
 }
 
 .public-footer-reserve {
@@ -499,7 +510,7 @@
   .public-navigation a:focus-visible,
   .public-surprise-link:active { transform: none; }
   .public-surprise-link:hover .public-surprise-icon,
-  .public-surprise-link:focus-visible .public-surprise-icon { transform: rotate(-6deg); }
+  .public-surprise-link:focus-visible .public-surprise-icon { transform: none; }
   .public-footer-links a:hover,
   .public-footer-links a:focus-visible { transform: none; }
 }

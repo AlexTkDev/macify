@@ -81,8 +81,10 @@
   font-weight: 800;
 }
 
-.surprise-button svg { transition: transform 250ms cubic-bezier(0.2, 0.8, 0.2, 1); }
-.surprise-button:hover svg { transform: rotate(20deg) scale(1.08); }
+.surprise-button svg {
+  transform-box: fill-box;
+  transform-origin: center;
+}
 
 .directory-app-grid {
   display: grid;
@@ -108,20 +110,9 @@
   aspect-ratio: 1200 / 630;
   position: relative;
   display: block;
-  contain: paint;
   overflow: hidden;
   border-radius: 0.75rem;
-  background: #f0f2f5;
-}
-
-.directory-app-preview::after {
-  position: absolute;
-  inset: 0;
-  background: rgb(13 22 38 / 0.34);
-  content: "";
-  mix-blend-mode: overlay;
-  opacity: 0;
-  pointer-events: none;
+  background: #000;
 }
 
 .directory-app-preview > img {
@@ -155,18 +146,6 @@
   position: relative;
   display: block;
   isolation: isolate;
-}
-
-.directory-app-identity-icon::after {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: 22%;
-  background: rgb(13 22 38 / 0.34);
-  content: "";
-  mix-blend-mode: overlay;
-  opacity: 0;
-  pointer-events: none;
 }
 
 .directory-app-identity-icon > .public-app-icon {
@@ -205,18 +184,23 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .directory-app-preview::after,
-  .directory-app-identity-icon::after {
-    transition: opacity 180ms ease;
+  .surprise-button svg {
+    transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .directory-app-row:hover .directory-app-preview::after,
-  .directory-app-row:hover .directory-app-identity-icon::after { opacity: 1; }
+  .surprise-button:hover svg { transform: rotate(14deg) scale(1.04); }
+
+  .directory-app-preview > img {
+    opacity: 0.96;
+    transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .directory-app-row:hover .directory-app-preview > img,
+  .directory-app-row:focus-visible .directory-app-preview > img { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .directory-app-preview::after,
-  .directory-app-identity-icon::after,
+  .directory-app-preview > img,
   .surprise-button svg { transition: none; }
   .surprise-button:hover svg { transform: none; }
 }
