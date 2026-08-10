@@ -71,8 +71,9 @@
   .header-search-field input { opacity: 0; }
   .inline-app-search:focus-within .header-search-field input { opacity: 1; }
 
-  .public-footer-main { grid-template-columns: 1fr; gap: 2.5rem; }
-  .public-footer-links { max-width: 28rem; }
+  .public-footer-main { grid-template-columns: minmax(0, 1fr) minmax(18rem, 1.1fr); gap: 2.5rem; }
+  .public-footer-links { max-width: 30rem; }
+  .public-footer-reserve { grid-column: 1 / -1; justify-content: flex-start; }
 
   .home-hero {
     grid-template-columns: 1fr;

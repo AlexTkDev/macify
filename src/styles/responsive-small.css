@@ -59,8 +59,11 @@
     z-index: 2;
   }
 
-  .public-footer { margin-top: 3rem; }
+  .public-footer { margin-top: 3rem; padding: 0.65rem; border-radius: 1.2rem; }
+  .public-footer-panel { padding: 1.6rem 1.25rem; border-radius: 0.95rem; }
+  .public-footer-main { grid-template-columns: 1fr; gap: 2rem; }
   .public-footer-links { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
+  .public-footer-reserve { grid-column: auto; }
   .public-footer-bottom { align-items: flex-start; flex-direction: column; }
   .inline-search-panel { position: fixed; top: 4.4rem; right: 0.5rem; left: 0.5rem; width: auto; }
   .section-intro { align-items: flex-start; flex-direction: column; }
