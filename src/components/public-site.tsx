@@ -10,6 +10,7 @@ export function PublicHeader() {
       <div className="public-header-inner">
         <MacifyLogo showMark={false} />
         <nav className="public-navigation" aria-label="Primary navigation">
+          <Link className="public-browse-link" href="/#all-apps">Browse apps</Link>
           <a className="public-surprise-link" href="/surprise">
             <span className="public-surprise-icon" aria-hidden="true"><Shuffle size={15} /></span>
             <span className="public-surprise-label">Surprise me</span>

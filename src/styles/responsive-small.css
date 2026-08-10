@@ -16,41 +16,31 @@
   .tag-page-header p { margin: 1.1rem 0 0 1.95rem; }
 
   .public-header {
-    min-height: 4rem;
+    min-height: 4.1rem;
   }
   .public-header-inner {
     width: min(calc(100% - 2rem), var(--content-width));
     max-width: none;
-    min-height: 3.35rem;
-    margin-top: 0.5rem;
-    padding: 0.3rem;
+    min-height: 4.1rem;
+    margin: 0 auto;
+    padding: 0;
     grid-template-areas: "brand navigation search";
-    grid-template-columns: minmax(0, 1fr) 2.75rem 2.75rem;
-    gap: 0.35rem;
-    border-color: #dfe3ea;
-    border-radius: 0.95rem;
-    box-shadow: 0 0.55rem 1.6rem rgb(21 31 49 / 0.09);
+    grid-template-columns: auto minmax(0, 1fr) 2.75rem;
+    gap: 0.5rem;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
-  .public-header .brand { min-width: 0; padding-inline: 0.65rem; }
+  .public-header .brand { min-width: 0; padding: 0; }
   .public-header .brand-word { color: #080a0d; font-size: 1rem; }
   .public-header .brand-mark { width: 1.85rem; height: 1.85rem; }
   .public-navigation {
+    justify-self: end;
     height: 2.75rem;
     border: 0;
   }
-  .public-navigation a,
-  .header-search-field {
-    border: 1px solid #e3e6eb;
-    border-radius: 0.65rem;
-    background: #f6f7f9;
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.8);
-  }
-  .public-navigation a:active,
-  .header-search-field:active {
-    border-color: #cbd7f5;
-    color: var(--play-blue);
-    background: #edf2ff;
-  }
+  .public-navigation .public-browse-link { display: none; }
+  .header-search-field { border-radius: 0.65rem; }
   .header-search-field:focus-within {
     border-color: #8caaff;
     background: var(--public-canvas);
@@ -58,11 +48,18 @@
   }
 
   .inline-app-search { width: 2.75rem; }
+  .inline-app-search:focus-within {
+    width: 100%;
+    position: absolute;
+    inset-inline: 0;
+    top: 0.67rem;
+    z-index: 2;
+  }
 
   .public-footer { margin-top: 3rem; }
   .public-footer-links { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
   .public-footer-bottom { align-items: flex-start; flex-direction: column; }
-  .inline-search-panel { position: fixed; top: 4rem; right: 0.5rem; left: 0.5rem; width: auto; }
+  .inline-search-panel { position: fixed; top: 4.15rem; right: 0.5rem; left: 0.5rem; width: auto; }
   .section-intro { align-items: flex-start; flex-direction: column; }
 
   .home-hero { padding: 3.1rem 0 5.25rem; gap: 2.7rem; }
@@ -196,5 +193,4 @@
 
 @media (max-width: 24rem) {
   .public-header .brand-word { display: none; }
-  .inline-app-search:focus-within { width: min(62vw, 14rem); }
 }
