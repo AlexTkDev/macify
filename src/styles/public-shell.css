@@ -23,7 +23,9 @@
   --header-accent-soft: oklch(0.95 0.045 82);
   --header-line: oklch(0.9 0.018 82);
   min-height: 100vh;
+  position: relative;
   overflow: clip;
+  isolation: isolate;
   color: var(--public-ink);
   background: var(--header-canvas);
   font-family: var(--font-urbanist), "Avenir Next", sans-serif;
@@ -373,16 +375,35 @@
 
 @keyframes search-spin { to { transform: rotate(360deg); } }
 
+.public-page-content,
 .public-footer {
-  width: min(calc(100% - 2rem), var(--content-width));
-  margin: 4rem auto 1rem;
-  padding: clamp(1rem, 2vw, 1.6rem);
-  overflow: hidden;
-  border-radius: 1.75rem;
-  background: url("/footer-studio-desk.png") center / cover no-repeat;
+  position: relative;
+  z-index: 1;
+}
+
+.public-ending-backdrop {
+  width: 100%;
+  height: clamp(34rem, 48vw, 46rem);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url("/footer-studio-desk.webp") center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 8%, #000 36%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, transparent 8%, #000 36%, #000 90%, transparent 100%);
+}
+
+.public-footer {
+  width: 100%;
+  margin: clamp(5rem, 8vw, 8rem) 0 0;
+  padding: 0 0 clamp(1rem, 2vw, 1.5rem);
 }
 
 .public-footer-panel {
+  width: min(calc(100% - 2rem), var(--content-width));
+  margin-inline: auto;
   padding: clamp(2rem, 4vw, 3.75rem);
   border: 1px solid rgb(255 255 255 / 0.9);
   border-radius: 1.4rem;

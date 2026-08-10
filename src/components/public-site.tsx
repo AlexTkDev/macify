@@ -71,7 +71,8 @@ export function PublicShell({ children }: { children: ReactNode }) {
     <div className="public-site">
       <a className="skip-link" href="#main-content">Skip to content</a>
       <PublicHeader />
-      {children}
+      <div className="public-page-content">{children}</div>
+      <div className="public-ending-backdrop" aria-hidden="true" />
       <PublicFooter />
     </div>
   );
