@@ -4,16 +4,16 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-const staging = process.argv.includes("--confirm-staging-replacement");
-const production = process.argv.includes("--confirm-production-replacement");
-if (staging === production) throw new Error("Pass exactly one explicit staging or production replacement confirmation flag.");
-const targetEnv = production ? "production" : "staging";
-const targetLabel = production ? "Production" : "Staging";
-const targetBucket = production ? "macify-production-media" : "macify-staging-media";
+if (!process.argv.includes("--confirm-production-replacement")) {
+  throw new Error("Pass --confirm-production-replacement to replace production data.");
+}
+const targetEnv = "production";
+const targetLabel = "Production";
+const targetBucket = "macify-production-media";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
-const workDirectory = await mkdtemp(path.join(tmpdir(), "macify-staging-replace-"));
+const workDirectory = await mkdtemp(path.join(tmpdir(), "macify-production-replace-"));
 const backupPath = path.join(tmpdir(), `macify-${targetEnv}-backup-${new Date().toISOString().replaceAll(":", "-")}.sql`);
 const tables = ["apps", "tags", "app_tags", "media_assets", "app_relationships", "import_jobs", "import_rows", "redirects"];
 
@@ -48,9 +48,9 @@ try {
   }
 
   const localMedia = query("SELECT storage_key, mime_type, checksum FROM media_assets ORDER BY storage_key;", false);
-  const stagingMedia = query("SELECT storage_key FROM media_assets ORDER BY storage_key;", true);
+  const productionMedia = query("SELECT storage_key FROM media_assets ORDER BY storage_key;", true);
   const localKeys = new Set(localMedia.map(({ storage_key }) => storage_key));
-  const obsoleteKeys = stagingMedia.map(({ storage_key }) => storage_key).filter((key) => !localKeys.has(key));
+  const obsoleteKeys = productionMedia.map(({ storage_key }) => storage_key).filter((key) => !localKeys.has(key));
 
   console.log(`Uploading ${localMedia.length} canonical media objects to ${targetEnv} R2...`);
   let uploaded = 0;

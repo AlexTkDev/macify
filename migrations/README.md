@@ -1,36 +1,22 @@
 # Database migrations
 
-This directory contains the ordered SQL history for Macify's Cloudflare D1 database.
+This directory contains the ordered SQL changes used to create and update Macify's Cloudflare D1 database.
 
-## What belongs here
+## Contents
 
 - Numbered `.sql` files are immutable database changes applied by Wrangler.
-- `meta/` contains Drizzle Kit's generated schema snapshots and migration journal.
-- `README.md` documents the contract; Wrangler ignores non-SQL files.
+- `meta/` contains Drizzle schema snapshots and the migration journal.
+- `src/db/schema.ts` is the TypeScript schema source.
 
-The TypeScript source of truth is `src/db/schema.ts`. Drizzle Kit compares that schema with the latest snapshot in `meta/` and generates the next SQL file. Wrangler applies the SQL files to local, staging, or production D1 and records completed filenames in D1's `d1_migrations` table.
+Wrangler records applied filenames in D1's `d1_migrations` table and runs only migrations that have not been applied.
 
 ## Workflow
 
-1. Change `src/db/schema.ts`.
+1. Change the relevant file in `src/db/`.
 2. Run `npm run db:generate`.
-3. Review the generated SQL and snapshot.
+3. Review the generated SQL and metadata.
 4. Run `npm run db:check`.
-5. Apply locally with `npm run db:migrate:local`.
-6. Test the application.
-7. Apply to staging before production.
+5. Apply locally with `npm run db:migrate:local` and verify the application.
+6. Back up production and apply with `npm run db:migrate:production` after explicit approval.
 
-Never edit an already-applied SQL migration. Add a new migration instead. Commit generated SQL and `meta/` files together. Do not place database exports, user data, secrets, or local Wrangler state in this directory.
-
-## Existing history
-
-- `0000`: initial tables and indexes.
-- `0001`: required category reference data.
-- `0002`: optional YouTube URL on applications.
-- `0003`: rename stored media roles from OG image to preview image.
-- `0004`: synchronize Drizzle metadata after the manually authored `0002` migration.
-- `0005`: simplify pricing, billing, and legacy application fields.
-- `0006`: remove the categories and application-category tables.
-- `0007`: add persistent rate-limit counters for editorial login attempts.
-
-The repository contains the complete generated history through `0007`. The presence of a migration file does not prove that a particular local, staging, or production D1 database has applied it; verify each environment with Wrangler before relying on its schema state.
+Never edit or remove an applied migration. Add a new migration instead. Commit generated SQL and metadata together. Do not store exports, live data, secrets, or Wrangler state here.

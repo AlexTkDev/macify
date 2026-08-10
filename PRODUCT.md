@@ -1,74 +1,58 @@
 # Product
 
-## Register
+## Purpose
 
-product
+Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. Editors maintain the catalogue through a protected internal dashboard.
 
-## Users
+## Public experience
 
-Macify serves macOS users who want reliable software recommendations without searching through promotional listicles, abandoned projects, or low-quality app stores. It also serves editors who research, classify, compare, and publish application records through an internal dashboard.
+The public website provides:
 
-The primary public task is finding a useful Mac application quickly. The primary editorial task is turning a URL or import file into an accurate, reviewable application record.
+- a curated homepage;
+- published application pages;
+- tag-based discovery;
+- inline search across names, taglines, and tags;
+- related applications and a random-app route;
+- canonical metadata, structured data, sitemap, robots rules, and social cards.
 
-## Product Purpose
+The homepage headline is “Mac apps worth making room for.” Its supporting copy is “A curated list of the most useful macOS applications.”
 
-Macify.app is a curated directory of the best useful macOS applications. It organizes application details, pricing, licensing, platforms, media, tags, alternatives, and editorial context into fast, searchable pages.
+Each application page presents the official identity, tagline, pricing, relevant tags, source status when open source, editorial description, media, optional demo, official website, and related applications.
 
-Phase 1 delivers the public directory, management dashboard, structured database, media pipeline, imports and exports, search, and technical SEO. Public visitor accounts, saved applications, payments, and subscriptions are intentionally deferred. The editorial dashboard is not a public account product, but it must be protected by Cloudflare Access or equivalent authorization before the site is deployed publicly.
+## Editorial dashboard
 
-Success means visitors can identify a trustworthy application in a few minutes, public pages load quickly worldwide, search engines can understand every application page, and editors can maintain the directory without manually editing code or database rows.
+The dashboard supports application creation and editing, drafts and publication, tags, relationships, media, reviewed imports and exports, and media optimization. It uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
 
-## Editorial Content Model
+## Content model
 
-Each application record contains its identity, official website, tagline, detailed description, classification, pricing, source model, tags, optional YouTube demo, and mutually related applications.
+An application record includes:
 
-Pricing is recorded in two parts. The access tier is free, freemium, or paid. Freemium and paid applications also record whether payment is one-time or subscription-based. Editors can add literal pricing details when the simple classification is not enough.
+- name, slug, website, and tagline;
+- researched Markdown description;
+- free, freemium, or paid access classification;
+- one-time or subscription billing where applicable;
+- source status;
+- one to three focused tags;
+- optional YouTube URL;
+- mutual related-application links;
+- one icon, one main preview, and optional screenshots.
 
-Source status is retained internally. Public pages display an Open source fact only when applicable; closed-source applications do not display a source label. Repository URLs and minimum macOS versions are outside the current content model.
+Markdown is rendered as sanitized semantic HTML. Raw HTML is never executed.
 
-Detailed descriptions are researched and written according to `EDITORIAL.md`, then stored as plain Markdown. The dashboard intentionally provides a normal textarea without a rich-text editor, formatting toolbar, or preview. Public application pages render the Markdown as semantic HTML with GitHub Flavored Markdown support for headings, lists, links, emphasis, tables, task lists, strikethrough, blockquotes, and code. Raw HTML from Markdown is never executed.
+## Media
 
-Application media consists of one icon, one main preview image, and multiple screenshots stored in Cloudflare R2 and referenced from the database. The preview image is the wide editorial visual shown within the public application page and within that application’s generated social-sharing image. Media can be attached during initial creation or later editing, and its R2 paths use the permanent application ID generated during submission. Audio is outside the product scope.
+Binary media is stored in private R2 objects; D1 stores metadata and storage keys. Uploads and URL imports are size-limited, MIME-checked, signature-validated, optimized through Cloudflare Images, and served through Macify-controlled routes. Remote imports reject private networks, unsafe redirects, invalid formats, and oversized responses.
 
-Every uploaded or remotely imported image passes through Cloudflare Images before it is written to R2. The pipeline preserves the original pixel dimensions, removes unnecessary encoding overhead, and prefers high-quality WebP when that produces a smaller file. If conversion would increase the byte size, Macify keeps the original. D1 records the delivered format, optimized byte size, width, height, and checksum. Existing unmeasured assets can be optimized safely in small batches from the media dashboard.
+The homepage has one static 1200×630 social image. Each application has a generated social card using its preview and the line `App Name — tagline | Macify`.
 
-Each application uses one to three focused tags for classification and discovery. Public tags link to dedicated pages containing every published application assigned to that tag. Tags use autocomplete against the existing taxonomy while allowing editors to create a missing tag inline; new tags are normalized and created when the application is saved.
+## Boundaries
 
-Editors can provide media as a local file or a public HTTPS image URL. URL imports are downloaded, validated, copied into R2, and recorded with their original source URL; public pages never hotlink third-party media. Remote fetches reject local or private destinations, unsafe redirects, unsupported formats, mismatched file signatures, and files over the editorial size limit.
+Macify does not currently provide public accounts, saved applications, payments, subscriptions, public submissions, or multi-user editorial roles. Audio and application binaries are not stored.
 
-Every public application page has a generated Macify social-sharing card. It shows the app’s uncropped preview image and the exact line `App Name — tagline | Macify`, with the app’s own name and tagline substituted. It is used for Open Graph and X/Twitter metadata.
+## Principles
 
-Related-application links are mutual: connecting application A to application B also makes A available from B. Editors choose these relationships explicitly, while the public page only displays published related records.
-
-## Current implementation boundary
-
-The public experience currently provides a randomized 30-application homepage selection drawn only from an editorially approved pool of 30 applications, application pages, tag pages, an accessible inline search over application names, taglines, and tags, and a route that opens a random published application. The underlying directory query layer also supports description, pricing, billing, and source filters, but those filters are not currently exposed as a public interface.
-
-The dashboard currently supports application CRUD, publishing, media, tags, relationships, and reviewed CSV/JSON imports and exports. It uses a deliberately isolated single-administrator login backed by Cloudflare secrets, signed sessions, and D1 login throttling. It is not a public account system: public registration, roles, password recovery, audit history, catalogue-wide search, filtering, and pagination are not implemented.
-
-## Brand Personality
-
-Curated, precise, Mac-native.
-
-The voice is calm and specific. It explains what an application does, who it suits, what it costs, and how it differs from alternatives. It avoids exaggerated claims and treats editorial judgment as a responsibility.
-
-## Anti-references
-
-- Generic SaaS gradients and glowing purple-blue interfaces.
-- Glass-heavy dashboards that reduce contrast or obscure hierarchy.
-- Excessively rounded cards nested inside other cards.
-- Advertising-cluttered download directories and SEO listicle pages.
-- Visual copies of Apple, Toolfolio, Details, Setapp, or the Mac App Store.
-- Low-contrast gray text and decorative motion that delays the task.
-
-## Design Principles
-
-1. **Lead with utility.** Search, tags, pricing, and download context must be visible before editorial decoration.
-2. **Make curation legible.** Explain why an application is listed and distinguish verified facts from editorial opinion.
-3. **Feel native without imitation.** Use familiar macOS clarity, density, and interaction patterns while maintaining an independent Macify identity.
-4. **Let application media do the color work.** The interface remains restrained so icons, screenshots, and preview images stay recognizable.
-5. **Design for maintenance.** Public patterns and dashboard controls share a small, consistent vocabulary that editors and future contributors can learn quickly.
-
-## Accessibility & Inclusion
-
-Target WCAG 2.2 AA. All core workflows must support keyboard navigation, visible focus, semantic landmarks, descriptive labels, readable contrast, zoom to 200%, reduced motion, and non-color status indicators. Touch targets must remain usable on mobile, and dense application metadata must reflow without horizontal page scrolling.
+- Lead with utility and verifiable information.
+- Keep editorial judgment independent and specific.
+- Feel Mac-native without copying Apple or the Mac App Store.
+- Let authentic application media carry most of the visual color.
+- Keep the catalogue maintainable, accessible, and fast.

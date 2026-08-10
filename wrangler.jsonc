@@ -35,29 +35,6 @@
     "head_sampling_rate": 0.1
   },
   "env": {
-    "staging": {
-      "name": "macify-staging",
-      "images": {
-        "binding": "IMAGES"
-      },
-      "vars": {
-        "APP_ENV": "staging"
-      },
-      "d1_databases": [
-        {
-          "binding": "DB",
-          "database_name": "macify-staging-database",
-          "database_id": "77963989-01c0-41ed-814c-599169cf37ca",
-          "migrations_dir": "migrations"
-        }
-      ],
-      "r2_buckets": [
-        {
-          "binding": "MEDIA",
-          "bucket_name": "macify-staging-media"
-        }
-      ]
-    },
     "production": {
       "name": "macify",
       "images": {

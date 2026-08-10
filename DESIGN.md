@@ -1,57 +1,46 @@
 ---
 name: Macify playful app directory
-description: A bright, precise directory that lets authentic Mac app artwork lead a clean browsing experience.
+description: A bright, precise directory led by authentic Mac application artwork.
 ---
 
-# North star
+# Design
 
-The approved homepage composition is [`.impeccable/mocks/home-c.png`](.impeccable/mocks/home-c.png). The approved detail composition is [`.impeccable/mocks/app-detail.png`](.impeccable/mocks/app-detail.png), with mobile translations in `home-mobile.png` and `app-detail-mobile.png`.
+## Direction
 
-Macify is a playful studio table, not an App Store clone and not a SaaS card grid. Real application icons interrupt oversized language and become physical-looking objects. Preview artwork supplies product context. Bright cobalt, orange, yellow, mint, and pale periwinkle create rhythm against a cool white canvas. The result should feel energetic and designed while remaining extremely easy to scan.
+Macify combines oversized editorial language with authentic application artwork on a clean white canvas. It should feel playful and Mac-aware without resembling the Mac App Store or a generic SaaS interface.
 
-# Component grammar
+Approved references:
 
-- The homepage hero uses Caprasimo for a chunky, friendly display voice with soft, playful character. Urbanist remains the body and interface family. Display tracking is never tighter than `-0.04em`.
-- App icons keep their authentic artwork, 22% corner radius, and one soft depth shadow.
-- Content surfaces use gently rounded corners. The sticky public header uses one clean full-width utility-bar system at every size: brand left, with Surprise Me immediately beside search on the right; the same grouped controls collapse to icons on smaller screens, with search expanding within the header. Buttons remain compact rectangles and tags remain text with small colored shapes.
-- Public pages avoid card chrome. Hierarchy comes from scale, color fields, whitespace, and artwork.
-- Detail-page previews and screenshots use their intrinsic dimensions with `width: 100%` and `height: auto`. Directory entries lead with a large, consistently cropped wide preview, followed by the authentic application icon, name, and concise two-line description.
-- Motion is reserved for the Surprise refresh and direct hover feedback. Reduced-motion preferences remove both.
-- The header’s Surprise Me control stays monochrome and unfilled, using only a restrained shuffle rotation on direct interaction; at narrow widths it reduces to the icon without losing its accessible label.
+- Homepage: [`.impeccable/mocks/home-c.png`](.impeccable/mocks/home-c.png)
+- Homepage mobile: [`.impeccable/mocks/home-mobile.png`](.impeccable/mocks/home-mobile.png)
+- Application page: [`.impeccable/mocks/app-detail.png`](.impeccable/mocks/app-detail.png)
+- Application mobile: [`.impeccable/mocks/app-detail-mobile.png`](.impeccable/mocks/app-detail-mobile.png)
 
-# Homepage
+## Visual system
 
-The hero is a two-column composition on desktop. The left side carries “Mac apps worth making room for.” with three real app icons woven into the words. Its type scale responds to the actual width of the copy column, with explicit minimum and maximum sizes; each authored row stays intact, including “Mac [icon] apps” on the first row. The right side carries one naturally proportioned preview and a compact overlapping identity label. The supporting sentence, “A curated list of the most useful macOS applications.”, remains a separate paragraph with its own scale.
+- Use Caprasimo for large display copy and Urbanist for interface text. Caveat is reserved for restrained handwritten accents.
+- Use pure white as the public background. Cobalt, orange, yellow, mint, pale periwinkle, honey amber, and deep aubergine provide controlled emphasis.
+- Use project OKLCH tokens for authored interface colors.
+- Keep authentic app icons at a 22% corner radius with one soft depth shadow.
+- Let hierarchy come from scale, whitespace, color fields, and media rather than card chrome.
+- Use compact rectangular controls. Reserve pills for true status or tag semantics.
+- Avoid gradients, glass effects, nested cards, low-contrast copy, decorative motion, and Apple imitation.
 
-The second fold shows 30 apps in a flat, surface-free preview directory. Each entry leads with one large wide preview or OG-style image, followed by its authentic application icon, name, and concise two-line tagline. It uses no more than three columns on wide layouts, two on tablets, and one on phones. Category, pricing, badges, and other metadata stay off this quick-browsing surface. Direct hover feedback remains restrained. “Surprise me” is the only secondary action and opens one random published application.
+## Homepage
 
-# Application page
+The desktop hero is a two-column composition. The left side carries “Mac apps worth making room for.” in three authored rows with real app icons woven into the words. The supporting sentence remains separate. The right side uses one naturally proportioned application preview and a compact identity label.
 
-The application hero is a centered two-line editorial composition. “Meet”, the authentic app icon, and the application name form the larger first line; the official tagline always forms the second line at roughly two-thirds of the identity scale. Both use independent container-relative `clamp()` scales with explicit minimum and maximum sizes. A restrained amber underline accents the tagline. Concise pricing, up to three tags, and an open-source label only when true form one dot-separated fact row. “Official website” is a quiet text action with an external arrow.
+The directory uses wide previews with the authentic icon, name, and short tagline beneath. It uses three columns on wide screens, two on tablets, and one on phones. Pricing, badges, and classification stay off this quick-browsing surface.
 
-The centered preview follows the identity and keeps its natural aspect ratio. The editorial body is a single, left-aligned article column with ordinary paragraph typography. The redundant tagline heading and generic or app-named “What it does” section are removed at render time. “What you can do” is a normal heading followed by a standard bulleted list; “Where it fits” is the next heading followed by body copy. Related apps form a loose icon shelf instead of repeating homepage tiles.
+## Application page
 
-Tags are clickable discovery links. Their destination pages use one oversized tag-led heading followed by the homepage flat app directory, preserving the same icon-led rhythm and direct hover feedback without introducing a second filtering interface.
+The hero centers “Meet”, the app icon, and the application name on the first line, followed by the official tagline with a restrained amber underline. A concise fact row contains pricing, up to three tags, and an open-source label only when true.
 
-# Responsive behavior
+Previews keep their natural proportions. Editorial content uses one readable article column. Related applications appear as a loose icon shelf.
 
-At tablet width the detail headline scales down while preserving the centered identity and fact row. At phone width, search collapses to an icon until focused, the homepage stacks, the application title may wrap after the icon-name introduction, and related apps become a horizontal shelf. No headline or app name may clip between 320px and desktop widths.
+## Interaction and responsiveness
 
-Public page gutters use one shared responsive inset. Laptop-width desktop layouts receive 3rem on each side—50% more than the original 2rem—while wide displays continue to use the 90rem content ceiling and phone layouts retain their compact 1rem gutters.
-
-# Implementation inventory
-
-| Visible ingredient | Medium | Commitment |
-| --- | --- | --- |
-| Oversized hero language | Semantic HTML + CSS | Three explicit lines with icon interruptions |
-| Application icons | Existing project media | Authentic artwork, never generated substitutes |
-| Featured and detail previews | Existing project media | Natural ratio and no crop |
-| Flat preview directory | Semantic HTML + CSS | Three, two, and one-column wide-image index without card surfaces |
-| Detail identity underline | CSS geometry | Restrained amber hand-drawn accent beneath the tagline |
-| Search | Existing React component + API | Inline results with icon, name, tagline |
-| Surprise interaction | Route + CSS | Open one random published application with restrained direct hover feedback |
-| Core text and controls | Semantic HTML | Never rasterized from the comps |
-
-# Dashboard boundary
-
-The public visual language does not remove editorial capability. The dashboard continues to show tags, publication state, media roles, pricing structure, and source status because those fields are operational rather than promotional.
+- Search results, forms, navigation, and controls must work by keyboard.
+- Motion is limited to direct feedback and removed when reduced motion is requested.
+- No headline or application name may clip between 320 px and desktop widths.
+- Public pages share consistent responsive gutters and target WCAG 2.2 AA.
