@@ -26,15 +26,18 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Cloudflare R2 media storage binding
 - [x] Drizzle ORM schema and versioned SQL migrations
 - [x] Local Cloudflare development environment
-- [x] Committed migration history through migration `0006`
+- [x] Committed migration history through migration `0007`
 - [x] Generated Cloudflare binding types
 - [x] Structured migration directory and migration documentation
-- [ ] Verify the active local D1 has applied migration `0006`
-- [ ] Complete staging and production D1/R2 resource identifiers in Wrangler configuration
-- [ ] Apply pending migrations to staging D1
-- [ ] Apply pending migrations to production D1
-- [ ] Deploy the current Worker to staging and complete a staging smoke test
-- [ ] Deploy the approved release to production
+- [x] Verify the active local D1 has applied migration `0007`
+- [x] Complete staging and production D1/R2 resource identifiers in Wrangler configuration
+- [x] Apply migrations through `0007` to staging D1
+- [x] Apply migrations through `0007` to production D1
+- [x] Deploy the current Worker to staging and complete database and authentication smoke tests
+- [x] Replace staging catalogue and R2 media with the canonical local dataset and verify parity
+- [x] Audit every published staging app page, tag page, and referenced media route
+- [x] Replace production catalogue and R2 media with the verified canonical dataset
+- [x] Deploy the approved release to the production Workers URL and complete full smoke tests
 - [ ] Connect and verify the Macify.app custom domain
 
 ## Application content model
@@ -68,7 +71,10 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Inline creation of new tags when an application is saved
 - [x] Related-application selector
 - [x] Required icon and main-preview checks before publishing
-- [ ] Protect the editorial dashboard with Cloudflare Access or equivalent authorization before public deployment
+- [x] Add single-administrator login, signed sessions, logout, and server-side authorization checks
+- [x] Add persistent failed-login throttling in D1
+- [x] Configure administrator credentials and session secret in staging
+- [x] Configure administrator credentials and a separate session secret in production
 - [ ] Add an audit log for editorial changes
 - [ ] Add pagination and filtering for a large application catalog
 - [ ] Add a reliable application search experience to the dashboard
@@ -143,7 +149,7 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 - [x] Application metadata
 - [x] Add dynamic sitemap generation for public applications and tags
 - [x] Add robots rules that exclude dashboard and API routes
-- [ ] Verify sitemap and robots behavior in staging
+- [x] Verify sitemap and environment-specific robots behavior in staging
 - [ ] Connect Google Search Console and Bing Webmaster Tools after deployment
 - [ ] Run production Core Web Vitals and crawlability audits
 
@@ -151,13 +157,18 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 
 - [x] TypeScript checks
 - [x] ESLint checks
+- [x] Document Cloudflare Workers Builds settings for GitHub-driven production deployment
+- [ ] Connect the existing `macify` Worker to `Beingpax/macify` and verify a `main` branch deployment
+- [x] Production Next.js build verification
 - [x] Drizzle migration consistency checks
 - [x] Explicit R2 failure cleanup in write operations
 - [ ] Add automated unit and integration tests for critical actions
 - [ ] Add end-to-end tests for create, edit, publish, and import workflows
-- [ ] Configure production logging, error monitoring, and alerts
+- [ ] Verify production logging and configure the alerts defined in `OPERATIONS.md`
 - [ ] Configure Cloudflare usage and billing notifications
-- [ ] Establish D1 backup/export and recovery procedures
+- [x] Document D1 backup/export and recovery procedures in `OPERATIONS.md`
+- [ ] Automate encrypted daily D1 exports with documented retention
+- [ ] Complete and record a quarterly D1 recovery drill in a disposable database
 - [ ] Establish R2 retention and orphan-cleanup procedures
 - [ ] Add Turnstile or equivalent protection to future public submission forms
 

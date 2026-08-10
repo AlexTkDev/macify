@@ -10,8 +10,10 @@ import { apps, importJobs, importRows } from "@/db/schema";
 import { commitImportedRelationships } from "@/app/dashboard/manage/import-relationships";
 import { commitImportRow, type ImportCommitContext } from "@/app/dashboard/manage/import-row";
 import { messageUrl } from "@/app/dashboard/manage/shared";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function commitImportJob(formData: FormData) {
+  await requireAdmin();
   const id = z.uuid().safeParse(formData.get("id"));
   if (!id.success) redirect(messageUrl("/dashboard/imports", "error", "Invalid import job."));
   const database = await getDatabase();

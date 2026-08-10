@@ -50,6 +50,13 @@
       "when": 1785822026460,
       "tag": "0006_unknown_leader",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1786287510343,
+      "tag": "0007_condemned_katie_power",
+      "breakpoints": true
     }
   ]
 }

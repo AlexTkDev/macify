@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, isNull, sql, type SQL } from "drizzle-orm";
+import { and, asc, count, eq, isNull, sql, type SQL } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { appTags, apps, tags } from "@/db/schema";
 import {
@@ -34,7 +34,8 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters)
     .select(cardFields)
     .from(apps)
     .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
-    .orderBy(desc(apps.publishedAt), asc(apps.name));
+    .orderBy(sql`random()`)
+    .limit(30);
 
   const page = filters?.page ?? 1;
   const pageSize = 24;

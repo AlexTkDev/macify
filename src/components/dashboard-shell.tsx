@@ -5,8 +5,10 @@ import {
   ArrowUpRight,
   FileUp,
   Image as ImageIcon,
+  LogOut,
   Tags,
 } from "lucide-react";
+import { logoutAdmin } from "@/app/dashboard/logout-action";
 import { MacifyLogo } from "@/components/macify-logo";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +48,7 @@ export function DashboardShell({
         <div className="dashboard-rail-footer">
           <span className="dashboard-environment"><i aria-hidden="true" /> Local workspace</span>
           <Link className="dashboard-site-link" href="/">Open Macify <ArrowUpRight aria-hidden="true" size={15} /></Link>
+          <form action={logoutAdmin}><button className="dashboard-site-link dashboard-logout" type="submit">Sign out <LogOut aria-hidden="true" size={15} /></button></form>
         </div>
       </aside>
       <section className="dashboard-workspace">

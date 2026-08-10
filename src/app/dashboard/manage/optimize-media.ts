@@ -9,10 +9,12 @@ import { mediaAssets } from "@/db/schema";
 import { optimizeImage } from "@/lib/image-optimization";
 import { bytesToHex } from "@/lib/media-validation";
 import { messageUrl } from "@/app/dashboard/manage/shared";
+import { requireAdmin } from "@/lib/admin-auth";
 
 const batchSize = 12;
 
 export async function optimizeExistingMedia() {
+  await requireAdmin();
   const { env } = await getCloudflareContext({ async: true });
   if (!env.IMAGES) {
     redirect(messageUrl("/dashboard/media", "error", "Cloudflare Images is not available in this environment."));

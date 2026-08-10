@@ -8,8 +8,10 @@ import { z } from "zod";
 import { getDatabase } from "@/db/client";
 import { apps, mediaAssets } from "@/db/schema";
 import { messageUrl } from "@/app/dashboard/manage/shared";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function deleteMediaAsset(formData: FormData) {
+  await requireAdmin();
   const id = z.uuid().safeParse(formData.get("id"));
   if (!id.success) redirect(messageUrl("/dashboard/media", "error", "Invalid media item."));
   const database = await getDatabase();

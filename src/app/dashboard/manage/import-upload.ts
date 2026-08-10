@@ -7,8 +7,10 @@ import { importJobs, importRows } from "@/db/schema";
 import { parseCsv } from "@/app/dashboard/manage/csv";
 import { validateImportRows } from "@/app/dashboard/manage/import-validation";
 import { messageUrl } from "@/app/dashboard/manage/shared";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function uploadImportFile(formData: FormData) {
+  await requireAdmin();
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) {
     redirect(messageUrl("/dashboard/imports", "error", "Choose a CSV or JSON file."));

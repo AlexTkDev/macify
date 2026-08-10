@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowUpRight, Shuffle } from "lucide-react";
 import { mediaUrl, PublicAppIcon, type PublicAppSummary } from "@/components/public-app-card";
 
-const PICK_COUNT = 30;
 const REVEAL_TONES = ["blue", "orange", "yellow", "mint", "lilac"] as const;
 
 export type DirectoryApp = PublicAppSummary & {
@@ -20,7 +19,7 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
   return (
     <div className="directory-app-grid">
       {applications.map((app) => (
-        <Link className="directory-app-row" data-reveal-tone={revealTone(app.id)} href={`/apps/${app.slug}`} key={app.id}>
+        <Link className="directory-app-row" data-reveal-tone={revealTone(app.id)} href={`/apps/${app.slug}`} key={app.id} prefetch={false}>
           <span className="directory-app-art">
             <span className="directory-app-image">
               {app.preview ? (
@@ -49,26 +48,12 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
   );
 }
 
-function randomSelection(applications: DirectoryApp[], count: number) {
-  const shuffled = [...applications];
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const randomValue = new Uint32Array(1);
-    crypto.getRandomValues(randomValue);
-    const swapIndex = randomValue[0] % (index + 1);
-    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
-  }
-  return shuffled.slice(0, count);
-}
-
 export function ApplicationDirectory({ applications }: { applications: DirectoryApp[] }) {
-  const visibleApplications = randomSelection(applications, PICK_COUNT);
-
   return (
     <section className="home-section application-directory" id="all-apps" aria-labelledby="all-apps-title">
       <div className="directory-heading">
         <h2 id="all-apps-title">Apps worth trying.</h2>
         <a
-          aria-label="Open a random application"
           className="surprise-button"
           href="/surprise"
         >
@@ -77,7 +62,7 @@ export function ApplicationDirectory({ applications }: { applications: Directory
         </a>
       </div>
 
-      <DirectoryAppGrid applications={visibleApplications} />
+      <DirectoryAppGrid applications={applications} />
     </section>
   );
 }

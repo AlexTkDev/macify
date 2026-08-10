@@ -38,16 +38,23 @@ Configuration stays at the project root because Next.js, TypeScript, Drizzle Kit
 
 See [`migrations/README.md`](migrations/README.md) before changing the database schema. The migration directory is committed because it is the reproducible history used to build every D1 environment; it does not contain live database data.
 
+See [`RELEASE.md`](RELEASE.md) before deploying. Macify uses proportional validation: isolated, reversible CSS or copy changes may deploy directly to production after lightweight checks and approval, while behavioral, data, authentication, infrastructure, or broad shared-interface changes must pass through staging.
+
+Production code deployment is designed to run through Cloudflare Workers Builds after the existing `macify` Worker is connected to the GitHub repository. A merge or direct push to `main` runs `npm run ci:check`, then `npm run deploy`; feature branches and pull requests do not change production. Until that dashboard connection is completed and verified, deployment remains manual.
+
+See [`OPERATIONS.md`](OPERATIONS.md) for the D1 backup and recovery runbook, production monitoring plan, and priorities for the remaining operational safeguards.
+
 ## Current status
 
 The local application includes the public directory, application and tag pages, inline search, editorial CRUD workflows, publication controls, tag and relationship management, R2 media ingestion, Cloudflare Images optimization, CSV/JSON imports and exports, generated social cards, sitemap generation, and robots rules.
 
-Before production launch, the editorial dashboard must be access-controlled, staging and production D1/R2 bindings must be completed, remote migrations and deployment must be validated in staging, and the catalogue needs final editorial and accessibility review. See [`PROJECT_CHECKLIST.md`](PROJECT_CHECKLIST.md) for the code-audited status.
+The editorial dashboard has single-administrator authentication in code. Staging and production Workers are deployed with separate encrypted session secrets, D1 migrations through `0007`, synchronized canonical catalogue/media data, and verified public, media, database, and authentication flows. The production Workers URL is live; connecting and verifying the `macify.app` custom domain remains a separate DNS step. See [`PROJECT_CHECKLIST.md`](PROJECT_CHECKLIST.md) for the code-audited status.
 
 ## Safety
 
 - Never commit `.dev.vars`, API keys, or production exports.
 - Review generated migrations before applying them remotely.
 - Run `npm run db:check` before committing schema changes.
-- Use the staging environment before production.
+- Follow `RELEASE.md`: use staging for material or uncertain changes; low-risk presentation-only changes may skip it after proportional checks and explicit approval.
+- Follow `OPERATIONS.md` before production migrations, bulk imports, catalogue replacement, or database recovery.
 - Public pages never access D1 or R2 directly from the browser.

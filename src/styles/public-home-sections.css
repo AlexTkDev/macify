@@ -1,7 +1,7 @@
 .home-section { padding: 0 0 7rem; }
 
 .tag-page {
-  width: min(calc(100% - 4rem), 76rem);
+  width: min(calc(100% - var(--public-page-inset)), 76rem);
   margin-inline: auto;
   padding: 2.5rem 0 7rem;
 }

@@ -8,6 +8,7 @@ import { getDatabase } from "@/db/client";
 import { apps, mediaAssets } from "@/db/schema";
 import { prepareMediaSource, putPreparedMedia } from "@/lib/media-upload";
 import type { MediaUploadState } from "@/app/dashboard/actions/action-types";
+import { requireAdmin } from "@/lib/admin-auth";
 
 const mediaRoleSchema = z.enum(["icon", "preview_image", "screenshot"]);
 
@@ -15,6 +16,7 @@ export async function uploadApplicationMedia(
   _previousState: MediaUploadState,
   formData: FormData,
 ): Promise<MediaUploadState> {
+  await requireAdmin();
   const appIdResult = z.uuid().safeParse(formData.get("appId"));
   const roleResult = mediaRoleSchema.safeParse(formData.get("role"));
   const altText = String(formData.get("altText") ?? "").trim().slice(0, 300);

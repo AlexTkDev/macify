@@ -16,6 +16,7 @@ import "../styles/dashboard-management.css";
 import "../styles/dashboard-forms.css";
 import "../styles/dashboard-form-widgets.css";
 import "../styles/dashboard-media.css";
+import "../styles/editor-login.css";
 import "../styles/responsive.css";
 import "../styles/responsive-small.css";
 

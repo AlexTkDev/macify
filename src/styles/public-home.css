@@ -1,6 +1,6 @@
 .home-hero,
 .home-section {
-  width: min(calc(100% - 4rem), var(--content-width));
+  width: min(calc(100% - var(--public-page-inset)), var(--content-width));
   margin-inline: auto;
 }
 
