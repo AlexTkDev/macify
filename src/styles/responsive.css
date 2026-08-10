@@ -23,11 +23,27 @@
 }
 
 @media (max-width: 52rem) {
+  .public-header {
+    min-height: 4.35rem;
+    border-bottom: 0;
+    background: transparent;
+    box-shadow: none;
+    pointer-events: none;
+  }
   .public-header-inner {
     width: fit-content;
     max-width: min(calc(100% - 2rem), 44rem);
+    min-height: 3.35rem;
+    margin: 0.55rem auto 0;
+    grid-template-areas: "brand navigation search";
+    grid-template-columns: auto auto auto;
     gap: 0.35rem;
     padding: 0.25rem 0.36rem 0.25rem 0.72rem;
+    border: 1px solid #e0e3e9;
+    border-radius: 999px;
+    background: var(--public-canvas);
+    box-shadow: 0 0.2rem 0.75rem rgb(26 29 36 / 0.05);
+    pointer-events: auto;
   }
   .public-navigation { display: flex; }
   .public-navigation a {

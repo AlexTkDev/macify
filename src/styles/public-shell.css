@@ -42,32 +42,28 @@
 .skip-link:focus { transform: translateY(0); }
 
 .public-header {
-  min-height: 4.35rem;
+  min-height: 4.75rem;
   position: sticky;
   top: 0;
   z-index: var(--z-header);
   display: flex;
   justify-content: center;
-  pointer-events: none;
+  border-bottom: 1px solid var(--public-line-soft);
+  background: var(--public-canvas);
+  box-shadow: 0 0.35rem 1.25rem rgb(21 31 49 / 0.04);
 }
 
 .public-header-inner {
-  width: fit-content;
-  max-width: min(calc(100% - 3rem), var(--content-width));
-  min-height: 3.35rem;
-  margin-top: 0.55rem;
+  width: min(calc(100% - var(--public-page-inset)), var(--content-width));
+  min-height: 4.75rem;
+  margin-inline: auto;
   position: relative;
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-areas: "brand search navigation";
+  grid-template-columns: auto minmax(16rem, 1fr) auto;
   align-items: center;
-  gap: clamp(0.75rem, 1.6vw, 1.5rem);
-  padding: 0.32rem 0.42rem 0.32rem 0.9rem;
-  border: 1px solid #e0e3e9;
-  border-radius: 999px;
+  gap: clamp(1.5rem, 4vw, 4rem);
   color: var(--public-ink);
-  background: var(--public-canvas);
-  box-shadow: 0 0.2rem 0.75rem rgb(26 29 36 / 0.05);
-  pointer-events: auto;
 }
 
 .public-site .brand {
@@ -81,6 +77,7 @@
 }
 
 .public-header .brand {
+  grid-area: brand;
   color: var(--public-ink);
 }
 
@@ -106,23 +103,24 @@
 .public-footer .brand-word { font-size: 1.35rem; }
 
 .public-navigation {
+  grid-area: navigation;
   display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
 .public-navigation a {
-  min-height: 2.3rem;
-  padding: 0.25rem 0.5rem;
+  min-height: 2.65rem;
+  padding: 0.4rem 0.75rem;
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border: 0;
-  border-radius: 0.4rem;
+  border: 1px solid #dfe3e9;
+  border-radius: 0.7rem;
   color: #252a31;
-  background: transparent;
-  box-shadow: none;
+  background: #f8f9fa;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9);
   font-size: 0.82rem;
   font-weight: 750;
   transition: color 160ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -130,9 +128,10 @@
 
 .public-navigation a:hover,
 .public-navigation a:focus-visible {
-  color: var(--public-ink);
-  background: transparent;
-  transform: translateY(-0.1rem);
+  border-color: #b8c8f4;
+  color: var(--play-blue);
+  background: #f2f5ff;
+  transform: translateY(-0.06rem);
 }
 
 .public-surprise-link:active { transform: translateY(0.03rem) scale(0.985); }
@@ -158,22 +157,23 @@
 }
 
 .public-header-actions {
-  justify-self: end;
+  grid-area: search;
+  justify-self: center;
   display: flex;
   align-items: center;
 }
 
 .inline-app-search {
-  width: clamp(10.5rem, 15vw, 13.5rem);
+  width: clamp(18rem, 30vw, 28rem);
   position: relative;
 }
 
-.inline-app-search:focus-within { width: clamp(13rem, 19vw, 15.5rem); }
+.inline-app-search:focus-within { width: clamp(20rem, 32vw, 30rem); }
 
 .header-search-field {
   width: 100%;
-  min-height: 2.35rem;
-  padding: 0 0.72rem;
+  min-height: 2.75rem;
+  padding: 0 0.85rem;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
