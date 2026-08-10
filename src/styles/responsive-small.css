@@ -16,12 +16,12 @@
   .tag-page-header p { margin: 1.1rem 0 0 1.95rem; }
 
   .public-header {
-    min-height: 4.1rem;
+    min-height: 4rem;
   }
   .public-header-inner {
     width: min(calc(100% - 2rem), var(--content-width));
     max-width: none;
-    min-height: 4.1rem;
+    min-height: 4rem;
     margin: 0 auto;
     padding: 0;
     grid-template-areas: "brand controls";
@@ -50,14 +50,14 @@
     width: 100%;
     position: absolute;
     inset-inline: 0;
-    top: 0.67rem;
+    top: 0.625rem;
     z-index: 2;
   }
 
   .public-footer { margin-top: 3rem; }
   .public-footer-links { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
   .public-footer-bottom { align-items: flex-start; flex-direction: column; }
-  .inline-search-panel { position: fixed; top: 4.15rem; right: 0.5rem; left: 0.5rem; width: auto; }
+  .inline-search-panel { position: fixed; top: 4.05rem; right: 0.5rem; left: 0.5rem; width: auto; }
   .section-intro { align-items: flex-start; flex-direction: column; }
 
   .home-hero { padding: 3.1rem 0 5.25rem; gap: 2.7rem; }

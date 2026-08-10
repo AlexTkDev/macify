@@ -18,10 +18,14 @@
   --public-line-soft: #eceef1;
   --public-surface: #f3f4f6;
   --public-surface-soft: #f8f9fa;
+  --header-canvas: oklch(0.985 0.012 82);
+  --header-accent: oklch(0.34 0.075 326);
+  --header-accent-soft: oklch(0.95 0.045 82);
+  --header-line: oklch(0.9 0.018 82);
   min-height: 100vh;
   overflow: clip;
   color: var(--public-ink);
-  background: var(--public-canvas);
+  background: var(--header-canvas);
   font-family: var(--font-urbanist), "Avenir Next", sans-serif;
 }
 
@@ -42,7 +46,7 @@
 .skip-link:focus { transform: translateY(0); }
 
 .public-header {
-  min-height: 4.5rem;
+  min-height: 4.25rem;
   position: sticky;
   top: 0;
   z-index: var(--z-header);
@@ -53,7 +57,7 @@
 
 .public-header-inner {
   width: min(calc(100% - var(--public-page-inset)), var(--content-width));
-  min-height: 4.5rem;
+  min-height: 4.25rem;
   margin-inline: auto;
   position: relative;
   display: grid;
@@ -78,7 +82,7 @@
   grid-area: brand;
   min-height: 2.75rem;
   justify-self: start;
-  color: var(--public-ink);
+  color: var(--header-accent);
 }
 
 .public-header .brand-mark {
@@ -98,7 +102,7 @@
   letter-spacing: -0.04em;
 }
 
-.public-header .brand-word { font-size: 1.12rem; letter-spacing: -0.04em; }
+.public-header .brand-word { font-size: 1.16rem; letter-spacing: -0.04em; }
 .public-footer .brand-mark { display: none; }
 .public-footer .brand-word { font-size: 1.35rem; }
 
@@ -110,19 +114,19 @@
 
 .public-navigation a {
   min-height: 2.75rem;
-  padding: 0.4rem 0.7rem;
+  padding: 0.35rem 0.6rem;
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   border: 1px solid transparent;
-  border-radius: 0.65rem;
+  border-radius: 0.55rem;
   color: #252a31;
   background: transparent;
   box-shadow: none;
-  font-size: 0.82rem;
-  font-weight: 750;
-  transition: color 160ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  font-size: 0.8rem;
+  font-weight: 720;
+  transition: color 160ms ease, background 160ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .public-navigation a:hover,
@@ -135,22 +139,22 @@
 
 .public-navigation .public-surprise-link {
   border-color: transparent;
-  color: #39404a;
+  color: var(--header-accent);
   background: transparent;
 }
 
 .public-navigation .public-surprise-link:hover,
 .public-navigation .public-surprise-link:focus-visible {
   border-color: transparent;
-  color: var(--public-ink-strong);
-  background: #f3f4f6;
+  color: var(--header-accent);
+  background: var(--header-accent-soft);
 }
 
 .public-surprise-link:active { transform: translateY(0.03rem) scale(0.985); }
 
 .public-surprise-icon {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1.25rem;
+  height: 1.25rem;
   display: grid;
   place-items: center;
   flex: 0 0 auto;
@@ -173,15 +177,15 @@
   justify-self: end;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
 .inline-app-search {
-  width: clamp(16rem, 24vw, 22rem);
+  width: clamp(17rem, 24vw, 21rem);
   position: relative;
 }
 
-.inline-app-search:focus-within { width: clamp(16rem, 24vw, 22rem); }
+.inline-app-search:focus-within { width: clamp(17rem, 24vw, 21rem); }
 
 .header-search-field {
   width: 100%;
@@ -190,17 +194,17 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid #d8dce4;
-  border-radius: 0.75rem;
-  color: #596271;
-  background: var(--public-surface-soft);
+  border: 1px solid var(--header-line);
+  border-radius: 0.65rem;
+  color: var(--header-accent);
+  background: var(--public-canvas);
   transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
 .header-search-field:focus-within {
-  border-color: #9ab5ff;
+  border-color: oklch(0.68 0.14 78);
   background: var(--public-canvas);
-  box-shadow: 0 0 0 0.22rem rgb(20 87 255 / 0.22);
+  box-shadow: 0 0 0 0.18rem oklch(0.76 0.12 78 / 0.2);
 }
 
 .header-search-field input {
@@ -210,10 +214,10 @@
   outline: 0;
   color: var(--public-ink-strong);
   background: transparent;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
 }
 
-.header-search-field input::placeholder { color: #68717e; }
+.header-search-field input::placeholder { color: #68717d; }
 .header-search-field input::-webkit-search-cancel-button { display: none; }
 
 .search-trigger {
@@ -225,7 +229,7 @@
   flex: 0 0 auto;
   border: 0;
   border-radius: 0.4rem;
-  color: inherit;
+  color: var(--header-accent);
   background: transparent;
   cursor: pointer;
 }
