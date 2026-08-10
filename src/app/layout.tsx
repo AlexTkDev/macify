@@ -71,7 +71,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Script
           data-domain="macify.app"
           data-website-id="dfid_Moyh2sl29BQAIQp2E4BmV"
-          src="https://datafa.st/js/script.js"
+          src="/js/script.js"
           strategy="afterInteractive"
         />
       </head>
