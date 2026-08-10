@@ -4,7 +4,7 @@
     gap: 2.5rem;
   }
 
-  .directory-app-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .directory-app-grid { gap-inline: 2.25rem; }
 
   .application-hero {
     min-height: 0;
@@ -83,8 +83,7 @@
   .home-hero-copy { padding-top: 1rem; }
   .home-hero h1 { font-size: clamp(3.35rem, 13.4cqi, 6.8rem); line-height: 0.94; }
   .home-feature-stage { width: min(100%, 42rem); }
-  .directory-app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem 3.6rem; }
-
+  .directory-app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .related-application-shelf { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
   .dashboard-detail-header { align-items: flex-start; flex-direction: column; }

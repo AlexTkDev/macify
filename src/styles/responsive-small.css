@@ -123,10 +123,11 @@
     white-space: nowrap;
   }
   .surprise-button svg { width: 1.2rem; height: 1.2rem; }
-  .directory-app-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .directory-app-row { gap: 0.72rem; }
-  .directory-app-copy strong { font-size: 1.05rem; }
-  .directory-app-copy > span { font-size: 0.82rem; }
+  .directory-app-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .directory-app-identity { margin-top: 0.78rem; }
 
   .application-page { padding: 1rem 0 4rem; }
   .application-hero { min-height: 0; }

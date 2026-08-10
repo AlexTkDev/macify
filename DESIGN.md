@@ -1,6 +1,6 @@
 ---
-name: Macify playful sample tray
-description: A bright, tactile directory that treats excellent Mac apps like collectible design objects.
+name: Macify playful app directory
+description: A bright, precise directory that lets authentic Mac app artwork lead a clean browsing experience.
 ---
 
 # North star
@@ -15,7 +15,7 @@ Macify is a playful studio table, not an App Store clone and not a SaaS card gri
 - App icons keep their authentic artwork, 22% corner radius, and one soft depth shadow.
 - Content surfaces use gently rounded corners. The sticky public header uses one clean full-width utility-bar system at every size: brand left, with Surprise Me immediately beside search on the right; the same grouped controls collapse to icons on smaller screens, with search expanding within the header. Buttons remain compact rectangles and tags remain text with small colored shapes.
 - Public pages avoid card chrome. Hierarchy comes from scale, color fields, whitespace, and artwork.
-- Detail-page previews and screenshots use their intrinsic dimensions with `width: 100%` and `height: auto`. Directory previews intentionally use one consistent wide aspect ratio with a centered cover crop so mixed source artwork forms a stable, scannable wall.
+- Detail-page previews and screenshots use their intrinsic dimensions with `width: 100%` and `height: auto`. Directory entries lead with a large, consistently cropped wide preview, followed by the authentic application icon, name, and concise two-line description.
 - Motion is reserved for the Surprise refresh and direct hover feedback. Reduced-motion preferences remove both.
 - The header’s Surprise Me control stays monochrome and unfilled, using only a restrained shuffle rotation on direct interaction; at narrow widths it reduces to the icon without losing its accessible label.
 
@@ -23,7 +23,7 @@ Macify is a playful studio table, not an App Store clone and not a SaaS card gri
 
 The hero is a two-column composition on desktop. The left side carries “Mac apps worth making room for.” with three real app icons woven into the words. Its type scale responds to the actual width of the copy column, with explicit minimum and maximum sizes; each authored row stays intact, including “Mac [icon] apps” on the first row. The right side carries one naturally proportioned preview and a compact overlapping identity label. The supporting sentence, “A curated list of the most useful macOS applications.”, remains a separate paragraph with its own scale.
 
-The second fold shows 30 apps in an adaptive sample wall. Color fields create the visual rhythm; each sample still exposes its name. Narrow layouts reduce the column count until the wall becomes a clean single-column scan of preview, name, and short tagline. “Surprise me” is the only secondary action and opens one random published application.
+The second fold shows 30 apps in a flat, surface-free preview directory. Each entry leads with one large wide preview or OG-style image, followed by its authentic application icon, name, and concise two-line tagline. It uses no more than three columns on wide layouts, two on tablets, and one on phones. Category, pricing, badges, and other metadata stay off this quick-browsing surface. Direct hover feedback remains restrained. “Surprise me” is the only secondary action and opens one random published application.
 
 # Application page
 
@@ -31,7 +31,7 @@ The application hero is a centered two-line editorial composition. “Meet”, t
 
 The centered preview follows the identity and keeps its natural aspect ratio. The editorial body is a single, left-aligned article column with ordinary paragraph typography. The redundant tagline heading and generic or app-named “What it does” section are removed at render time. “What you can do” is a normal heading followed by a standard bulleted list; “Where it fits” is the next heading followed by body copy. Related apps form a loose icon shelf instead of repeating homepage tiles.
 
-Tags are clickable discovery links. Their destination pages use one oversized tag-led heading followed by the homepage preview wall, preserving the same color rhythm, natural app imagery, and direct hover feedback without introducing a second filtering interface.
+Tags are clickable discovery links. Their destination pages use one oversized tag-led heading followed by the homepage flat app directory, preserving the same icon-led rhythm and direct hover feedback without introducing a second filtering interface.
 
 # Responsive behavior
 
@@ -46,7 +46,7 @@ Public page gutters use one shared responsive inset. Laptop-width desktop layout
 | Oversized hero language | Semantic HTML + CSS | Three explicit lines with icon interruptions |
 | Application icons | Existing project media | Authentic artwork, never generated substitutes |
 | Featured and detail previews | Existing project media | Natural ratio and no crop |
-| Sample-wall color rhythm | CSS | Adaptive directory grid with a consistent cropped preview ratio |
+| Flat preview directory | Semantic HTML + CSS | Three, two, and one-column wide-image index without card surfaces |
 | Detail identity underline | CSS geometry | Restrained amber hand-drawn accent beneath the tagline |
 | Search | Existing React component + API | Inline results with icon, name, tagline |
 | Surprise interaction | Route + CSS | Open one random published application with restrained direct hover feedback |
