@@ -48,9 +48,7 @@
   z-index: var(--z-header);
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid var(--public-line-soft);
   background: var(--public-canvas);
-  box-shadow: 0 0.2rem 0.9rem rgb(21 31 49 / 0.035);
 }
 
 .public-header-inner {
@@ -59,8 +57,8 @@
   margin-inline: auto;
   position: relative;
   display: grid;
-  grid-template-areas: "brand navigation search";
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas: "brand controls";
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: clamp(1.25rem, 3vw, 3rem);
   color: var(--public-ink);
@@ -105,8 +103,6 @@
 .public-footer .brand-word { font-size: 1.35rem; }
 
 .public-navigation {
-  grid-area: navigation;
-  justify-self: center;
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -138,13 +134,17 @@
 }
 
 .public-navigation .public-surprise-link {
-  border-color: #d7e0fa;
-  color: #1748c8;
-  background: #f4f7ff;
+  border-color: transparent;
+  color: #39404a;
+  background: transparent;
 }
 
 .public-navigation .public-surprise-link:hover,
-.public-navigation .public-surprise-link:focus-visible { border-color: #adc1f6; background: #eaf0ff; }
+.public-navigation .public-surprise-link:focus-visible {
+  border-color: transparent;
+  color: var(--public-ink-strong);
+  background: #f3f4f6;
+}
 
 .public-surprise-link:active { transform: translateY(0.03rem) scale(0.985); }
 
@@ -157,7 +157,7 @@
   color: currentColor;
   background: transparent;
   box-shadow: none;
-  transform: rotate(-6deg);
+  transform: none;
   transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -165,14 +165,15 @@
 
 .public-surprise-link:hover .public-surprise-icon,
 .public-surprise-link:focus-visible .public-surprise-icon {
-  transform: rotate(14deg) scale(1.08);
+  transform: rotate(8deg);
 }
 
 .public-header-actions {
-  grid-area: search;
+  grid-area: controls;
   justify-self: end;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .inline-app-search {

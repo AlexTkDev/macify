@@ -24,8 +24,8 @@
     min-height: 4.1rem;
     margin: 0 auto;
     padding: 0;
-    grid-template-areas: "brand navigation search";
-    grid-template-columns: auto minmax(0, 1fr) 2.75rem;
+    grid-template-areas: "brand controls";
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 0.5rem;
     border: 0;
     border-radius: 0;
@@ -35,11 +35,9 @@
   .public-header .brand-word { color: #080a0d; font-size: 1rem; }
   .public-header .brand-mark { width: 1.85rem; height: 1.85rem; }
   .public-navigation {
-    justify-self: end;
     height: 2.75rem;
     border: 0;
   }
-  .public-navigation .public-browse-link { display: none; }
   .header-search-field { border-radius: 0.65rem; }
   .header-search-field:focus-within {
     border-color: #8caaff;
@@ -63,7 +61,7 @@
   .section-intro { align-items: flex-start; flex-direction: column; }
 
   .home-hero { padding: 3.1rem 0 5.25rem; gap: 2.7rem; }
-  .home-hero h1 { font-size: clamp(2.5rem, 12vw, 2.8rem); line-height: 1; }
+  .home-hero h1 { font-size: clamp(2.25rem, 12.4cqi, 2.8rem); line-height: 1; }
   .home-title-icon { width: 0.98em; height: 0.98em; }
   .home-hero-intro { max-width: 100%; margin-top: 0.5rem; font-size: clamp(1.05rem, 5vw, 1.35rem); letter-spacing: 0; white-space: normal; }
   .home-feature-image { border-radius: 1rem; }
@@ -189,8 +187,4 @@
 
   .form-footer { align-items: stretch; flex-direction: column; }
   .form-footer > div { display: grid; grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 24rem) {
-  .public-header .brand-word { display: none; }
 }

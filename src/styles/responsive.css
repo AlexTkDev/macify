@@ -25,17 +25,15 @@
 @media (max-width: 52rem) {
   .public-header {
     min-height: 4.25rem;
-    border-bottom: 1px solid var(--public-line-soft);
     background: var(--public-canvas);
-    box-shadow: 0 0.2rem 0.9rem rgb(21 31 49 / 0.035);
   }
   .public-header-inner {
     width: min(calc(100% - 2rem), var(--content-width));
     max-width: none;
     min-height: 4.25rem;
     margin: 0 auto;
-    grid-template-areas: "brand navigation search";
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "brand controls";
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 0.75rem;
     padding: 0;
     border: 0;
@@ -43,12 +41,11 @@
     background: transparent;
     box-shadow: none;
   }
-  .public-navigation { justify-self: center; display: flex; }
+  .public-navigation { display: flex; }
   .public-navigation a {
     min-height: 2.75rem;
     justify-content: center;
   }
-  .public-navigation .public-browse-link { padding-inline: 0.55rem; }
   .public-navigation .public-surprise-link { width: 2.75rem; padding: 0.25rem; }
   .public-surprise-label { width: 1px; height: 1px; position: absolute; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
   .public-surprise-icon { width: 1.45rem; height: 1.45rem; }
@@ -60,8 +57,9 @@
     min-height: 2.75rem;
     padding-inline: 0;
     overflow: hidden;
+    border-color: transparent;
     border-radius: 0.7rem;
-    background: #f7f8fa;
+    background: transparent;
   }
   .search-trigger { width: 2.75rem; height: 2.75rem; }
   .inline-app-search:focus-within .header-search-field { padding-inline-end: 0.75rem; }

@@ -9,14 +9,13 @@ export function PublicHeader() {
     <header className="public-header">
       <div className="public-header-inner">
         <MacifyLogo showMark={false} />
-        <nav className="public-navigation" aria-label="Primary navigation">
-          <Link className="public-browse-link" href="/#all-apps">Browse apps</Link>
-          <a className="public-surprise-link" href="/surprise">
-            <span className="public-surprise-icon" aria-hidden="true"><Shuffle size={15} /></span>
-            <span className="public-surprise-label">Surprise me</span>
-          </a>
-        </nav>
         <div className="public-header-actions">
+          <nav className="public-navigation" aria-label="Primary navigation">
+            <a className="public-surprise-link" href="/surprise">
+              <span className="public-surprise-icon" aria-hidden="true"><Shuffle size={15} /></span>
+              <span className="public-surprise-label">Surprise me</span>
+            </a>
+          </nav>
           <InlineAppSearch />
         </div>
       </div>
