@@ -51,16 +51,23 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Macify",
-    title: "Macify — Useful macOS apps, carefully selected",
-    description:
-      "Discover useful, beautifully made Mac applications with clear pricing and practical editorial context.",
+    title: "Mac apps worth making room for. | Macify",
+    description: "A curated list of the most useful macOS applications.",
     url: "https://macify.app",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Mac apps worth making room for. — Macify",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Macify — Useful macOS apps, carefully selected",
-    description:
-      "Discover useful, beautifully made Mac applications with clear pricing and practical editorial context.",
+    title: "Mac apps worth making room for. | Macify",
+    description: "A curated list of the most useful macOS applications.",
+    images: ["/opengraph-image.png"],
   },
 };
 

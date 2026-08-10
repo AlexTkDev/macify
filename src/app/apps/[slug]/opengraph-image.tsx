@@ -1,10 +1,18 @@
 import { ImageResponse } from "next/og";
 import { notFound } from "next/navigation";
+import { mediaUrl } from "@/components/public-app-card";
 import { getPublishedApplicationBySlug } from "@/lib/apps-data";
 
-export const alt = "Macify application share image";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+export const dynamic = "force-dynamic";
+
+function titleFontSize(title: string) {
+  if (title.length > 180) return 20;
+  if (title.length > 120) return 24;
+  if (title.length > 80) return 30;
+  return 42;
+}
 
 export default async function OpenGraphImage({
   params,
@@ -14,46 +22,65 @@ export default async function OpenGraphImage({
   const { slug } = await params;
   const application = await getPublishedApplicationBySlug(slug);
   if (!application) notFound();
+  const preview = application.media.find(({ role }) => role === "preview_image");
+  const title = `${application.name} — ${application.tagline} | Macify`;
+  const previewSource = preview
+    ? new URL(`${mediaUrl(preview.storageKey)}?width=1200`, "https://macify.app").toString()
+    : null;
 
   return new ImageResponse(
     <div
       style={{
-        alignItems: "stretch",
-        background: "#f3f5f6",
-        color: "#171b1e",
+        background: "#ffffff",
+        color: "#20111f",
         display: "flex",
+        flexDirection: "column",
         height: "100%",
-        padding: "48px",
         width: "100%",
       }}
     >
       <div
         style={{
-          border: "2px solid #c4cbd0",
-          borderRadius: 28,
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "52px 56px",
+          alignItems: "center",
+          flexShrink: 0,
+          height: 132,
+          padding: "0 56px",
           width: "100%",
         }}
       >
-        <div style={{ alignItems: "center", display: "flex", fontSize: 30, fontWeight: 700, letterSpacing: "-0.03em" }}>
-          <span style={{ alignItems: "center", background: "#171b1e", borderRadius: 14, color: "#ffffff", display: "flex", height: 48, justifyContent: "center", marginRight: 18, width: 48 }}>M</span>
-          Macify
+        <div
+          style={{
+            fontSize: titleFontSize(title),
+            fontWeight: 700,
+            letterSpacing: "-0.035em",
+            lineHeight: 1,
+            width: "100%",
+          }}
+        >
+          {title}
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ color: "#42647d", fontSize: 24, letterSpacing: "0.08em", marginBottom: 18, textTransform: "uppercase" }}>
-            Useful macOS application
-          </div>
-          <div style={{ fontSize: application.name.length > 24 ? 72 : 92, fontWeight: 750, letterSpacing: "-0.055em", lineHeight: 0.94 }}>
-            {application.name}
-          </div>
-        </div>
-        <div style={{ alignItems: "center", display: "flex", fontSize: 24, justifyContent: "space-between" }}>
-          <span style={{ color: "#69747c" }}>{application.tagline}</span>
-          <span style={{ marginLeft: 36, whiteSpace: "nowrap" }}>macify.app</span>
-        </div>
+      </div>
+      <div
+        style={{
+          alignItems: "center",
+          background: "#f6f4f5",
+          display: "flex",
+          flex: 1,
+          justifyContent: "center",
+          overflow: "hidden",
+          width: "100%",
+        }}
+      >
+        {previewSource ? (
+          <img
+            alt=""
+            height={498}
+            src={previewSource}
+            style={{ height: "100%", objectFit: "contain", width: "100%" }}
+            width={1200}
+          />
+        ) : null}
       </div>
     </div>,
     size,

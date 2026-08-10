@@ -28,7 +28,7 @@ Source status is retained internally. Public pages display an Open source fact o
 
 Detailed descriptions are researched and written according to `EDITORIAL.md`, then stored as plain Markdown. The dashboard intentionally provides a normal textarea without a rich-text editor, formatting toolbar, or preview. Public application pages render the Markdown as semantic HTML with GitHub Flavored Markdown support for headings, lists, links, emphasis, tables, task lists, strikethrough, blockquotes, and code. Raw HTML from Markdown is never executed.
 
-Application media consists of one icon, one main preview image, and multiple screenshots stored in Cloudflare R2 and referenced from the database. The preview image is the wide editorial visual shown within the public application page; it is not used as the social-sharing image. Media can be attached during initial creation or later editing, and its R2 paths use the permanent application ID generated during submission. Audio is outside the product scope.
+Application media consists of one icon, one main preview image, and multiple screenshots stored in Cloudflare R2 and referenced from the database. The preview image is the wide editorial visual shown within the public application page and within that application’s generated social-sharing image. Media can be attached during initial creation or later editing, and its R2 paths use the permanent application ID generated during submission. Audio is outside the product scope.
 
 Every uploaded or remotely imported image passes through Cloudflare Images before it is written to R2. The pipeline preserves the original pixel dimensions, removes unnecessary encoding overhead, and prefers high-quality WebP when that produces a smaller file. If conversion would increase the byte size, Macify keeps the original. D1 records the delivered format, optimized byte size, width, height, and checksum. Existing unmeasured assets can be optimized safely in small batches from the media dashboard.
 
@@ -36,7 +36,7 @@ Each application uses one to three focused tags for classification and discovery
 
 Editors can provide media as a local file or a public HTTPS image URL. URL imports are downloaded, validated, copied into R2, and recorded with their original source URL; public pages never hotlink third-party media. Remote fetches reject local or private destinations, unsafe redirects, unsupported formats, mismatched file signatures, and files over the editorial size limit.
 
-Every public application page has a generated Macify social-sharing card containing that application’s name. This consistent card is used for Open Graph and X/Twitter metadata independently of the uploaded preview image.
+Every public application page has a generated Macify social-sharing card. It shows the app’s uncropped preview image and the exact line `App Name — tagline | Macify`, with the app’s own name and tagline substituted. It is used for Open Graph and X/Twitter metadata.
 
 Related-application links are mutual: connecting application A to application B also makes A available from B. Editors choose these relationships explicitly, while the public page only displays published related records.
 
