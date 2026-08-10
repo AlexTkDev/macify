@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caprasimo, Urbanist } from "next/font/google";
+import { Caprasimo, Caveat, Urbanist } from "next/font/google";
 import "./globals.css";
 import "../styles/tokens.css";
 import "../styles/base.css";
@@ -31,6 +31,12 @@ const caprasimo = Caprasimo({
   weight: "400",
 });
 
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
+  weight: "500",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://macify.app"),
   title: {
@@ -60,7 +66,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html data-scroll-behavior="smooth" lang="en">
-      <body className={`${urbanist.variable} ${caprasimo.variable}`}>{children}</body>
+      <body className={`${urbanist.variable} ${caprasimo.variable} ${caveat.variable}`}>{children}</body>
     </html>
   );
 }

@@ -54,10 +54,11 @@ export function ApplicationDirectory({ applications }: { applications: Directory
       <div className="directory-heading">
         <h2 id="all-apps-title">Apps worth trying.</h2>
         <a
+          aria-label="Open a random application"
           className="surprise-button"
           href="/surprise"
         >
-          Surprise me
+          <span className="surprise-button-label">Surprise me</span>
           <Shuffle aria-hidden="true" size={17} />
         </a>
       </div>

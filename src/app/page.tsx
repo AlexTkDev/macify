@@ -6,11 +6,11 @@ import { getHomepageDirectoryData } from "@/lib/apps-data";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const { applications } = await getHomepageDirectoryData();
+  const { applications, heroApplications } = await getHomepageDirectoryData();
   return (
     <PublicShell>
       <main id="main-content">
-        <HomeHero applications={applications} />
+        <HomeHero applications={heroApplications} />
         <ApplicationDirectory applications={applications} />
       </main>
     </PublicShell>

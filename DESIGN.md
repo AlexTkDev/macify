@@ -13,11 +13,11 @@ Macify is a playful studio table, not an App Store clone and not a SaaS card gri
 
 - The homepage hero uses Caprasimo for a chunky, friendly display voice with soft, playful character. Urbanist remains the body and interface family. Display tracking is never tighter than `-0.04em`.
 - App icons keep their authentic artwork, 22% corner radius, and one soft depth shadow.
-- Content surfaces use gently rounded corners. The compact persistent public header and its search field use a deliberate pill silhouette; buttons remain compact rectangles and tags remain text with small colored shapes.
+- Content surfaces use gently rounded corners. The sticky public header uses one clean full-width utility-bar system at every size: brand left, with Surprise Me immediately beside search on the right; the same grouped controls collapse to icons on smaller screens, with search expanding within the header. Buttons remain compact rectangles and tags remain text with small colored shapes.
 - Public pages avoid card chrome. Hierarchy comes from scale, color fields, whitespace, and artwork.
 - Detail-page previews and screenshots use their intrinsic dimensions with `width: 100%` and `height: auto`. Directory previews intentionally use one consistent wide aspect ratio with a centered cover crop so mixed source artwork forms a stable, scannable wall.
 - Motion is reserved for the Surprise refresh and direct hover feedback. Reduced-motion preferences remove both.
-- The persistent Surprise Me control stays monochrome and unfilled, using only a restrained shuffle rotation on direct interaction; at narrow widths it reduces to the icon without losing its accessible label.
+- The header’s Surprise Me control stays monochrome and unfilled, using only a restrained shuffle rotation on direct interaction; at narrow widths it reduces to the icon without losing its accessible label.
 
 # Homepage
 

@@ -1,4 +1,4 @@
-import { and, asc, count, eq, isNull, sql, type SQL } from "drizzle-orm";
+import { and, asc, count, eq, inArray, isNull, sql, type SQL } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { appTags, apps, tags } from "@/db/schema";
 import {
@@ -30,12 +30,23 @@ function searchConditions(filters?: DirectorySearchFilters) {
 
 export async function getHomepageDirectoryData(filters?: DirectorySearchFilters) {
   const database = await getDatabase();
-  const records = await database
-    .select(cardFields)
-    .from(apps)
-    .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
-    .orderBy(sql`random()`)
-    .limit(30);
+  const heroSlugs = ["dayflow", "cleanshot-x", "swish", "droppy"];
+  const [records, heroRecords] = await Promise.all([
+    database
+      .select(cardFields)
+      .from(apps)
+      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
+      .orderBy(sql`random()`)
+      .limit(30),
+    database
+      .select(cardFields)
+      .from(apps)
+      .where(and(
+        eq(apps.status, "published"),
+        isNull(apps.deletedAt),
+        inArray(apps.slug, heroSlugs),
+      )),
+  ]);
 
   const page = filters?.page ?? 1;
   const pageSize = 24;
@@ -54,10 +65,15 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters)
       .where(and(...conditions)),
   ]) : [[], [{ total: 0 }]];
 
-  const appIds = [...new Set([...records, ...searchRecords].map(({ id }) => id))];
+  const appIds = [...new Set([...records, ...heroRecords, ...searchRecords].map(({ id }) => id))];
   const { icons, previews } = await getCardMedia(appIds);
   return {
     applications: records.map((record) => ({
+      ...record,
+      icon: icons.get(record.id) ?? null,
+      preview: previews.get(record.id) ?? null,
+    })),
+    heroApplications: heroRecords.map((record) => ({
       ...record,
       icon: icons.get(record.id) ?? null,
       preview: previews.get(record.id) ?? null,
