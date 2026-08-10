@@ -13,10 +13,15 @@ type DataFastRealtimeResponse = {
   data?: Array<{ visitors?: number }>;
 };
 
+type DataFastEnv = CloudflareEnv & {
+  DATAFAST_API_KEY?: string;
+};
+
 export async function GET() {
   const { env } = await getCloudflareContext({ async: true });
+  const values = env as DataFastEnv;
 
-  if (!env.DATAFAST_API_KEY) {
+  if (!values.DATAFAST_API_KEY) {
     return Response.json({ error: "Realtime visitors are unavailable." }, { status: 503, headers: noStoreHeaders });
   }
 
@@ -25,7 +30,7 @@ export async function GET() {
       cache: "no-store",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${env.DATAFAST_API_KEY}`,
+        Authorization: `Bearer ${values.DATAFAST_API_KEY}`,
         "Cache-Control": "no-cache",
       },
     });
