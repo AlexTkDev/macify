@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Shuffle } from "lucide-react";
 import { InlineAppSearch } from "@/components/inline-app-search";
+import { LiveVisitorCount } from "@/components/live-visitor-count";
 import { MacifyLogo } from "@/components/macify-logo";
 
 export function PublicHeader() {
@@ -10,8 +11,7 @@ export function PublicHeader() {
     <header className="public-header">
       <div className="public-header-inner">
         <div className="public-brand-pill">
-          {/* Future: replace this Macify placeholder with a DataFast-powered live current-visitors indicator. Keep Macify visible until that analytics integration is ready. */}
-          <MacifyLogo showMark={false} />
+          <LiveVisitorCount />
         </div>
         <nav className="public-navigation" aria-label="Primary navigation">
           <Link className="public-home-link" href="/">Home</Link>

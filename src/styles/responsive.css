@@ -42,7 +42,7 @@
     background: transparent;
     box-shadow: none;
   }
-  .public-brand-pill { min-height: 3rem; padding-inline: 0.85rem; }
+  .public-brand-pill { min-height: 2.5rem; padding: 0.2rem 0.75rem; }
   .public-navigation { min-height: 3rem; display: flex; }
   .public-home-link,
   .public-blog-link { display: none !important; }
