@@ -44,6 +44,14 @@ Production code deployment is designed to run through Cloudflare Workers Builds 
 
 See [`OPERATIONS.md`](OPERATIONS.md) for the D1 backup and recovery runbook, production monitoring plan, and priorities for the remaining operational safeguards.
 
+## Project documentation
+
+- [`PRODUCT.md`](PRODUCT.md) defines the product scope and current behavior.
+- [`DESIGN.md`](DESIGN.md) defines the public visual direction and component grammar.
+- [`EDITORIAL.md`](EDITORIAL.md) defines application research, writing, and publication standards.
+- [`HOMEPAGE_CURATION.md`](HOMEPAGE_CURATION.md) defines the approved homepage pool, update procedure, and editorial decision log.
+- [`RELEASE.md`](RELEASE.md) defines proportional validation and deployment policy.
+
 ## Current status
 
 The local application includes the public directory, application and tag pages, inline search, editorial CRUD workflows, publication controls, tag and relationship management, R2 media ingestion, Cloudflare Images optimization, CSV/JSON imports and exports, generated social cards, sitemap generation, and robots rules.

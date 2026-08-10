@@ -106,11 +106,22 @@
 .directory-app-preview {
   width: 100%;
   aspect-ratio: 1200 / 630;
+  position: relative;
   display: block;
   contain: paint;
   overflow: hidden;
   border-radius: 0.75rem;
   background: #f0f2f5;
+}
+
+.directory-app-preview::after {
+  position: absolute;
+  inset: 0;
+  background: rgb(13 22 38 / 0.34);
+  content: "";
+  mix-blend-mode: overlay;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .directory-app-preview > img {
@@ -138,7 +149,27 @@
   gap: 0.9rem;
 }
 
-.directory-app-identity > .public-app-icon {
+.directory-app-identity-icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+
+.directory-app-identity-icon::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 22%;
+  background: rgb(13 22 38 / 0.34);
+  content: "";
+  mix-blend-mode: overlay;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.directory-app-identity-icon > .public-app-icon {
   width: 3.75rem;
   height: 3.75rem;
   box-shadow: 0 0.28rem 0.6rem rgb(var(--shadow-color) / 0.17), inset 0 0 0 1px rgb(255 255 255 / 0.38);
@@ -174,15 +205,18 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .directory-app-row:hover .directory-app-copy strong {
-    color: var(--play-blue);
-    text-decoration: underline;
-    text-decoration-thickness: 0.08em;
-    text-underline-offset: 0.16em;
+  .directory-app-preview::after,
+  .directory-app-identity-icon::after {
+    transition: opacity 180ms ease;
   }
+
+  .directory-app-row:hover .directory-app-preview::after,
+  .directory-app-row:hover .directory-app-identity-icon::after { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .directory-app-preview::after,
+  .directory-app-identity-icon::after,
   .surprise-button svg { transition: none; }
   .surprise-button:hover svg { transform: none; }
 }

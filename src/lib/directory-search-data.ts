@@ -7,6 +7,41 @@ import {
   type DirectorySearchFilters,
 } from "@/lib/directory-shared";
 
+const HOMEPAGE_CURATED_SLUGS = [
+  "clop",
+  "lunar",
+  "dia",
+  "anybox",
+  "balance",
+  "wallspace",
+  "cleanshot-x",
+  "pieoneer",
+  "droppy",
+  "iina",
+  "klack",
+  "antinote",
+  "orion",
+  "blip",
+  "monocle",
+  "lookaway",
+  "swish",
+  "alcove",
+  "proxyman",
+  "1password",
+  "wispr-flow",
+  "expenses",
+  "mimestream",
+  "xmind",
+  "raycast",
+  "sketch",
+  "compressx",
+  "dayflow",
+  "chronoid",
+  "bettertouchtool",
+  "daisydisk",
+  "session",
+];
+
 function searchConditions(filters?: DirectorySearchFilters) {
   const conditions: SQL[] = [eq(apps.status, "published"), isNull(apps.deletedAt)];
   if (filters?.query) {
@@ -35,7 +70,11 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters)
     database
       .select(cardFields)
       .from(apps)
-      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
+      .where(and(
+        eq(apps.status, "published"),
+        isNull(apps.deletedAt),
+        inArray(apps.slug, HOMEPAGE_CURATED_SLUGS),
+      ))
       .orderBy(sql`random()`)
       .limit(30),
     database

@@ -6,6 +6,10 @@ Every application description should help a reader decide whether the app belong
 
 Descriptions are stored as Markdown in the application's `description` field. Write at least 150 words, but do not impose a maximum. Stop when the reader has enough useful context to make a decision.
 
+## Homepage curation
+
+Homepage inclusion is a separate editorial decision from catalogue publication. Follow [`HOMEPAGE_CURATION.md`](HOMEPAGE_CURATION.md) when adding or removing applications from the approved homepage pool, validating required media, or recording a curation decision. Do not unpublish an otherwise valid catalogue record merely to remove it from the homepage.
+
 ## Required research
 
 Research every application independently before writing.

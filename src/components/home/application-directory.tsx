@@ -29,7 +29,9 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
             )}
           </span>
           <span className="directory-app-identity">
-            <PublicAppIcon app={app} decorative size={60} />
+            <span className="directory-app-identity-icon">
+              <PublicAppIcon app={app} decorative size={60} />
+            </span>
             <span className="directory-app-copy">
               <strong>{app.name}</strong>
               <span>{app.tagline}</span>
