@@ -35,9 +35,9 @@ export function PublicAppIcon({
       alt={decorative ? "" : (app.icon.altText ?? `${app.name} icon`)}
       className={className}
       height={size}
+      loading={priority ? undefined : "lazy"}
       priority={priority}
       src={mediaUrl(app.icon.storageKey)}
-      unoptimized
       width={size}
     />
   ) : (

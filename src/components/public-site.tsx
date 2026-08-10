@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Shuffle } from "lucide-react";
 import { InlineAppSearch } from "@/components/inline-app-search";
@@ -72,7 +73,16 @@ export function PublicShell({ children }: { children: ReactNode }) {
       <a className="skip-link" href="#main-content">Skip to content</a>
       <PublicHeader />
       <div className="public-page-content">{children}</div>
-      <div className="public-ending-backdrop" aria-hidden="true" />
+      <div className="public-ending-backdrop" aria-hidden="true">
+        <Image
+          alt=""
+          fill
+          loading="lazy"
+          sizes="100vw"
+          src="/footer-studio-desk.webp"
+          unoptimized
+        />
+      </div>
       <PublicFooter />
     </div>
   );

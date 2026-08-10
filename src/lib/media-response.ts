@@ -27,6 +27,14 @@ export async function serveMedia(
   visibility: "dashboard" | "published",
 ) {
   const key = segments.join("/");
+  const requestedWidthValue = new URL(request.url).searchParams.get("width");
+  const requestedWidth = requestedWidthValue === null ? null : Number(requestedWidthValue);
+  const transformWidth = requestedWidth !== null
+    && Number.isSafeInteger(requestedWidth)
+    && requestedWidth >= 32
+    && requestedWidth <= 3840
+      ? requestedWidth
+      : null;
 
   if (!key.startsWith("apps/") || key.length > 600) {
     return new Response("Not found", { status: 404 });
@@ -51,11 +59,38 @@ export async function serveMedia(
   }
 
   const { env } = getCloudflareContext();
-  const requestedRange = parseRangeHeader(request.headers.get("range"));
+  const requestedRange = transformWidth === null ? parseRangeHeader(request.headers.get("range")) : undefined;
   const object = requestedRange
     ? await env.MEDIA.get(key, { range: requestedRange })
     : await env.MEDIA.get(key);
   if (object === null) return new Response("Not found", { status: 404 });
+  let responseBody = object.body;
+
+  if (transformWidth !== null && object.httpMetadata?.contentType?.startsWith("image/") && env.IMAGES) {
+    const [transformBody, fallbackBody] = object.body.tee();
+    responseBody = fallbackBody;
+    try {
+      const transformed = await env.IMAGES
+        .input(transformBody)
+        .transform({ width: transformWidth, fit: "scale-down" })
+        .output({ format: "image/webp", quality: 85, anim: false });
+      const response = transformed.response();
+      const headers = new Headers(response.headers);
+      headers.set("Cache-Control", "public, max-age=31536000, s-maxage=31536000, immutable");
+      headers.set("X-Content-Type-Options", "nosniff");
+      headers.set("Content-Security-Policy", "default-src 'none'");
+      headers.set("Vary", "Accept");
+      await fallbackBody.cancel();
+      return new Response(response.body, { status: response.status, headers });
+    } catch (error) {
+      console.error(JSON.stringify({
+        event: "media.resize.failed",
+        key,
+        width: transformWidth,
+        message: error instanceof Error ? error.message : "Unknown image transformation error",
+      }));
+    }
+  }
 
   const headers = new Headers();
   const metadata = object.httpMetadata;
@@ -86,5 +121,5 @@ export async function serveMedia(
     headers.set("Content-Length", String(object.size));
   }
 
-  return new Response(object.body, { status, headers });
+  return new Response(responseBody, { status, headers });
 }

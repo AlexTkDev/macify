@@ -6,7 +6,7 @@ The homepage is an editorial selection, not a catalogue-wide listing. It should 
 
 ## Current behavior
 
-- The approved homepage pool contains 32 application slugs.
+- The approved homepage pool contains 30 application slugs.
 - Each homepage request randomly selects 30 applications from that pool.
 - An application must be published and not deleted before it can appear.
 - No application outside the approved pool may be used as a fallback.
@@ -45,4 +45,4 @@ When the approved pool contains more than 30 published applications, selection r
 | --- | --- |
 | 2026-08-10 | Replaced catalogue-wide homepage sampling with a curated pool of 34 applications. The homepage continued to select 30 entries randomly from the approved pool. MacWhisper was explicitly excluded, and the spoken name “Yax Mind” was resolved to Xmind. |
 | 2026-08-10 | Removed Dato and Cold Turkey Blocker from homepage eligibility. BetterTouchTool remained approved. The pool changed from 34 to 32 applications. |
-
+| 2026-08-10 | Removed IINA and CleanShot X from homepage eligibility. The spoken request “cleanse out X” was resolved to CleanShot X. Both catalogue records remained published. The pool changed from 32 to 30 applications. |

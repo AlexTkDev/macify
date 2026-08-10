@@ -390,10 +390,15 @@
   bottom: 0;
   left: 0;
   z-index: 0;
+  overflow: hidden;
   pointer-events: none;
-  background: url("/footer-studio-desk.webp") center / cover no-repeat;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 8%, #000 36%, #000 90%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, transparent 8%, #000 36%, #000 90%, transparent 100%);
+}
+
+.public-ending-backdrop > img {
+  object-fit: cover;
+  object-position: center;
 }
 
 .public-footer {

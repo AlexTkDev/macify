@@ -17,9 +17,9 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
               <Image
                 alt={app.preview.altText ?? `${app.name} preview`}
                 height={app.preview.height ?? 630}
+                loading="lazy"
                 sizes="(max-width: 608px) calc(100vw - 32px), (max-width: 832px) 46vw, 30vw"
                 src={mediaUrl(app.preview.storageKey)}
-                unoptimized
                 width={app.preview.width ?? 1200}
               />
             ) : (

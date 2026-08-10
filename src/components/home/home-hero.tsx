@@ -38,7 +38,7 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
       {featured && (
         <Link className="home-feature-stage" href={`/apps/${featured.slug}`} prefetch={false}>
           <div className="home-feature-caption">
-            <PublicAppIcon app={featured} decorative priority size={76} />
+            <PublicAppIcon app={featured} decorative size={76} />
             <span><strong>{featured.name}</strong><p>{featured.tagline}</p></span>
           </div>
           <div className="home-feature-image">
@@ -47,9 +47,9 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
                 alt=""
                 height={featured.preview.height ?? 900}
                 priority
+                fetchPriority="high"
                 sizes="(max-width: 900px) 100vw, 52vw"
                 src={mediaUrl(featured.preview.storageKey)}
-                unoptimized
                 width={featured.preview.width ?? 1600}
               />
             ) : <span>{featured.name}</span>}

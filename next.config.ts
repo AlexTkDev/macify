@@ -4,6 +4,10 @@ import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  images: {
+    loader: "custom",
+    loaderFile: "./src/lib/media-image-loader.ts",
+  },
   async rewrites() {
     return [
       {
