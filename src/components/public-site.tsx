@@ -8,14 +8,20 @@ export function PublicHeader() {
   return (
     <header className="public-header">
       <div className="public-header-inner">
-        <MacifyLogo showMark={false} />
+        <div className="public-brand-pill">
+          {/* Future: replace this Macify placeholder with a DataFast-powered live current-visitors indicator. Keep Macify visible until that analytics integration is ready. */}
+          <MacifyLogo showMark={false} />
+        </div>
+        <nav className="public-navigation" aria-label="Primary navigation">
+          <Link className="public-home-link" href="/">Home</Link>
+          <a className="public-surprise-link" href="/surprise">
+            <span className="public-surprise-icon" aria-hidden="true"><Shuffle size={15} /></span>
+            <span className="public-surprise-label">Surprise me</span>
+          </a>
+          <Link className="public-blog-link" href="/blog">Blog</Link>
+          <Link className="public-submit-link" href="/submit">Submit app</Link>
+        </nav>
         <div className="public-header-actions">
-          <nav className="public-navigation" aria-label="Primary navigation">
-            <a className="public-surprise-link" href="/surprise">
-              <span className="public-surprise-icon" aria-hidden="true"><Shuffle size={15} /></span>
-              <span className="public-surprise-label">Surprise me</span>
-            </a>
-          </nav>
           <InlineAppSearch />
         </div>
       </div>

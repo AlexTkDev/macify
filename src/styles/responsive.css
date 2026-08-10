@@ -24,44 +24,49 @@
 
 @media (max-width: 52rem) {
   .public-header {
-    min-height: 4.25rem;
-    background: var(--header-canvas);
+    min-height: 4.6rem;
+    padding: 0.55rem 0 0.25rem;
+    background: transparent;
   }
   .public-header-inner {
     width: min(calc(100% - 2rem), var(--content-width));
     max-width: none;
-    min-height: 4.25rem;
+    min-height: 3.2rem;
     margin: 0 auto;
-    grid-template-areas: "brand controls";
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.75rem;
+    grid-template-areas: "brand navigation controls";
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 0.5rem;
     padding: 0;
     border: 0;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
   }
-  .public-navigation { display: flex; }
+  .public-brand-pill { min-height: 3rem; padding-inline: 0.85rem; }
+  .public-navigation { min-height: 3rem; display: flex; }
+  .public-home-link,
+  .public-blog-link { display: none !important; }
   .public-navigation a {
     min-height: 2.75rem;
     justify-content: center;
   }
-  .public-navigation .public-surprise-link { width: 2.75rem; padding: 0.25rem; }
+  .public-navigation .public-surprise-link { width: 2.55rem; padding: 0.2rem; }
+  .public-navigation .public-submit-link { padding-inline: 0.8rem; }
   .public-surprise-label { width: 1px; height: 1px; position: absolute; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
-  .public-surprise-icon { width: 1.45rem; height: 1.45rem; }
+  .public-surprise-icon { width: 1.35rem; height: 1.35rem; display: grid; }
   .public-header .brand { min-height: 2.75rem; align-items: center; }
   .public-header-actions { justify-self: end; }
-  .inline-app-search { width: 2.75rem; }
+  .inline-app-search { width: 3rem; }
   .inline-app-search:focus-within { width: min(58vw, 16rem); }
   .header-search-field {
-    min-height: 2.75rem;
+    min-height: 3rem;
     padding-inline: 0;
     overflow: hidden;
-    border-color: transparent;
-    border-radius: 0.7rem;
-    background: transparent;
+    border-color: #e1e3e7;
+    border-radius: 999px;
+    background: var(--public-canvas);
   }
-  .search-trigger { width: 2.75rem; height: 2.75rem; }
+  .search-trigger { width: 3rem; height: 3rem; }
   .inline-app-search:focus-within .header-search-field { padding-inline-end: 0.75rem; }
   .header-search-field input { opacity: 0; }
   .inline-app-search:focus-within .header-search-field input { opacity: 1; }

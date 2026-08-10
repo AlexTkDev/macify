@@ -16,48 +16,53 @@
   .tag-page-header p { margin: 1.1rem 0 0 1.95rem; }
 
   .public-header {
-    min-height: 4rem;
+    min-height: 4.35rem;
+    padding: 0.45rem 0 0.2rem;
   }
   .public-header-inner {
     width: min(calc(100% - 2rem), var(--content-width));
     max-width: none;
-    min-height: 4rem;
+    min-height: 3rem;
     margin: 0 auto;
     padding: 0;
-    grid-template-areas: "brand controls";
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.5rem;
+    grid-template-areas: "brand navigation controls";
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 0.35rem;
     border: 0;
     border-radius: 0;
     box-shadow: none;
   }
+  .public-brand-pill { min-height: 2.85rem; padding: 0.2rem 0.7rem; }
   .public-header .brand { min-width: 0; padding: 0; }
-  .public-header .brand-word { color: #080a0d; font-size: 1rem; }
+  .public-header .brand-word { color: #080a0d; font-size: 0.95rem; }
   .public-header .brand-mark { width: 1.85rem; height: 1.85rem; }
   .public-navigation {
-    height: 2.75rem;
-    border: 0;
+    min-height: 2.85rem;
+    height: 2.85rem;
+    padding: 0.2rem;
   }
-  .header-search-field { border-radius: 0.65rem; }
+  .public-navigation .public-submit-link { min-height: 2.4rem; padding-inline: 0.65rem; font-size: 0.76rem; }
+  .public-navigation .public-surprise-link { min-height: 2.4rem; }
+  .header-search-field { min-height: 2.85rem; border-radius: 999px; }
   .header-search-field:focus-within {
     border-color: #8caaff;
     background: var(--public-canvas);
     box-shadow: 0 0 0 0.2rem rgb(20 87 255 / 0.16);
   }
 
-  .inline-app-search { width: 2.75rem; }
+  .inline-app-search { width: 2.85rem; }
   .inline-app-search:focus-within {
     width: 100%;
     position: absolute;
     inset-inline: 0;
-    top: 0.625rem;
+    top: 0.45rem;
     z-index: 2;
   }
 
   .public-footer { margin-top: 3rem; }
   .public-footer-links { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
   .public-footer-bottom { align-items: flex-start; flex-direction: column; }
-  .inline-search-panel { position: fixed; top: 4.05rem; right: 0.5rem; left: 0.5rem; width: auto; }
+  .inline-search-panel { position: fixed; top: 4.4rem; right: 0.5rem; left: 0.5rem; width: auto; }
   .section-intro { align-items: flex-start; flex-direction: column; }
 
   .home-hero { padding: 3.1rem 0 5.25rem; gap: 2.7rem; }
