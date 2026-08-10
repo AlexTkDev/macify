@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const realtimeVisitorsUrl = "https://datafa.st/api/widgets/6a7998cb222be2211b1b87b6/realtime-visitors";
+const realtimeVisitorsUrl = "/api/realtime-visitors";
 const refreshIntervalMs = 60_000;
 
 type RealtimeVisitorsResponse = {
@@ -10,14 +10,14 @@ type RealtimeVisitorsResponse = {
 };
 
 export function LiveVisitorCount() {
-  const [visitorCount, setVisitorCount] = useState(0);
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
 
   useEffect(() => {
     let active = true;
 
     async function refreshVisitorCount() {
       try {
-        const response = await fetch(realtimeVisitorsUrl, { cache: "no-store" });
+        const response = await fetch(realtimeVisitorsUrl, { cache: "no-store", credentials: "same-origin" });
         if (!response.ok) return;
 
         const data = await response.json() as RealtimeVisitorsResponse;
@@ -39,9 +39,9 @@ export function LiveVisitorCount() {
   }, []);
 
   return (
-    <span className="live-visitor-count" aria-label={`${visitorCount.toLocaleString()} people online now`} aria-live="polite">
+    <span className="live-visitor-count" aria-label={visitorCount === null ? "Loading people online now" : `${visitorCount.toLocaleString()} people online now`} aria-live="polite">
       <span className="live-visitor-status" aria-hidden="true" />
-      <strong>{visitorCount.toLocaleString()}</strong>
+      <strong>{visitorCount === null ? "–" : visitorCount.toLocaleString()}</strong>
       <span>online</span>
     </span>
   );
