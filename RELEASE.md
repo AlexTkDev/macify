@@ -2,6 +2,23 @@
 
 Macify uses proportional release checks. The amount of validation should match the risk of the change rather than forcing every edit through the same process.
 
+## GitHub-driven production deployment
+
+The intended production path is Cloudflare Workers Builds connected to `Beingpax/macify`:
+
+- Existing Worker: `macify`
+- Production branch: `main`
+- Root directory: `/`
+- Build command: `npm run ci:check`
+- Deploy command: `npm run deploy`
+- Non-production branch builds: disabled initially
+
+Once the connection is active, merging or directly pushing to `main` authorizes and triggers a production deployment. Do not push to `main` until the change has the required approval and validation. Feature branches and pull requests remain review surfaces and must not deploy production.
+
+Connect the existing Worker in Cloudflare under **Workers & Pages → macify → Settings → Builds → Connect**. Authorize the GitHub account, select `Beingpax/macify`, enter the settings above, and save. Cloudflare creates and retains the build token; runtime secrets remain configured on the Worker and must not be copied into GitHub.
+
+After connecting, merge a harmless documentation-only commit to `main`, confirm a successful build in the Worker’s build history, and verify the production URL. Only then treat GitHub as the authoritative deployment path. Keep `npm run deploy` available for an explicitly approved emergency deployment or rollback.
+
 ## Low-risk direct production changes
 
 An isolated change may skip staging and deploy directly to production when all of the following are true:
@@ -15,7 +32,7 @@ For these changes, use lightweight validation only:
 
 1. Inspect the focused diff.
 2. Run the narrow relevant check, normally `npm run typecheck`, `npm run lint`, or a CSS/UI detector when applicable. Skip checks that cannot exercise the changed surface.
-3. Deploy with `npm run deploy` after approval.
+3. Merge the approved change to `main` for automatic deployment, or use `npm run deploy` only for an explicitly approved manual release.
 4. Verify the affected production route and asset once.
 
 A small CSS or copy adjustment does not require a staging deployment, exhaustive route audit, catalogue synchronization, full regression suite, or repeated production checks unless the change reveals a wider problem.
@@ -37,7 +54,7 @@ The normal sequence is:
 2. Back up remote data before destructive or replacement operations.
 3. Deploy to staging with `npm run deploy:staging`.
 4. Verify only the relevant staging workflows; use exhaustive audits for release-wide or data-wide changes.
-5. Deploy to production with `npm run deploy` after explicit approval.
+5. Merge the approved change to `main` for automatic production deployment. Use `npm run deploy` only when a manual release is explicitly required.
 6. Verify the affected production workflows and retain rollback information.
 
 ## Editorial content

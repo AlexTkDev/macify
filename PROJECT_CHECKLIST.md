@@ -157,6 +157,8 @@ Macify.app is a curated directory of useful macOS applications. This checklist r
 
 - [x] TypeScript checks
 - [x] ESLint checks
+- [x] Document Cloudflare Workers Builds settings for GitHub-driven production deployment
+- [ ] Connect the existing `macify` Worker to `Beingpax/macify` and verify a `main` branch deployment
 - [x] Production Next.js build verification
 - [x] Drizzle migration consistency checks
 - [x] Explicit R2 failure cleanup in write operations

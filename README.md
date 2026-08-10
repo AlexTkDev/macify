@@ -40,6 +40,8 @@ See [`migrations/README.md`](migrations/README.md) before changing the database 
 
 See [`RELEASE.md`](RELEASE.md) before deploying. Macify uses proportional validation: isolated, reversible CSS or copy changes may deploy directly to production after lightweight checks and approval, while behavioral, data, authentication, infrastructure, or broad shared-interface changes must pass through staging.
 
+Production code deployment is designed to run through Cloudflare Workers Builds after the existing `macify` Worker is connected to the GitHub repository. A merge or direct push to `main` runs `npm run ci:check`, then `npm run deploy`; feature branches and pull requests do not change production. Until that dashboard connection is completed and verified, deployment remains manual.
+
 See [`OPERATIONS.md`](OPERATIONS.md) for the D1 backup and recovery runbook, production monitoring plan, and priorities for the remaining operational safeguards.
 
 ## Current status

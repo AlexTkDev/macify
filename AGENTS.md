@@ -6,6 +6,8 @@ Macify.app is a curated directory of useful macOS applications. Read `PRODUCT.md
 
 Read `RELEASE.md` before any deployment. Apply its proportional release policy instead of automatically sending every change through staging.
 
+After Cloudflare Workers Builds is connected, treat a merge or direct push to `main` as a production deployment action. Never push to `main` without explicit production approval. Use feature branches and pull requests for ordinary work; do not run a separate local production deploy after a successful GitHub-triggered deployment.
+
 Phase 1 includes the public directory, editorial dashboard, D1 schema, R2 media pipeline, imports and exports, search, and technical SEO. Public visitor accounts, saved apps, payments, and subscriptions belong to Phase 2 unless the user explicitly changes the scope. The internal dashboard uses isolated single-administrator authentication; preserve server-side authorization on every dashboard page, route handler, and mutation.
 
 ## Platform
