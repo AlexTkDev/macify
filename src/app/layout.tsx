@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Caprasimo, Caveat, Urbanist } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import "../styles/tokens.css";
 import "../styles/base.css";
@@ -66,6 +67,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html data-scroll-behavior="smooth" lang="en">
+      <head>
+        <Script
+          data-domain="macify.app"
+          data-website-id="dfid_Moyh2sl29BQAIQp2E4BmV"
+          src="https://datafa.st/js/script.js"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className={`${urbanist.variable} ${caprasimo.variable} ${caveat.variable}`}>{children}</body>
     </html>
   );
