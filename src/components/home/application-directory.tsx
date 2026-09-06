@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Shuffle } from "lucide-react";
 import { mediaUrl, PublicAppIcon, type PublicAppSummary } from "@/components/public-app-card";
 
 export type DirectoryApp = PublicAppSummary & {
@@ -45,19 +44,29 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
   );
 }
 
-export function ApplicationDirectory({ applications }: { applications: DirectoryApp[] }) {
+export function ApplicationDirectory({
+  applications,
+  heading = "Apps worth trying.",
+  id = "all-apps",
+  activeView,
+}: {
+  applications: DirectoryApp[];
+  heading?: string;
+  id?: string;
+  activeView?: "hot" | "trending" | "latest";
+}) {
+  const titleId = `${id}-title`;
   return (
-    <section className="home-section application-directory" id="all-apps" aria-labelledby="all-apps-title">
+    <section className="home-section application-directory" id={id} aria-labelledby={titleId}>
       <div className="directory-heading">
-        <h2 id="all-apps-title">Apps worth trying.</h2>
-        <a
-          aria-label="Open a random application"
-          className="surprise-button"
-          href="/surprise"
-        >
-          <span className="surprise-button-label">Surprise me</span>
-          <Shuffle aria-hidden="true" size={17} />
-        </a>
+        <h2 id={titleId}>{heading}</h2>
+        {activeView && <nav aria-label="Application ranking" className="directory-view-tabs">
+          {(["hot", "trending", "latest"] as const).map((view) => (
+            <Link aria-current={activeView === view ? "page" : undefined} href={`/?view=${view}#${id}`} key={view} scroll>
+              {view[0].toUpperCase() + view.slice(1)}
+            </Link>
+          ))}
+        </nav>}
       </div>
 
       <DirectoryAppGrid applications={applications} />

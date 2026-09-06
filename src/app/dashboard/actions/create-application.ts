@@ -12,7 +12,7 @@ import {
   normalizedApplicationValues,
   relatedApplicationsExist,
   relationshipQueries,
-  tagQueries,
+  categoryQueries,
   uniqueConstraintMessage,
 } from "@/app/dashboard/actions/application-persistence";
 import type { ApplicationFormState } from "@/app/dashboard/actions/action-types";
@@ -60,7 +60,7 @@ export async function createApplication(
         createdAt: now,
         updatedAt: now,
       }),
-      ...tagQueries(database, appId, result.data),
+      ...categoryQueries(database, appId, result.data),
       ...relationshipQueries(database, appId, result.data.relatedAppIds),
       ...preparedResult.media.map((asset) => database.insert(mediaAssets).values({
         id: asset.id,

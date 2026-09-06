@@ -23,7 +23,7 @@ Approved references:
 - Use project OKLCH tokens for authored interface colors.
 - Keep authentic app icons at a 22% corner radius with one soft depth shadow.
 - Let hierarchy come from scale, whitespace, color fields, and media rather than card chrome.
-- Use compact rectangular controls. Reserve pills for true status or tag semantics.
+- Use compact rectangular controls. Reserve pills for true status or category semantics.
 - Avoid gradients, glass effects, nested cards, low-contrast copy, decorative motion, and Apple imitation.
 
 ## Homepage
@@ -34,7 +34,7 @@ The directory uses wide previews with the authentic icon, name, and short taglin
 
 ## Application page
 
-The hero centers “Meet”, the app icon, and the application name on the first line, followed by the official tagline with a restrained amber underline. A concise fact row contains pricing, up to three tags, and an open-source label only when true.
+The hero centers “Meet”, the app icon, and the application name on the first line, followed by the official tagline with a restrained amber underline. A concise fact row contains pricing, up to 12 categories, and an open-source label only when true.
 
 Previews keep their natural proportions. Editorial content uses one readable article column. Related applications appear as a loose icon shelf.
 

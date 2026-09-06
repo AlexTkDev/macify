@@ -14,12 +14,11 @@ export function PublicHeader() {
         </div>
         <nav className="public-navigation" aria-label="Primary navigation">
           <Link className="public-home-link" href="/">Home</Link>
+          <Link className="public-categories-link" href="/categories">Categories</Link>
           <a className="public-surprise-link" href="/surprise">
             <span className="public-surprise-icon" aria-hidden="true"><Shuffle size={15} /></span>
             <span className="public-surprise-label">Surprise me</span>
           </a>
-          <Link className="public-blog-link" href="/blog">Blog</Link>
-          <Link className="public-submit-link" href="/submit">Submit app</Link>
         </nav>
         <div className="public-header-actions">
           <InlineAppSearch />
@@ -43,6 +42,7 @@ export function PublicFooter() {
               <p>Explore</p>
               <Link href="/">Home</Link>
               <Link href="/#all-apps">Browse apps</Link>
+              <Link href="/categories">Categories</Link>
               <a href="/surprise">Surprise me</a>
             </nav>
             <nav aria-label="About Macify">

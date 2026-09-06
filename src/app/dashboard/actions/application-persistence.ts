@@ -1,7 +1,7 @@
 import { and, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { appRelationships, appTags, apps, tags } from "@/db/schema";
-import { normalizeTags, type ApplicationFields } from "@/lib/application-schema";
+import { appRelationships, appCategories, apps, categories } from "@/db/schema";
+import { normalizeCategories, type ApplicationFields } from "@/lib/application-schema";
 
 export function normalizedApplicationValues(data: ApplicationFields) {
   return {
@@ -18,22 +18,22 @@ export function normalizedApplicationValues(data: ApplicationFields) {
   };
 }
 
-export function tagQueries(
+export function categoryQueries(
   database: Awaited<ReturnType<typeof getDatabase>>,
   appId: string,
   data: ApplicationFields,
 ) {
-  const normalizedTags = normalizeTags(data.tagsText);
+  const normalizedCategories = normalizeCategories(data.categoriesText);
   return [
-    database.delete(appTags).where(eq(appTags.appId, appId)),
-    ...normalizedTags.flatMap(({ name, slug }) => [
+    database.delete(appCategories).where(eq(appCategories.appId, appId)),
+    ...normalizedCategories.flatMap(({ name, slug }) => [
       database
-        .insert(tags)
-        .values({ id: `tag-${slug}`, name, slug, createdAt: new Date() })
-        .onConflictDoUpdate({ target: tags.slug, set: { name } }),
-      database.insert(appTags).values({
+        .insert(categories)
+        .values({ id: `category-${slug}`, name, slug, createdAt: new Date() })
+        .onConflictDoUpdate({ target: categories.slug, set: { name } }),
+      database.insert(appCategories).values({
         appId,
-        tagId: sql`(select ${tags.id} from ${tags} where ${tags.slug} = ${slug})`,
+        categoryId: sql`(select ${categories.id} from ${categories} where ${categories.slug} = ${slug})`,
       }),
     ]),
   ] as const;

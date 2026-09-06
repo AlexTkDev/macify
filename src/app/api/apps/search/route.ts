@@ -1,6 +1,6 @@
 import { and, asc, eq, isNull, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { appTags, apps, tags } from "@/db/schema";
+import { appCategories, apps, categories } from "@/db/schema";
 import { getAppIcons } from "@/lib/directory-shared";
 
 export const dynamic = "force-dynamic";
@@ -29,9 +29,9 @@ export async function GET(request: Request) {
         or lower(${apps.tagline}) like ${pattern}
         or lower(${apps.description}) like ${pattern}
         or exists (
-          select 1 from ${appTags}
-          inner join ${tags} on ${tags.id} = ${appTags.tagId}
-          where ${appTags.appId} = ${apps.id} and lower(${tags.name}) like ${pattern}
+          select 1 from ${appCategories}
+          inner join ${categories} on ${categories.id} = ${appCategories.categoryId}
+          where ${appCategories.appId} = ${apps.id} and lower(${categories.name}) like ${pattern}
         )
       )`,
     ))

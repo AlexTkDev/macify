@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { appTagAssignments, tagTaxonomy } from "../data/tag-taxonomy.mjs";
+import { appCategoryAssignments, categoryTaxonomy } from "../data/category-taxonomy.mjs";
 
 if (!process.argv.includes("--local")) throw new Error("Pass --local to update local D1. This script never updates remote environments.");
 
@@ -24,13 +24,13 @@ function sql(value) {
   return `'${String(value).replaceAll("'", "''")}'`;
 }
 
-const tagSlugs = new Set(tagTaxonomy.map(({ slug }) => slug));
-if (tagSlugs.size !== tagTaxonomy.length) throw new Error("The curated taxonomy contains duplicate tag slugs.");
+const categorySlugs = new Set(categoryTaxonomy.map(({ slug }) => slug));
+if (categorySlugs.size !== categoryTaxonomy.length) throw new Error("The curated taxonomy contains duplicate category slugs.");
 
-for (const [appSlug, assignedTags] of Object.entries(appTagAssignments)) {
-  if (assignedTags.length > 3) throw new Error(`${appSlug} has more than three assigned tags.`);
-  for (const tagSlug of assignedTags) {
-    if (!tagSlugs.has(tagSlug)) throw new Error(`${appSlug} references unknown tag '${tagSlug}'.`);
+for (const [appSlug, assignedCategories] of Object.entries(appCategoryAssignments)) {
+  if (assignedCategories.length > 12) throw new Error(`${appSlug} has more than 12 assigned categories.`);
+  for (const categorySlug of assignedCategories) {
+    if (!categorySlugs.has(categorySlug)) throw new Error(`${appSlug} references unknown category '${categorySlug}'.`);
   }
 }
 
@@ -39,7 +39,7 @@ const query = runWrangler([
   "SELECT slug FROM apps WHERE deleted_at IS NULL ORDER BY slug;",
 ], { json: true });
 const activeSlugs = new Set((query[0]?.results ?? []).map(({ slug }) => slug));
-const mappedSlugs = new Set(Object.keys(appTagAssignments));
+const mappedSlugs = new Set(Object.keys(appCategoryAssignments));
 const missing = [...activeSlugs].filter((slug) => !mappedSlugs.has(slug));
 const stale = [...mappedSlugs].filter((slug) => !activeSlugs.has(slug));
 if (missing.length || stale.length) {
@@ -50,22 +50,22 @@ if (missing.length || stale.length) {
 }
 
 const now = Date.now();
-const statements = ["DELETE FROM app_tags;", "DELETE FROM tags;"];
-for (const tag of tagTaxonomy) {
-  statements.push(`INSERT INTO tags (id, slug, name, created_at) VALUES (${sql(`tag-${tag.slug}`)}, ${sql(tag.slug)}, ${sql(tag.name)}, ${now});`);
+const statements = ["DELETE FROM app_categories;", "DELETE FROM categories;"];
+for (const category of categoryTaxonomy) {
+  statements.push(`INSERT INTO categories (id, slug, name, created_at) VALUES (${sql(`category-${category.slug}`)}, ${sql(category.slug)}, ${sql(category.name)}, ${now});`);
 }
-for (const [appSlug, assignedTags] of Object.entries(appTagAssignments)) {
-  for (const tagSlug of assignedTags) {
-    statements.push(`INSERT INTO app_tags (app_id, tag_id) SELECT a.id, t.id FROM apps a CROSS JOIN tags t WHERE a.slug = ${sql(appSlug)} AND a.deleted_at IS NULL AND t.slug = ${sql(tagSlug)};`);
+for (const [appSlug, assignedCategories] of Object.entries(appCategoryAssignments)) {
+  for (const categorySlug of assignedCategories) {
+    statements.push(`INSERT INTO app_categories (app_id, category_id) SELECT a.id, t.id FROM apps a CROSS JOIN categories t WHERE a.slug = ${sql(appSlug)} AND a.deleted_at IS NULL AND t.slug = ${sql(categorySlug)};`);
   }
 }
 
-const directory = await mkdtemp(path.join(tmpdir(), "macify-tags-"));
+const directory = await mkdtemp(path.join(tmpdir(), "macify-categories-"));
 try {
-  const sqlPath = path.join(directory, "tags.sql");
+  const sqlPath = path.join(directory, "categories.sql");
   await writeFile(sqlPath, `${statements.join("\n")}\n`);
   runWrangler(["d1", "execute", "DB", "--local", "--file", sqlPath, "--yes"]);
-  console.log(`Synchronized ${tagTaxonomy.length} tags and ${Object.values(appTagAssignments).flat().length} local app assignments.`);
+  console.log(`Synchronized ${categoryTaxonomy.length} categories and ${Object.values(appCategoryAssignments).flat().length} local app assignments.`);
 } finally {
   await rm(directory, { recursive: true, force: true });
 }

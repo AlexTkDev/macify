@@ -2,7 +2,7 @@ import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { excludedAppSlugs, iconOverrides, previewImageOverrides } from "../data/media-overrides.mjs";
-import { appTagAssignments, tagNamesForApp } from "../data/tag-taxonomy.mjs";
+import { appCategoryAssignments, categoryNamesForApp } from "../data/category-taxonomy.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceArgument = process.argv.find((argument) => argument.startsWith("--source="))?.slice("--source=".length);
@@ -14,14 +14,14 @@ const unfilteredSourceApps = sourceModule.apps ?? sourceModule.expandedApps;
 if (!Array.isArray(unfilteredSourceApps)) throw new Error(`No application array exported from ${path.relative(root, sourcePath)}.`);
 const sourceApps = unfilteredSourceApps.filter((app) => !excludedAppSlugs.has(app.slug));
 for (const app of sourceApps) {
-  if (!Object.hasOwn(appTagAssignments, app.slug)) throw new Error(`Missing curated tag assignment for ${app.name} (${app.slug}).`);
+  if (!Object.hasOwn(appCategoryAssignments, app.slug)) throw new Error(`Missing curated category assignment for ${app.name} (${app.slug}).`);
 }
 const acceptedTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/avif"]);
 const headers = { Accept: "text/html,application/xhtml+xml", "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 MacifyCatalog/1.0" };
 
-function attributes(tag) {
+function attributes(category) {
   const result = {};
-  for (const match of tag.matchAll(/([:\w-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g)) {
+  for (const match of category.matchAll(/([:\w-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g)) {
     result[match[1].toLowerCase()] = match[2] ?? match[3] ?? match[4] ?? "";
   }
   return result;
@@ -67,12 +67,12 @@ async function discoverMedia(app) {
     }
   } catch { /* Fallbacks below keep catalog preparation deterministic. */ }
 
-  const tags = [...html.matchAll(/<(?:meta|link)\b[^>]*>/gi)].map((match) => attributes(match[0]));
-  const meta = (key) => tags.filter((tag) => tag.property?.toLowerCase() === key || tag.name?.toLowerCase() === key).map((tag) => absolute(tag.content, finalUrl));
-  const linkedIcons = tags
-    .filter((tag) => tag.rel?.toLowerCase().split(/\s+/).some((value) => value === "icon" || value === "apple-touch-icon"))
+  const categories = [...html.matchAll(/<(?:meta|link)\b[^>]*>/gi)].map((match) => attributes(match[0]));
+  const meta = (key) => categories.filter((category) => category.property?.toLowerCase() === key || category.name?.toLowerCase() === key).map((category) => absolute(category.content, finalUrl));
+  const linkedIcons = categories
+    .filter((category) => category.rel?.toLowerCase().split(/\s+/).some((value) => value === "icon" || value === "apple-touch-icon"))
     .sort((a, b) => (b.rel?.includes("apple-touch") ? 1 : 0) - (a.rel?.includes("apple-touch") ? 1 : 0))
-    .map((tag) => absolute(tag.href, finalUrl));
+    .map((category) => absolute(category.href, finalUrl));
   const domain = new URL(finalUrl).hostname;
   const iconUrl = await firstUsable([
     iconOverrides[app.slug],
@@ -110,7 +110,7 @@ for (const [index, app] of sourceApps.entries()) {
   const media = await discoverMedia(app);
   prepared.push({
     ...app,
-    tags: tagNamesForApp(app.slug).join(", "),
+    categories: categoryNamesForApp(app.slug).join(", "),
     relatedAppSlugs: String(app.relatedAppSlugs || "")
       .split(",")
       .map((slug) => slug.trim())

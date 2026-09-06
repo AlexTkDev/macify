@@ -1,4 +1,4 @@
-export const tagTaxonomy = [
+export const categoryTaxonomy = [
   { slug: "ai", name: "AI" },
   { slug: "automation", name: "Automation" },
   { slug: "bookmarks-knowledge", name: "Bookmarks & knowledge" },
@@ -35,7 +35,7 @@ export const tagTaxonomy = [
   { slug: "window-management", name: "Window management" },
 ];
 
-export const appTagAssignments = {
+export const appCategoryAssignments = {
   "1password": ["passwords-security"],
   alcove: ["customization", "menu-bar"],
   alfred: ["automation", "launchers-search", "keyboard-shortcuts"],
@@ -106,7 +106,7 @@ export const appTagAssignments = {
   qbittorrent: ["file-transfer-downloads"],
 };
 
-export function tagNamesForApp(slug) {
-  const names = new Map(tagTaxonomy.map((tag) => [tag.slug, tag.name]));
-  return (appTagAssignments[slug] ?? []).map((tagSlug) => names.get(tagSlug)).filter(Boolean);
+export function categoryNamesForApp(slug) {
+  const names = new Map(categoryTaxonomy.map((category) => [category.slug, category.name]));
+  return (appCategoryAssignments[slug] ?? []).map((categorySlug) => names.get(categorySlug)).filter(Boolean);
 }

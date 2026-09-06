@@ -145,10 +145,10 @@ try {
     const status = app.status === "published" ? "published" : "draft";
     const publishedAt = status === "published" ? now : null;
     statements.push(`INSERT INTO apps (id, slug, name, website_url, tagline, description, pricing_type, billing_type, pricing_details, source_type, youtube_url, status, published_at, created_at, updated_at) VALUES (${sql(app.id)}, ${sql(app.slug)}, ${sql(app.name)}, ${sql(app.websiteUrl)}, ${sql(app.tagline)}, ${sql(app.description)}, ${sql(app.pricingType)}, ${sql(app.billingType)}, ${sql(app.pricingDetails)}, ${sql(app.sourceType)}, ${sql(app.youtubeUrl)}, ${sql(status)}, ${sql(publishedAt)}, ${now}, ${now});`);
-    for (const name of parseLists(app.tags)) {
-      const tagSlug = slugify(name);
-      statements.push(`INSERT INTO tags (id, slug, name, created_at) VALUES (${sql(`tag-${tagSlug}`)}, ${sql(tagSlug)}, ${sql(name)}, ${now}) ON CONFLICT(slug) DO UPDATE SET name = excluded.name;`);
-      statements.push(`INSERT OR IGNORE INTO app_tags (app_id, tag_id) SELECT ${sql(app.id)}, id FROM tags WHERE slug = ${sql(tagSlug)};`);
+    for (const name of parseLists(app.categories)) {
+      const categorySlug = slugify(name);
+      statements.push(`INSERT INTO categories (id, slug, name, created_at) VALUES (${sql(`category-${categorySlug}`)}, ${sql(categorySlug)}, ${sql(name)}, ${now}) ON CONFLICT(slug) DO UPDATE SET name = excluded.name;`);
+      statements.push(`INSERT OR IGNORE INTO app_categories (app_id, category_id) SELECT ${sql(app.id)}, id FROM categories WHERE slug = ${sql(categorySlug)};`);
     }
     for (const asset of app.assets) {
       statements.push(`INSERT INTO media_assets (id, app_id, role, storage_key, mime_type, byte_size, width, height, checksum, source_url, alt_text, created_at) VALUES (${sql(asset.id)}, ${sql(app.id)}, ${sql(asset.role)}, ${sql(asset.storageKey)}, ${sql(asset.mimeType)}, ${asset.byteSize}, ${asset.width ?? "NULL"}, ${asset.height ?? "NULL"}, ${sql(asset.checksum)}, ${sql(asset.sourceUrl)}, ${sql(asset.altText)}, ${now});`);

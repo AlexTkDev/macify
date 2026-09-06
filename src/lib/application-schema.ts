@@ -31,21 +31,21 @@ export const applicationSchema = z.object({
   pricingDetails: z.string().trim().max(240),
   sourceType: z.enum(["open_source", "closed_source"]),
   youtubeUrl: optionalYouTubeUrl,
-  tagsText: z
+  categoriesText: z
     .string()
     .trim()
-    .min(2, "Choose at least one tag.")
-    .max(500, "Keep the tag list under 500 characters.")
+    .min(2, "Choose at least one category.")
+    .max(500, "Keep the category list under 500 characters.")
     .refine(
       (value) =>
         value === "" ||
-        value.split(",").every((tag) => {
-          const length = tag.trim().length;
+        value.split(",").every((category) => {
+          const length = category.trim().length;
           return length >= 2 && length <= 40;
         }),
-      "Use comma-separated tags between 2 and 40 characters each.",
+      "Use comma-separated categories between 2 and 40 characters each.",
     )
-    .refine((value) => value.split(",").map((tag) => tag.trim()).filter(Boolean).length <= 3, "Choose no more than three tags."),
+    .refine((value) => value.split(",").map((category) => category.trim()).filter(Boolean).length <= 12, "Choose no more than 12 categories."),
   relatedAppIds: z.array(z.uuid()).max(12, "Choose no more than 12 related applications."),
 }).superRefine((data, context) => {
   if (data.pricingType !== "free" && data.billingType === "") {
@@ -67,12 +67,12 @@ export function applicationFieldsFromFormData(formData: FormData) {
     pricingDetails: formData.get("pricingDetails"),
     sourceType: formData.get("sourceType") ?? "closed_source",
     youtubeUrl: formData.get("youtubeUrl"),
-    tagsText: formData.get("tagsText"),
+    categoriesText: formData.get("categoriesText"),
     relatedAppIds: formData.getAll("relatedAppIds"),
   };
 }
 
-export function normalizeTags(value: string) {
+export function normalizeCategories(value: string) {
   const seen = new Set<string>();
 
   return value
@@ -88,5 +88,5 @@ export function normalizeTags(value: string) {
         .replace(/^-+|-+$/g, ""),
     }))
     .filter(({ slug }) => slug.length >= 2 && !seen.has(slug) && seen.add(slug))
-    .slice(0, 3);
+    .slice(0, 12);
 }

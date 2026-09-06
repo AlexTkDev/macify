@@ -10,18 +10,18 @@ The public website provides:
 
 - a curated homepage;
 - published application pages;
-- tag-based discovery;
-- inline search across names, taglines, and tags;
+- category-based discovery;
+- inline search across names, taglines, and categories;
 - related applications and a random-app route;
 - canonical metadata, structured data, sitemap, robots rules, and social cards.
 
 The homepage headline is “Mac apps worth making room for.” Its supporting copy is “A curated list of the most useful macOS applications.”
 
-Each application page presents the official identity, tagline, pricing, relevant tags, source status when open source, editorial description, media, optional demo, official website, and related applications.
+Each application page presents the official identity, tagline, pricing, relevant categories, source status when open source, editorial description, media, optional demo, official website, and related applications.
 
 ## Editorial dashboard
 
-The dashboard supports application creation and editing, drafts and publication, tags, relationships, media, reviewed imports and exports, and media optimization. It uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
+The dashboard supports application creation and editing, drafts and publication, categories, relationships, media, reviewed imports and exports, and media optimization. It uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
 
 ## Content model
 
@@ -32,7 +32,7 @@ An application record includes:
 - free, freemium, or paid access classification;
 - one-time or subscription billing where applicable;
 - source status;
-- one to three focused tags;
+- one to three focused categories;
 - optional YouTube URL;
 - mutual related-application links;
 - one icon, one main preview, and optional screenshots.

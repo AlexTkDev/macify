@@ -22,10 +22,10 @@ export default async function ImportsPage({ searchParams }: { searchParams: Prom
         </form>
         <aside className="import-guidance">
           <h2>Required columns</h2>
-          <p><code>name</code>, <code>slug</code>, <code>websiteUrl</code>, <code>tagline</code>, <code>description</code>, <code>pricingType</code>, and <code>tags</code>. Use <code>free</code>, <code>freemium</code>, or <code>paid</code> for pricing. Freemium and paid rows also require <code>billingType</code> as <code>one_time</code> or <code>subscription</code>.</p>
+          <p><code>name</code>, <code>slug</code>, <code>websiteUrl</code>, <code>tagline</code>, <code>description</code>, <code>pricingType</code>, and <code>categories</code>. Use <code>free</code>, <code>freemium</code>, or <code>paid</code> for pricing. Freemium and paid rows also require <code>billingType</code> as <code>one_time</code> or <code>subscription</code>.</p>
           <h2>Optional media columns</h2>
           <p><code>iconUrl</code>, <code>iconAltText</code>, <code>previewImageUrl</code>, <code>previewImageAltText</code>, and <code>screenshotUrls</code>. Separate multiple screenshot URLs with <code>|</code> or <code>;</code>.</p>
-          <p>Tags are required and accept one to three comma-separated values. <code>relatedAppSlugs</code> accepts comma-separated slugs. Images are securely downloaded into R2 only when the validated import is committed. Imported applications remain drafts.</p>
+          <p>Categories are required and accept one to three comma-separated values. <code>relatedAppSlugs</code> accepts comma-separated slugs. Images are securely downloaded into R2 only when the validated import is committed. Imported applications remain drafts.</p>
         </aside>
       </section>
       <section className="dashboard-panel" aria-labelledby="import-history-heading">

@@ -3,10 +3,10 @@ import { alias } from "drizzle-orm/sqlite-core";
 import { getDatabase } from "@/db/client";
 import {
   appRelationships,
-  appTags,
+  appCategories,
   apps,
   mediaAssets,
-  tags,
+  categories,
 } from "@/db/schema";
 import { getAppIcons, publicApplicationFields } from "@/lib/directory-shared";
 
@@ -31,13 +31,13 @@ export async function getPublishedApplicationBySlug(slug: string) {
     pricingDetails: relatedApp.pricingDetails,
     confidence: appRelationships.confidence,
   };
-  const [tagRows, media, outgoing, incoming] = await Promise.all([
+  const [categoryRows, media, outgoing, incoming] = await Promise.all([
     database
-      .select({ id: tags.id, slug: tags.slug, name: tags.name })
-      .from(appTags)
-      .innerJoin(tags, eq(tags.id, appTags.tagId))
-      .where(eq(appTags.appId, application.id))
-      .orderBy(asc(tags.name)),
+      .select({ id: categories.id, slug: categories.slug, name: categories.name })
+      .from(appCategories)
+      .innerJoin(categories, eq(categories.id, appCategories.categoryId))
+      .where(eq(appCategories.appId, application.id))
+      .orderBy(asc(categories.name)),
     database
       .select({
         id: mediaAssets.id,
@@ -91,7 +91,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
   const icons = await getAppIcons(relatedRecords.map(({ id }) => id));
   return {
     ...application,
-    tags: tagRows,
+    categories: categoryRows,
     media,
     related: relatedRecords.map((record) => ({
       ...record,

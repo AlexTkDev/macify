@@ -6,7 +6,7 @@ import {
   FileUp,
   Image as ImageIcon,
   LogOut,
-  Tags,
+  Shapes,
 } from "lucide-react";
 import { logoutAdmin } from "@/app/dashboard/logout-action";
 import { MacifyLogo } from "@/components/macify-logo";
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 const navigation = [
   { id: "applications", label: "Applications", description: "Curate the directory", icon: AppWindow, href: "/dashboard", tone: "blue" },
-  { id: "tags", label: "Tags", description: "Tune discovery", icon: Tags, href: "/dashboard/tags", tone: "yellow" },
+  { id: "categories", label: "Categories", description: "Tune discovery", icon: Shapes, href: "/dashboard/categories", tone: "yellow" },
   { id: "media", label: "Media", description: "Manage artwork", icon: ImageIcon, href: "/dashboard/media", tone: "mint" },
   { id: "imports", label: "Imports", description: "Move data", icon: FileUp, href: "/dashboard/imports", tone: "lilac" },
 ] as const;

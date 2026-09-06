@@ -186,24 +186,17 @@
 }
 
 .public-navigation .public-surprise-link {
+  padding-inline: 1rem;
   border-color: transparent;
-  color: #343a43;
-  background: transparent;
+  color: var(--public-canvas);
+  background: #151a21;
 }
 
 .public-navigation .public-surprise-link:hover,
 .public-navigation .public-surprise-link:focus-visible {
   border-color: transparent;
-  color: #111318;
-  background: #e8eaed;
-}
-
-.public-navigation .public-submit-link,
-.public-navigation .public-submit-link:hover,
-.public-navigation .public-submit-link:focus-visible {
-  padding-inline: 1rem;
   color: var(--public-canvas);
-  background: #151a21;
+  background: #080a0d;
 }
 
 .public-surprise-link:active { transform: translateY(0.03rem) scale(0.985); }

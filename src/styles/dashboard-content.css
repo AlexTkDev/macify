@@ -315,9 +315,9 @@
 .dashboard-detail-facts dd { margin: 0; font-size: 0.72rem; font-weight: 700; text-align: right; }
 .dashboard-detail-group { padding: 1.25rem; }
 .dashboard-detail-group h2 { margin-bottom: 1rem; }
-.dashboard-detail-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.dashboard-detail-categories { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
-.dashboard-detail-tags span {
+.dashboard-detail-categories span {
   padding: 0.3rem 0.48rem;
   border-radius: 0.35rem;
   color: var(--accent-dark);

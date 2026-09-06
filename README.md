@@ -54,6 +54,14 @@ public/         Static public assets
 - [`OPERATIONS.md`](OPERATIONS.md): production data protection and recovery
 - [`RELEASE.md`](RELEASE.md): validation and production deployment
 
+## Deferred public features
+
+The public blog and application-submission entry points are intentionally hidden from the site header. They remain future features; the current navigation promotes **Surprise me** as its primary action.
+
+## Trending applications
+
+The homepage offers **Hot**, **Trending**, and **Latest** rankings. Hot uses unique DataFast visitors over seven days; Trending compares the latest three-day window with the preceding three days; Latest uses publication time. The server reads DataFast through the `DATAFAST_API_KEY` secret, caches analytics for one hour, and never exposes the key to browser code. Local development and analytics failures fall back to the curated 30-application directory.
+
 ## Safety
 
 - Never commit `.dev.vars`, credentials, exports, backups, or Wrangler state.

@@ -44,14 +44,12 @@
   }
   .public-brand-pill { min-height: 2.5rem; padding: 0.2rem 0.75rem; }
   .public-navigation { min-height: 3rem; display: flex; }
-  .public-home-link,
-  .public-blog-link { display: none !important; }
+  .public-home-link { display: none !important; }
   .public-navigation a {
     min-height: 2.75rem;
     justify-content: center;
   }
   .public-navigation .public-surprise-link { width: 2.55rem; padding: 0.2rem; }
-  .public-navigation .public-submit-link { padding-inline: 0.8rem; }
   .public-surprise-label { width: 1px; height: 1px; position: absolute; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
   .public-surprise-icon { width: 1.35rem; height: 1.35rem; display: grid; }
   .public-header .brand { min-height: 2.75rem; align-items: center; }

@@ -15,7 +15,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
 const workDirectory = await mkdtemp(path.join(tmpdir(), "macify-production-replace-"));
 const backupPath = path.join(tmpdir(), `macify-${targetEnv}-backup-${new Date().toISOString().replaceAll(":", "-")}.sql`);
-const tables = ["apps", "tags", "app_tags", "media_assets", "app_relationships", "import_jobs", "import_rows", "redirects"];
+const tables = ["apps", "categories", "app_categories", "media_assets", "app_relationships", "import_jobs", "import_rows", "redirects"];
 
 function run(args, { json = false } = {}) {
   const result = spawnSync(wrangler, args, { cwd: root, encoding: "utf8", env: process.env });
@@ -66,7 +66,7 @@ try {
   }
 
   const replacementPath = path.join(workDirectory, "replace-content.sql");
-  const deleteOrder = ["import_rows", "import_jobs", "app_relationships", "app_tags", "media_assets", "redirects", "tags", "apps"];
+  const deleteOrder = ["import_rows", "import_jobs", "app_relationships", "app_categories", "media_assets", "redirects", "categories", "apps"];
   const replacement = [
     "PRAGMA defer_foreign_keys=TRUE;",
     ...deleteOrder.map((table) => `DELETE FROM "${table}";`),
@@ -78,8 +78,8 @@ try {
   console.log(`Replacing ${targetEnv} D1 catalogue tables...`);
   run(["d1", "execute", "DB", "--remote", "--env", targetEnv, "--file", replacementPath, "--yes"]);
 
-  const remoteCounts = query("SELECT (SELECT COUNT(*) FROM apps) AS apps, (SELECT COUNT(*) FROM media_assets) AS media, (SELECT COUNT(*) FROM tags) AS tags;", true)[0];
-  const localCounts = query("SELECT (SELECT COUNT(*) FROM apps) AS apps, (SELECT COUNT(*) FROM media_assets) AS media, (SELECT COUNT(*) FROM tags) AS tags;", false)[0];
+  const remoteCounts = query("SELECT (SELECT COUNT(*) FROM apps) AS apps, (SELECT COUNT(*) FROM media_assets) AS media, (SELECT COUNT(*) FROM categories) AS categories;", true)[0];
+  const localCounts = query("SELECT (SELECT COUNT(*) FROM apps) AS apps, (SELECT COUNT(*) FROM media_assets) AS media, (SELECT COUNT(*) FROM categories) AS categories;", false)[0];
   if (JSON.stringify(remoteCounts) !== JSON.stringify(localCounts)) {
     throw new Error(`${targetLabel} count verification failed. Local ${JSON.stringify(localCounts)}, remote ${JSON.stringify(remoteCounts)}.`);
   }

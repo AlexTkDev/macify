@@ -1,27 +1,27 @@
 import { and, asc, count, desc, eq, isNull, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import {
-  appTags,
+  appCategories,
   apps,
   importJobs,
   importRows,
   mediaAssets,
-  tags,
+  categories,
 } from "@/db/schema";
 
-export async function getTagManagementData() {
+export async function getCategoryManagementData() {
   const database = await getDatabase();
   return database
     .select({
-      id: tags.id,
-      name: tags.name,
-      slug: tags.slug,
-      applicationCount: count(appTags.appId),
+      id: categories.id,
+      name: categories.name,
+      slug: categories.slug,
+      applicationCount: count(appCategories.appId),
     })
-    .from(tags)
-    .leftJoin(appTags, eq(appTags.tagId, tags.id))
-    .groupBy(tags.id)
-    .orderBy(desc(count(appTags.appId)), asc(tags.name));
+    .from(categories)
+    .leftJoin(appCategories, eq(appCategories.categoryId, categories.id))
+    .groupBy(categories.id)
+    .orderBy(desc(count(appCategories.appId)), asc(categories.name));
 }
 
 export async function getMediaManagementData() {

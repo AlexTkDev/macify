@@ -8,5 +8,6 @@ export {
   getHomepageDirectoryData,
   getPublishedApplicationBySlug,
   getPublishedApplicationSlugs,
+  type HomepageView,
   type DirectorySearchFilters,
 } from "@/lib/app-directory-data";

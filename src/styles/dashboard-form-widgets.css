@@ -196,16 +196,16 @@
 .related-app-empty { margin: 1rem 0; color: var(--muted); font-size: 0.7rem; }
 .related-app-hint { margin: 0.65rem 0 0; color: var(--muted); font-size: 0.62rem; }
 
-.tag-input { position: relative; }
+.category-input { position: relative; }
 
-.tag-input-values {
+.category-input-values {
   margin-bottom: 0.5rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
 }
 
-.tag-input-values > span {
+.category-input-values > span {
   padding: 0.3rem 0.35rem 0.3rem 0.5rem;
   display: inline-flex;
   align-items: center;
@@ -216,13 +216,13 @@
   font-size: 0.64rem;
 }
 
-.tag-input-values button,
-.tag-input-control button,
-.tag-input-suggestions button { border: 0; background: transparent; }
+.category-input-values button,
+.category-input-control button,
+.category-input-suggestions button { border: 0; background: transparent; }
 
-.tag-input-control { display: flex; align-items: center; position: relative; }
+.category-input-control { display: flex; align-items: center; position: relative; }
 
-.tag-input-control input {
+.category-input-control input {
   width: 100%;
   height: 2.8rem;
   padding: 0 2.6rem 0 0.75rem;
@@ -233,7 +233,7 @@
   font-size: 0.74rem;
 }
 
-.tag-input-control button {
+.category-input-control button {
   width: 2rem;
   height: 2rem;
   display: grid;
@@ -243,7 +243,7 @@
   color: var(--accent-dark);
 }
 
-.tag-input-suggestions {
+.category-input-suggestions {
   width: 100%;
   padding: 0.35rem;
   display: grid;
@@ -256,7 +256,7 @@
   box-shadow: 0 0.8rem 2rem rgb(38 43 55 / 0.14);
 }
 
-.tag-input-suggestions button {
+.category-input-suggestions button {
   min-height: 2.25rem;
   padding: 0 0.55rem;
   border-radius: var(--radius-xs);
@@ -264,5 +264,5 @@
   font-size: 0.7rem;
 }
 
-.tag-input-suggestions button:hover { background: var(--accent-soft); }
-.tag-input > small { margin-top: 0.45rem; display: block; color: var(--faint); font-size: 0.6rem; }
+.category-input-suggestions button:hover { background: var(--accent-soft); }
+.category-input > small { margin-top: 0.45rem; display: block; color: var(--faint); font-size: 0.6rem; }

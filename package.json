@@ -28,7 +28,7 @@
     "media:sync:local": "node scripts/sync-local-media.mjs --local",
     "production:replace-from-local": "node scripts/replace-production-from-local.mjs --confirm-production-replacement",
     "media:optimize:local": "node scripts/optimize-local-media.mjs --local",
-    "tags:sync:local": "node scripts/sync-local-tags.mjs --local",
+    "categories:sync:local": "node scripts/sync-local-categories.mjs --local",
     "db:migrate:production": "wrangler d1 migrations apply DB --remote --env production"
   },
   "dependencies": {

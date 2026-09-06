@@ -7,7 +7,7 @@ import { getEditorialOptions } from "@/lib/apps-data";
 export const dynamic = "force-dynamic";
 
 export default async function NewApplicationPage() {
-  const { relatedApplications, tags } = await getEditorialOptions();
+  const { relatedApplications, categories } = await getEditorialOptions();
   return (
     <DashboardShell active="applications">
       <nav className="dashboard-breadcrumbs" aria-label="Breadcrumb">
@@ -22,7 +22,7 @@ export default async function NewApplicationPage() {
           <span>Create the editorial record, choose related applications, then add media immediately after saving.</span>
         </div>
       </header>
-      <ApplicationForm relatedApplications={relatedApplications} tags={tags} />
+      <ApplicationForm relatedApplications={relatedApplications} categories={categories} />
     </DashboardShell>
   );
 }

@@ -25,7 +25,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
   const icon = media.find((asset) => asset.role === "icon");
   const preview = media.find((asset) => asset.role === "preview_image");
   const related = options.relatedApplications.filter((item) => application.relatedAppIds.includes(item.id));
-  const tags = application.tagsText.split(",").map((tag) => tag.trim()).filter(Boolean);
+  const categories = application.categoriesText.split(",").map((category) => category.trim()).filter(Boolean);
 
   return (
     <DashboardShell active="applications">
@@ -79,10 +79,10 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
             </dl>
           </section>
 
-          {tags.length > 0 && (
+          {categories.length > 0 && (
             <section className="dashboard-detail-facts dashboard-detail-group">
-              <h2>Tags</h2>
-              <div className="dashboard-detail-tags">{tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+              <h2>Categories</h2>
+              <div className="dashboard-detail-categories">{categories.map((category) => <span key={category}>{category}</span>)}</div>
             </section>
           )}
 

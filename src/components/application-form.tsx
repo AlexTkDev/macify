@@ -17,12 +17,12 @@ const initialState: ApplicationFormState = {};
 export function ApplicationForm({
   application,
   relatedApplications,
-  tags,
+  categories,
   mode = "create",
 }: {
   application?: EditableApplication;
   relatedApplications: RelatedApplicationOption[];
-  tags: string[];
+  categories: string[];
   mode?: "create" | "edit";
 }) {
   const formAction = mode === "edit" ? updateApplication : createApplication;
@@ -52,7 +52,7 @@ export function ApplicationForm({
         slugEdited={slugEdited}
       />
       {mode === "create" && <ApplicationMediaSection errors={state.errors} />}
-      <ApplicationClassificationSection application={application} errors={state.errors} tags={tags} />
+      <ApplicationClassificationSection application={application} errors={state.errors} categories={categories} />
       <ApplicationAvailabilitySection application={application} errors={state.errors} pricingType={pricingType} setPricingType={setPricingType} />
       <ApplicationRelationshipsSection application={application} errors={state.errors} relatedApplications={relatedApplications} />
       <ApplicationFormActions mode={mode} />

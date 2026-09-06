@@ -30,11 +30,11 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
           </span>
           <span className="application-title-tagline">{application.tagline}</span>
         </h1>
-        {application.tags.length > 0 && (
-          <div className="application-tags" aria-label="Application tags">
-            {application.tags.map((tag) => (
-              <Link className="application-tag" href={`/tags/${tag.slug}`} key={tag.id} prefetch={false}>
-                {tag.name}
+        {application.categories.length > 0 && (
+          <div className="application-categories" aria-label="Application categories">
+            {application.categories.map((category) => (
+              <Link className="application-category" href={`/categories/${category.slug}`} key={category.id} prefetch={false}>
+                {category.name}
               </Link>
             ))}
           </div>

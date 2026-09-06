@@ -16,7 +16,7 @@ const headers = [
   "pricingDetails",
   "sourceType",
   "youtubeUrl",
-  "tags",
+  "categories",
   "iconUrl",
   "iconAltText",
   "previewImageUrl",

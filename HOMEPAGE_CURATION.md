@@ -1,6 +1,6 @@
 # Homepage curation
 
-The homepage is an editorial selection, not the complete catalogue. Search, tags, and application pages cover the wider published directory.
+The homepage is an editorial selection, not the complete catalogue. Search, categories, and application pages cover the wider published directory.
 
 ## Source of truth
 

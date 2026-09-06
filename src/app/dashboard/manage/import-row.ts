@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { importRows } from "@/db/schema";
-import { normalizeTags } from "@/lib/application-schema";
+import { normalizeCategories } from "@/lib/application-schema";
 import { putPreparedMedia } from "@/lib/media-upload";
 import { prepareImportedMedia } from "@/app/dashboard/manage/import-media";
 import type { NormalizedImport } from "@/app/dashboard/manage/import-schema";
@@ -55,7 +55,7 @@ export async function commitImportRow(row: ImportRow, context: ImportCommitConte
       context.database,
       appId,
       data,
-      normalizeTags(data.tags),
+      normalizeCategories(data.categories),
       prepared.media,
       row.id,
       now,

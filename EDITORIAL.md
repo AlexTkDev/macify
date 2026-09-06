@@ -57,6 +57,6 @@ Use this order:
 - `Where it fits` identifies audience and tradeoffs.
 - No paragraph exceeds three sentences.
 - Markdown is valid and contains no raw HTML.
-- The record has an authentic icon, a usable preview, focused tags, and a working official link.
+- The record has an authentic icon, a usable preview, focused categories, and a working official link.
 
 Homepage inclusion is separate from publication. Follow [`HOMEPAGE_CURATION.md`](HOMEPAGE_CURATION.md) without unpublishing an otherwise valid catalogue record.

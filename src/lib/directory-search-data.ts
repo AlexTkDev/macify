@@ -1,11 +1,14 @@
-import { and, asc, count, eq, inArray, isNull, sql, type SQL } from "drizzle-orm";
+import { and, asc, count, desc, eq, inArray, isNull, sql, type SQL } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { appTags, apps, tags } from "@/db/schema";
+import { appCategories, apps, categories } from "@/db/schema";
 import {
   cardFields,
   getCardMedia,
   type DirectorySearchFilters,
 } from "@/lib/directory-shared";
+import { getHotApplicationVisits, getTrendingApplicationVisits } from "@/lib/datafast-analytics";
+
+export type HomepageView = "hot" | "trending" | "latest";
 
 const HOMEPAGE_CURATED_SLUGS = [
   "clop",
@@ -52,9 +55,9 @@ function searchConditions(filters?: DirectorySearchFilters) {
       or lower(${apps.tagline}) like ${pattern}
       or lower(${apps.description}) like ${pattern}
       or exists (
-        select 1 from ${appTags}
-        inner join ${tags} on ${tags.id} = ${appTags.tagId}
-        where ${appTags.appId} = ${apps.id} and lower(${tags.name}) like ${pattern}
+        select 1 from ${appCategories}
+        inner join ${categories} on ${categories.id} = ${appCategories.categoryId}
+        where ${appCategories.appId} = ${apps.id} and lower(${categories.name}) like ${pattern}
       )
     )`);
   }
@@ -64,28 +67,33 @@ function searchConditions(filters?: DirectorySearchFilters) {
   return conditions;
 }
 
-export async function getHomepageDirectoryData(filters?: DirectorySearchFilters) {
+export async function getHomepageDirectoryData(filters?: DirectorySearchFilters, view: HomepageView = "hot") {
   const database = await getDatabase();
   const heroSlugs = ["dayflow", "cleanshot-x", "swish", "droppy"];
-  const [records, heroRecords] = await Promise.all([
+  const [fallbackRecords, heroRecords, analyticsVisits] = await Promise.all([
+    view === "latest"
+      ? database.select(cardFields).from(apps)
+        .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
+        .orderBy(desc(apps.publishedAt), desc(apps.createdAt)).limit(30)
+      : database.select(cardFields).from(apps).where(and(
+        eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, HOMEPAGE_CURATED_SLUGS),
+      )).limit(30),
     database
       .select(cardFields)
       .from(apps)
-      .where(and(
-        eq(apps.status, "published"),
-        isNull(apps.deletedAt),
-        inArray(apps.slug, HOMEPAGE_CURATED_SLUGS),
-      ))
-      .limit(30),
-    database
-      .select(cardFields)
-      .from(apps)
-      .where(and(
-        eq(apps.status, "published"),
-        isNull(apps.deletedAt),
-        inArray(apps.slug, heroSlugs),
-      )),
+      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, heroSlugs))),
+    view === "hot" ? getHotApplicationVisits() : view === "trending" ? getTrendingApplicationVisits() : Promise.resolve([]),
   ]);
+
+  let records = fallbackRecords;
+  if (analyticsVisits.length) {
+    const rankedSlugs = analyticsVisits.map(({ slug }) => slug);
+    const rankedRecords = await database.select(cardFields).from(apps).where(and(
+      eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, rankedSlugs),
+    )).limit(30);
+    const bySlug = new Map(rankedRecords.map((record) => [record.slug, record]));
+    records = rankedSlugs.map((slug) => bySlug.get(slug)).filter((record): record is (typeof rankedRecords)[number] => Boolean(record));
+  }
 
   const page = filters?.page ?? 1;
   const pageSize = 24;
@@ -106,10 +114,10 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters)
 
   const appIds = [...new Set([...records, ...heroRecords, ...searchRecords].map(({ id }) => id))];
   const { icons, previews } = await getCardMedia(appIds);
-  const orderedRecords = [...records].sort((left, right) => (
+  const orderedRecords = view !== "latest" && !analyticsVisits.length ? [...records].sort((left, right) => (
     (HOMEPAGE_CURATED_ORDER.get(left.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
     - (HOMEPAGE_CURATED_ORDER.get(right.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
-  ));
+  )) : records;
   return {
     applications: orderedRecords.map((record) => ({
       ...record,

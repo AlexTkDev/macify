@@ -1,24 +1,24 @@
 import { sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import {
-  appTags,
+  appCategories,
   apps,
   importRows,
   mediaAssets,
-  tags,
+  categories,
 } from "@/db/schema";
 import type { NormalizedImport } from "@/app/dashboard/manage/import-schema";
 import type { PreparedMedia } from "@/lib/media-upload";
-import type { normalizeTags } from "@/lib/application-schema";
+import type { normalizeCategories } from "@/lib/application-schema";
 
 type Database = Awaited<ReturnType<typeof getDatabase>>;
-type NormalizedTag = ReturnType<typeof normalizeTags>[number];
+type NormalizedCategory = ReturnType<typeof normalizeCategories>[number];
 
 export async function insertImportedApplication(
   database: Database,
   appId: string,
   data: NormalizedImport,
-  normalizedTags: NormalizedTag[],
+  normalizedCategories: NormalizedCategory[],
   media: PreparedMedia[],
   rowId: string,
   now: Date,
@@ -40,14 +40,14 @@ export async function insertImportedApplication(
       createdAt: now,
       updatedAt: now,
     }),
-    ...normalizedTags.flatMap((tag) => [
+    ...normalizedCategories.flatMap((category) => [
       database
-        .insert(tags)
-        .values({ id: `tag-${tag.slug}`, ...tag, createdAt: now })
-        .onConflictDoUpdate({ target: tags.slug, set: { name: tag.name } }),
-      database.insert(appTags).values({
+        .insert(categories)
+        .values({ id: `category-${category.slug}`, ...category, createdAt: now })
+        .onConflictDoUpdate({ target: categories.slug, set: { name: category.name } }),
+      database.insert(appCategories).values({
         appId,
-        tagId: sql`(select ${tags.id} from ${tags} where ${tags.slug} = ${tag.slug})`,
+        categoryId: sql`(select ${categories.id} from ${categories} where ${categories.slug} = ${category.slug})`,
       }),
     ]),
     ...media.map((asset) => database.insert(mediaAssets).values({

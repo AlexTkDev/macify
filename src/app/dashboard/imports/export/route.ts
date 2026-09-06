@@ -1,6 +1,6 @@
 import { asc, eq, isNull } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { appRelationships, appTags, apps, mediaAssets, tags } from "@/db/schema";
+import { appRelationships, appCategories, apps, mediaAssets, categories } from "@/db/schema";
 import { requireAdminRequest } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +13,7 @@ function csvCell(value: unknown) {
 export async function GET(request: Request) {
   if (!(await requireAdminRequest(request))) return new Response("Unauthorized", { status: 401 });
   const database = await getDatabase();
-  const [records, tagRows, mediaRows, relationshipRows] = await Promise.all([
+  const [records, categoryRows, mediaRows, relationshipRows] = await Promise.all([
     database
       .select({
         id: apps.id,
@@ -33,15 +33,15 @@ export async function GET(request: Request) {
       .where(isNull(apps.deletedAt))
       .orderBy(asc(apps.name)),
     database
-      .select({ appId: appTags.appId, name: tags.name })
-      .from(appTags)
-      .innerJoin(tags, eq(tags.id, appTags.tagId))
-      .orderBy(asc(tags.name)),
+      .select({ appId: appCategories.appId, name: categories.name })
+      .from(appCategories)
+      .innerJoin(categories, eq(categories.id, appCategories.categoryId))
+      .orderBy(asc(categories.name)),
     database.select({ appId: mediaAssets.appId, role: mediaAssets.role, storageKey: mediaAssets.storageKey, sourceUrl: mediaAssets.sourceUrl, altText: mediaAssets.altText }).from(mediaAssets).orderBy(asc(mediaAssets.createdAt)),
     database.select({ sourceAppId: appRelationships.sourceAppId, targetAppId: appRelationships.targetAppId }).from(appRelationships).where(eq(appRelationships.relationshipType, "related")),
   ]);
-  const tagsByApp = new Map<string, string[]>();
-  for (const tag of tagRows) tagsByApp.set(tag.appId, [...(tagsByApp.get(tag.appId) ?? []), tag.name]);
+  const categoriesByApp = new Map<string, string[]>();
+  for (const category of categoryRows) categoriesByApp.set(category.appId, [...(categoriesByApp.get(category.appId) ?? []), category.name]);
   const mediaByApp = new Map<string, typeof mediaRows>();
   for (const media of mediaRows) if (media.appId) mediaByApp.set(media.appId, [...(mediaByApp.get(media.appId) ?? []), media]);
   const slugById = new Map(records.map((record) => [record.id, record.slug]));
@@ -61,7 +61,7 @@ export async function GET(request: Request) {
     const preview = media.find((asset) => asset.role === "preview_image");
     return {
       ...record,
-      tags: (tagsByApp.get(id) ?? []).join(", "),
+      categories: (categoriesByApp.get(id) ?? []).join(", "),
       iconUrl: icon ? exportMediaUrl(icon, record.status) : "",
       iconAltText: icon?.altText ?? "",
       previewImageUrl: preview ? exportMediaUrl(preview, record.status) : "",
@@ -77,7 +77,7 @@ export async function GET(request: Request) {
       headers: { "Content-Disposition": 'attachment; filename="macify-applications.json"', "Content-Type": "application/json; charset=utf-8" },
     });
   }
-  const headers = ["name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "tags", "iconUrl", "iconAltText", "previewImageUrl", "previewImageAltText", "screenshotUrls", "relatedAppSlugs", "status"] as const;
+  const headers = ["name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "categories", "iconUrl", "iconAltText", "previewImageUrl", "previewImageAltText", "screenshotUrls", "relatedAppSlugs", "status"] as const;
   const csv = [headers.join(","), ...output.map((row) => headers.map((header) => csvCell(row[header])).join(","))].join("\r\n");
   return new Response(csv, {
     headers: { "Content-Disposition": 'attachment; filename="macify-applications.csv"', "Content-Type": "text/csv; charset=utf-8" },

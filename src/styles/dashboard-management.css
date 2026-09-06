@@ -52,8 +52,8 @@
   font-weight: 700;
 }
 
-.record-list-header-tags,
-.record-item-tag > summary { grid-template-columns: minmax(10rem, 1.4fr) minmax(10rem, 1.2fr) 5rem 4rem 1.25rem; }
+.record-list-header-categories,
+.record-item-category > summary { grid-template-columns: minmax(10rem, 1.4fr) minmax(10rem, 1.2fr) 5rem 4rem 1.25rem; }
 
 .record-item { border-bottom: 1px solid var(--line); }
 .record-item:last-child { border-bottom: 0; }
@@ -107,7 +107,7 @@
   gap: 0.85rem;
 }
 
-.record-editor-form-tag { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+.record-editor-form-category { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
 .record-editor-form label,
 .compact-form label { display: flex; flex-direction: column; gap: 0.32rem; }
 .record-editor-form label > span,
