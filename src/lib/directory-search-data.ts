@@ -92,7 +92,15 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
       eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, rankedSlugs),
     )).limit(30);
     const bySlug = new Map(rankedRecords.map((record) => [record.slug, record]));
-    records = rankedSlugs.map((slug) => bySlug.get(slug)).filter((record): record is (typeof rankedRecords)[number] => Boolean(record));
+    const ranked = rankedSlugs.map((slug) => bySlug.get(slug)).filter((record): record is (typeof rankedRecords)[number] => Boolean(record));
+    const rankedIds = new Set(ranked.map(({ id }) => id));
+    const curatedRemainder = [...fallbackRecords]
+      .filter(({ id }) => !rankedIds.has(id))
+      .sort((left, right) => (
+        (HOMEPAGE_CURATED_ORDER.get(left.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
+        - (HOMEPAGE_CURATED_ORDER.get(right.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
+      ));
+    records = [...ranked, ...curatedRemainder].slice(0, 30);
   }
 
   const page = filters?.page ?? 1;

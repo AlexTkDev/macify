@@ -48,25 +48,16 @@ export function ApplicationDirectory({
   applications,
   heading = "Apps worth trying.",
   id = "all-apps",
-  activeView,
 }: {
   applications: DirectoryApp[];
   heading?: string;
   id?: string;
-  activeView?: "hot" | "trending" | "latest";
 }) {
   const titleId = `${id}-title`;
   return (
     <section className="home-section application-directory" id={id} aria-labelledby={titleId}>
       <div className="directory-heading">
         <h2 id={titleId}>{heading}</h2>
-        {activeView && <nav aria-label="Application ranking" className="directory-view-tabs">
-          {(["hot", "trending", "latest"] as const).map((view) => (
-            <Link aria-current={activeView === view ? "page" : undefined} href={`/?view=${view}#${id}`} key={view} scroll>
-              {view[0].toUpperCase() + view.slice(1)}
-            </Link>
-          ))}
-        </nav>}
       </div>
 
       <DirectoryAppGrid applications={applications} />

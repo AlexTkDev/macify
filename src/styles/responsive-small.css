@@ -102,7 +102,7 @@
     min-height: 0;
     padding: 0.2rem;
   }
-  .directory-view-tabs a {
+  .directory-view-tabs button {
     width: auto;
     height: auto;
     position: static;

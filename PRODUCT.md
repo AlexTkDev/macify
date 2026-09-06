@@ -32,7 +32,7 @@ An application record includes:
 - free, freemium, or paid access classification;
 - one-time or subscription billing where applicable;
 - source status;
-- one to three focused categories;
+- one to 12 focused categories;
 - optional YouTube URL;
 - mutual related-application links;
 - one icon, one main preview, and optional screenshots.

@@ -79,17 +79,25 @@
   background: var(--public-canvas);
 }
 
-.directory-view-tabs a {
+.directory-view-tabs button {
   padding: 0.52rem 0.82rem;
+  border: 0;
   border-radius: 999px;
   color: var(--public-text-secondary);
+  background: transparent;
   font-size: 0.88rem;
   font-weight: 800;
+  cursor: pointer;
 }
 
-.directory-view-tabs a[aria-current="page"] {
+.directory-view-tabs button[aria-pressed="true"] {
   color: var(--public-canvas);
   background: var(--public-ink);
+}
+
+.directory-view-tabs button:focus-visible {
+  outline: 0.16rem solid var(--play-blue);
+  outline-offset: 0.12rem;
 }
 
 .category-index-grid {
