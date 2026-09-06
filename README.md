@@ -2,7 +2,7 @@
   <img src="src/app/icon.svg" alt="Macify" width="88" height="88">
   <h1>Macify</h1>
   <p><strong>Mac apps worth making room for.</strong></p>
-  <p>Macify is a collection of high-quality macOS apps. You can find applications from all categories that can help elevate your experience with your Mac.</p>
+  <p>A curated collection of the best macOS software.</p>
   <p>
     <a href="https://macify.app"><kbd>⌘&nbsp; Browse apps</kbd></a>&nbsp;
     <a href="CONTRIBUTING.md"><kbd>🌱&nbsp; Suggest an app</kbd></a>&nbsp;
@@ -12,17 +12,19 @@
 
 ## Find your next favourite Mac app
 
-Macify brings together some of the best macOS apps in one carefully chosen collection. Each pick can improve how your Mac looks, feels, or works.
+Macify brings together excellent macOS applications across a wide range of categories. Every app is selected for its quality, usefulness, and ability to make the Mac experience better.
 
-Browse the collection, search for a specific tool, or take the surprise route. Every listing explains what the app does, who it suits, what it costs, and the tradeoffs worth knowing before you install it.
+The collection includes both free and paid software. It is focused entirely on applications made for macOS, so iPhone and iPad apps are not included.
+
+Browse the collection, search for a specific tool, or take the surprise route. Every listing explains what the app does, who it suits, what it costs, and what you should know before installing it.
 
 ## Know a good one?
 
-Made a Mac app you are proud of? Found a small gem more people should know about? We would love to see it.
+Made a Mac app you are proud of? Know a great app that belongs in the collection but is not here yet? You are welcome to suggest it.
 
-Read the [contribution guide](CONTRIBUTING.md) before opening a pull request. Each public contribution can introduce one new application. If a listing needs a correction, or you have an idea for Macify itself, [open an issue](https://github.com/Beingpax/macify/issues/new/choose).
+Read the [contribution guidelines](CONTRIBUTING.md) to learn how to add an application. Each public contribution can introduce one new app. If an existing listing needs a correction, or you have an idea for Macify itself, [open an issue](https://github.com/Beingpax/macify/issues/new/choose).
 
-Found something useful here? A star helps more Mac people stumble across the collection. Fork the repository whenever you are ready to add your pick.
+You can also support the project by starring the repository or forking it. Every contribution helps us build a better collection of high quality macOS applications.
 
 ## Make it run locally
 
