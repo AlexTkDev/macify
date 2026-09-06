@@ -166,13 +166,14 @@
   border: 2px solid var(--category-tile-bg);
   border-radius: 24%;
   box-shadow: 0 0.22rem 0.45rem rgb(8 10 13 / 0.2);
+  transform-origin: 50% 82%;
   transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .category-app-gallery img.public-app-icon { background: #fff; }
 
-.category-index-grid a:hover .category-app-gallery .public-app-icon:nth-child(1) { transform: translateX(-0.25rem) rotate(-4deg); }
-.category-index-grid a:hover .category-app-gallery .public-app-icon:nth-child(3) { transform: translateX(0.25rem) rotate(4deg); }
+.category-index-grid a:hover .category-app-gallery .public-app-icon:nth-child(1) { transform: rotate(-4deg); }
+.category-index-grid a:hover .category-app-gallery .public-app-icon:nth-child(3) { transform: rotate(4deg); }
 .category-index-grid a:focus-visible { outline: 0.2rem solid var(--public-ink); outline-offset: 0.25rem; }
 
 .directory-app-grid {
