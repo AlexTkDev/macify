@@ -8,20 +8,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/editorial-policy" },
 };
 
-const sections = [
-  { id: "selection", label: "What we include" },
-  { id: "research", label: "How we research and write" },
-  { id: "meaning", label: "What a listing means" },
-  { id: "independence", label: "Commercial independence" },
-  { id: "corrections", label: "Corrections and concerns" },
-];
-
 export default function EditorialPolicyPage() {
   return (
     <PolicyLayout
       title="Editorial policy"
       description="How applications earn and keep a place in the Macify directory."
-      sections={sections}
     >
       <section id="selection">
         <h2>What we include</h2>

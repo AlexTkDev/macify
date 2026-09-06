@@ -1,24 +1,38 @@
-# Macify
+<div align="center">
+  <img src="src/app/icon.svg" alt="Macify" width="88" height="88">
+  <h1>Macify</h1>
+  <p><strong>Mac apps worth making room for.</strong></p>
+  <p>A cheerful, hand picked directory of useful macOS apps.</p>
+  <p>
+    <a href="https://macify.app"><kbd>🌈&nbsp; Browse apps</kbd></a>&nbsp;
+    <a href="CONTRIBUTING.md"><kbd>🌱&nbsp; Suggest an app</kbd></a>&nbsp;
+    <a href="https://github.com/Beingpax/macify/issues/new/choose"><kbd>💬&nbsp; Share feedback</kbd></a>
+  </p>
+</div>
 
-**Mac apps worth making room for.**
+## Find your next favourite Mac app
 
-Finding a good Mac app should not mean digging through promotional listicles, abandoned projects, or pages of nearly identical choices. Macify is a carefully curated directory of applications that can make your Mac more useful, personal, and enjoyable.
+Macify is for the little apps that make a Mac feel like yours. Search for a specific tool, wander through a category, or take the surprise route and see where you land.
 
-Search for something specific, browse by category, or move between related applications until you find the right fit. Every listing is written to explain what the app does, who it is for, what it costs, and any tradeoffs worth knowing before you install it.
+Each listing gives you the useful bits before you install: what the app does, who it suits, what it costs, and the tradeoffs worth knowing. No crowded download pages or copy pasted praise.
 
-[Browse Macify →](https://macify.app)
+| Start here | What you will find |
+| --- | --- |
+| [Browse all apps](https://macify.app) | The full collection, ready to search |
+| [Explore categories](https://macify.app/categories) | Apps grouped by the job they help with |
+| [Surprise me](https://macify.app/surprise) | One unexpected pick from the directory |
 
-## Add an app
+## Know a good one?
 
-If you make a Mac app—or simply know a great one we have missed—you are welcome to propose it. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) before opening a pull request; each public contribution may add one new application.
+Made a Mac app you are proud of? Found a small gem more people should know about? We would love to see it.
 
-If an existing listing is incorrect or outdated, please [open an issue](https://github.com/Beingpax/macify/issues/new/choose) instead. The same goes for bugs and ideas about the website.
+Read the [contribution guide](CONTRIBUTING.md) before opening a pull request. Each public contribution can introduce one new application. If a listing needs a correction, or you have an idea for Macify itself, [open an issue](https://github.com/Beingpax/macify/issues/new/choose).
 
-If Macify helps you discover something useful, give the repository a star. Fork it when you are ready to contribute an application.
+Found something useful here? A star helps more Mac people stumble across the collection. Fork the repository whenever you are ready to add your pick.
 
-## Development
+## Make it run locally
 
-Macify is built with Next.js and TypeScript, runs on Cloudflare Workers, and uses D1 for reviewed listings and R2 for application media.
+Macify uses Next.js and TypeScript on Cloudflare Workers. Reviewed listings live in D1, while application artwork lives in R2.
 
 To run it locally:
 
@@ -30,11 +44,11 @@ npm run db:migrate:local
 npm run dev
 ```
 
-The development server validates and syncs the local catalogue before starting. To refresh catalogue changes while it is already running, use `npm run catalogue:sync:local`.
+The development server checks and syncs the local catalogue when it starts. To refresh catalogue changes while it is already running, use `npm run catalogue:sync:local`.
 
 Before changing product behavior, interface design, or catalogue copy, read [`docs/PRODUCT.md`](docs/PRODUCT.md), [`docs/DESIGN.md`](docs/DESIGN.md), and [`docs/EDITORIAL.md`](docs/EDITORIAL.md). Operational and release details live in [`docs/OPERATIONS.md`](docs/OPERATIONS.md) and [`docs/RELEASE.md`](docs/RELEASE.md).
 
-Run the relevant checks before submitting repository changes:
+Before submitting changes, run the checks that match your work:
 
 ```bash
 npm run typecheck

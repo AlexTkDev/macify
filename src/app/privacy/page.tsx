@@ -8,21 +8,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const sections = [
-  { id: "information", label: "Information we handle" },
-  { id: "use", label: "How we use it" },
-  { id: "analytics", label: "Analytics and cookies" },
-  { id: "affiliate-links", label: "Providers and outside links" },
-  { id: "retention", label: "Retention and security" },
-  { id: "choices", label: "Your choices and rights" },
-];
-
 export default function PrivacyPage() {
   return (
     <PolicyLayout
       title="Privacy notice"
       description="What happens to your data when you browse Macify."
-      sections={sections}
     >
       <section id="information">
         <h2>Information we handle</h2>

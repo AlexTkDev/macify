@@ -49,26 +49,4 @@ Use this order:
 [Commercial model and concise current pricing context.]
 ```
 
-## Voice
-
-- Write calmly, directly, and specifically.
-- Prefer concrete nouns and verbs.
-- Do not repeat the tagline as the opening sentence.
-- Avoid hype, unsupported comparisons, padding, and duplicated features.
-- State limitations plainly.
-- Keep pricing in structured fields unless it is essential to the recommendation.
-- Do not speculate about unreleased functionality.
-
-## Publication check
-
-- Facts and changing claims are current.
-- The opening has two or three untitled paragraphs.
-- `Features` is the first heading and contains verified capabilities.
-- `Where it fits` identifies audience and tradeoffs.
-- `Privacy and requirements` distinguishes local behavior, cloud behavior, permissions, and developer claims.
-- `Pricing` is the final section and agrees with the structured pricing fields.
-- No paragraph exceeds three sentences.
-- Markdown is valid and contains no raw HTML.
-- The record has an authentic icon, a usable preview, focused categories, and a working official link.
-
 Homepage inclusion is separate from publication. Follow [`HOMEPAGE_CURATION.md`](HOMEPAGE_CURATION.md) without unpublishing an otherwise valid catalogue record.
