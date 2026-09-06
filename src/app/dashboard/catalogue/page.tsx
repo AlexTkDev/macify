@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { desc } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import { AlertTriangle, CheckCircle2, GitBranch, PlusCircle, RefreshCcw } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
@@ -33,9 +33,16 @@ export default async function CatalogueReviewPage({
   const query = await searchParams;
   const view: View = query.view === "history" || query.view === "failed" ? query.view : "pending";
   const database = await getDatabase();
-  const allRevisions = await database.select().from(catalogueRevisions)
-    .orderBy(desc(catalogueRevisions.createdAt)).limit(200);
-  const revisions = allRevisions.filter((revision) => (
+  const [recentRevisions, countRows] = await Promise.all([
+    database.select().from(catalogueRevisions).orderBy(desc(catalogueRevisions.createdAt)).limit(200),
+    database.select({
+      pending: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' then 1 else 0 end), 0)`,
+      create: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'create' then 1 else 0 end), 0)`,
+      update: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'update' then 1 else 0 end), 0)`,
+      failed: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'failed' then 1 else 0 end), 0)`,
+    }).from(catalogueRevisions),
+  ]);
+  const revisions = recentRevisions.filter((revision) => (
     view === "pending" ? revision.status === "pending"
       : view === "failed" ? revision.status === "failed"
         : revision.status === "published" || revision.status === "rejected"
@@ -43,12 +50,7 @@ export default async function CatalogueReviewPage({
   const applications = await getCatalogueQueueApplications(
     revisions.flatMap(({ appId }) => appId ? [appId] : []),
   );
-  const counts = {
-    pending: allRevisions.filter(({ status }) => status === "pending").length,
-    create: allRevisions.filter(({ status, changeType }) => status === "pending" && changeType === "create").length,
-    update: allRevisions.filter(({ status, changeType }) => status === "pending" && changeType === "update").length,
-    failed: allRevisions.filter(({ status }) => status === "failed").length,
-  };
+  const counts = countRows[0] ?? { pending: 0, create: 0, update: 0, failed: 0 };
 
   return (
     <DashboardShell active="catalogue">
