@@ -13,6 +13,9 @@ type DataFastPageAnalyticsResponse = {
     path?: string;
     visitors?: number;
   }>;
+  pagination?: {
+    total?: number;
+  };
 };
 
 export type ApplicationVisit = {
@@ -39,19 +42,21 @@ function applicationSlugFromPath(path: string) {
   return slug && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) ? slug : null;
 }
 
-async function getApplicationVisits(startAt: string, endAt: string): Promise<ApplicationVisit[]> {
+async function getApplicationVisits(startAt?: string, endAt?: string): Promise<ApplicationVisit[] | null> {
   const { env } = await getCloudflareContext({ async: true });
   const apiKey = (env as DataFastEnv).DATAFAST_API_KEY;
-  if (!apiKey) return [];
+  if (!apiKey) return null;
 
   const query = new URLSearchParams({
     fields: "path,visitors",
     filter_page: "contains:/apps/",
-    limit: "250",
-    startAt,
-    endAt,
+    limit: "1000",
     timezone: "UTC",
   });
+  if (startAt && endAt) {
+    query.set("startAt", startAt);
+    query.set("endAt", endAt);
+  }
 
   try {
     const response = await fetch(`${pagesAnalyticsUrl}?${query}`, {
@@ -59,13 +64,13 @@ async function getApplicationVisits(startAt: string, endAt: string): Promise<App
         Accept: "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
-      next: { revalidate: 3600 },
+      next: { revalidate: 7200 },
       signal: AbortSignal.timeout(5_000),
     });
-    if (!response.ok) return [];
+    if (!response.ok) return null;
 
     const payload = await response.json() as DataFastPageAnalyticsResponse;
-    if (payload.status !== "success" || !Array.isArray(payload.data)) return [];
+    if (payload.status !== "success" || !Array.isArray(payload.data)) return null;
 
     const visitsBySlug = new Map<string, number>();
     for (const row of payload.data) {
@@ -78,14 +83,14 @@ async function getApplicationVisits(startAt: string, endAt: string): Promise<App
     return [...visitsBySlug]
       .map(([slug, visitors]) => ({ slug, visitors }))
       .sort((left, right) => right.visitors - left.visitors || left.slug.localeCompare(right.slug))
-      .slice(0, 250);
+      .slice(0, 1000);
   } catch {
-    return [];
+    return null;
   }
 }
 
 export async function getHotApplicationVisits() {
-  return (await getApplicationVisits(utcDate(6), utcDate(0))).slice(0, applicationLimit);
+  return (await getApplicationVisits(utcDate(6), utcDate(0)) ?? []).slice(0, applicationLimit);
 }
 
 export async function getTrendingApplicationVisits() {
@@ -93,8 +98,8 @@ export async function getTrendingApplicationVisits() {
     getApplicationVisits(utcDate(2), utcDate(0)),
     getApplicationVisits(utcDate(5), utcDate(3)),
   ]);
-  const previousBySlug = new Map(previous.map(({ slug, visitors }) => [slug, visitors]));
-  return current
+  const previousBySlug = new Map((previous ?? []).map(({ slug, visitors }) => [slug, visitors]));
+  return (current ?? [])
     .map(({ slug, visitors }) => ({
       slug,
       visitors,
@@ -102,4 +107,10 @@ export async function getTrendingApplicationVisits() {
     }))
     .sort((left, right) => right.score - left.score || right.visitors - left.visitors || left.slug.localeCompare(right.slug))
     .slice(0, applicationLimit);
+}
+
+export async function getAllTimeApplicationVisitors(slug: string) {
+  const visits = await getApplicationVisits();
+  if (!visits) return null;
+  return visits.find((application) => application.slug === slug)?.visitors ?? 0;
 }

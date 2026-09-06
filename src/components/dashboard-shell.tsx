@@ -12,8 +12,8 @@ import { MacifyLogo } from "@/components/macify-logo";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { id: "applications", label: "Applications", description: "Curate the directory", icon: AppWindow, href: "/dashboard", tone: "blue" },
-  { id: "catalogue", label: "Contributions", description: "Review GitHub changes", icon: GitPullRequest, href: "/dashboard/catalogue", tone: "mint" },
+  { id: "applications", label: "Applications", description: "Published app listings", icon: AppWindow, href: "/dashboard", tone: "blue" },
+  { id: "catalogue", label: "Review queue", description: "Publish GitHub updates", icon: GitPullRequest, href: "/dashboard/catalogue", tone: "mint" },
   { id: "media", label: "Media", description: "Inspect synchronized artwork", icon: ImageIcon, href: "/dashboard/media", tone: "mint" },
 ] as const;
 
@@ -32,7 +32,7 @@ export function DashboardShell({
       <aside className="dashboard-rail">
         <div className="dashboard-brand">
           <MacifyLogo href="/dashboard" />
-          <span>Editorial</span>
+          <span>Publishing</span>
         </div>
         <div className="dashboard-rail-label">Workspace</div>
         <nav className="dashboard-navigation" aria-label="Dashboard navigation">
@@ -44,7 +44,7 @@ export function DashboardShell({
           ))}
         </nav>
         <div className="dashboard-rail-footer">
-          <span className="dashboard-environment"><i aria-hidden="true" /> Local workspace</span>
+          <span className="dashboard-environment"><i aria-hidden="true" /> Admin workspace</span>
           <Link className="dashboard-site-link" href="/">Open Macify <ArrowUpRight aria-hidden="true" size={15} /></Link>
           <form action={logoutAdmin}><button className="dashboard-site-link dashboard-logout" type="submit">Sign out <LogOut aria-hidden="true" size={15} /></button></form>
         </div>

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, ExternalLink } from "lucide-react";
+import { ChevronRight, ExternalLink, GitBranch } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
 import { deals } from "@/db/schema";
@@ -53,13 +53,16 @@ export default async function EditApplicationPage({
 
       <header className="editor-header editor-header-row">
         <div>
-          <p>{application.status} record</p>
+          <p>{application.status === "published" ? "Published application" : application.status === "archived" ? "Archived application" : "Application not public"}</p>
           <h1>{application.name}</h1>
-          <span>Manage dashboard-only placement and deals. Catalogue content is reviewed through GitHub revisions.</span>
+          <span>Manage featured placement and time-limited deals. App information is changed in GitHub.</span>
         </div>
         <div className="editor-header-actions">
           <a className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">
             Visit website <ExternalLink size={15} />
+          </a>
+          <a className="button-secondary" href={`https://github.com/Beingpax/macify/edit/main/catalog/apps/${application.slug}.json`} rel="noreferrer" target="_blank">
+            Edit app information <GitBranch size={15} />
           </a>
         </div>
       </header>
@@ -70,7 +73,7 @@ export default async function EditApplicationPage({
 
       <section className="dashboard-panel editorial-controls" aria-labelledby="editorial-controls-heading">
         <div className="media-editor-heading">
-          <div><h2 id="editorial-controls-heading">Editorial placement</h2><span>These settings live only in D1 and cannot be changed by GitHub contributions.</span></div>
+          <div><h2 id="editorial-controls-heading">Placement and deals</h2><span>These controls affect presentation on Macify. The app listing itself stays in GitHub.</span></div>
         </div>
         <div className="editorial-control-grid">
           <form action={setFeaturedApplication} className="editorial-control-card">

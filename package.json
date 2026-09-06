@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run catalogue:sync:local",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -16,7 +17,8 @@
     "db:check": "drizzle-kit check",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "db:migrate:production": "wrangler d1 migrations apply DB --remote --env production",
-    "catalogue:validate": "node scripts/validate-catalogue.mjs"
+    "catalogue:validate": "node scripts/validate-catalogue.mjs",
+    "catalogue:sync:local": "node scripts/sync-local-catalogue.mjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "1.20.2",

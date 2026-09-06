@@ -156,27 +156,57 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.55rem 0;
+  gap: 0.65rem 1.15rem;
   color: #4f5055;
   font-size: clamp(0.9rem, 1.35vw, 1.05rem);
   font-weight: 520;
   line-height: 1.35;
 }
 
-.application-facts > span {
+.application-fact {
+  position: relative;
   display: inline-flex;
   align-items: center;
+  gap: 0.48rem;
 }
 
-.application-facts > span + span::before {
-  content: "·";
-  margin: 0 1.1rem;
-  color: #55565b;
+.application-fact-icon {
+  width: 1.7rem;
+  height: 1.7rem;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--public-ink-strong);
+  isolation: isolate;
 }
 
-.application-facts .application-source { color: var(--play-blue); }
+.application-fact-icon::before {
+  content: "";
+  width: 1.5rem;
+  height: 1.32rem;
+  position: absolute;
+  z-index: -1;
+  border-radius: 0.32rem;
+  background: #dfe5f2;
+  transform: rotate(-7deg);
+}
 
-.application-price { color: inherit; }
+.application-fact-orange .application-fact-icon::before { background: #ffb38d; }
+.application-fact-green .application-fact-icon::before { background: #83dfb9; }
+.application-fact-blue .application-fact-icon::before { background: #91bdff; }
+.application-fact-violet .application-fact-icon::before { background: #bca9ff; }
+.application-fact-yellow .application-fact-icon::before { background: #f4d66f; }
+
+.application-facts .application-source { color: #3159a4; }
+
+.application-visitors strong {
+  color: var(--public-ink-strong);
+  font-variant-numeric: tabular-nums;
+  font-weight: 720;
+}
+
+.application-price { color: #45474e; }
 
 .application-website {
   width: max-content;

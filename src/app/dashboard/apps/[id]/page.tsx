@@ -39,7 +39,9 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           )}
           <div>
             <div className="dashboard-detail-status">
-              <span className={cn(application.status === "published" ? "published-badge" : "draft-badge")}>{application.status}</span>
+              <span className={cn(application.status === "published" ? "published-badge" : "draft-badge")}>
+                {application.status === "published" ? "Published" : application.status === "archived" ? "Archived" : "Not public"}
+              </span>
               <span>/{application.slug}</span>
             </div>
             <h1>{application.name}</h1>
@@ -48,7 +50,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
         </div>
         <div className="dashboard-actions">
           <a className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">Website <ExternalLink size={15} /></a>
-          <Link className="button-primary" href={`/dashboard/apps/${application.id}/edit`}><SlidersHorizontal size={15} /> Editorial settings</Link>
+          <Link className="button-primary" href={`/dashboard/apps/${application.id}/edit`}><SlidersHorizontal size={15} /> Placement and deals</Link>
         </div>
       </header>
 

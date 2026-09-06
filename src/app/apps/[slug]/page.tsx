@@ -7,6 +7,7 @@ import { RelatedApplications } from "@/components/application-detail/related-app
 import { PublicShell } from "@/components/public-site";
 import { mediaUrl } from "@/components/public-app-card";
 import { getPublishedApplicationBySlug } from "@/lib/apps-data";
+import { getAllTimeApplicationVisitors } from "@/lib/datafast-analytics";
 
 export const dynamic = "force-dynamic";
 const getApplication = cache(getPublishedApplicationBySlug);
@@ -28,7 +29,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ApplicationPage({ params }: { params: Promise<{ slug: string }> }) {
-  const application = await getApplication((await params).slug);
+  const slug = (await params).slug;
+  const [application, visitors] = await Promise.all([
+    getApplication(slug),
+    getAllTimeApplicationVisitors(slug),
+  ]);
   if (!application) notFound();
   const icon = application.media.find(({ role }) => role === "icon");
   const preview = application.media.find(({ role }) => role === "preview_image");
@@ -49,7 +54,7 @@ export default async function ApplicationPage({ params }: { params: Promise<{ sl
   return (
     <PublicShell>
       <main className="application-page" id="main-content">
-        <ApplicationHero application={application} icon={icon} />
+        <ApplicationHero application={application} icon={icon} visitors={visitors} />
         <ApplicationOverview application={application} preview={preview} screenshots={screenshots} />
         <RelatedApplications applications={application.related} />
       </main>

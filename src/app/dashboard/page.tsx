@@ -25,28 +25,28 @@ export default async function DashboardPage() {
     <DashboardShell active="applications">
       <header className="dashboard-header">
         <div>
-          <p>Content workspace</p>
+          <p>Publishing workspace</p>
           <h1>Applications</h1>
         </div>
         <div className="dashboard-actions">
           <Link className="button-primary" href="/dashboard/catalogue">
-            <GitPullRequest size={16} /> Review contributions
+            <GitPullRequest size={16} /> Open review queue
           </Link>
         </div>
       </header>
 
       <section className="status-strip" aria-label="Directory status">
         <div><span>Published</span><strong>{stats.published}</strong><small>Visible in the public directory</small></div>
-        <div><span>Pending reviews</span><strong>{pendingRevisions}</strong><small>Merged GitHub revisions awaiting a decision</small></div>
+        <div><span>Awaiting publication</span><strong>{pendingRevisions}</strong><small>Merged GitHub updates ready for review</small></div>
         <div><span>Media</span><strong>{formatBytes(Number(media.bytes))}</strong><small>{media.count} files recorded for R2</small></div>
-        <div><span>Database</span><strong className="status-ready"><Database size={15} /> Ready</strong><small>{stats.total} application records in local D1</small></div>
+        <div><span>Database</span><strong className="status-ready"><Database size={15} /> Ready</strong><small>{stats.total} application records stored in D1</small></div>
       </section>
 
       <section className="dashboard-panel" aria-labelledby="recent-apps">
         <div className="panel-toolbar">
           <div>
             <h2 id="recent-apps">Recent applications</h2>
-            <p>Published catalogue records. Content changes come from reviewed GitHub revisions.</p>
+            <p>Published app listings. Change app information in GitHub; use this dashboard for publication, placement, and deals.</p>
           </div>
         </div>
 
@@ -54,7 +54,7 @@ export default async function DashboardPage() {
           <div className="dashboard-empty">
             <span className="empty-app-mark" aria-hidden="true">0</span>
             <h3>No applications yet</h3>
-            <p>Merge a valid catalogue manifest and publish it from Contributions.</p>
+            <p>Add an app listing in GitHub, then publish the merged update from the review queue.</p>
           </div>
         ) : (
           <div className="data-table-wrap">
@@ -92,11 +92,11 @@ export default async function DashboardPage() {
                     <td>{app.sourceType === "open_source" ? "Open source" : <span className="table-muted">Not displayed</span>}</td>
                     <td>
                       <span className={cn(app.status === "published" ? "published-badge" : "draft-badge")}>
-                        {app.status === "published" ? "Published" : "Draft"}
+                        {app.status === "published" ? "Published" : "Not public"}
                       </span>
                     </td>
                     <td>
-                      <Link className="icon-button" href={`/dashboard/apps/${app.id}/edit`} aria-label={`Open editorial settings for ${app.name}`}>
+                      <Link className="icon-button" href={`/dashboard/apps/${app.id}/edit`} aria-label={`Manage placement and deals for ${app.name}`}>
                         <SlidersHorizontal size={15} />
                       </Link>
                     </td>

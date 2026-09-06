@@ -4,22 +4,65 @@ import { PolicyLayout } from "@/components/policy-layout";
 
 export const metadata: Metadata = {
   title: "Privacy notice",
-  description: "What data the current version of Macify handles and why.",
+  description: "What happens to your data when you browse Macify.",
   alternates: { canonical: "/privacy" },
 };
 
+const sections = [
+  { id: "information", label: "Information we handle" },
+  { id: "use", label: "How we use it" },
+  { id: "analytics", label: "Analytics and cookies" },
+  { id: "affiliate-links", label: "Providers and outside links" },
+  { id: "retention", label: "Retention and security" },
+  { id: "choices", label: "Your choices and rights" },
+];
+
 export default function PrivacyPage() {
   return (
-    <PolicyLayout title="Privacy notice" description="What Macify processes when you use the directory, why it is needed, and the choices available to you.">
-      <section id="scope"><h2>Scope</h2><p>This notice applies to the public Macify website and its application directory. Macify does not currently provide public accounts, saved applications, payments, subscriptions, or public submission forms.</p><p>Developer websites, app stores, YouTube, and other services linked from an application profile have their own privacy practices. This notice does not cover what they process after you follow an external link.</p></section>
-      <section id="data"><h2>Information processed</h2><p>When you request a page or media file, Macify and its hosting infrastructure may process your IP address, request time, requested URL, referrer, browser and device information, approximate location derived from network data, and security or diagnostic signals. These are standard parts of delivering and protecting a website.</p><p>If you contact Macify outside the site, the message and contact details you choose to provide may be retained so the request can be answered and a record of the conversation can be maintained.</p><p>Macify does not ask public visitors for sensitive personal information and does not use the site to make decisions that produce legal or similarly significant effects.</p></section>
-      <section id="analytics"><h2>Analytics and cookies</h2><p>Macify uses DataFast to understand aggregate traffic, referral sources, page usage, and the approximate number of visitors online. The current integration loads DataFast’s standard analytics script. According to DataFast, that script uses cookies for visitor identification and processes information including IP addresses and browsing activity.</p><p>Macify does not send DataFast a public account ID, name, email address, payment record, or other known-user profile because the public site does not have those features. Analytics is not used to serve personalized advertising.</p><p>You can block or delete cookies through your browser. Where local law requires consent before analytics cookies are stored, the analytics configuration and consent experience must follow that requirement.</p></section>
-      <section id="affiliate-links"><h2>Affiliate and external links</h2><p>Macify may earn a commission from qualifying purchases made through affiliate links on this website, without increasing the price you pay. An offer may also copy its discount code to your clipboard before opening the destination website.</p><p>Affiliate and other external links lead to third-party services with their own privacy practices. The destination may receive standard request information, recognize the affiliate identifier, use cookies or similar technologies, and report attribution or commission information to Macify.</p></section>
-      <section id="purposes"><h2>Why information is used</h2><p>Technical request information is used to deliver pages and media, maintain reliability, investigate errors, prevent abuse, and protect the service. Analytics information is used to understand whether the directory is useful, which pages are visited, and how people arrive at the site.</p><p>Where data-protection law requires a legal basis, these activities are generally carried out for the legitimate interests of operating, securing, and improving Macify. Consent is used where applicable law requires it for analytics cookies. Macify does not sell personal information.</p></section>
-      <section id="providers"><h2>Service providers and transfers</h2><p><a href="https://www.cloudflare.com/privacypolicy/">Cloudflare</a> provides website hosting, content delivery, and security services. <a href="https://datafa.st/privacy-policy">DataFast</a> provides website analytics and realtime visitor statistics. These providers process information on Macify’s behalf or under their own applicable terms to deliver their services.</p><p>Providers may process information in countries other than your own. Their contractual terms and legally recognized transfer safeguards govern those transfers where required. Macify may also disclose information when reasonably necessary to comply with law, protect the service, or respond to a valid legal request.</p></section>
-      <section id="retention"><h2>Retention and security</h2><p>Request logs, security records, analytics data, and correspondence are retained only for as long as reasonably needed for their stated purposes, applicable provider settings, dispute resolution, and legal obligations. Retention can differ by record type. Information is deleted or aggregated when it is no longer needed.</p><p>Macify limits administrative access and uses Cloudflare’s infrastructure to protect data in transit and at rest where supported. No internet service can guarantee absolute security.</p></section>
-      <section id="choices"><h2>Your choices and rights</h2><p>You can use browser controls or privacy tools to limit cookies and analytics requests. Blocking analytics should not prevent access to the public directory, although the realtime visitor indicator may not reflect your visit accurately.</p><p>Depending on where you live, you may have rights to request access, correction, deletion, restriction, portability, or an objection to certain processing. You may also withdraw consent where processing relies on consent and complain to your local data-protection authority. A request may require reasonable verification and may be limited where the law permits or requires continued retention.</p></section>
-      <section id="contact"><h2>Changes and contact</h2><p>This notice will be updated when Macify materially changes its data practices, providers, or public features. The date at the top shows the latest revision.</p><p>Privacy questions and rights requests can be sent to <a href="mailto:privacy@macify.app">privacy@macify.app</a>.</p><p>For how applications are selected and described, read the <Link href="/editorial-policy">editorial policy</Link>.</p></section>
+    <PolicyLayout
+      title="Privacy notice"
+      description="What happens to your data when you browse Macify."
+      sections={sections}
+    >
+      <aside className="policy-summary" aria-labelledby="privacy-summary-title">
+        <h2 id="privacy-summary-title">The short version</h2>
+        <ul>
+          <li>You can browse without an account or giving Macify your name or email address.</li>
+          <li>Basic technical and usage data helps deliver, secure, and improve the directory.</li>
+          <li>Macify does not sell personal information or use it for personalized advertising.</li>
+        </ul>
+      </aside>
+      <section id="information">
+        <h2>Information we handle</h2>
+        <p>Macify is a public application directory. It does not currently offer public accounts, payments, saved applications, or submission forms.</p>
+        <p>When you visit, the site processes standard technical information, including your IP address, requested page, browser and device details, referrer, approximate country, and security or diagnostic signals. If you email Macify, we receive the address, message, and any other information you choose to send.</p>
+      </section>
+      <section id="use">
+        <h2>How we use it</h2>
+        <p>Technical information is used to deliver pages and media, keep the site reliable, diagnose errors, and prevent abuse. Usage information helps us understand how people find and use the directory. Messages are used to answer questions, rights requests, and correction reports.</p>
+        <p>Where a legal basis is required, these uses generally rely on Macify’s legitimate interests in operating, securing, and improving the site. Consent is required where applicable law requires it for analytics cookies.</p>
+      </section>
+      <section id="analytics">
+        <h2>Analytics and cookies</h2>
+        <p>Macify uses an analytics service to measure page visits, referral sources, and the approximate number of visitors online. The current analytics setup uses a cookie to recognize a browser and processes IP address, browser and device information, approximate country, referrer, and page activity.</p>
+        <p>Analytics is not connected to a public Macify account, used for personalized advertising, or sold. You can block or delete analytics cookies in your browser without losing access to the directory.</p>
+      </section>
+      <section id="affiliate-links">
+        <h2>Providers and outside links</h2>
+        <p>Macify shares information only as needed with providers that host, secure, deliver, and measure the site, or when disclosure is required by law. These providers may process information in other countries under their own terms and any legally required transfer safeguards.</p>
+        <p>Links to application websites, app stores, videos, and other services take you to sites with their own privacy practices. Some links are affiliate links. Macify may earn a commission from a qualifying purchase, and the destination may receive an affiliate identifier along with standard request information.</p>
+      </section>
+      <section id="retention">
+        <h2>Retention and security</h2>
+        <p>Technical records, analytics, and messages are kept only while reasonably needed to operate and protect the site, answer requests, maintain useful reporting, or meet legal obligations. The exact period depends on the record and the settings of the service that stores it.</p>
+        <p>Administrative access is limited and reasonable safeguards are used to protect information. No internet service can guarantee absolute security.</p>
+      </section>
+      <section id="choices">
+        <h2>Your choices and rights</h2>
+        <p>Depending on where you live, you may have rights to access, correct, delete, restrict, or object to the use of your personal information, withdraw consent, or complain to a data-protection authority.</p>
+        <p>Send privacy questions or rights requests to <a href="mailto:privacy@macify.app">privacy@macify.app</a>. We may need to verify a request before acting on it. This notice will change when Macify’s data practices change.</p>
+        <p>For how applications are selected and described, read the <Link href="/editorial-policy">editorial policy</Link>.</p>
+      </section>
     </PolicyLayout>
   );
 }

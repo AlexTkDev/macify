@@ -19,7 +19,9 @@ npm run db:migrate:local
 npm run dev
 ```
 
-Optional catalogue seed commands are listed in `package.json`. Use `npm run preview` when a change needs verification in the Workers runtime.
+`npm run dev` validates `catalog/apps` and synchronizes the manifests into local D1 before Next.js starts. Run `npm run catalogue:sync:local` to refresh an already-running development server. This command is local-only, preserves dashboard-managed featured state and existing media, and never writes to production.
+
+Use `npm run preview` when a change needs verification in the Workers runtime.
 
 ## Quality checks
 
