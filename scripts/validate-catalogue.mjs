@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const appsDirectory = path.join(root, "catalog", "apps");
+const dealsDirectory = path.join(root, "catalog", "deals");
+const examplesDirectory = path.join(root, "catalog", "examples");
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const allowedPricing = new Set(["free", "freemium", "paid"]);
 const allowedBilling = new Set(["one_time", "subscription"]);
@@ -90,6 +92,30 @@ function validateManifest(manifest, expectedSlug) {
   return issues;
 }
 
+function validateDealManifest(manifest, expectedAppSlug) {
+  const issues = [];
+  const allowedKeys = new Set(["$schema", "schemaVersion", "appSlug", "discountPercent", "code", "url", "affiliate", "startsAt", "endsAt"]);
+  for (const key of Object.keys(manifest)) if (!allowedKeys.has(key)) issues.push(`${key} is not an allowed deal field.`);
+  if (manifest.schemaVersion !== 1) issues.push("schemaVersion must be 1.");
+  if (!slugPattern.test(manifest.appSlug ?? "")) issues.push("appSlug must use lowercase letters, numbers, and hyphens.");
+  if (manifest.appSlug !== expectedAppSlug) issues.push(`appSlug must match the filename (${expectedAppSlug}).`);
+  if (!Number.isInteger(manifest.discountPercent) || manifest.discountPercent < 1 || manifest.discountPercent > 100) {
+    issues.push("discountPercent must be an integer from 1 to 100.");
+  }
+  if (manifest.code !== null && (typeof manifest.code !== "string" || manifest.code.trim().length < 1 || manifest.code.length > 80)) {
+    issues.push("code must be null or contain 1 to 80 characters.");
+  }
+  if (!isHttpUrl(manifest.url, true)) issues.push("url must be a public HTTPS URL.");
+  if (typeof manifest.affiliate !== "boolean") issues.push("affiliate must be true or false.");
+  const startsAt = typeof manifest.startsAt === "string" ? Date.parse(manifest.startsAt) : Number.NaN;
+  const endsAt = typeof manifest.endsAt === "string" ? Date.parse(manifest.endsAt) : Number.NaN;
+  const hasTimezone = (value) => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/.test(value);
+  if (!Number.isFinite(startsAt) || !hasTimezone(manifest.startsAt)) issues.push("startsAt must be an ISO 8601 date-time with a timezone.");
+  if (!Number.isFinite(endsAt) || !hasTimezone(manifest.endsAt)) issues.push("endsAt must be an ISO 8601 date-time with a timezone.");
+  if (Number.isFinite(startsAt) && Number.isFinite(endsAt) && endsAt <= startsAt) issues.push("endsAt must be after startsAt.");
+  return issues;
+}
+
 const files = (await readdir(appsDirectory)).filter((file) => file.endsWith(".json")).sort();
 if (files.length === 0) throw new Error("The catalogue contains no application manifests.");
 const manifests = [];
@@ -130,5 +156,36 @@ for (const { file, manifest } of manifests) {
   }
 }
 
+const dealFiles = (await readdir(dealsDirectory)).filter((file) => file.endsWith(".json")).sort();
+for (const file of dealFiles) {
+  let manifest;
+  try {
+    manifest = JSON.parse(await readFile(path.join(dealsDirectory, file), "utf8"));
+  } catch (error) {
+    console.error(`deals/${file}: ${error instanceof Error ? error.message : "invalid JSON"}`);
+    failed = true;
+    continue;
+  }
+  const issues = validateDealManifest(manifest, file.slice(0, -5));
+  if (!bySlug.has(manifest.appSlug)) issues.push(`appSlug does not match an application in catalog/apps (${manifest.appSlug ?? "missing"}).`);
+  for (const issue of issues) console.error(`deals/${file}: ${issue}`);
+  failed ||= issues.length > 0;
+}
+
+for (const [file, validate, expectedSlug] of [
+  ["application.example.json", validateManifest, "example-app"],
+  ["deal.example.json", validateDealManifest, "example-app"],
+]) {
+  try {
+    const manifest = JSON.parse(await readFile(path.join(examplesDirectory, file), "utf8"));
+    const issues = validate(manifest, expectedSlug);
+    for (const issue of issues) console.error(`examples/${file}: ${issue}`);
+    failed ||= issues.length > 0;
+  } catch (error) {
+    console.error(`examples/${file}: ${error instanceof Error ? error.message : "invalid JSON"}`);
+    failed = true;
+  }
+}
+
 if (failed) process.exitCode = 1;
-else console.log(`Validated ${manifests.length} application manifests.`);
+else console.log(`Validated ${manifests.length} application manifest(s), ${dealFiles.length} deal manifest(s), and both contributor examples.`);

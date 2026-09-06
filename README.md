@@ -40,7 +40,9 @@ src/db/         D1 client and Drizzle schema
 src/lib/        Queries, validation, media, and utilities
 migrations/     Ordered D1 migrations and Drizzle metadata
 catalog/apps/   Public, one-file-per-application catalogue manifests
-catalog/schema/ Manifest schema
+catalog/deals/  Separate deal manifests linked by application slug
+catalog/examples/ Contributor-ready application and deal examples
+catalog/schema/ Application and deal schemas
 scripts/        Catalogue validation and GitHub synchronization tools
 public/         Static public assets
 ```
@@ -61,7 +63,7 @@ public/         Static public assets
 
 GitHub is the canonical source for contributed application content, while Cloudflare remains the serving layer. Pull requests validate one JSON manifest per application. After a merge, an authenticated workflow sends only changed manifests to the Worker. The Worker validates the manifest, safely downloads and optimizes changed remote images into R2, and stores a pending revision in D1. An administrator must publish that exact revision from the dashboard; a pending or failed update never replaces the live application.
 
-Featured placement and deals are dashboard-only D1 records. They cannot be changed from public manifests.
+Featured placement remains a dashboard-only D1 setting. Deal manifests live separately from application manifests and link to them through the application slug.
 
 ## Deferred public features
 
