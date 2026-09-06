@@ -2,9 +2,9 @@
   <img src="src/app/icon.svg" alt="Macify" width="88" height="88">
   <h1>Macify</h1>
   <p><strong>Mac apps worth making room for.</strong></p>
-  <p>A cheerful, hand picked directory of useful macOS apps.</p>
+  <p>Macify is a collection of high-quality macOS apps. You can find applications from all categories that can help elevate your experience with your Mac.</p>
   <p>
-    <a href="https://macify.app"><kbd>🌈&nbsp; Browse apps</kbd></a>&nbsp;
+    <a href="https://macify.app"><kbd>⌘&nbsp; Browse apps</kbd></a>&nbsp;
     <a href="CONTRIBUTING.md"><kbd>🌱&nbsp; Suggest an app</kbd></a>&nbsp;
     <a href="https://github.com/Beingpax/macify/issues/new/choose"><kbd>💬&nbsp; Share feedback</kbd></a>
   </p>
@@ -12,15 +12,9 @@
 
 ## Find your next favourite Mac app
 
-Macify is for the little apps that make a Mac feel like yours. Search for a specific tool, wander through a category, or take the surprise route and see where you land.
+Macify brings together some of the best macOS apps in one carefully chosen collection. Each pick can improve how your Mac looks, feels, or works.
 
-Each listing gives you the useful bits before you install: what the app does, who it suits, what it costs, and the tradeoffs worth knowing. No crowded download pages or copy pasted praise.
-
-| Start here | What you will find |
-| --- | --- |
-| [Browse all apps](https://macify.app) | The full collection, ready to search |
-| [Explore categories](https://macify.app/categories) | Apps grouped by the job they help with |
-| [Surprise me](https://macify.app/surprise) | One unexpected pick from the directory |
+Browse the collection, search for a specific tool, or take the surprise route. Every listing explains what the app does, who it suits, what it costs, and the tradeoffs worth knowing before you install it.
 
 ## Know a good one?
 
