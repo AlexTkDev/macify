@@ -111,7 +111,11 @@
     clip: auto;
     white-space: normal;
   }
-  .category-index-grid { grid-template-columns: 1fr; }
+  .category-index-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+  .category-index-grid a,
+  .category-index-grid a:nth-child(n) { min-height: 9.5rem; padding: 1.05rem; grid-column: span 1; }
+  .category-index-grid strong { font-size: 1rem; }
+  .category-app-gallery .public-app-icon { width: 2.65rem; height: 2.65rem; margin-inline-start: -0.8rem; }
   .directory-app-grid {
     grid-template-columns: 1fr;
     gap: 3rem;

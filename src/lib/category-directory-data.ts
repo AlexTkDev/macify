@@ -1,7 +1,7 @@
 import { and, asc, count, desc, eq, isNull } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { appCategories, apps, categories } from "@/db/schema";
-import { cardFields, getCardMedia } from "@/lib/directory-shared";
+import { cardFields, getAppIcons, getCardMedia } from "@/lib/directory-shared";
 
 export async function getPublishedCategoryBySlug(slug: string) {
   const database = await getDatabase();
@@ -44,15 +44,38 @@ export async function getPublishedCategorySlugs() {
 
 export async function getPublishedCategories() {
   const database = await getDatabase();
-  return database.select({
-    id: categories.id,
-    name: categories.name,
-    slug: categories.slug,
-    applicationCount: count(appCategories.appId),
-  }).from(categories)
-    .innerJoin(appCategories, eq(appCategories.categoryId, categories.id))
-    .innerJoin(apps, eq(apps.id, appCategories.appId))
-    .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
-    .groupBy(categories.id)
-    .orderBy(desc(count(appCategories.appId)), asc(categories.name));
+  const [categoryRows, applicationRows] = await Promise.all([
+    database.select({
+      id: categories.id,
+      name: categories.name,
+      slug: categories.slug,
+      applicationCount: count(appCategories.appId),
+    }).from(categories)
+      .innerJoin(appCategories, eq(appCategories.categoryId, categories.id))
+      .innerJoin(apps, eq(apps.id, appCategories.appId))
+      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
+      .groupBy(categories.id)
+      .orderBy(desc(count(appCategories.appId)), asc(categories.name)),
+    database.select({ categoryId: appCategories.categoryId, ...cardFields })
+      .from(appCategories)
+      .innerJoin(apps, eq(apps.id, appCategories.appId))
+      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
+      .orderBy(desc(apps.publishedAt), asc(apps.name)),
+  ]);
+  const icons = await getAppIcons([...new Set(applicationRows.map(({ id }) => id))]);
+  const applicationsByCategory = new Map<string, Array<(typeof applicationRows)[number] & {
+    icon: NonNullable<ReturnType<typeof icons.get>> | null;
+  }>>();
+
+  for (const application of applicationRows) {
+    const categoryApplications = applicationsByCategory.get(application.categoryId) ?? [];
+    if (categoryApplications.length >= 4) continue;
+    categoryApplications.push({ ...application, icon: icons.get(application.id) ?? null });
+    applicationsByCategory.set(application.categoryId, categoryApplications);
+  }
+
+  return categoryRows.map((category) => ({
+    ...category,
+    applications: applicationsByCategory.get(category.id) ?? [],
+  }));
 }
