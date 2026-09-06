@@ -163,6 +163,8 @@
   width: 3.15rem;
   height: 3.15rem;
   margin-inline-start: -0.65rem;
+  position: relative;
+  z-index: 1;
   border: 2px solid var(--category-tile-bg);
   border-radius: 24%;
   box-shadow: 0 0.22rem 0.45rem rgb(8 10 13 / 0.2);
@@ -171,6 +173,7 @@
 }
 
 .category-app-gallery img.public-app-icon { background: #fff; }
+.category-app-gallery .public-app-icon:nth-child(2) { z-index: 2; }
 
 .category-index-grid a:hover .category-app-gallery .public-app-icon:nth-child(1) { transform: rotate(-4deg); }
 .category-index-grid a:hover .category-app-gallery .public-app-icon:nth-child(3) { transform: rotate(4deg); }
