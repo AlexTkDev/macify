@@ -9,6 +9,6 @@ catalog/deals/example-app.json
 
 The `appSlug` inside the deal must also match that filename. This readable GitHub reference is resolved to the application's internal D1 ID during synchronization.
 
-Start with [`../examples/deal.example.json`](../examples/deal.example.json). Use the exact percentage offered, set `code` to `null` when no code is needed, and provide the final HTTPS destination. Set `affiliate` accurately so Macify can apply the correct disclosure and link semantics.
+Start with [`../examples/deal.example.json`](../examples/deal.example.json). Use the exact percentage offered and set `code` to `null` when no code is needed. A deal has no separate destination: its action always uses the linked application's `websiteUrl`.
 
 Deal dates must be ISO 8601 timestamps with a timezone. Expired deals remain in Git history but are not shown publicly. Deal changes require the same review process as application changes.

@@ -94,7 +94,7 @@ function validateManifest(manifest, expectedSlug) {
 
 function validateDealManifest(manifest, expectedAppSlug) {
   const issues = [];
-  const allowedKeys = new Set(["$schema", "schemaVersion", "appSlug", "discountPercent", "code", "url", "affiliate", "startsAt", "endsAt"]);
+  const allowedKeys = new Set(["$schema", "schemaVersion", "appSlug", "discountPercent", "code", "startsAt", "endsAt"]);
   for (const key of Object.keys(manifest)) if (!allowedKeys.has(key)) issues.push(`${key} is not an allowed deal field.`);
   if (manifest.schemaVersion !== 1) issues.push("schemaVersion must be 1.");
   if (!slugPattern.test(manifest.appSlug ?? "")) issues.push("appSlug must use lowercase letters, numbers, and hyphens.");
@@ -105,8 +105,6 @@ function validateDealManifest(manifest, expectedAppSlug) {
   if (manifest.code !== null && (typeof manifest.code !== "string" || manifest.code.trim().length < 1 || manifest.code.length > 80)) {
     issues.push("code must be null or contain 1 to 80 characters.");
   }
-  if (!isHttpUrl(manifest.url, true)) issues.push("url must be a public HTTPS URL.");
-  if (typeof manifest.affiliate !== "boolean") issues.push("affiliate must be true or false.");
   const startsAt = typeof manifest.startsAt === "string" ? Date.parse(manifest.startsAt) : Number.NaN;
   const endsAt = typeof manifest.endsAt === "string" ? Date.parse(manifest.endsAt) : Number.NaN;
   const hasTimezone = (value) => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/.test(value);

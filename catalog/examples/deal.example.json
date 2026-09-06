@@ -4,8 +4,6 @@
   "appSlug": "example-app",
   "discountPercent": 40,
   "code": "MACIFY40",
-  "url": "https://example.com/deal?ref=macify",
-  "affiliate": true,
   "startsAt": "2026-09-01T00:00:00Z",
   "endsAt": "2026-10-01T00:00:00Z"
 }

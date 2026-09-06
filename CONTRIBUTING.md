@@ -19,8 +19,8 @@ Featured placement is an editorial setting and intentionally does not exist in p
 
 1. Copy [`catalog/examples/deal.example.json`](catalog/examples/deal.example.json) to `catalog/deals`.
 2. Name the file with the existing application's slug and use the same value for `appSlug`: `catalog/deals/example-app.json`.
-3. Enter the percentage as an integer, the final HTTPS destination URL, and ISO 8601 start and end times with a timezone.
-4. Use `null` when no discount code is required, and set `affiliate` accurately.
+3. Enter the percentage as an integer and ISO 8601 start and end times with a timezone.
+4. Use `null` when no discount code is required. Deal actions automatically use the linked application's `websiteUrl`.
 5. Run `npm run catalogue:validate`.
 
 Deal manifests are maintained separately so an offer can change or expire without rewriting the application's catalogue record. See [`catalog/deals/README.md`](catalog/deals/README.md) for the complete relationship rule.
