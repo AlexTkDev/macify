@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, isNull, lte, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 import { getDatabase } from "@/db/client";
 import {
@@ -80,8 +80,8 @@ export async function getPublishedApplicationBySlug(slug: string) {
       .limit(6),
     database.select().from(deals).where(and(
       eq(deals.appId, application.id),
-      sql`(${deals.startsAt} is null or ${deals.startsAt} <= ${now})`,
-      sql`(${deals.endsAt} is null or ${deals.endsAt} > ${now})`,
+      lte(deals.startsAt, now),
+      gt(deals.endsAt, now),
     )).limit(1),
   ]);
 
