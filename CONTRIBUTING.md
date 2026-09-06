@@ -1,17 +1,17 @@
-# Add an application to Macify
+# 🌱 Add an application to Macify
 
 If you develop a Mac application, or know one that is not yet listed and would be useful to other Mac users, you can propose it for the Macify catalogue.
 
 Each contribution must add one new application. Do not include code, documentation, design, or changes to an existing listing in the same pull request.
 
-## Before you begin
+## 🔎 Before you begin
 
 - Check [`catalog/apps`](catalog/apps) to make sure the application is not already listed.
 - Make sure the application is available for macOS or provides a meaningful Mac experience.
 - Gather current official sources for its features, pricing, platform requirements, privacy practices, and media.
 - Use the application's official website and authentic artwork.
 
-## Submit an application
+## 📦 Submit an application
 
 1. Fork this repository and create a branch for the application.
 2. Copy [`catalog/examples/application.example.json`](catalog/examples/application.example.json) into [`catalog/apps`](catalog/apps).
@@ -24,7 +24,7 @@ Each contribution must add one new application. Do not include code, documentati
 
 The pull request must add exactly one new file under `catalog/apps` and change nothing else.
 
-## Review and publication
+## ✅ Review and publication
 
 Automated checks confirm that the manifest is complete and correctly structured. A Macify editor then reviews the application, its sources, and the quality of the description. A submission may be edited, returned for changes, or declined, and submitting an application does not guarantee publication.
 

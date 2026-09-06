@@ -72,9 +72,6 @@ export async function createAdminSession() {
 }
 
 export async function isAdminAuthenticated(cookieHeader?: string | null) {
-  const { env: runtimeEnv } = await getCloudflareContext({ async: true });
-  if ((runtimeEnv as AdminEnv).APP_ENV === "local") return true;
-
   const env = await authEnv();
   if (!env) return false;
   const value = cookieHeader === undefined
@@ -98,8 +95,9 @@ export async function requireAdminRequest(request: Request) {
 }
 
 export async function clearAdminSession() {
+  const { env } = await getCloudflareContext({ async: true });
   const jar = await cookies();
-  jar.set(COOKIE_NAME, "", { httpOnly: true, maxAge: 0, path: "/", sameSite: "lax", secure: process.env.APP_ENV !== "local" });
+  jar.set(COOKIE_NAME, "", { httpOnly: true, maxAge: 0, path: "/", sameSite: "lax", secure: env.APP_ENV !== "local" });
 }
 
 export async function loginRateLimit(requestHeaders: Headers) {

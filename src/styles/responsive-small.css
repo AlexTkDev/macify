@@ -177,4 +177,22 @@
   .media-library,
   .media-management-grid { grid-template-columns: 1fr; }
   .media-editor { padding-inline: 1rem; }
+  .catalogue-queue-stats { grid-template-columns: 1fr; }
+  .catalogue-queue-stats > div { border-right: 0; border-bottom: 1px solid var(--line); }
+  .catalogue-queue-stats > div:last-child { border-bottom: 0; }
+  .catalogue-revision-identity { align-items: flex-start; }
+  .catalogue-revision-actions { display: grid; grid-template-columns: 1fr; }
+  .catalogue-review-panel { padding: .9rem; }
+  .catalogue-review-summary { grid-template-columns: 1fr; }
+  .catalogue-review-jump { overflow-x: auto; }
+  .prose-diff-head { display: none; }
+  .prose-diff-row { grid-template-columns: 1fr; }
+  .prose-diff-cell:first-child { border-right: 0; border-bottom: 1px solid var(--line); }
+  .prose-diff-cell::before { margin-bottom: .4rem; display: block; color: var(--faint); font-size: .56rem; font-weight: 720; text-transform: uppercase; }
+  .prose-diff-cell[data-side="before"]::before { content: "Previous"; }
+  .prose-diff-cell[data-side="after"]::before { content: "Proposed"; }
+  .catalogue-media-diff-row { grid-template-columns: 1fr; }
+  .catalogue-media-cell { border-left: 0; border-top: 1px solid var(--line); }
+  .editorial-deal-link { grid-template-columns: 1fr; }
+  .editorial-deal-link .button-secondary { grid-column: auto; }
 }

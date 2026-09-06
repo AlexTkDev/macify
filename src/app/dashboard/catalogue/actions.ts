@@ -65,7 +65,7 @@ export async function decideCatalogueRevision(formData: FormData) {
   if (revision.changeType === "archive") {
     if (!revision.appId) redirect("/dashboard/catalogue?error=missing-app");
     await database.batch([
-      database.update(apps).set({ status: "archived", updatedAt: new Date() }).where(eq(apps.id, revision.appId)),
+      database.update(apps).set({ status: "archived", isFeatured: false, featuredAt: null, updatedAt: new Date() }).where(eq(apps.id, revision.appId)),
       database.update(catalogueRevisions).set({ status: "published", reviewedAt: new Date() })
         .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending"))),
     ]);

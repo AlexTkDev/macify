@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { ChevronRight, ExternalLink, GitBranch } from "lucide-react";
+import { BadgePercent, ChevronRight, ExternalLink, GitBranch, Star } from "lucide-react";
+import { setApplicationPublication, setFeaturedApplication } from "@/app/dashboard/editorial-actions";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
 import { deals } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import { removeApplicationDeal, saveApplicationDeal, setFeaturedApplication } from "@/app/dashboard/editorial-actions";
 import { getApplicationEditorData } from "@/lib/apps-data";
 
 export const dynamic = "force-dynamic";
@@ -32,74 +32,88 @@ export default async function EditApplicationPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ featured?: string; dealSaved?: string; dealRemoved?: string; dealError?: string }>;
+  searchParams: Promise<{ featured?: string; featureError?: string; publication?: string }>;
 }) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const database = await getDatabase();
   const [{ application, media }, dealRows] = await Promise.all([
     getApplicationEditorData(id),
-    database.select().from(deals).where(eq(deals.appId, id)).limit(1),
+    database.select({ id: deals.id }).from(deals).where(eq(deals.appId, id)).limit(1),
   ]);
   if (!application) notFound();
   const deal = dealRows[0];
+  const isPublished = application.status === "published";
 
   return (
     <DashboardShell active="applications">
       <nav className="dashboard-breadcrumbs" aria-label="Breadcrumb">
         <Link href="/dashboard">Applications</Link>
         <ChevronRight size={14} aria-hidden="true" />
-        <span aria-current="page">{application.name}</span>
+        <Link href={`/dashboard/apps/${application.id}`}>{application.name}</Link>
+        <ChevronRight size={14} aria-hidden="true" />
+        <span aria-current="page">Controls</span>
       </nav>
 
       <header className="editor-header editor-header-row">
         <div>
-          <p>{application.status === "published" ? "Published application" : application.status === "archived" ? "Archived application" : "Application not public"}</p>
+          <p>{isPublished ? "Published application" : application.status === "archived" ? "Unpublished application" : "Draft application"}</p>
           <h1>{application.name}</h1>
-          <span>Manage featured placement and time-limited deals. App information is changed in GitHub.</span>
+          <span>Control public visibility and homepage placement. Listing content and media continue to come from GitHub revisions.</span>
         </div>
         <div className="editor-header-actions">
           <a className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">
             Visit website <ExternalLink size={15} />
           </a>
           <a className="button-secondary" href={`https://github.com/Beingpax/macify/edit/main/catalog/apps/${application.slug}.json`} rel="noreferrer" target="_blank">
-            Edit app information <GitBranch size={15} />
+            Edit listing <GitBranch size={15} />
           </a>
         </div>
       </header>
-      {query.featured === "1" && <div className="success-banner" role="status">✓ Featured placement updated.</div>}
-      {query.dealSaved === "1" && <div className="success-banner" role="status">✓ Deal saved.</div>}
-      {query.dealRemoved === "1" && <div className="success-banner" role="status">✓ Deal removed.</div>}
-      {query.dealError === "1" && <div className="form-error" role="alert">Check the discount, HTTPS URL, and date range.</div>}
+
+      {query.featured === "1" && <div className="success-banner" role="status">Featured placement updated.</div>}
+      {query.publication === "publish" && <div className="success-banner" role="status">Application published to the directory.</div>}
+      {query.publication === "unpublish" && <div className="success-banner" role="status">Application removed from the public directory and homepage placement.</div>}
+      {query.featureError === "not-published" && <div className="form-error" role="alert">Publish the application before featuring it on the homepage.</div>}
 
       <section className="dashboard-panel editorial-controls" aria-labelledby="editorial-controls-heading">
         <div className="media-editor-heading">
-          <div><h2 id="editorial-controls-heading">Placement and deals</h2><span>These controls affect presentation on Macify. The app listing itself stays in GitHub.</span></div>
+          <div><h2 id="editorial-controls-heading">Application controls</h2><span>These dashboard-only settings determine whether and where the approved listing appears.</span></div>
+          <span className="application-control-state" data-state={application.status}>{isPublished ? "Live" : application.status === "archived" ? "Unpublished" : "Draft"}</span>
         </div>
         <div className="editorial-control-grid">
-          <form action={setFeaturedApplication} className="editorial-control-card">
-            <input name="appId" type="hidden" value={application.id} />
-            <h3>Featured application</h3>
-            <p>Give this application a distinct featured treatment in the public directory.</p>
-            <button className={application.isFeatured ? "button-secondary" : "button-primary"} name="featured" type="submit" value={application.isFeatured ? "false" : "true"}>
-              {application.isFeatured ? "Remove featured status" : "Feature application"}
-            </button>
-          </form>
-          <form action={saveApplicationDeal} className="editorial-control-card editorial-deal-form">
-            <input name="appId" type="hidden" value={application.id} />
-            <h3>Deal</h3>
-            <label>Discount percentage<input defaultValue={deal?.discountPercent ?? ""} max="100" min="1" name="discountPercent" required type="number" /></label>
-            <label>Code <span>(optional)</span><input defaultValue={deal?.code ?? ""} maxLength={80} name="code" /></label>
-            <label>Deal URL<input defaultValue={deal?.url ?? ""} name="url" required type="url" /></label>
-            <div className="editorial-date-grid">
-              <label>Starts<input defaultValue={toDateTimeInput(deal?.startsAt)} name="startsAt" required type="datetime-local" /></label>
-              <label>Ends<input defaultValue={toDateTimeInput(deal?.endsAt)} name="endsAt" required type="datetime-local" /></label>
-            </div>
-            <div className="catalogue-revision-actions">
-              <button className="button-primary" type="submit">Save deal</button>
-            </div>
-          </form>
-          {deal && <form action={removeApplicationDeal}><input name="appId" type="hidden" value={application.id} /><button className="button-secondary" type="submit">Remove current deal</button></form>}
+          <section className="editorial-control-card editorial-control-primary">
+            <div className="editorial-control-icon" data-tone={isPublished ? "success" : "muted"}><ExternalLink size={18} /></div>
+            <div><p className="section-kicker">Publication</p><h3>{isPublished ? "Visible in the public directory" : "Not visible to visitors"}</h3></div>
+            <p>{isPublished
+              ? "Unpublishing hides the application page and removes it from public lists. The approved record and media remain stored."
+              : "Publishing makes the latest approved record visible again. This does not publish a pending GitHub revision."}</p>
+            <form action={setApplicationPublication}>
+              <input name="appId" type="hidden" value={application.id} />
+              <button className={isPublished ? "button-secondary button-danger" : "button-primary"} name="intent" type="submit" value={isPublished ? "unpublish" : "publish"}>
+                {isPublished ? "Unpublish application" : "Publish application"}
+              </button>
+            </form>
+          </section>
+
+          <section className="editorial-control-card">
+            <div className="editorial-control-icon" data-tone={application.isFeatured ? "featured" : "muted"}><Star size={18} /></div>
+            <div><p className="section-kicker">Homepage placement</p><h3>{application.isFeatured ? "Featured" : "Standard placement"}</h3></div>
+            <p>{application.isFeatured
+              ? "This application receives the featured treatment in the public directory."
+              : "Feature this application when it should receive priority placement on the homepage."}</p>
+            <form action={setFeaturedApplication}>
+              <input name="appId" type="hidden" value={application.id} />
+              <button className={application.isFeatured ? "button-secondary" : "button-primary"} disabled={!isPublished} name="featured" type="submit" value={application.isFeatured ? "false" : "true"}>
+                {application.isFeatured ? "Remove featured status" : isPublished ? "Feature application" : "Publish before featuring"}
+              </button>
+            </form>
+          </section>
         </div>
+        <aside className="editorial-deal-link">
+          <BadgePercent aria-hidden="true" size={19} />
+          <div><strong>Deals have their own catalogue.</strong><span>Discount percentages, promotion codes, and availability are managed separately from application placement.</span></div>
+          <Link className="button-secondary" href={deal ? `/dashboard/deals/${deal.id}` : `/dashboard/deals/new?app=${application.id}`}>{deal ? "Open current deal" : "Add a deal"}</Link>
+        </aside>
       </section>
 
       <section className="media-editor" aria-labelledby="media-heading">
@@ -137,10 +151,4 @@ export default async function EditApplicationPage({
       </section>
     </DashboardShell>
   );
-}
-
-function toDateTimeInput(value: Date | null | undefined) {
-  if (!value) return "";
-  const local = new Date(value.getTime() - value.getTimezoneOffset() * 60_000);
-  return local.toISOString().slice(0, 16);
 }

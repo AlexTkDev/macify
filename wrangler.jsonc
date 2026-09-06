@@ -24,6 +24,16 @@
       "bucket_name": "macify-local-media"
     }
   ],
+  "ratelimits": [
+    {
+      "name": "REALTIME_VISITORS_RATE_LIMITER",
+      "namespace_id": "748391027",
+      "simple": {
+        "limit": 10,
+        "period": 60
+      }
+    }
+  ],
   "vars": {
     "APP_ENV": "local",
     "CATALOG_REPOSITORY": "Beingpax/macify"
@@ -57,6 +67,16 @@
         {
           "binding": "MEDIA",
           "bucket_name": "macify-production-media"
+        }
+      ],
+      "ratelimits": [
+        {
+          "name": "REALTIME_VISITORS_RATE_LIMITER",
+          "namespace_id": "748391028",
+          "simple": {
+            "limit": 10,
+            "period": 60
+          }
         }
       ]
     }

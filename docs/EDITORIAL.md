@@ -1,12 +1,12 @@
-# Editorial standard
+# ✍️ Editorial standard
 
-## Goal
+## 🎯 Goal
 
 Help readers decide whether an application fits their workflow. Explain verified capabilities, practical use, audience, and meaningful tradeoffs without repeating marketing copy.
 
 Application descriptions are stored as Markdown. Aim for roughly 300 useful words, but stop sooner when a focused application is already explained clearly. Never pad a description to reach a word count.
 
-## Research
+## 🔎 Research
 
 1. Read the official website, documentation, changelog, pricing, and platform requirements.
 2. Consult independent reviews or substantial first-hand discussions for real-world experience.
@@ -15,7 +15,7 @@ Application descriptions are stored as Markdown. Aim for roughly 300 useful word
 
 Official sources establish facts. Independent sources provide experience. Paraphrase research and do not copy marketing claims, testimonials, reviews, or user comments.
 
-## Description structure
+## 🧱 Description structure
 
 Use this order:
 

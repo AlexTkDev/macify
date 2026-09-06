@@ -1,4 +1,4 @@
-# Macify catalogue
+# 🗂️ Macify catalogue
 
 This directory is the GitHub source for Macify's app listing information:
 

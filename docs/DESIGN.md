@@ -3,9 +3,9 @@ name: Macify playful app directory
 description: A bright, precise directory led by authentic Mac application artwork.
 ---
 
-# Design
+# 🎨 Design
 
-## Direction
+## 🧭 Direction
 
 Macify combines oversized editorial language with authentic application artwork on a clean white canvas. It should feel playful and Mac-aware without resembling the Mac App Store or a generic SaaS interface.
 
@@ -16,7 +16,7 @@ Approved references:
 - Application page: [`.impeccable/mocks/app-detail.png`](../.impeccable/mocks/app-detail.png)
 - Application mobile: [`.impeccable/mocks/app-detail-mobile.png`](../.impeccable/mocks/app-detail-mobile.png)
 
-## Visual system
+## 🧩 Visual system
 
 - Use Caprasimo for large display copy and Urbanist for interface text. Caveat is reserved for restrained handwritten accents.
 - Use pure white as the public background. Cobalt, orange, yellow, mint, pale periwinkle, honey amber, and deep aubergine provide controlled emphasis.
@@ -26,19 +26,19 @@ Approved references:
 - Use compact rectangular controls. Reserve pills for true status or category semantics.
 - Avoid gradients, glass effects, nested cards, low-contrast copy, decorative motion, and Apple imitation.
 
-## Homepage
+## 🏠 Homepage
 
 The desktop hero is a two-column composition. The left side carries “Mac apps worth making room for.” in three authored rows with real app icons woven into the words. The supporting sentence remains separate. The right side uses one naturally proportioned application preview and a compact identity label.
 
 The directory uses wide previews with the authentic icon, name, and short tagline beneath. It uses three columns on wide screens, two on tablets, and one on phones. Pricing, badges, and classification stay off this quick-browsing surface.
 
-## Application page
+## 🖥️ Application page
 
 The hero centers “Meet”, the app icon, and the application name on the first line, followed by the official tagline with a restrained amber underline. A concise fact row contains pricing, up to 12 categories, and an open-source label only when true.
 
 Previews keep their natural proportions. Editorial content uses one readable article column. Related applications appear as a loose icon shelf.
 
-## Interaction and responsiveness
+## ⌨️ Interaction and responsiveness
 
 - Search results, forms, navigation, and controls must work by keyboard.
 - The primary navigation presents Home, Categories, and Surprise me as standard links, followed by a dark Submit app button that opens the GitHub contribution guide.

@@ -1,10 +1,15 @@
+import Image from "next/image";
 import Link from "next/link";
 import { desc } from "drizzle-orm";
-import { GitBranch } from "lucide-react";
+import { AlertTriangle, CheckCircle2, GitBranch, PlusCircle, RefreshCcw } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
 import { catalogueRevisions } from "@/db/schema";
+import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
+import type { CatalogueManifest } from "@/lib/catalogue-manifest";
 import { revisionChangeLabels, revisionStatusLabels } from "@/lib/catalogue-revision-labels";
+import { getCatalogueQueueApplications } from "@/lib/catalogue-review-data";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -18,63 +23,166 @@ const errorMessages: Record<string, string> = {
   "stale-revision": "A newer pending revision exists for this application. Review the newest revision instead.",
 };
 
+type View = "pending" | "history" | "failed";
+
 export default async function CatalogueReviewPage({
   searchParams,
 }: {
-  searchParams: Promise<{ published?: string; rejected?: string; error?: string }>;
+  searchParams: Promise<{ published?: string; rejected?: string; error?: string; view?: string }>;
 }) {
   const query = await searchParams;
+  const view: View = query.view === "history" || query.view === "failed" ? query.view : "pending";
   const database = await getDatabase();
-  const revisions = await database.select().from(catalogueRevisions)
-    .orderBy(desc(catalogueRevisions.createdAt)).limit(100);
+  const allRevisions = await database.select().from(catalogueRevisions)
+    .orderBy(desc(catalogueRevisions.createdAt)).limit(200);
+  const revisions = allRevisions.filter((revision) => (
+    view === "pending" ? revision.status === "pending"
+      : view === "failed" ? revision.status === "failed"
+        : revision.status === "published" || revision.status === "rejected"
+  )).slice(0, 100);
+  const applications = await getCatalogueQueueApplications(
+    revisions.flatMap(({ appId }) => appId ? [appId] : []),
+  );
+  const counts = {
+    pending: allRevisions.filter(({ status }) => status === "pending").length,
+    create: allRevisions.filter(({ status, changeType }) => status === "pending" && changeType === "create").length,
+    update: allRevisions.filter(({ status, changeType }) => status === "pending" && changeType === "update").length,
+    failed: allRevisions.filter(({ status }) => status === "failed").length,
+  };
 
   return (
     <DashboardShell active="catalogue">
-      <header className="editor-header">
+      <header className="editor-header editor-header-row">
         <div>
           <p>GitHub updates</p>
-          <h1>Publication queue</h1>
-          <span>Review merged app information before it reaches the public directory.</span>
+          <h1>Review queue</h1>
+          <span>See exactly what changed before any merged application update reaches the public directory.</span>
         </div>
       </header>
 
-      <aside className="catalogue-source-notice">
-        <GitBranch aria-hidden="true" size={18} />
-        <div><strong>GitHub is the source of app information.</strong><span>Use this queue to publish or reject updates. Make corrections in the JSON manifest, then merge a new GitHub revision.</span></div>
-      </aside>
+      <section className="catalogue-queue-stats" aria-label="Review queue status">
+        <div><GitBranch size={18} /><span>Awaiting review</span><strong>{counts.pending}</strong></div>
+        <div><PlusCircle size={18} /><span>New applications</span><strong>{counts.create}</strong></div>
+        <div><RefreshCcw size={18} /><span>Application updates</span><strong>{counts.update}</strong></div>
+        <div><AlertTriangle size={18} /><span>Sync failures</span><strong>{counts.failed}</strong></div>
+      </section>
 
-      {query.published === "1" && <div className="success-banner" role="status">✓ Revision published.</div>}
-      {query.rejected === "1" && <div className="success-banner" role="status">✓ Revision rejected.</div>}
+      {query.published === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Revision published.</div>}
+      {query.rejected === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Revision rejected. The public listing was not changed.</div>}
       {query.error && <div className="form-error" role="alert">{errorMessages[query.error] ?? "The revision could not be reviewed."}</div>}
 
       <section className="dashboard-panel catalogue-queue-panel" aria-labelledby="revisions-heading">
-        <div className="media-editor-heading">
-          <div><h2 id="revisions-heading">App updates</h2><span>Newest merged GitHub revisions appear first.</span></div>
-          <strong>{revisions.filter(({ status }) => status === "pending").length} awaiting publication</strong>
+        <div className="catalogue-queue-toolbar">
+          <div>
+            <h2 id="revisions-heading">{viewLabel(view)}</h2>
+            <p>{viewDescription(view)}</p>
+          </div>
+          <nav className="catalogue-view-tabs" aria-label="Review queue views">
+            <Link className={cn(view === "pending" && "active")} href="/dashboard/catalogue">Pending <span>{counts.pending}</span></Link>
+            <Link className={cn(view === "history" && "active")} href="/dashboard/catalogue?view=history">History</Link>
+            <Link className={cn(view === "failed" && "active")} href="/dashboard/catalogue?view=failed">Failed <span>{counts.failed}</span></Link>
+          </nav>
         </div>
         {revisions.length === 0 ? (
-          <p className="catalogue-queue-empty">No GitHub updates have reached the publication queue yet.</p>
+          <div className="catalogue-queue-empty">
+            <CheckCircle2 aria-hidden="true" size={24} />
+            <strong>{view === "pending" ? "Everything is reviewed" : "No revisions in this view"}</strong>
+            <span>{view === "pending" ? "New merged GitHub changes will appear here automatically." : "Choose another queue view to continue."}</span>
+          </div>
         ) : (
           <div className="catalogue-revision-list">
-            {revisions.map((revision) => (
-              <article className="catalogue-revision" key={revision.id}>
-                <div>
-                  <div className="catalogue-revision-meta">
-                    <span>{revisionChangeLabels[revision.changeType]}</span><span data-status={revision.status}>{revisionStatusLabels[revision.status]}</span>
+            {revisions.map((revision) => {
+              const manifestResult = catalogueManifestSchema.safeParse(revision.manifest);
+              const manifest = manifestResult.success ? manifestResult.data : null;
+              const current = revision.appId ? applications.get(revision.appId) : null;
+              const icon = revision.preparedMedia.find(({ role }) => role === "icon")
+                ?? current?.media.find(({ role }) => role === "icon");
+              const summary = revision.status === "pending"
+                ? summarizeRevision(manifest, current ?? null, revision.preparedMedia)
+                : `${revisionChangeLabels[revision.changeType]} revision ${revisionStatusLabels[revision.status].toLowerCase()}.`;
+              return (
+                <article className="catalogue-revision" key={revision.id}>
+                  <div className="catalogue-revision-identity">
+                    <div className="catalogue-revision-icon">
+                      {icon ? <Image alt={manifest?.name ? `${manifest.name} icon` : "Application icon"} height={48} src={mediaUrl(icon.storageKey)} unoptimized width={48} />
+                        : <span aria-hidden="true">{(manifest?.name ?? revision.appSlug).slice(0, 1).toUpperCase()}</span>}
+                    </div>
+                    <div>
+                      <div className="catalogue-revision-meta">
+                        <span>{revisionChangeLabels[revision.changeType]}</span>
+                        <span data-status={revision.status}>{revisionStatusLabels[revision.status]}</span>
+                      </div>
+                      <h3>{manifest?.name ?? revision.appSlug}</h3>
+                      <p>{summary}</p>
+                      <small>{revision.createdAt.toLocaleString()} · commit {revision.sourceCommitSha.slice(0, 8)}</small>
+                    </div>
                   </div>
-                  <h3>{revision.appSlug}</h3>
-                  <p>GitHub commit {revision.sourceCommitSha.slice(0, 8)} · {revision.sourcePath}</p>
-                  <small>{revision.createdAt.toLocaleString()}</small>
-                </div>
-                <div className="catalogue-revision-actions">
-                  {revision.appId && <Link className="button-secondary" href={`/dashboard/apps/${revision.appId}/edit`}>Current app</Link>}
-                  <Link className={revision.status === "pending" ? "button-primary" : "button-secondary"} href={`/dashboard/catalogue/${revision.id}`}>{revision.status === "pending" ? "Review update" : "View revision"}</Link>
-                </div>
-              </article>
-            ))}
+                  <div className="catalogue-revision-actions">
+                    {revision.appId && <Link className="button-secondary" href={`/dashboard/apps/${revision.appId}`}>Current listing</Link>}
+                    <Link className={revision.status === "pending" ? "button-primary" : "button-secondary"} href={`/dashboard/catalogue/${revision.id}`}>
+                      {revision.status === "pending" ? "Review changes" : "View revision"}
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
       </section>
     </DashboardShell>
   );
+}
+
+function summarizeRevision(
+  manifest: CatalogueManifest | null,
+  current: {
+    name: string;
+    slug: string;
+    websiteUrl: string;
+    tagline: string;
+    description: string;
+    pricingType: string;
+    billingType: string | null;
+    pricingDetails: string | null;
+    sourceType: string;
+    youtubeUrl: string | null;
+    media: Array<{ role: string; checksum: string }>;
+  } | null,
+  proposedMedia: Array<{ role: string; checksum: string }>,
+) {
+  if (!manifest) return "Application removal or a revision without a valid manifest.";
+  if (!current) return `New application with ${proposedMedia.length} prepared media ${proposedMedia.length === 1 ? "asset" : "assets"}.`;
+  const changed = [
+    current.name !== manifest.name,
+    current.slug !== manifest.slug,
+    current.websiteUrl !== manifest.websiteUrl,
+    current.tagline !== manifest.tagline,
+    current.description !== manifest.description,
+    current.pricingType !== manifest.pricingType || current.billingType !== manifest.billingType || current.pricingDetails !== manifest.pricingDetails,
+    current.sourceType !== manifest.sourceType,
+    current.youtubeUrl !== manifest.youtubeUrl,
+  ].filter(Boolean).length;
+  const currentMediaKeys = current.media.map((asset) => `${asset.role}:${asset.checksum}`).sort();
+  const proposedMediaKeys = proposedMedia.map((asset) => `${asset.role}:${asset.checksum}`).sort();
+  const mediaChanged = currentMediaKeys.length !== proposedMediaKeys.length
+    || currentMediaKeys.some((key, index) => key !== proposedMediaKeys[index]);
+  const parts = [changed ? `${changed} listing ${changed === 1 ? "field" : "fields"}` : null, mediaChanged ? "media" : null]
+    .filter(Boolean);
+  return parts.length ? `${parts.join(" and ")} changed.` : "Taxonomy or relationship changes ready for review.";
+}
+
+function viewLabel(view: View) {
+  return view === "pending" ? "Awaiting a decision" : view === "history" ? "Reviewed revisions" : "Synchronization failures";
+}
+
+function viewDescription(view: View) {
+  return view === "pending"
+    ? "Newest proposed changes appear first. Nothing here is public until you publish it."
+    : view === "history"
+      ? "Previously published and rejected revisions remain available for audit."
+      : "These revisions could not be prepared for review and need a corrected GitHub manifest.";
+}
+
+function mediaUrl(storageKey: string) {
+  return `/dashboard/media/${storageKey.split("/").map(encodeURIComponent).join("/")}`;
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   Database,
   GitPullRequest,
+  Star,
   SlidersHorizontal,
 } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
@@ -46,7 +47,7 @@ export default async function DashboardPage() {
         <div className="panel-toolbar">
           <div>
             <h2 id="recent-apps">Recent applications</h2>
-            <p>Published app listings. Change app information in GitHub; use this dashboard for publication, placement, and deals.</p>
+            <p>Approved application records. Use the dashboard for publication and placement; edit listing content in GitHub.</p>
           </div>
         </div>
 
@@ -65,6 +66,7 @@ export default async function DashboardPage() {
                   <th scope="col">Pricing</th>
                   <th scope="col">Source</th>
                   <th scope="col">Status</th>
+                  <th scope="col">Homepage</th>
                   <th scope="col"><span className="sr-only">Actions</span></th>
                 </tr>
               </thead>
@@ -92,11 +94,12 @@ export default async function DashboardPage() {
                     <td>{app.sourceType === "open_source" ? "Open source" : <span className="table-muted">Not displayed</span>}</td>
                     <td>
                       <span className={cn(app.status === "published" ? "published-badge" : "draft-badge")}>
-                        {app.status === "published" ? "Published" : "Not public"}
+                        {app.status === "published" ? "Published" : app.status === "archived" ? "Unpublished" : "Draft"}
                       </span>
                     </td>
+                    <td>{app.isFeatured ? <span className="featured-badge"><Star size={12} /> Featured</span> : <span className="table-muted">Standard</span>}</td>
                     <td>
-                      <Link className="icon-button" href={`/dashboard/apps/${app.id}/edit`} aria-label={`Manage placement and deals for ${app.name}`}>
+                      <Link className="icon-button" href={`/dashboard/apps/${app.id}/edit`} aria-label={`Manage publication and placement for ${app.name}`}>
                         <SlidersHorizontal size={15} />
                       </Link>
                     </td>

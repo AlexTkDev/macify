@@ -10,7 +10,7 @@
   </p>
 </div>
 
-## Find your next favourite Mac app
+## 🔎 Find your next favourite Mac app
 
 Macify brings together excellent macOS applications across a wide range of categories. Every app is selected for its quality, usefulness, and ability to make the Mac experience better.
 
@@ -18,15 +18,20 @@ The collection includes both free and paid software. It is focused entirely on a
 
 Browse the collection, search for a specific tool, or take the surprise route. Every listing explains what the app does, who it suits, what it costs, and what you should know before installing it.
 
-## Know a good one?
+## 💡 Know a good one?
 
 Made a Mac app you are proud of? Know a great app that belongs in the collection but is not here yet? You are welcome to suggest it.
 
 Read the [contribution guidelines](CONTRIBUTING.md) to learn how to add an application. Each public contribution can introduce one new app. If an existing listing needs a correction, or you have an idea for Macify itself, [open an issue](https://github.com/Beingpax/macify/issues/new/choose).
 
-You can also support the project by starring the repository or forking it. Every contribution helps us build a better collection of high quality macOS applications.
+You can also help the project grow:
 
-## Make it run locally
+- ⭐ Star the repository so more Mac users can discover it.
+- 🔀 Fork the repository when you are ready to contribute.
+
+Every contribution helps us build a better collection of high quality macOS applications.
+
+## 🛠️ Make it run locally
 
 Macify uses Next.js and TypeScript on Cloudflare Workers. Reviewed listings live in D1, while application artwork lives in R2.
 

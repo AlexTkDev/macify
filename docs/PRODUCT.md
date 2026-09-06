@@ -1,10 +1,10 @@
-# Product
+# 🧭 Product
 
-## Purpose
+## 🎯 Purpose
 
 Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. GitHub manifests hold app listing information; editors review merged revisions and control placement through a protected dashboard.
 
-## Public experience
+## 🌐 Public experience
 
 The public website provides:
 
@@ -20,11 +20,11 @@ The homepage headline is “Mac apps worth making room for.” Its supporting co
 
 Each application page presents the official identity, tagline, pricing, relevant categories, source status when open source, editorial description, media, optional demo, official website, and related applications.
 
-## Editorial dashboard
+## 🗃️ Editorial dashboard
 
 The dashboard supports GitHub revision review and publication, featured placement, time-bounded deals, application inspection, and a read-only R2 media inventory. App listing information is never edited directly in D1. The dashboard uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
 
-## Content model
+## 🧩 Content model
 
 An application record includes:
 
@@ -42,7 +42,7 @@ App listing information is stored as one public JSON manifest per application. M
 
 Markdown is rendered as sanitized semantic HTML. Raw HTML is never executed.
 
-## Media
+## 🖼️ Media
 
 Binary media is stored in private R2 objects; D1 stores metadata and storage keys. URL ingestion is size-limited, MIME-checked, signature-validated, optimized through Cloudflare Images, and served through Macify-controlled routes. Remote ingestion rejects private networks, unsafe redirects, invalid formats, and oversized responses.
 
@@ -50,11 +50,11 @@ Public manifests contain HTTPS source URLs, not image binaries. During ingestion
 
 The homepage has one static 1200×630 social image. Each application has a generated social card using its preview and the line `App Name — tagline | Macify`.
 
-## Boundaries
+## 🚧 Boundaries
 
 Macify does not currently provide public accounts, saved applications, payments, subscriptions, an in-site submission form, or multi-user editorial roles. Audio and application binaries are not stored.
 
-## Principles
+## 🧠 Principles
 
 - Lead with utility and verifiable information.
 - Keep editorial judgment independent and specific.

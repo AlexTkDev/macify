@@ -50,7 +50,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
         </div>
         <div className="dashboard-actions">
           <a className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">Website <ExternalLink size={15} /></a>
-          <Link className="button-primary" href={`/dashboard/apps/${application.id}/edit`}><SlidersHorizontal size={15} /> Placement and deals</Link>
+          <Link className="button-primary" href={`/dashboard/apps/${application.id}/edit`}><SlidersHorizontal size={15} /> Publication and placement</Link>
         </div>
       </header>
 

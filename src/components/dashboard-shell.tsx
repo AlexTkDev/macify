@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   AppWindow,
   ArrowUpRight,
+  BadgePercent,
   Image as ImageIcon,
   GitPullRequest,
   LogOut,
@@ -14,6 +15,7 @@ import { cn } from "@/lib/utils";
 const navigation = [
   { id: "applications", label: "Applications", description: "Published app listings", icon: AppWindow, href: "/dashboard", tone: "blue" },
   { id: "catalogue", label: "Review queue", description: "Publish GitHub updates", icon: GitPullRequest, href: "/dashboard/catalogue", tone: "mint" },
+  { id: "deals", label: "Deals", description: "Manage the offer catalogue", icon: BadgePercent, href: "/dashboard/deals", tone: "orange" },
   { id: "media", label: "Media", description: "Inspect synchronized artwork", icon: ImageIcon, href: "/dashboard/media", tone: "mint" },
 ] as const;
 

@@ -1,8 +1,8 @@
-# Release workflow
+# 🚀 Release workflow
 
 Macify deploys directly to production. Validation must match the risk of the change.
 
-## Production path
+## 🛤️ Production path
 
 Cloudflare Workers Builds should use:
 
@@ -13,7 +13,7 @@ Cloudflare Workers Builds should use:
 
 A merge or direct push to `main` is a production deployment action. Do not push to `main` without explicit production approval. Use feature branches and pull requests for ordinary review. Do not run a second manual deployment after a successful GitHub-triggered deployment.
 
-## Validation
+## ✅ Validation
 
 For an isolated copy, CSS, or static asset change:
 
@@ -34,7 +34,7 @@ For behavior, authentication, data, schema, catalogue synchronization, media, ro
 
 Use `npm run preview` for material Workers-runtime changes. Run `npm run typecheck` and `npm run lint` after material TypeScript changes.
 
-## Remote safety
+## 🛡️ Remote safety
 
 - Commands are local unless they use `--remote` or deploy.
 - Never deploy, migrate production, replace data, create resources, change DNS, or add secrets without explicit approval.
@@ -42,7 +42,7 @@ Use `npm run preview` for material Workers-runtime changes. Run `npm run typeche
 - Read [`migrations/README.md`](../migrations/README.md) before schema changes.
 - Read [`OPERATIONS.md`](OPERATIONS.md) before migrations, bulk synchronization, restoration, or recovery.
 
-## Commands
+## ⌨️ Commands
 
 - Local migrations: `npm run db:migrate:local`
 - Production migrations: `npm run db:migrate:production`
