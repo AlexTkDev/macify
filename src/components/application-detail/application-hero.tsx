@@ -94,13 +94,6 @@ export function ApplicationHero({
             </ApplicationFact>
           )}
         </div>
-        {application.deal && (
-          <aside className="application-deal" aria-label={`${application.name} deal`}>
-            <strong>{application.deal.discountPercent}% off</strong>
-            {application.deal.code && <span>Use code <code>{application.deal.code}</code></span>}
-            <a href={application.deal.url} rel="sponsored noreferrer" target="_blank">Get this deal</a>
-          </aside>
-        )}
       </div>
     </header>
   );

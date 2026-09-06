@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gt, isNull, lte, sql } from "drizzle-orm";
+import { and, asc, desc, eq, isNull, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 import { getDatabase } from "@/db/client";
 import {
@@ -7,7 +7,6 @@ import {
   apps,
   mediaAssets,
   categories,
-  deals,
 } from "@/db/schema";
 import { getAppIcons, publicApplicationFields } from "@/lib/directory-shared";
 
@@ -32,8 +31,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
     pricingDetails: relatedApp.pricingDetails,
     isFeatured: relatedApp.isFeatured,
   };
-  const now = new Date();
-  const [categoryRows, media, outgoing, incoming, dealRows] = await Promise.all([
+  const [categoryRows, media, outgoing, incoming] = await Promise.all([
     database
       .select({ id: categories.id, slug: categories.slug, name: categories.name })
       .from(appCategories)
@@ -78,11 +76,6 @@ export async function getPublishedApplicationBySlug(slug: string) {
       ))
       .orderBy(asc(relatedApp.name))
       .limit(6),
-    database.select().from(deals).where(and(
-      eq(deals.appId, application.id),
-      lte(deals.startsAt, now),
-      gt(deals.endsAt, now),
-    )).limit(1),
   ]);
 
   const relatedRecords = Array.from(
@@ -102,7 +95,6 @@ export async function getPublishedApplicationBySlug(slug: string) {
       ...record,
       icon: icons.get(record.id) ?? null,
     })),
-    deal: dealRows[0] ?? null,
   };
 }
 

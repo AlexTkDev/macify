@@ -17,10 +17,10 @@ function PublicHeader() {
         <nav className="public-navigation" aria-label="Primary navigation">
           <Link className="public-home-link" href="/">Home</Link>
           <Link className="public-categories-link" href="/categories">Categories</Link>
-          <Link className="public-surprise-link" href="/surprise" aria-label="Surprise me with an app">
+          <a className="public-surprise-link" href="/surprise" aria-label="Surprise me with an app">
             <span className="public-navigation-icon" aria-hidden="true"><Shuffle size={15} /></span>
             <span className="public-navigation-label">Surprise me</span>
-          </Link>
+          </a>
           <a
             className="public-submit-link"
             href={contributionGuideUrl}
@@ -55,7 +55,7 @@ function PublicFooter() {
               <Link href="/">Home</Link>
               <Link href="/#all-apps">Browse apps</Link>
               <Link href="/categories">Categories</Link>
-              <Link href="/surprise">Surprise me</Link>
+              <a href="/surprise">Surprise me</a>
               <a href={contributionGuideUrl} target="_blank" rel="noreferrer">Submit an app</a>
             </nav>
             <nav aria-label="About Macify">

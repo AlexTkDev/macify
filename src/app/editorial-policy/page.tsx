@@ -23,14 +23,6 @@ export default function EditorialPolicyPage() {
       description="How applications earn and keep a place in the Macify directory."
       sections={sections}
     >
-      <aside className="policy-summary" aria-labelledby="editorial-summary-title">
-        <h2 id="editorial-summary-title">The short version</h2>
-        <ul>
-          <li>Macify chooses what to publish and does not sell rankings or favorable coverage.</li>
-          <li>Listings are researched descriptions, not hands-on reviews unless clearly labeled.</li>
-          <li>Developers and readers can report errors, but they cannot buy or control editorial decisions.</li>
-        </ul>
-      </aside>
       <section id="selection">
         <h2>What we include</h2>
         <p>Macify features useful software built for macOS or offering a meaningful Mac experience. We look for a clear purpose, a trustworthy source, understandable pricing, and enough reliable information to explain the application properly.</p>

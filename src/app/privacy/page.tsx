@@ -24,14 +24,6 @@ export default function PrivacyPage() {
       description="What happens to your data when you browse Macify."
       sections={sections}
     >
-      <aside className="policy-summary" aria-labelledby="privacy-summary-title">
-        <h2 id="privacy-summary-title">The short version</h2>
-        <ul>
-          <li>You can browse without an account or giving Macify your name or email address.</li>
-          <li>Basic technical and usage data helps deliver, secure, and improve the directory.</li>
-          <li>Macify does not sell personal information or use it for personalized advertising.</li>
-        </ul>
-      </aside>
       <section id="information">
         <h2>Information we handle</h2>
         <p>Macify is a public application directory. It does not currently offer public accounts, payments, saved applications, or submission forms.</p>

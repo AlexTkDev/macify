@@ -1,32 +1,31 @@
-# Contributing to Macify
+# Add an application to Macify
 
-Macify accepts public pull requests only for new macOS application listings. Each pull request must add exactly one new file under [`catalog/apps`](catalog/apps) and change nothing else. You do not need to open an issue first.
+If you develop a Mac application, or know one that is not yet listed and would be useful to other Mac users, you can propose it for the Macify catalogue.
 
-For bugs, feature ideas, documentation, code, design, or changes to an existing listing, open an issue instead. These areas are maintained by Macify editors, and unsolicited pull requests for them are not reviewed.
+Each contribution must add one new application. Do not include code, documentation, design, or changes to an existing listing in the same pull request.
 
-## Add an application
+## Before you begin
 
-1. Copy [`catalog/examples/application.example.json`](catalog/examples/application.example.json) to `catalog/apps`, then name it with the application's lowercase, hyphenated slug: `catalog/apps/example-app.json`.
-2. Complete every field. Use `null` or an empty array only where the example permits it, and leave `relatedAppSlugs` empty for a public submission.
-3. Write a factual description following [`docs/EDITORIAL.md`](docs/EDITORIAL.md), including features, fit, privacy and requirements, and pricing.
-4. Use direct public HTTPS URLs for the icon and preview. Do not commit image files.
-5. Run `npm run catalogue:validate`, then open a pull request with links to authoritative sources.
+- Check [`catalog/apps`](catalog/apps) to make sure the application is not already listed.
+- Make sure the application is available for macOS or provides a meaningful Mac experience.
+- Gather current official sources for its features, pricing, platform requirements, privacy practices, and media.
+- Use the application's official website and authentic artwork.
 
-Automated checks verify completeness and structure, not editorial quality. Macify decides what is accepted, may request changes, and may reject or later remove any listing.
+## Submit an application
 
-After a pull request is merged, Cloudflare prepares a pending revision. An editor must publish it from the protected dashboard before it appears publicly.
+1. Fork this repository and create a branch for the application.
+2. Copy [`catalog/examples/application.example.json`](catalog/examples/application.example.json) into [`catalog/apps`](catalog/apps).
+3. Rename the file with the application's lowercase, hyphenated slug. For example, use `catalog/apps/example-app.json` for “Example App.”
+4. Complete every field in the manifest. Use `null` or an empty array only where the example permits it, and leave `relatedAppSlugs` empty.
+5. Write a factual description that follows [`docs/EDITORIAL.md`](docs/EDITORIAL.md). Explain what the application does, its useful features, who it suits, important tradeoffs, privacy and system requirements, and how it is priced.
+6. Add direct public HTTPS URLs for the icon, preview, and any screenshots. Do not add image files to the repository.
+7. Run `npm run catalogue:validate` and fix every reported error.
+8. Open a pull request. Explain why the application would be valuable to Mac users and include links to the official sources used for the listing.
 
-## Open an issue instead
+The pull request must add exactly one new file under `catalog/apps` and change nothing else.
 
-Open an issue to:
+## Review and publication
 
-- report incorrect or outdated listing information;
-- request a correction or removal;
-- report a website bug; or
-- suggest a product, design, or documentation improvement.
+Automated checks confirm that the manifest is complete and correctly structured. A Macify editor then reviews the application, its sources, and the quality of the description. A submission may be edited, returned for changes, or declined, and submitting an application does not guarantee publication.
 
-Relationships, featured placement, deals, corrections, removals, and repository changes remain editor-managed. Opening an issue does not guarantee that a change will be accepted or implemented.
-
-## Security and privacy
-
-Do not include secrets, private contact information, account credentials, analytics exports, database backups, or copyrighted image binaries. Report vulnerabilities privately as described in [`SECURITY.md`](SECURITY.md).
+After a pull request is merged, Macify creates a pending catalogue revision. An editor must approve and publish that revision before the application appears on the website.
