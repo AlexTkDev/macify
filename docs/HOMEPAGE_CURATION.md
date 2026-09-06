@@ -4,7 +4,7 @@ The homepage is an editorial selection, not the complete catalogue. Search, cate
 
 ## Source of truth
 
-`HOMEPAGE_CURATED_SLUGS` in [`src/lib/directory-search-data.ts`](src/lib/directory-search-data.ts) contains the approved pool. Homepage requests select up to 30 eligible applications from that list.
+`HOMEPAGE_CURATED_SLUGS` in [`src/lib/directory-search-data.ts`](../src/lib/directory-search-data.ts) contains the approved pool. Homepage requests select up to 30 eligible applications from that list.
 
 An eligible application must be published, not deleted, and have:
 

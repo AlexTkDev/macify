@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. GitHub manifests hold catalogue content; editors review merged revisions and control placement through a protected dashboard.
+Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. GitHub manifests hold app listing information; editors review merged revisions and control placement through a protected dashboard.
 
 ## Public experience
 
@@ -21,7 +21,7 @@ Each application page presents the official identity, tagline, pricing, relevant
 
 ## Editorial dashboard
 
-The dashboard supports GitHub revision review and publication, featured placement, time-bounded deals, application inspection, and a read-only R2 media inventory. Catalogue content is never edited directly in D1. The dashboard uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
+The dashboard supports GitHub revision review and publication, featured placement, time-bounded deals, application inspection, and a read-only R2 media inventory. App listing information is never edited directly in D1. The dashboard uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
 
 ## Content model
 

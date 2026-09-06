@@ -2,7 +2,7 @@
 
 ## Product
 
-Macify is a curated macOS application directory. Read `PRODUCT.md` before changing behavior, `DESIGN.md` before changing the public interface, and `EDITORIAL.md` before editing catalogue copy.
+Macify is a curated macOS application directory. Read `docs/PRODUCT.md` before changing behavior, `docs/DESIGN.md` before changing the public interface, and `docs/EDITORIAL.md` before editing catalogue copy.
 
 The protected dashboard uses single-administrator authentication. Preserve server-side authorization on every dashboard page, handler, and mutation. Public accounts, saved applications, submissions, payments, and subscriptions are outside the current scope unless explicitly requested.
 
@@ -33,14 +33,14 @@ The protected dashboard uses single-administrator authentication. Preserve serve
 
 ## Design and editorial
 
-- Preserve the direction and accessibility rules in `DESIGN.md`.
+- Preserve the direction and accessibility rules in `docs/DESIGN.md`.
 - Avoid generic gradients, glass effects, excessive pills, nested cards, low contrast, and decorative motion.
-- Follow `EDITORIAL.md`; research each application independently and verify changing facts.
+- Follow `docs/EDITORIAL.md`; research each application independently and verify changing facts.
 - Never alter a remote application record without explicit approval.
 
 ## Release
 
-Read `RELEASE.md` before deployment. A merge or push to `main` may deploy production through Cloudflare Workers Builds. Never push to `main` without explicit production approval.
+Read `docs/RELEASE.md` before deployment. A merge or push to `main` may deploy production through Cloudflare Workers Builds. Never push to `main` without explicit production approval.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

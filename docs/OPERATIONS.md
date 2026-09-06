@@ -1,6 +1,6 @@
 # Production operations
 
-Remote commands, restoration, catalogue replacement, resource changes, and deployment require explicit approval.
+Remote commands, restoration, catalogue replacement, resource changes, and deployment always require explicit approval.
 
 ## D1 protection
 

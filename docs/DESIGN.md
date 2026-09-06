@@ -11,10 +11,10 @@ Macify combines oversized editorial language with authentic application artwork 
 
 Approved references:
 
-- Homepage: [`.impeccable/mocks/home-c.png`](.impeccable/mocks/home-c.png)
-- Homepage mobile: [`.impeccable/mocks/home-mobile.png`](.impeccable/mocks/home-mobile.png)
-- Application page: [`.impeccable/mocks/app-detail.png`](.impeccable/mocks/app-detail.png)
-- Application mobile: [`.impeccable/mocks/app-detail-mobile.png`](.impeccable/mocks/app-detail-mobile.png)
+- Homepage: [`.impeccable/mocks/home-c.png`](../.impeccable/mocks/home-c.png)
+- Homepage mobile: [`.impeccable/mocks/home-mobile.png`](../.impeccable/mocks/home-mobile.png)
+- Application page: [`.impeccable/mocks/app-detail.png`](../.impeccable/mocks/app-detail.png)
+- Application mobile: [`.impeccable/mocks/app-detail-mobile.png`](../.impeccable/mocks/app-detail-mobile.png)
 
 ## Visual system
 

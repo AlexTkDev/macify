@@ -41,6 +41,7 @@ src/components/ Shared interface components
 src/db/         D1 client and Drizzle schema
 src/lib/        Queries, validation, media, and utilities
 migrations/     Ordered D1 migrations and Drizzle metadata
+docs/           Product, design, editorial, operations, and release guidance
 catalog/apps/   Public, one-file-per-application catalogue manifests
 catalog/examples/ Contributor-ready application example
 catalog/schema/ Application manifest schema
@@ -50,13 +51,13 @@ public/         Static public assets
 
 ## Documentation
 
-- [`PRODUCT.md`](PRODUCT.md): product behavior and scope
-- [`DESIGN.md`](DESIGN.md): public interface direction
-- [`EDITORIAL.md`](EDITORIAL.md): research and writing standard
-- [`HOMEPAGE_CURATION.md`](HOMEPAGE_CURATION.md): homepage selection rules
+- [`docs/PRODUCT.md`](docs/PRODUCT.md): product behavior and scope
+- [`docs/DESIGN.md`](docs/DESIGN.md): public interface direction
+- [`docs/EDITORIAL.md`](docs/EDITORIAL.md): research and writing standard
+- [`docs/HOMEPAGE_CURATION.md`](docs/HOMEPAGE_CURATION.md): homepage selection rules
 - [`migrations/README.md`](migrations/README.md): database change workflow
-- [`OPERATIONS.md`](OPERATIONS.md): production data protection and recovery
-- [`RELEASE.md`](RELEASE.md): validation and production deployment
+- [`docs/OPERATIONS.md`](docs/OPERATIONS.md): production data protection and recovery
+- [`docs/RELEASE.md`](docs/RELEASE.md): validation and production deployment
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): public catalogue contribution workflow
 - [`SECURITY.md`](SECURITY.md): private vulnerability reporting
 

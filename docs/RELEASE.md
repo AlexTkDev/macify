@@ -39,7 +39,7 @@ Use `npm run preview` for material Workers-runtime changes. Run `npm run typeche
 - Commands are local unless they use `--remote` or deploy.
 - Never deploy, migrate production, replace data, create resources, change DNS, or add secrets without explicit approval.
 - Never commit `.dev.vars`, credentials, exports, backups, or Wrangler state.
-- Read [`migrations/README.md`](migrations/README.md) before schema changes.
+- Read [`migrations/README.md`](../migrations/README.md) before schema changes.
 - Read [`OPERATIONS.md`](OPERATIONS.md) before migrations, bulk synchronization, restoration, or recovery.
 
 ## Commands

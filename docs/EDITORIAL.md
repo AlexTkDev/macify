@@ -4,7 +4,7 @@
 
 Help readers decide whether an application fits their workflow. Explain verified capabilities, practical use, audience, and meaningful tradeoffs without repeating marketing copy.
 
-Descriptions are stored as Markdown. Aim for roughly 300 useful words, but stop sooner when a focused application is already explained clearly. Never pad a description to reach a word count.
+Application descriptions are stored as Markdown. Aim for roughly 300 useful words, but stop sooner when a focused application is already explained clearly. Never pad a description to reach a word count.
 
 ## Research
 
