@@ -27,7 +27,8 @@ export async function serveMedia(
   visibility: "dashboard" | "published",
 ) {
   const key = segments.join("/");
-  const requestedWidthValue = new URL(request.url).searchParams.get("width");
+  const searchParams = new URL(request.url).searchParams;
+  const requestedWidthValue = searchParams.get("width");
   const requestedWidth = requestedWidthValue === null ? null : Number(requestedWidthValue);
   const transformWidth = requestedWidth !== null
     && Number.isSafeInteger(requestedWidth)
@@ -35,6 +36,14 @@ export async function serveMedia(
     && requestedWidth <= 3840
       ? requestedWidth
       : null;
+  const requestedQualityValue = searchParams.get("quality");
+  const requestedQuality = requestedQualityValue === null ? null : Number(requestedQualityValue);
+  const transformQuality = requestedQuality !== null
+    && Number.isSafeInteger(requestedQuality)
+    && requestedQuality >= 60
+    && requestedQuality <= 95
+      ? requestedQuality
+      : 85;
 
   if (!key.startsWith("apps/") || key.length > 600) {
     return new Response("Not found", { status: 404 });
@@ -73,7 +82,7 @@ export async function serveMedia(
       const transformed = await env.IMAGES
         .input(transformBody)
         .transform({ width: transformWidth, fit: "scale-down" })
-        .output({ format: "image/webp", quality: 85, anim: false });
+        .output({ format: "image/webp", quality: transformQuality, anim: false });
       const response = transformed.response();
       const headers = new Headers(response.headers);
       headers.set("Cache-Control", "public, max-age=31536000, s-maxage=31536000, immutable");

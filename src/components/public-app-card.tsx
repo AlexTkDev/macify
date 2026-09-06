@@ -21,13 +21,17 @@ type AppIconSize = 44 | 50 | 56 | 58 | 60 | 66 | 76 | 96;
 export function PublicAppIcon({
   app,
   decorative = false,
+  loading,
   priority = false,
   size = 56,
+  sizes = `${size}px`,
 }: {
   app: Pick<PublicAppSummary, "name" | "icon">;
   decorative?: boolean;
+  loading?: "eager" | "lazy";
   priority?: boolean;
   size?: AppIconSize;
+  sizes?: string;
 }) {
   const className = `public-app-icon public-app-icon-${size}`;
   return app.icon ? (
@@ -35,8 +39,11 @@ export function PublicAppIcon({
       alt={decorative ? "" : (app.icon.altText ?? `${app.name} icon`)}
       className={className}
       height={size}
-      loading={priority ? undefined : "lazy"}
+      fetchPriority={priority ? "high" : "low"}
+      loading={priority ? undefined : (loading ?? "lazy")}
       priority={priority}
+      quality={88}
+      sizes={sizes}
       src={mediaUrl(app.icon.storageKey)}
       width={size}
     />

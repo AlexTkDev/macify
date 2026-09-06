@@ -19,9 +19,9 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
         <h1 id="home-title">
           <span className="sr-only">Mac apps worth making room for.</span>
           <span className="home-title-art">
-            <span className="home-title-line"><span aria-hidden="true">Mac</span>{headlineApps[0] && <Link aria-label={`Open ${headlineApps[0].name}`} className="home-title-icon" href={`/apps/${headlineApps[0].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[0]} priority size={96} /></Link>}<span aria-hidden="true">apps</span></span>
-            <span className="home-title-line"><span aria-hidden="true">worth</span>{headlineApps[1] && <Link aria-label={`Open ${headlineApps[1].name}`} className="home-title-icon home-title-icon-orange" href={`/apps/${headlineApps[1].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[1]} priority size={96} /></Link>}<span aria-hidden="true">making</span></span>
-            <span className="home-title-line">{headlineApps[2] && <Link aria-label={`Open ${headlineApps[2].name}`} className="home-title-icon home-title-icon-yellow" href={`/apps/${headlineApps[2].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[2]} priority size={96} /></Link>}<span aria-hidden="true">room for.</span></span>
+            <span className="home-title-line"><span aria-hidden="true">Mac</span>{headlineApps[0] && <Link aria-label={`Open ${headlineApps[0].name}`} className="home-title-icon" href={`/apps/${headlineApps[0].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[0]} priority size={96} sizes="(max-width: 38rem) 48px, 96px" /></Link>}<span aria-hidden="true">apps</span></span>
+            <span className="home-title-line"><span aria-hidden="true">worth</span>{headlineApps[1] && <Link aria-label={`Open ${headlineApps[1].name}`} className="home-title-icon home-title-icon-orange" href={`/apps/${headlineApps[1].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[1]} priority size={96} sizes="(max-width: 38rem) 48px, 96px" /></Link>}<span aria-hidden="true">making</span></span>
+            <span className="home-title-line">{headlineApps[2] && <Link aria-label={`Open ${headlineApps[2].name}`} className="home-title-icon home-title-icon-yellow" href={`/apps/${headlineApps[2].slug}`} prefetch={false}><PublicAppIcon app={headlineApps[2]} priority size={96} sizes="(max-width: 38rem) 48px, 96px" /></Link>}<span aria-hidden="true">room for.</span></span>
           </span>
         </h1>
         <p className="home-hero-intro">
@@ -48,6 +48,8 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
                 height={featured.preview.height ?? 900}
                 priority
                 fetchPriority="high"
+                loading="eager"
+                quality={78}
                 sizes="(max-width: 900px) 100vw, 52vw"
                 src={mediaUrl(featured.preview.storageKey)}
                 width={featured.preview.width ?? 1600}

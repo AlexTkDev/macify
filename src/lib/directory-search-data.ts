@@ -39,6 +39,9 @@ const HOMEPAGE_CURATED_SLUGS = [
   "daisydisk",
   "session",
 ];
+const HOMEPAGE_CURATED_ORDER = new Map(
+  HOMEPAGE_CURATED_SLUGS.map((slug, index) => [slug, index]),
+);
 
 function searchConditions(filters?: DirectorySearchFilters) {
   const conditions: SQL[] = [eq(apps.status, "published"), isNull(apps.deletedAt)];
@@ -73,7 +76,6 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters)
         isNull(apps.deletedAt),
         inArray(apps.slug, HOMEPAGE_CURATED_SLUGS),
       ))
-      .orderBy(sql`random()`)
       .limit(30),
     database
       .select(cardFields)
@@ -104,8 +106,12 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters)
 
   const appIds = [...new Set([...records, ...heroRecords, ...searchRecords].map(({ id }) => id))];
   const { icons, previews } = await getCardMedia(appIds);
+  const orderedRecords = [...records].sort((left, right) => (
+    (HOMEPAGE_CURATED_ORDER.get(left.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
+    - (HOMEPAGE_CURATED_ORDER.get(right.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
+  ));
   return {
-    applications: records.map((record) => ({
+    applications: orderedRecords.map((record) => ({
       ...record,
       icon: icons.get(record.id) ?? null,
       preview: previews.get(record.id) ?? null,

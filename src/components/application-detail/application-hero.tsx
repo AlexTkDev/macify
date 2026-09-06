@@ -20,8 +20,9 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
                     icon: icon ? { storageKey: icon.storageKey, altText: icon.altText } : null,
                   }}
                   decorative
-                  priority
+                  loading="eager"
                   size={96}
+                  sizes="(max-width: 38rem) 48px, 72px"
                 />
               </span>
             </span>

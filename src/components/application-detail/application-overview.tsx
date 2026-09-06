@@ -46,11 +46,13 @@ function EditorialImage({ application, media, priority = false }: { application:
   return (
     <Image
       alt={media.altText ?? `${application.name} application preview`}
+      fetchPriority={priority ? "high" : "low"}
       height={media.height ?? 900}
+      loading={priority ? "eager" : "lazy"}
       priority={priority}
+      quality={78}
       sizes="(max-width: 900px) 100vw, 76rem"
       src={mediaUrl(media.storageKey)}
-      unoptimized
       width={media.width ?? 1600}
     />
   );
