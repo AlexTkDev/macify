@@ -4,12 +4,12 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const appsDirectory = path.join(root, "catalog", "apps");
-const dealsDirectory = path.join(root, "catalog", "deals");
 const examplesDirectory = path.join(root, "catalog", "examples");
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const allowedPricing = new Set(["free", "freemium", "paid"]);
 const allowedBilling = new Set(["one_time", "subscription"]);
 const allowedSource = new Set(["open_source", "closed_source"]);
+const requiredManifestKeys = ["$schema", "schemaVersion", "name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "categories", "relatedAppSlugs", "media"];
 
 function isHttpUrl(value, httpsOnly = false) {
   if (typeof value !== "string" || value.length > 2_000) return false;
@@ -46,17 +46,23 @@ function validateMedia(value, label, issues) {
 
 function validateManifest(manifest, expectedSlug) {
   const issues = [];
-  const allowedKeys = new Set(["$schema", "schemaVersion", "name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "categories", "relatedAppSlugs", "media"]);
+  if (!manifest || typeof manifest !== "object" || Array.isArray(manifest)) {
+    return ["manifest must be a JSON object."];
+  }
+  const allowedKeys = new Set(requiredManifestKeys);
+  for (const key of requiredManifestKeys) if (!(key in manifest)) issues.push(`${key} is required.`);
   for (const key of Object.keys(manifest)) if (!allowedKeys.has(key)) issues.push(`${key} is not an allowed manifest field.`);
   const text = (key, min, max) => {
     const value = manifest[key];
     if (typeof value !== "string" || value.trim().length < min || value.length > max) issues.push(`${key} must contain ${min} to ${max} characters.`);
   };
   if (manifest.schemaVersion !== 1) issues.push("schemaVersion must be 1.");
+  if (manifest.$schema !== "../schema/application.schema.json") issues.push("$schema must reference ../schema/application.schema.json.");
   text("name", 2, 80);
   text("slug", 2, 90);
   text("tagline", 10, 140);
   text("description", 40, 20_000);
+  if (typeof manifest.description === "string") validateDescription(manifest.description, issues);
   if (!slugPattern.test(manifest.slug ?? "")) issues.push("slug must use lowercase letters, numbers, and hyphens.");
   if (manifest.slug !== expectedSlug) issues.push(`slug must match the filename (${expectedSlug}).`);
   if (!isHttpUrl(manifest.websiteUrl, true)) issues.push("websiteUrl must be an HTTPS URL without credentials.");
@@ -92,26 +98,29 @@ function validateManifest(manifest, expectedSlug) {
   return issues;
 }
 
-function validateDealManifest(manifest, expectedAppSlug) {
-  const issues = [];
-  const allowedKeys = new Set(["$schema", "schemaVersion", "appSlug", "discountPercent", "code", "startsAt", "endsAt"]);
-  for (const key of Object.keys(manifest)) if (!allowedKeys.has(key)) issues.push(`${key} is not an allowed deal field.`);
-  if (manifest.schemaVersion !== 1) issues.push("schemaVersion must be 1.");
-  if (!slugPattern.test(manifest.appSlug ?? "")) issues.push("appSlug must use lowercase letters, numbers, and hyphens.");
-  if (manifest.appSlug !== expectedAppSlug) issues.push(`appSlug must match the filename (${expectedAppSlug}).`);
-  if (!Number.isInteger(manifest.discountPercent) || manifest.discountPercent < 1 || manifest.discountPercent > 100) {
-    issues.push("discountPercent must be an integer from 1 to 100.");
+function validateDescription(description, issues) {
+  if (/<\/?[a-z][^>]*>/i.test(description)) issues.push("description must not contain raw HTML.");
+
+  const headings = ["## Features", "## Where it fits", "## Privacy and requirements", "## Pricing"];
+  const headingLines = description.split("\n").filter((line) => line.startsWith("## "));
+  if (headingLines.length !== headings.length || headings.some((heading, index) => headingLines[index] !== heading)) {
+    issues.push(`description headings must appear once and in this order: ${headings.join(", ")}.`);
+    return;
   }
-  if (manifest.code !== null && (typeof manifest.code !== "string" || manifest.code.trim().length < 1 || manifest.code.length > 80)) {
-    issues.push("code must be null or contain 1 to 80 characters.");
+
+  const sections = headings.map((heading) => description.indexOf(heading));
+  const introduction = description.slice(0, sections[0]).trim().split(/\n\s*\n/).filter(Boolean);
+  if (introduction.length < 2 || introduction.length > 3) issues.push("description must begin with two or three untitled paragraphs.");
+
+  for (let index = 0; index < headings.length; index += 1) {
+    const start = sections[index] + headings[index].length;
+    const end = sections[index + 1] ?? description.length;
+    if (!description.slice(start, end).trim()) issues.push(`${headings[index]} must not be empty.`);
   }
-  const startsAt = typeof manifest.startsAt === "string" ? Date.parse(manifest.startsAt) : Number.NaN;
-  const endsAt = typeof manifest.endsAt === "string" ? Date.parse(manifest.endsAt) : Number.NaN;
-  const hasTimezone = (value) => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/.test(value);
-  if (!Number.isFinite(startsAt) || !hasTimezone(manifest.startsAt)) issues.push("startsAt must be an ISO 8601 date-time with a timezone.");
-  if (!Number.isFinite(endsAt) || !hasTimezone(manifest.endsAt)) issues.push("endsAt must be an ISO 8601 date-time with a timezone.");
-  if (Number.isFinite(startsAt) && Number.isFinite(endsAt) && endsAt <= startsAt) issues.push("endsAt must be after startsAt.");
-  return issues;
+
+  const features = description.slice(sections[0] + headings[0].length, sections[1]);
+  const featureCount = features.split("\n").filter((line) => /^[-*] /.test(line.trim())).length;
+  if (featureCount < 4 || featureCount > 8) issues.push("## Features must contain four to eight Markdown bullets.");
 }
 
 const files = (await readdir(appsDirectory)).filter((file) => file.endsWith(".json")).sort();
@@ -154,25 +163,8 @@ for (const { file, manifest } of manifests) {
   }
 }
 
-const dealFiles = (await readdir(dealsDirectory)).filter((file) => file.endsWith(".json")).sort();
-for (const file of dealFiles) {
-  let manifest;
-  try {
-    manifest = JSON.parse(await readFile(path.join(dealsDirectory, file), "utf8"));
-  } catch (error) {
-    console.error(`deals/${file}: ${error instanceof Error ? error.message : "invalid JSON"}`);
-    failed = true;
-    continue;
-  }
-  const issues = validateDealManifest(manifest, file.slice(0, -5));
-  if (!bySlug.has(manifest.appSlug)) issues.push(`appSlug does not match an application in catalog/apps (${manifest.appSlug ?? "missing"}).`);
-  for (const issue of issues) console.error(`deals/${file}: ${issue}`);
-  failed ||= issues.length > 0;
-}
-
 for (const [file, validate, expectedSlug] of [
   ["application.example.json", validateManifest, "example-app"],
-  ["deal.example.json", validateDealManifest, "example-app"],
 ]) {
   try {
     const manifest = JSON.parse(await readFile(path.join(examplesDirectory, file), "utf8"));
@@ -186,4 +178,4 @@ for (const [file, validate, expectedSlug] of [
 }
 
 if (failed) process.exitCode = 1;
-else console.log(`Validated ${manifests.length} application manifest(s), ${dealFiles.length} deal manifest(s), and both contributor examples.`);
+else console.log(`Validated ${manifests.length} application manifest(s) and the contributor example.`);

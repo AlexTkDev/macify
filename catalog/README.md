@@ -1,12 +1,11 @@
 # Macify catalogue
 
-Macify keeps contributor-managed catalogue data in JSON:
+This directory is the GitHub source for Macify's app listing information:
 
 - [`apps/`](apps) contains one application manifest per application.
-- [`deals/`](deals) contains at most one current or upcoming deal per application.
-- [`examples/`](examples) contains copyable examples that are never published as catalogue records.
-- [`schema/`](schema) contains the machine-readable JSON schemas.
+- [`examples/application.example.json`](examples/application.example.json) is the contribution template.
+- [`schema/application.schema.json`](schema/application.schema.json) documents the manifest format.
 
-Application and deal filenames use the same stable application slug. For example, `apps/raycast.json` and `deals/raycast.json` belong to the same application. The deal also declares `"appSlug": "raycast"`; validation requires both references to agree.
+GitHub stores the source record; D1 stores pending and published copies used by the website. Merging a valid manifest creates a pending revision, not a public listing. Macify editors control publication, relationships, placement, deals, corrections, and removal.
 
-Read [`../CONTRIBUTING.md`](../CONTRIBUTING.md) before submitting a pull request.
+To propose an application, read [`../CONTRIBUTING.md`](../CONTRIBUTING.md).

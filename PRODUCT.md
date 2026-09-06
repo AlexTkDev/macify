@@ -37,7 +37,7 @@ An application record includes:
 - mutual related-application links;
 - one icon, one main preview, and optional screenshots.
 
-Contributed catalogue content is stored as one public JSON manifest per application. Merged changes become pending D1 revisions and require dashboard approval. Existing published content remains live until its replacement is approved. Featured state and deals are editorial metadata stored only in D1 and never accepted from public manifests.
+App listing information is stored as one public JSON manifest per application. Merged changes become pending D1 revisions and require dashboard approval. Existing published content remains live until its replacement is approved. Featured state and deals are editorial metadata stored only in D1 and never accepted from public manifests.
 
 Markdown is rendered as sanitized semantic HTML. Raw HTML is never executed.
 
@@ -51,7 +51,7 @@ The homepage has one static 1200×630 social image. Each application has a gener
 
 ## Boundaries
 
-Macify does not currently provide public accounts, saved applications, payments, subscriptions, public submissions, or multi-user editorial roles. Audio and application binaries are not stored.
+Macify does not currently provide public accounts, saved applications, payments, subscriptions, an in-site submission form, or multi-user editorial roles. Audio and application binaries are not stored.
 
 ## Principles
 

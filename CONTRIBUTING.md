@@ -1,33 +1,22 @@
 # Contributing to Macify
 
-Macify accepts application, correction, and deal contributions through pull requests. Start with the files in [`catalog/examples`](catalog/examples); examples are documentation and are never published as catalogue records.
+Macify accepts pull requests that add useful macOS applications. Public contribution pull requests may add exactly one new file under [`catalog/apps`](catalog/apps) and may not change existing files.
 
-## Add or update an application
+## Add an application
 
 1. Copy [`catalog/examples/application.example.json`](catalog/examples/application.example.json) to `catalog/apps`, then name it with the application's lowercase, hyphenated slug: `catalog/apps/example-app.json`.
-2. Include direct HTTPS source URLs for the icon, preview image, and up to eight screenshots. Do not commit image files. Use stable, publicly accessible sources that you are permitted to share.
-3. Keep `relatedAppSlugs` reciprocal: if app A names app B, app B must also name app A in the same pull request.
-4. Keep descriptions factual and editorial. Follow [`EDITORIAL.md`](EDITORIAL.md).
-5. Run `npm run catalogue:validate`.
-6. Open a pull request explaining the addition or correction and identifying authoritative sources for claims.
+2. Complete every field. Use `null` or an empty array only where the example permits it, and leave `relatedAppSlugs` empty for a public submission.
+3. Write a factual description following [`EDITORIAL.md`](EDITORIAL.md), including features, fit, privacy and requirements, and pricing.
+4. Use direct public HTTPS URLs for the icon and preview. Do not commit image files.
+5. Run `npm run catalogue:validate`, then open a pull request with links to authoritative sources.
 
-Merging does not publish content immediately. Cloudflare validates and optimizes changed media, then creates a pending revision in Macify's protected editorial dashboard. An administrator reviews and publishes it. Existing live content remains available while an update is pending.
+Automated checks verify completeness and structure, not editorial quality. Macify decides what is accepted, may request changes, and may reject or later remove any listing.
 
-Featured placement is an editorial setting and intentionally does not exist in public manifests. Pull requests cannot change it.
+After a pull request is merged, Cloudflare prepares a pending revision. An editor must publish it from the protected dashboard before it appears publicly.
 
-## Add or update a deal
+## Repository scope
 
-1. Copy [`catalog/examples/deal.example.json`](catalog/examples/deal.example.json) to `catalog/deals`.
-2. Name the file with the existing application's slug and use the same value for `appSlug`: `catalog/deals/example-app.json`.
-3. Enter the percentage as an integer and ISO 8601 start and end times with a timezone.
-4. Use `null` when no discount code is required. Deal actions automatically use the linked application's `websiteUrl`.
-5. Run `npm run catalogue:validate`.
-
-Deal manifests are maintained separately so an offer can change or expire without rewriting the application's catalogue record. See [`catalog/deals/README.md`](catalog/deals/README.md) for the complete relationship rule.
-
-## Remove an application
-
-Delete its manifest and explain why in the pull request. A merge creates an archive request for editorial review; it does not immediately remove the live page.
+Corrections, removals, relationships, featured placement, and deals are maintained by Macify editors. Open an issue when an existing listing needs attention.
 
 ## Security and privacy
 

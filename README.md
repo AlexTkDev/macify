@@ -1,6 +1,6 @@
 # Macify
 
-Macify is a curated directory of useful macOS applications. The repository contains the public website, a protected editorial dashboard, and the Cloudflare data and media services that support them.
+Macify is a curated directory of useful macOS applications. GitHub holds the source app manifests; Cloudflare D1 serves reviewed listings, and R2 stores their media. A protected dashboard gives Macify final control over publication, placement, deals, and removal.
 
 ## Stack
 
@@ -42,9 +42,8 @@ src/db/         D1 client and Drizzle schema
 src/lib/        Queries, validation, media, and utilities
 migrations/     Ordered D1 migrations and Drizzle metadata
 catalog/apps/   Public, one-file-per-application catalogue manifests
-catalog/deals/  Separate deal manifests linked by application slug
-catalog/examples/ Contributor-ready application and deal examples
-catalog/schema/ Application and deal schemas
+catalog/examples/ Contributor-ready application example
+catalog/schema/ Application manifest schema
 scripts/        Catalogue validation and GitHub synchronization tools
 public/         Static public assets
 ```
@@ -61,11 +60,13 @@ public/         Static public assets
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): public catalogue contribution workflow
 - [`SECURITY.md`](SECURITY.md): private vulnerability reporting
 
-## Catalogue workflow
+## Application workflow
 
-GitHub is the canonical source for contributed application content, while Cloudflare remains the serving layer. Pull requests validate one JSON manifest per application. After a merge, an authenticated workflow sends only changed manifests to the Worker. The Worker validates the manifest, safely downloads and optimizes changed remote images into R2, and stores a pending revision in D1. An administrator must publish that exact revision from the dashboard; a pending or failed update never replaces the live application.
+Public pull requests may add one complete application manifest under `catalog/apps`. Automated checks validate its structure and sources, but Macify editors decide whether it meets the directory's standard.
 
-Featured placement remains a dashboard-only D1 setting. Deal manifests live separately from application manifests and link to them through the application slug.
+After merge, the workflow sends the manifest to Cloudflare. Media is validated and stored in R2, while the proposed listing becomes a pending D1 revision. It becomes public only after an editor publishes it from the dashboard. Corrections, relationships, featured placement, deals, and removals remain editor-managed.
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) to propose an application.
 
 ## Deferred public features
 

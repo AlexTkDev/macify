@@ -2,9 +2,6 @@ name: Catalogue
 
 on:
   pull_request:
-    paths:
-      - "catalog/**"
-      - "scripts/validate-catalogue.mjs"
   push:
     branches: [main]
     paths:
@@ -18,9 +15,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Restrict public contributions to one new application
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          mapfile -t changes < <(git diff --name-status "$BASE_SHA" "$HEAD_SHA")
+          if [[ ${#changes[@]} -ne 1 ]]; then
+            echo "Public pull requests must add exactly one application manifest."
+            printf '%s\n' "${changes[@]}"
+            exit 1
+          fi
+
+          IFS=$'\t' read -r status changed_path <<< "${changes[0]}"
+          if [[ "$status" != "A" || ! "$changed_path" =~ ^catalog/apps/[a-z0-9]+(-[a-z0-9]+)*\.json$ ]]; then
+            echo "Public pull requests may only add one new catalog/apps/<slug>.json file."
+            exit 1
+          fi
       - run: node scripts/validate-catalogue.mjs
 
   sync:
