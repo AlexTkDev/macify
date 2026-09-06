@@ -1,3 +1,9 @@
+<!--
+Public pull requests may only add one new catalog/apps/<slug>.json file and
+change nothing else. For bugs, ideas, code, documentation, design, or changes
+to an existing listing, open an issue instead.
+-->
+
 ## Application
 
 Explain what the application does and why it belongs on Macify.

@@ -28,14 +28,14 @@ jobs:
         run: |
           mapfile -t changes < <(git diff --name-status "$BASE_SHA" "$HEAD_SHA")
           if [[ ${#changes[@]} -ne 1 ]]; then
-            echo "Public pull requests must add exactly one application manifest."
+            echo "Public pull requests may only add exactly one application manifest. Open an issue for every other kind of change."
             printf '%s\n' "${changes[@]}"
             exit 1
           fi
 
           IFS=$'\t' read -r status changed_path <<< "${changes[0]}"
           if [[ "$status" != "A" || ! "$changed_path" =~ ^catalog/apps/[a-z0-9]+(-[a-z0-9]+)*\.json$ ]]; then
-            echo "Public pull requests may only add one new catalog/apps/<slug>.json file."
+            echo "Public pull requests may only add one new catalog/apps/<slug>.json file and change nothing else. Open an issue for every other kind of change."
             exit 1
           fi
       - run: node scripts/validate-catalogue.mjs

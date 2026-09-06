@@ -1,0 +1,30 @@
+name: Listing correction
+description: Report incorrect or outdated information in an existing application listing.
+title: "[Listing]: "
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping keep Macify accurate. Please link authoritative sources for the requested change.
+  - type: input
+    id: application
+    attributes:
+      label: Application
+      description: Which application listing needs attention?
+      placeholder: Application name or Macify URL
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: What needs correcting?
+      description: Explain what is incorrect, outdated, or should be removed.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: Link official or otherwise authoritative sources that support the correction.
+      placeholder: One URL per line
+    validations:
+      required: true

@@ -1,6 +1,8 @@
 # Contributing to Macify
 
-Macify accepts pull requests that add useful macOS applications. Public contribution pull requests may add exactly one new file under [`catalog/apps`](catalog/apps) and may not change existing files.
+Macify accepts public pull requests only for new macOS application listings. Each pull request must add exactly one new file under [`catalog/apps`](catalog/apps) and change nothing else. You do not need to open an issue first.
+
+For bugs, feature ideas, documentation, code, design, or changes to an existing listing, open an issue instead. These areas are maintained by Macify editors, and unsolicited pull requests for them are not reviewed.
 
 ## Add an application
 
@@ -14,9 +16,16 @@ Automated checks verify completeness and structure, not editorial quality. Macif
 
 After a pull request is merged, Cloudflare prepares a pending revision. An editor must publish it from the protected dashboard before it appears publicly.
 
-## Repository scope
+## Open an issue instead
 
-Corrections, removals, relationships, featured placement, and deals are maintained by Macify editors. Open an issue when an existing listing needs attention.
+Open an issue to:
+
+- report incorrect or outdated listing information;
+- request a correction or removal;
+- report a website bug; or
+- suggest a product, design, or documentation improvement.
+
+Relationships, featured placement, deals, corrections, removals, and repository changes remain editor-managed. Opening an issue does not guarantee that a change will be accepted or implemented.
 
 ## Security and privacy
 

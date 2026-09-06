@@ -65,6 +65,8 @@ public/         Static public assets
 
 Public pull requests may add one complete application manifest under `catalog/apps`. Automated checks validate its structure and sources, but Macify editors decide whether it meets the directory's standard.
 
+No issue is required for a new application. For corrections, bugs, feature ideas, code, design, or documentation changes, open an issue instead; those changes remain maintainer-managed.
+
 After merge, the workflow sends the manifest to Cloudflare. Media is validated and stored in R2, while the proposed listing becomes a pending D1 revision. It becomes public only after an editor publishes it from the dashboard. Corrections, relationships, featured placement, deals, and removals remain editor-managed.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) to propose an application.

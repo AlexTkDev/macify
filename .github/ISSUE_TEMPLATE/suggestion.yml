@@ -1,0 +1,26 @@
+name: Suggestion
+description: Suggest a focused improvement to Macify.
+title: "[Suggestion]: "
+body:
+  - type: markdown
+    attributes:
+      value: Macify is intentionally focused. An issue starts a discussion but does not approve an external pull request.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the user need or limitation, rather than only the proposed feature.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested approach
+      description: Explain the smallest useful change you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add examples, screenshots, or alternatives if they help explain the suggestion.

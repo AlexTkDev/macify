@@ -1,0 +1,36 @@
+name: Bug report
+description: Report a reproducible problem with the Macify website.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: Use the listing correction form for inaccurate application information. Do not disclose security vulnerabilities here.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Provide the shortest sequence that reliably shows the problem.
+      placeholder: |
+        1. Go to …
+        2. Select …
+        3. See …
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Page URL
+      description: Where did the problem occur?
+      placeholder: https://…
+  - type: textarea
+    id: environment
+    attributes:
+      label: Browser and device
+      description: Include the browser, operating system, and device when relevant.
