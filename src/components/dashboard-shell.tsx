@@ -3,20 +3,18 @@ import Link from "next/link";
 import {
   AppWindow,
   ArrowUpRight,
-  FileUp,
   Image as ImageIcon,
+  GitPullRequest,
   LogOut,
-  Shapes,
 } from "lucide-react";
 import { logoutAdmin } from "@/app/dashboard/logout-action";
 import { MacifyLogo } from "@/components/macify-logo";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { id: "applications", label: "Applications", description: "Curate the directory", icon: AppWindow, href: "/dashboard", tone: "blue" },
-  { id: "categories", label: "Categories", description: "Tune discovery", icon: Shapes, href: "/dashboard/categories", tone: "yellow" },
-  { id: "media", label: "Media", description: "Manage artwork", icon: ImageIcon, href: "/dashboard/media", tone: "mint" },
-  { id: "imports", label: "Imports", description: "Move data", icon: FileUp, href: "/dashboard/imports", tone: "lilac" },
+  { id: "applications", label: "Applications", description: "Published app listings", icon: AppWindow, href: "/dashboard", tone: "blue" },
+  { id: "catalogue", label: "Review queue", description: "Publish GitHub updates", icon: GitPullRequest, href: "/dashboard/catalogue", tone: "mint" },
+  { id: "media", label: "Media", description: "Inspect synchronized artwork", icon: ImageIcon, href: "/dashboard/media", tone: "mint" },
 ] as const;
 
 export function DashboardShell({
@@ -34,7 +32,7 @@ export function DashboardShell({
       <aside className="dashboard-rail">
         <div className="dashboard-brand">
           <MacifyLogo href="/dashboard" />
-          <span>Editorial</span>
+          <span>Publishing</span>
         </div>
         <div className="dashboard-rail-label">Workspace</div>
         <nav className="dashboard-navigation" aria-label="Dashboard navigation">
@@ -46,7 +44,7 @@ export function DashboardShell({
           ))}
         </nav>
         <div className="dashboard-rail-footer">
-          <span className="dashboard-environment"><i aria-hidden="true" /> Local workspace</span>
+          <span className="dashboard-environment"><i aria-hidden="true" /> Admin workspace</span>
           <Link className="dashboard-site-link" href="/">Open Macify <ArrowUpRight aria-hidden="true" size={15} /></Link>
           <form action={logoutAdmin}><button className="dashboard-site-link dashboard-logout" type="submit">Sign out <LogOut aria-hidden="true" size={15} /></button></form>
         </div>

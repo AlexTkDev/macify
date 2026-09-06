@@ -1,0 +1,7 @@
+/catalog/ @Beingpax
+/.github/workflows/ @Beingpax
+/migrations/ @Beingpax
+/src/app/api/internal/ @Beingpax
+/src/app/dashboard/ @Beingpax
+/src/db/ @Beingpax
+/wrangler.jsonc @Beingpax

@@ -3,7 +3,6 @@ import { bytesToHex, matchesFileSignature, safeFileName } from "@/lib/media-vali
 import { fetchRemoteImage } from "@/lib/remote-image";
 import { optimizeImage } from "@/lib/image-optimization";
 
-export { isAllowedRemoteImageUrl } from "@/lib/media-validation";
 export type { MediaRole, PreparedMedia } from "@/lib/media-types";
 
 export async function prepareMediaSource(

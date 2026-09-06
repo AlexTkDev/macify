@@ -12,6 +12,7 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
       {applications.map((app) => (
         <Link className="directory-app-row" href={`/apps/${app.slug}`} key={app.id} prefetch={false}>
           <span className="directory-app-preview">
+            {app.isFeatured && <span className="directory-featured-badge">Featured</span>}
             {app.preview ? (
               <Image
                 alt={app.preview.altText ?? `${app.name} preview`}
@@ -41,26 +42,5 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
         </Link>
       ))}
     </div>
-  );
-}
-
-export function ApplicationDirectory({
-  applications,
-  heading = "Apps worth trying.",
-  id = "all-apps",
-}: {
-  applications: DirectoryApp[];
-  heading?: string;
-  id?: string;
-}) {
-  const titleId = `${id}-title`;
-  return (
-    <section className="home-section application-directory" id={id} aria-labelledby={titleId}>
-      <div className="directory-heading">
-        <h2 id={titleId}>{heading}</h2>
-      </div>
-
-      <DirectoryAppGrid applications={applications} />
-    </section>
   );
 }

@@ -5,7 +5,7 @@ import { InlineAppSearch } from "@/components/inline-app-search";
 import { LiveVisitorCount } from "@/components/live-visitor-count";
 import { MacifyLogo } from "@/components/macify-logo";
 
-export function PublicHeader() {
+function PublicHeader() {
   return (
     <header className="public-header">
       <div className="public-header-inner">
@@ -28,7 +28,7 @@ export function PublicHeader() {
   );
 }
 
-export function PublicFooter() {
+function PublicFooter() {
   return (
     <footer className="public-footer">
       <div className="public-footer-panel">
@@ -52,6 +52,9 @@ export function PublicFooter() {
             </nav>
           </div>
         </div>
+        <p className="public-footer-affiliate">
+          Macify may earn a commission from qualifying purchases made through affiliate links on this website. <Link href="/privacy#affiliate-links">Learn about affiliate links</Link>.
+        </p>
         <div className="public-footer-bottom">
           <p>© 2026 Macify. Independent, carefully maintained, and made for Mac users.</p>
           <p>Product names and artwork belong to their respective owners.</p>

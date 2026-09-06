@@ -1,35 +1,16 @@
-import { and, asc, count, desc, eq, inArray, isNull, ne, or, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import {
-  appRelationships,
   appCategories,
   apps,
   mediaAssets,
   categories,
+  catalogueRevisions,
 } from "@/db/schema";
-
-export async function getEditorialOptions(excludeAppId?: string) {
-  const database = await getDatabase();
-  const [relatedApplicationOptions, categoryOptions] = await Promise.all([
-    database
-      .select({ id: apps.id, name: apps.name, status: apps.status })
-      .from(apps)
-      .where(excludeAppId
-        ? and(isNull(apps.deletedAt), ne(apps.id, excludeAppId))
-        : isNull(apps.deletedAt))
-      .orderBy(asc(apps.name)),
-    database.select({ name: categories.name }).from(categories).orderBy(asc(categories.name)),
-  ]);
-
-  return {
-    relatedApplications: relatedApplicationOptions,
-    categories: categoryOptions.map(({ name }) => name),
-  };
-}
 
 export async function getApplicationsDashboardData() {
   const database = await getDatabase();
-  const [records, statsRows, mediaRows] = await Promise.all([
+  const [records, statsRows, mediaRows, revisionRows] = await Promise.all([
     database
       .select({
         id: apps.id,
@@ -40,6 +21,7 @@ export async function getApplicationsDashboardData() {
         pricingDetails: apps.pricingDetails,
         sourceType: apps.sourceType,
         status: apps.status,
+        isFeatured: apps.isFeatured,
         updatedAt: apps.updatedAt,
       })
       .from(apps)
@@ -50,13 +32,13 @@ export async function getApplicationsDashboardData() {
       .select({
         total: count(),
         published: sql<number>`coalesce(sum(case when ${apps.status} = 'published' then 1 else 0 end), 0)`,
-        drafts: sql<number>`coalesce(sum(case when ${apps.status} = 'draft' then 1 else 0 end), 0)`,
       })
       .from(apps)
       .where(isNull(apps.deletedAt)),
     database
       .select({ count: count(), bytes: sql<number>`coalesce(sum(${mediaAssets.byteSize}), 0)` })
       .from(mediaAssets),
+    database.select({ count: count() }).from(catalogueRevisions).where(eq(catalogueRevisions.status, "pending")),
   ]);
 
   const applicationIds = records.map(({ id }) => id);
@@ -90,14 +72,15 @@ export async function getApplicationsDashboardData() {
         iconAltText: icon?.altText ?? null,
       };
     }),
-    stats: statsRows[0] ?? { total: 0, published: 0, drafts: 0 },
+    stats: statsRows[0] ?? { total: 0, published: 0 },
     media: mediaRows[0] ?? { count: 0, bytes: 0 },
+    pendingRevisions: revisionRows[0]?.count ?? 0,
   };
 }
 
 export async function getApplicationEditorData(id: string) {
   const database = await getDatabase();
-  const [applicationRows, media, categoryRows, relationshipRows] = await Promise.all([
+  const [applicationRows, media, categoryRows] = await Promise.all([
     database
       .select({
         id: apps.id,
@@ -112,6 +95,7 @@ export async function getApplicationEditorData(id: string) {
         sourceType: apps.sourceType,
         youtubeUrl: apps.youtubeUrl,
         status: apps.status,
+        isFeatured: apps.isFeatured,
       })
       .from(apps)
       .where(and(eq(apps.id, id), isNull(apps.deletedAt)))
@@ -125,7 +109,6 @@ export async function getApplicationEditorData(id: string) {
         byteSize: mediaAssets.byteSize,
         width: mediaAssets.width,
         height: mediaAssets.height,
-        durationMs: mediaAssets.durationMs,
         sourceUrl: mediaAssets.sourceUrl,
         altText: mediaAssets.altText,
         createdAt: mediaAssets.createdAt,
@@ -139,21 +122,12 @@ export async function getApplicationEditorData(id: string) {
       .innerJoin(categories, eq(categories.id, appCategories.categoryId))
       .where(eq(appCategories.appId, id))
       .orderBy(asc(categories.name)),
-    database
-      .select({
-        sourceAppId: appRelationships.sourceAppId,
-        targetAppId: appRelationships.targetAppId,
-      })
-      .from(appRelationships)
-      .where(or(eq(appRelationships.sourceAppId, id), eq(appRelationships.targetAppId, id))),
   ]);
 
   const application = applicationRows[0]
     ? {
         ...applicationRows[0],
         categoriesText: categoryRows.map(({ name }) => name).join(", "),
-        relatedAppIds: relationshipRows.map(({ sourceAppId, targetAppId }) =>
-          sourceAppId === id ? targetAppId : sourceAppId),
       }
     : null;
 

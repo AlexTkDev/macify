@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Pencil } from "lucide-react";
+import { ArrowLeft, ExternalLink, SlidersHorizontal } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { MarkdownContent } from "@/components/markdown-content";
-import { getApplicationEditorData, getEditorialOptions } from "@/lib/apps-data";
+import { getApplicationEditorData } from "@/lib/apps-data";
 import { formatPricing } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
@@ -16,15 +16,11 @@ function mediaUrl(storageKey: string) {
 
 export default async function ApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [{ application, media }, options] = await Promise.all([
-    getApplicationEditorData(id),
-    getEditorialOptions(id),
-  ]);
+  const { application, media } = await getApplicationEditorData(id);
   if (!application) notFound();
 
   const icon = media.find((asset) => asset.role === "icon");
   const preview = media.find((asset) => asset.role === "preview_image");
-  const related = options.relatedApplications.filter((item) => application.relatedAppIds.includes(item.id));
   const categories = application.categoriesText.split(",").map((category) => category.trim()).filter(Boolean);
 
   return (
@@ -43,7 +39,9 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           )}
           <div>
             <div className="dashboard-detail-status">
-              <span className={cn(application.status === "published" ? "published-badge" : "draft-badge")}>{application.status}</span>
+              <span className={cn(application.status === "published" ? "published-badge" : "draft-badge")}>
+                {application.status === "published" ? "Published" : application.status === "archived" ? "Archived" : "Not public"}
+              </span>
               <span>/{application.slug}</span>
             </div>
             <h1>{application.name}</h1>
@@ -52,7 +50,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
         </div>
         <div className="dashboard-actions">
           <a className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">Website <ExternalLink size={15} /></a>
-          <Link className="button-primary" href={`/dashboard/apps/${application.id}/edit`}><Pencil size={15} /> Edit application</Link>
+          <Link className="button-primary" href={`/dashboard/apps/${application.id}/edit`}><SlidersHorizontal size={15} /> Placement and deals</Link>
         </div>
       </header>
 
@@ -86,14 +84,6 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
             </section>
           )}
 
-          {related.length > 0 && (
-            <section className="dashboard-detail-facts dashboard-detail-group">
-              <h2>Related applications</h2>
-              <div className="dashboard-related-list">
-                {related.map((app) => <Link href={`/dashboard/apps/${app.id}`} key={app.id}><span>{app.name}</span><span className={cn(app.status === "published" ? "published-badge" : "draft-badge")}>{app.status}</span></Link>)}
-              </div>
-            </section>
-          )}
         </aside>
       </div>
     </DashboardShell>

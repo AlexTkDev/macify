@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run catalogue:sync:local",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -15,28 +16,16 @@
     "db:generate": "drizzle-kit generate",
     "db:check": "drizzle-kit check",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
-    "db:seed:initial": "node scripts/import-local-drafts.mjs",
-    "data:generate:csv": "node scripts/generate-initial-apps-csv.mjs",
-    "data:prepare:expanded": "node scripts/prepare-expanded-apps.mjs",
-    "db:seed:expanded": "node scripts/import-local-drafts.mjs --dataset=data/expanded-apps.json",
-    "data:prepare:additional": "node scripts/prepare-expanded-apps.mjs --source=data/additional-apps-source.mjs --destination=data/additional-apps.json",
-    "db:seed:additional": "node scripts/import-local-drafts.mjs --dataset=data/additional-apps.json",
-    "editorial:check": "node scripts/check-editorial-descriptions.mjs",
-    "editorial:prune-excluded": "node scripts/prune-excluded-editorial.mjs",
-    "editorial:sync:local": "node scripts/sync-editorial-descriptions.mjs --local",
-    "media:audit-og": "node scripts/audit-og-images.mjs",
-    "media:sync:local": "node scripts/sync-local-media.mjs --local",
-    "production:replace-from-local": "node scripts/replace-production-from-local.mjs --confirm-production-replacement",
-    "media:optimize:local": "node scripts/optimize-local-media.mjs --local",
-    "categories:sync:local": "node scripts/sync-local-categories.mjs --local",
-    "db:migrate:production": "wrangler d1 migrations apply DB --remote --env production"
+    "db:migrate:production": "wrangler d1 migrations apply DB --remote --env production",
+    "catalogue:validate": "node scripts/validate-catalogue.mjs",
+    "catalogue:sync:local": "node scripts/sync-local-catalogue.mjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "1.20.2",
     "clsx": "^2.1.1",
     "drizzle-orm": "0.45.2",
     "lucide-react": "1.28.0",
-    "next": "16.2.12",
+    "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-markdown": "^10.1.0",
@@ -51,9 +40,9 @@
     "@types/react-dom": "19.2.4",
     "drizzle-kit": "0.31.10",
     "eslint": "9.39.5",
-    "eslint-config-next": "16.2.12",
+    "eslint-config-next": "16.3.4",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
-    "wrangler": "4.118.0"
+    "wrangler": "4.129.0"
   }
 }

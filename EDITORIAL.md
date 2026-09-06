@@ -4,7 +4,7 @@
 
 Help readers decide whether an application fits their workflow. Explain verified capabilities, practical use, audience, and meaningful tradeoffs without repeating marketing copy.
 
-Descriptions are stored as Markdown. Aim for at least 150 useful words and stop when the reader has enough context.
+Descriptions are stored as Markdown. Aim for roughly 300 useful words, but stop sooner when a focused application is already explained clearly. Never pad a description to reach a word count.
 
 ## Research
 
@@ -19,9 +19,11 @@ Official sources establish facts. Independent sources provide experience. Paraph
 
 Use this order:
 
-1. Three untitled opening paragraphs, each no longer than three sentences.
+1. Two or three untitled opening paragraphs, each no longer than three sentences.
 2. `## Features` followed by four to eight verified Markdown bullets.
 3. `## Where it fits` with the ideal audience, relationship to alternatives, and a meaningful limitation or tradeoff.
+4. `## Privacy and requirements` covering the application's data model, relevant permissions, accounts, platform support, and hardware or service dependencies. Attribute privacy claims to the developer unless independently established.
+5. `## Pricing` stating whether the application is free, freemium, a one-time purchase, or subscription-based. Keep exact, rapidly changing prices consistent with the structured pricing fields and make regional or tax variability clear when relevant.
 
 ```markdown
 [What the app is, the problem it solves, and its distinctive interaction.]
@@ -37,6 +39,14 @@ Use this order:
 ## Where it fits
 
 [Best audience, alternatives, and primary tradeoff.]
+
+## Privacy and requirements
+
+[Data storage and processing, accounts, permissions, supported macOS versions, hardware requirements, and optional services.]
+
+## Pricing
+
+[Commercial model and concise current pricing context.]
 ```
 
 ## Voice
@@ -52,9 +62,11 @@ Use this order:
 ## Publication check
 
 - Facts and changing claims are current.
-- The opening has exactly three untitled paragraphs.
+- The opening has two or three untitled paragraphs.
 - `Features` is the first heading and contains verified capabilities.
 - `Where it fits` identifies audience and tradeoffs.
+- `Privacy and requirements` distinguishes local behavior, cloud behavior, permissions, and developer claims.
+- `Pricing` is the final section and agrees with the structured pricing fields.
 - No paragraph exceeds three sentences.
 - Markdown is valid and contains no raw HTML.
 - The record has an authentic icon, a usable preview, focused categories, and a working official link.

@@ -1,0 +1,32 @@
+.page {
+  width: min(calc(100% - var(--public-page-inset)), 68rem);
+  margin-inline: auto;
+  padding: 3rem 0 7rem;
+}
+
+.header { max-width: 49rem; margin-bottom: 3rem; }
+.header > p { margin: 0 0 .65rem; color: var(--play-blue); font-size: .9rem; font-weight: 800; }
+.header h1 { margin: 0; font-family: var(--font-caprasimo), sans-serif; font-size: clamp(2.8rem, 6vw, 5.2rem); font-weight: 400; line-height: 1; letter-spacing: -.035em; }
+.header > span { max-width: 66ch; margin-top: 1.2rem; display: block; color: #50525a; font-size: 1.03rem; line-height: 1.55; }
+
+.options { border-top: 1px solid #dfe1e6; }
+.option { padding: 2rem 0; display: grid; grid-template-columns: minmax(15rem, .8fr) minmax(24rem, 1.2fr); gap: 2rem; align-items: center; border-bottom: 1px solid #dfe1e6; }
+.optionCopy { display: grid; grid-template-columns: 2rem 1fr; gap: .75rem; align-items: start; }
+.optionCopy > span { padding-top: .15rem; color: #7b7e86; font-size: .78rem; font-variant-numeric: tabular-nums; font-weight: 760; }
+.optionCopy h2 { margin: 0; color: var(--public-ink-strong); font-size: 1.22rem; line-height: 1.2; }
+.optionCopy p { max-width: 36ch; margin: .35rem 0 0; color: #62656d; font-size: .88rem; line-height: 1.45; }
+
+.preview { min-height: 4rem; display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: .7rem 1.05rem; }
+.fact { display: inline-flex; align-items: center; gap: .46rem; color: #41434a; font-size: .9rem; white-space: nowrap; }
+.fact strong { color: var(--public-ink-strong); font-weight: 800; }
+.icon { width: 1.85rem; height: 1.85rem; position: relative; display: inline-grid; place-items: center; flex: 0 0 auto; color: var(--public-ink-strong); isolation: isolate; }
+.icon::before { content: ""; width: 1.62rem; height: 1.42rem; position: absolute; z-index: -1; border-radius: .34rem; transform: rotate(-7deg); }
+.blue::before { background: #91bdff; }
+.green::before { background: #83dfb9; }
+.violet::before { background: #bca9ff; }
+
+@media (max-width: 760px) {
+  .page { padding-top: 2rem; }
+  .option { grid-template-columns: 1fr; gap: 1.15rem; }
+  .preview { padding-left: 2.75rem; }
+}

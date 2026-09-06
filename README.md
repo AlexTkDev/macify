@@ -1,6 +1,6 @@
 # Macify
 
-Macify is a curated directory of useful macOS applications. The repository contains the public website, a protected editorial dashboard, and the Cloudflare data and media services that support them.
+Macify is a curated directory of useful macOS applications. GitHub holds the source app manifests; Cloudflare D1 serves reviewed listings, and R2 stores their media. A protected dashboard gives Macify final control over publication, placement, deals, and removal.
 
 ## Stack
 
@@ -19,7 +19,9 @@ npm run db:migrate:local
 npm run dev
 ```
 
-Optional catalogue seed commands are listed in `package.json`. Use `npm run preview` when a change needs verification in the Workers runtime.
+`npm run dev` validates `catalog/apps` and synchronizes the manifests into local D1 before Next.js starts. Run `npm run catalogue:sync:local` to refresh an already-running development server. This command is local-only, preserves dashboard-managed featured state and existing media, and never writes to production.
+
+Use `npm run preview` when a change needs verification in the Workers runtime.
 
 ## Quality checks
 
@@ -39,8 +41,10 @@ src/components/ Shared interface components
 src/db/         D1 client and Drizzle schema
 src/lib/        Queries, validation, media, and utilities
 migrations/     Ordered D1 migrations and Drizzle metadata
-data/           Canonical catalogue preparation data
-scripts/        Editorial, media, import, and operations tools
+catalog/apps/   Public, one-file-per-application catalogue manifests
+catalog/examples/ Contributor-ready application example
+catalog/schema/ Application manifest schema
+scripts/        Catalogue validation and GitHub synchronization tools
 public/         Static public assets
 ```
 
@@ -53,6 +57,16 @@ public/         Static public assets
 - [`migrations/README.md`](migrations/README.md): database change workflow
 - [`OPERATIONS.md`](OPERATIONS.md): production data protection and recovery
 - [`RELEASE.md`](RELEASE.md): validation and production deployment
+- [`CONTRIBUTING.md`](CONTRIBUTING.md): public catalogue contribution workflow
+- [`SECURITY.md`](SECURITY.md): private vulnerability reporting
+
+## Application workflow
+
+Public pull requests may add one complete application manifest under `catalog/apps`. Automated checks validate its structure and sources, but Macify editors decide whether it meets the directory's standard.
+
+After merge, the workflow sends the manifest to Cloudflare. Media is validated and stored in R2, while the proposed listing becomes a pending D1 revision. It becomes public only after an editor publishes it from the dashboard. Corrections, relationships, featured placement, deals, and removals remain editor-managed.
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) to propose an application.
 
 ## Deferred public features
 
@@ -67,4 +81,4 @@ The homepage offers **Hot**, **Trending**, and **Latest** rankings. Hot uses uni
 - Never commit `.dev.vars`, credentials, exports, backups, or Wrangler state.
 - Browser code must not access D1 or R2 bindings directly.
 - Remote migrations, deployments, data replacement, DNS, resources, and secrets require explicit approval.
-- Back up production D1 before migrations, imports, catalogue replacement, or destructive operations.
+- Back up production D1 before migrations, bulk synchronization, or destructive operations.

@@ -58,7 +58,15 @@ function EditorialImage({ application, media, priority = false }: { application:
   );
 }
 
-export function ApplicationOverview({ application, preview, screenshots }: { application: PublishedApplication; preview?: ApplicationMedia; screenshots: ApplicationMedia[] }) {
+export function ApplicationOverview({
+  application,
+  preview,
+  screenshots,
+}: {
+  application: PublishedApplication;
+  preview?: ApplicationMedia;
+  screenshots: ApplicationMedia[];
+}) {
   const description = descriptionParts(application.description, application.tagline, application.name);
   return (
     <div className="application-overview">
