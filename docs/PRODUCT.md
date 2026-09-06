@@ -13,6 +13,7 @@ The public website provides:
 - category-based discovery;
 - inline search across names, taglines, and categories;
 - related applications and a random-app route;
+- a GitHub contribution path for proposing new applications;
 - canonical metadata, structured data, sitemap, robots rules, and social cards.
 
 The homepage headline is “Mac apps worth making room for.” Its supporting copy is “A curated list of the most useful macOS applications.”

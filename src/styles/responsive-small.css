@@ -41,7 +41,9 @@
     padding: 0.2rem;
   }
   .public-navigation .public-categories-link { min-height: 2.4rem; padding-inline: 0.6rem; font-size: 0.76rem; }
-  .public-navigation .public-surprise-link { min-height: 2.4rem; }
+  .public-navigation .public-surprise-link,
+  .public-navigation .public-submit-link { min-height: 2.4rem; }
+  .live-visitor-count > span:last-child { display: none; }
   .header-search-field { min-height: 2.85rem; border-radius: 999px; }
   .header-search-field:focus-within {
     border-color: #8caaff;

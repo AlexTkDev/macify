@@ -185,40 +185,32 @@
   transform: none;
 }
 
-.public-navigation .public-surprise-link {
+.public-navigation .public-submit-link {
   padding-inline: 1rem;
   border-color: transparent;
   color: var(--public-canvas);
   background: #151a21;
 }
 
-.public-navigation .public-surprise-link:hover,
-.public-navigation .public-surprise-link:focus-visible {
+.public-navigation .public-submit-link:hover,
+.public-navigation .public-submit-link:focus-visible {
   border-color: transparent;
   color: var(--public-canvas);
   background: #080a0d;
 }
 
-.public-surprise-link:active { transform: translateY(0.03rem) scale(0.985); }
+.public-submit-link:active { transform: translateY(0.03rem) scale(0.985); }
 
-.public-surprise-icon {
+.public-navigation-icon {
   width: 1.25rem;
   height: 1.25rem;
   display: none;
   place-items: center;
   flex: 0 0 auto;
   color: currentColor;
-  background: transparent;
-  box-shadow: none;
-  transform: none;
 }
 
-.public-surprise-icon svg { width: 1rem; height: 1rem; }
-
-.public-surprise-link:hover .public-surprise-icon,
-.public-surprise-link:focus-visible .public-surprise-icon {
-  transform: rotate(8deg);
-}
+.public-navigation-icon svg { width: 1rem; height: 1rem; }
 
 .public-header-actions {
   grid-area: controls;
@@ -483,10 +475,6 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .public-surprise-icon {
-    transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
   .public-footer-links a {
     transition: color 160ms cubic-bezier(0.22, 1, 0.36, 1), transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -511,14 +499,11 @@
 @media (prefers-reduced-motion: reduce) {
   .header-search-field,
   .public-navigation a,
-  .public-surprise-icon,
   .public-footer-links a { transition: none; }
   .search-spinner { animation: none; }
   .public-navigation a:hover,
   .public-navigation a:focus-visible,
-  .public-surprise-link:active { transform: none; }
-  .public-surprise-link:hover .public-surprise-icon,
-  .public-surprise-link:focus-visible .public-surprise-icon { transform: none; }
+  .public-submit-link:active { transform: none; }
   .public-footer-links a:hover,
   .public-footer-links a:focus-visible { transform: none; }
 }

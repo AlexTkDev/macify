@@ -1,9 +1,11 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { Shuffle } from "lucide-react";
+import { Plus, Shuffle } from "lucide-react";
 import { InlineAppSearch } from "@/components/inline-app-search";
 import { LiveVisitorCount } from "@/components/live-visitor-count";
 import { MacifyLogo } from "@/components/macify-logo";
+
+const contributionGuideUrl = "https://github.com/Beingpax/macify/blob/main/CONTRIBUTING.md";
 
 function PublicHeader() {
   return (
@@ -15,9 +17,19 @@ function PublicHeader() {
         <nav className="public-navigation" aria-label="Primary navigation">
           <Link className="public-home-link" href="/">Home</Link>
           <Link className="public-categories-link" href="/categories">Categories</Link>
-          <a className="public-surprise-link" href="/surprise">
-            <span className="public-surprise-icon" aria-hidden="true"><Shuffle size={15} /></span>
-            <span className="public-surprise-label">Surprise me</span>
+          <Link className="public-surprise-link" href="/surprise" aria-label="Surprise me with an app">
+            <span className="public-navigation-icon" aria-hidden="true"><Shuffle size={15} /></span>
+            <span className="public-navigation-label">Surprise me</span>
+          </Link>
+          <a
+            className="public-submit-link"
+            href={contributionGuideUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Submit an app on GitHub (opens in a new tab)"
+          >
+            <span className="public-navigation-icon" aria-hidden="true"><Plus size={15} /></span>
+            <span className="public-navigation-label">Submit app</span>
           </a>
         </nav>
         <div className="public-header-actions">
@@ -43,7 +55,8 @@ function PublicFooter() {
               <Link href="/">Home</Link>
               <Link href="/#all-apps">Browse apps</Link>
               <Link href="/categories">Categories</Link>
-              <a href="/surprise">Surprise me</a>
+              <Link href="/surprise">Surprise me</Link>
+              <a href={contributionGuideUrl} target="_blank" rel="noreferrer">Submit an app</a>
             </nav>
             <nav aria-label="About Macify">
               <p>About</p>
