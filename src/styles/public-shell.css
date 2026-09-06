@@ -468,6 +468,20 @@
   color: var(--play-blue);
 }
 
+.public-footer-affiliate {
+  margin: clamp(1.75rem, 3vw, 2.25rem) 0 0;
+  color: var(--public-text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.public-footer-affiliate a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .public-surprise-icon {
     transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -481,7 +495,7 @@
 }
 
 .public-footer-bottom {
-  margin-top: clamp(1.75rem, 3vw, 2.25rem);
+  margin-top: 1rem;
   padding-top: 1rem;
   display: flex;
   justify-content: space-between;
