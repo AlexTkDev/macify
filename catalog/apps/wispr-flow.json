@@ -1,0 +1,36 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Wispr Flow",
+  "slug": "wispr-flow",
+  "websiteUrl": "https://wisprflow.ai/",
+  "tagline": "Effortless Voice Dictation.",
+  "description": "Wispr Flow is an AI-assisted voice dictation tool that turns spoken thoughts into formatted text wherever you write. It is designed to work across desktop and mobile apps, so a spoken message can become an email, document, chat reply, or note without opening a separate transcription workspace.\n\nThe app focuses on reducing the friction between speech and usable prose. Rather than producing a raw transcript, Flow aims to apply punctuation and formatting that fit the destination, making it practical for day-to-day communication as well as longer first drafts.\n\nThat makes Flow most valuable when typing is the bottleneck, not thinking. It works as an input method that follows the cursor, leaving the user in control of the app, document, or conversation where the text belongs.\n\n## Features\n\n- Dictate into supported Mac, Windows, iOS, and Android contexts without moving text through a separate editor.\n- Turn speech into formatted prose with punctuation and layout designed for messages, email, documents, and other everyday writing surfaces.\n- Start voice input from the desktop workflow and continue writing in the app already in use.\n- Use Flow’s current language, vocabulary, and formatting controls where available to improve how names, terminology, and personal phrasing are handled.\n- Keep a lightweight notepad available from a shortcut when a thought needs to be captured before choosing its final destination.\n- Review output before sending when accuracy, sensitive information, or precise formatting matters.\n\n## Where it fits\n\nWispr Flow suits people who spend much of the day writing messages, email, notes, or drafts and prefer to speak their first version. It is especially useful when switching away from the current app would break concentration.\n\nIt is not a substitute for editing or for a full meeting-recording system. Its usefulness depends on your comfort speaking aloud, the quality of the audio environment, and the features available on your platform and plan.",
+  "pricingType": "freemium",
+  "billingType": "subscription",
+  "pricingDetails": "Pro $15/month.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "ai",
+    "dictation-transcription",
+    "notes-writing"
+  ],
+  "relatedAppSlugs": [
+    "macwhisper",
+    "spokenly",
+    "superwhisper",
+    "voiceos"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://cdn.prod.website-files.com/682f84b3838c89f8ff7667db/68d27d1a8a10f417b5644527_flow-wc-v2.png",
+      "altText": "Wispr Flow application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://cdn.prod.website-files.com/682f84b3838c89f8ff7667db/683c611aba65ade013982bcd_wispr-og-min.jpg",
+      "altText": "Wispr Flow voice dictation product preview"
+    },
+    "screenshots": []
+  }
+}

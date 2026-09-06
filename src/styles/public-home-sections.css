@@ -209,6 +209,22 @@
   background: #000;
 }
 
+.directory-featured-badge {
+  position: absolute;
+  top: .75rem;
+  left: .75rem;
+  z-index: 3;
+  padding: .38rem .58rem;
+  border: 1px solid rgb(255 255 255 / .7);
+  border-radius: .35rem;
+  color: #10131a;
+  background: #f8bd32;
+  font-size: .66rem;
+  font-weight: 850;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
 .directory-app-preview::before {
   content: "";
   position: absolute;

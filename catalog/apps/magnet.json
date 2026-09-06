@@ -1,0 +1,34 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Magnet",
+  "slug": "magnet",
+  "websiteUrl": "https://magnet.crowdcafe.com/",
+  "tagline": "Organize your workspace.",
+  "description": "Magnet is a macOS window manager that moves and resizes windows into predictable screen regions using keyboard shortcuts, menu-bar controls, or dragging to screen edges. It makes a tiled workspace possible without manually sizing every window or entering full-screen mode.\n\nSend a document to one half of the screen, put a browser beside it, or arrange windows across an external display with a single command. This is useful for comparison, writing beside reference material, communication beside work, and any setup that repeatedly uses the same screen geometry.\n\nMagnet changes window placement, not the content of the applications. It works best when a small set of layouts becomes familiar, and it may overlap with newer macOS tiling capabilities depending on the version of macOS in use.\n\n## Features\n\n- Snap windows to halves, thirds, corners, and other screen regions through shortcuts and edge dragging.\n- Move and resize windows quickly without manually dragging each edge.\n- Use menu-bar access for layouts that do not need a remembered keyboard shortcut.\n- Arrange windows across attached displays according to the current Mac configuration.\n\n## Where it fits\n\nMagnet fits people who routinely work with two or more apps side by side and want a simple, dedicated tiling layer. It is useful on large displays and laptops with an external monitor.\n\nIt is not necessary if the built-in macOS layouts already cover the workflow. Check for shortcut conflicts with other window managers before enabling it.",
+  "pricingType": "paid",
+  "billingType": "one_time",
+  "pricingDetails": "$4.99 one-time purchase.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "keyboard-shortcuts",
+    "window-management"
+  ],
+  "relatedAppSlugs": [
+    "bettertouchtool",
+    "rectangle",
+    "swish"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://magnet.crowdcafe.com/apple-touch-icon.png",
+      "altText": "Magnet application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://images.squarespace-cdn.com/content/5d3c73c906ac510001158d1b/1581786936549-9MHXLUKH6M4FQU1QT62Z/Screen+Shot+2020-02-13+at+9.31.22+AM.png?format=1500w&content-type=image%2Fpng",
+      "altText": "Magnet application preview"
+    },
+    "screenshots": []
+  }
+}

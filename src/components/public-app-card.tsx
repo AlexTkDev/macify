@@ -9,6 +9,7 @@ export type PublicAppSummary = {
   pricingType: PricingType;
   billingType: BillingType;
   pricingDetails: string | null;
+  isFeatured: boolean;
   icon: { storageKey: string; altText: string | null } | null;
 };
 

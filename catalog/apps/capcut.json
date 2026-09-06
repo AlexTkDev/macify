@@ -1,0 +1,32 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "CapCut",
+  "slug": "capcut",
+  "websiteUrl": "https://www.capcut.com/tools/desktop-video-editor",
+  "tagline": "Create more. Edit less.",
+  "description": "CapCut Desktop is a video editor for Mac and Windows that combines a conventional timeline editor with templates, effects, captions, and a growing set of AI-assisted tools. It is aimed at quick social video production as well as more detailed editing, letting a creator move from raw clips to a short, platform-specific export in one environment.\n\nUse it to cut clips, arrange media, add text and audio, then apply the tools that match the project—automatic captions, smart media search, color adjustment, keyframe animation, or an adjusted aspect ratio. Cloud project access and direct publishing tools can be convenient for a multi-device workflow, but they also mean media and account choices deserve attention.\n\nCapCut is broad rather than minimal. Its large asset library and AI features can accelerate an idea, although availability, included usage, and output rules change with the product and plan, so important commercial or client work should be checked against the current terms before delivery.\n\n## Features\n\n- Edit video and audio on a timeline with effects, filters, transitions, text, and a broad import and export format range.\n- Generate captions from video or audio, work with transcript-based editing, and use text-to-speech or other current voice tools where available.\n- Search local media by objects, dialogue, and people to find clips in a larger project.\n- Animate with keyframes and graphs, then apply color-wheel controls and automatic color adjustment.\n- Use AI-assisted options such as background removal, stabilization, script-to-video, dubbing, resizing, and short-form conversion when the current account and plan allow them.\n- Store and access projects through the service’s current multi-device cloud workflow when that convenience is worth the associated account and privacy tradeoff.\n\n## Where it fits\n\nCapCut fits creators producing short social videos, tutorials, reels, and quick marketing edits who value an approachable editor with many ready-made tools. It can also serve a more involved edit when the timeline and animation controls are sufficient for the project.\n\nIt is not the simplest choice for someone who only needs a trim, and its AI and cloud features should not be treated as permanent or universally included. Review current plan limits, licensing, privacy, and export requirements before basing a business workflow on them.",
+  "pricingType": "freemium",
+  "billingType": "subscription",
+  "pricingDetails": "Pro $19.99/month or $179.99/year.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "video-editing"
+  ],
+  "relatedAppSlugs": [
+    "handbrake",
+    "screen-studio"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://www.capcut.com&size=256",
+      "altText": "CapCut application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://p16-seeyou-sg.ibyteimg.com/tos-alisg-i-2zwwjm3azk-sg/e8fdbbfd07fd4237936b8aa03d32d6e5~tplv-2zwwjm3azk-image.image",
+      "altText": "CapCut application preview"
+    },
+    "screenshots": []
+  }
+}

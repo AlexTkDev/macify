@@ -1,0 +1,36 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Clop",
+  "slug": "clop",
+  "websiteUrl": "https://lowtechguys.com/clop/",
+  "tagline": "Clipboard optimizer for macOS.",
+  "description": "Clop is a Mac optimizer for images, videos, PDFs, files, and clipboard content. It reduces media size at the moment you copy, record, drag, or select something, so the version you paste or share is already suited to a chat, email, document, or upload limit.\n\nIts most immediate workflow is a large screenshot copied to the clipboard: leave Clop running, copy the image, and paste a smaller version into the destination app. The same approach applies to screen recordings, Finder files, and PDFs, with manual hotkeys and drop zones when automatic behavior would be too broad.\n\nClop works locally and its source is available under GPLv3. It keeps originals in a backup folder, but any optimizer changes output characteristics, so retain the original and test a preset before applying it automatically to valuable source media.\n\n## Features\n\n- Optimize copied images automatically and make the smaller version ready to paste into another app.\n- Compress and transform images, video, and PDF files through clipboard workflows, Finder selections, watched files, or drag-and-drop.\n- Downscale and crop media, convert video to GIF, alter speed, remove audio, and encode compatible formats such as MP4.\n- Create preset drop zones backed by Shortcuts for actions such as WebP conversion, watermarking, cropping, and uploading.\n- Use on-device processing with no cloud file transfer, while retaining original files in Clop’s backup folder.\n- Integrate with macOS Shortcuts, Dropshare, and file-shelf apps, and use Apple Silicon’s media engine for supported video encoding.\n\n## Where it fits\n\nClop is ideal for people who repeatedly share screenshots, recordings, visual documentation, or large PDFs and want the size reduction to happen before the upload becomes a problem. It complements capture tools such as CleanShot or Shottr rather than replacing them.\n\nThe automatic modes need thoughtful configuration. Keep an original when resolution, metadata, or exact visual fidelity matters, and check which capabilities remain available after the current Pro trial.",
+  "pricingType": "freemium",
+  "billingType": "one_time",
+  "pricingDetails": "Pro €15 one-time purchase.",
+  "sourceType": "open_source",
+  "youtubeUrl": null,
+  "categories": [
+    "clipboard",
+    "compression-conversion"
+  ],
+  "relatedAppSlugs": [
+    "cleanshot-x",
+    "compressx",
+    "pimosa",
+    "shottr",
+    "the-unarchiver"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://lowtechguys.com/static/img/clop-icon.png",
+      "altText": "Clop application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://img.panaitiu.com/_/1200/plain/https://lowtechguys.com/static/img/clop-screenshot.png",
+      "altText": "Clop application preview"
+    },
+    "screenshots": []
+  }
+}

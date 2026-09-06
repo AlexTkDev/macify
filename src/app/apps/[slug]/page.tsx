@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const application = await getApplication((await params).slug);
   if (!application) return {};
   const canonical = `/apps/${application.slug}`;
-  const title = application.seoTitle ?? application.name;
-  const description = application.seoDescription ?? application.tagline;
+  const title = application.name;
+  const description = application.tagline;
   const images = [{ url: `${canonical}/opengraph-image`, alt: `${application.name} — ${application.tagline} | Macify` }];
   return {
     title,

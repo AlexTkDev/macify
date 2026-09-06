@@ -1,0 +1,32 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "The Unarchiver",
+  "slug": "the-unarchiver",
+  "websiteUrl": "https://theunarchiver.com/",
+  "tagline": "Open any archive in seconds.",
+  "description": "The Unarchiver is a free macOS utility for opening archive formats that Finder’s built-in Archive Utility does not always handle. Assign it as the default opener and it extracts the contents of an archive without turning compression formats into a separate technical problem.\n\nIt is especially handy when receiving RAR, 7z, multi-part, old, or foreign-language archives from another platform. Select the archive as usual, let the app unpack it, and return to Finder with the resulting files.\n\nThe Unarchiver is intentionally focused on extraction rather than archive authoring or file management. It supports many formats, but old and encrypted formats can have documented partial support, so an unsupported archive may still require a specialized tool or the original sender.\n\n## Features\n\n- Extract common archive formats including ZIP, Zipx, RAR, 7z, TAR, Gzip, Bzip2, XZ, CAB, and many disc-image formats.\n- Handle features such as Zip AES encryption, Zip64, RAR encryption, and multiple RAR volumes where supported.\n- Open a broad set of legacy formats, including StuffIt, ARJ, ARC, Amiga archives, and older compression systems.\n- Work with archives whose filenames use non-Latin characters.\n- Set The Unarchiver as the default application for archive files through Finder’s Open With controls.\n\n## Where it fits\n\nThe Unarchiver suits most Mac users who occasionally receive an archive that macOS cannot open. It is a sensible replacement for the built-in extractor when compatibility matters more than advanced controls.\n\nIt is not for creating archives or repairing damaged files. Check the developer’s current support table when a particularly old, encrypted, or unusual format is important.",
+  "pricingType": "free",
+  "billingType": null,
+  "pricingDetails": null,
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "compression-conversion",
+    "file-management"
+  ],
+  "relatedAppSlugs": [
+    "clop"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://cdn.theunarchiver.com/img/the-unarchiver-96x96.png",
+      "altText": "The Unarchiver application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://image.thum.io/get/width/1200/crop/630/noanimate/https://theunarchiver.com/",
+      "altText": "The Unarchiver application preview"
+    },
+    "screenshots": []
+  }
+}

@@ -5,7 +5,7 @@ import { InlineAppSearch } from "@/components/inline-app-search";
 import { LiveVisitorCount } from "@/components/live-visitor-count";
 import { MacifyLogo } from "@/components/macify-logo";
 
-export function PublicHeader() {
+function PublicHeader() {
   return (
     <header className="public-header">
       <div className="public-header-inner">
@@ -28,7 +28,7 @@ export function PublicHeader() {
   );
 }
 
-export function PublicFooter() {
+function PublicFooter() {
   return (
     <footer className="public-footer">
       <div className="public-footer-panel">

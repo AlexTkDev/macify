@@ -4,6 +4,22 @@
   padding: 1.4rem 0 7rem;
 }
 
+.application-deal {
+  width: fit-content;
+  margin: 1.25rem auto 0;
+  padding: .7rem .8rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  border: 1px solid #e2ad2e;
+  border-radius: .55rem;
+  background: #fff7d8;
+  color: #34280d;
+  font-size: .78rem;
+}
+.application-deal code { padding: .18rem .35rem; border: 1px dashed currentColor; background: #fff; font: inherit; font-weight: 800; }
+.application-deal a { color: inherit; font-weight: 850; text-underline-offset: .18em; }
+
 .application-hero {
   display: flex;
   justify-content: center;

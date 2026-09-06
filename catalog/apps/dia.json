@@ -1,0 +1,34 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Dia",
+  "slug": "dia",
+  "websiteUrl": "https://www.diabrowser.com/",
+  "tagline": "The AI browser where you can chat with your tabs.",
+  "description": "Dia is a macOS browser that combines tabs with AI-assisted work context. It can gather information from connected services, the current browser context, and organized tab spaces so that a question, report, or meeting can begin with more than an empty page.\n\nUse it to start the day with a brief that collects calendar, inbox, and links, or ask a question across connected tools such as Slack, Notion, and Google Workspace. Profiles, saved splits, and named tab groups aim to separate work, personal, and project contexts.\n\nDia is a browser with broad access to work information, so connected accounts and AI memory settings deserve close review. The app says users control connected tools and that Sync is end-to-end encrypted, but sensitive decisions and generated output still require human verification.\n\n## Features\n\n- Create a Morning Brief that gathers current calendar, inbox, and relevant links.\n- Ask questions across connected tools, tabs, Google Workspace, Slack, Notion, and other available context.\n- Generate reports and presentation decks from connected information, then review and edit the result before use.\n- Use profiles to separate tabs, logins, and AI context for work, freelance, and personal life.\n- Save split-screen layouts and organize related tabs under meaningful group names.\n- Block trackers and ads, control memory and sharing settings, and use end-to-end encrypted Sync according to the developer.\n\n## Where it fits\n\nDia fits knowledge workers whose browser is already the place where meetings, documents, messaging, and research collide. It is most helpful when the available integrations match the actual tools in use.\n\nIt currently requires macOS 14 or later on an M1 Mac or newer. It should not be used as an unreviewed source of truth for sensitive company information or external communication.",
+  "pricingType": "freemium",
+  "billingType": "subscription",
+  "pricingDetails": "Pro $20/month.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "ai",
+    "bookmarks-knowledge"
+  ],
+  "relatedAppSlugs": [
+    "chatgpt",
+    "claude",
+    "orion"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://www.diabrowser.com/apple-touch-icon.png",
+      "altText": "Dia application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://cdn.sanity.io/images/e5fj2khm/production/2a3fed123dd60d491e98c28d8eb8ca0a116ce275-2400x1260.png?auto=format&q=100&w=1200&h=630",
+      "altText": "Dia application preview"
+    },
+    "screenshots": []
+  }
+}

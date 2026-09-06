@@ -1,0 +1,31 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Mac Mouse Fix",
+  "slug": "mac-mouse-fix",
+  "websiteUrl": "https://mousefix.org/",
+  "tagline": "Make your mouse better.",
+  "description": "Mac Mouse Fix is a macOS utility that makes a non-Apple mouse behave more naturally on a Mac. It remaps mouse buttons, improves scrolling and gesture behavior, and gives common desktop actions a direct mouse input instead of requiring a keyboard shortcut or trackpad gesture.\n\nSet buttons for the actions you actually use—such as back and forward navigation, Mission Control, or window movement—then keep the mouse interaction consistent across apps. It is particularly helpful for people who use a multi-button Logitech, gaming, or standard USB mouse alongside a MacBook or desktop Mac.\n\nMouse customizers need Accessibility permissions to control system behavior. The useful configuration is usually modest: map a few meaningful actions, avoid conflicts with application-specific controls, and test the result before assuming it will be right in every professional app or game.\n\n## Features\n\n- Assign mouse buttons and scrolling behavior to macOS actions and common navigation commands.\n- Improve trackpad-like scrolling and gesture-style interaction for supported third-party mice.\n- Use the mouse to trigger window and desktop controls that otherwise need keyboard shortcuts.\n- Keep a focused configuration for a personal mouse rather than relying on vendor software alone.\n\n## Where it fits\n\nMac Mouse Fix fits Mac users who prefer a conventional multi-button mouse and want it to feel more integrated with macOS. It complements hardware driver software by concentrating on Mac-native interaction.\n\nIt requires the relevant system permissions and may not be appropriate for every specialized mouse workflow. Test mappings in apps with their own mouse controls before committing to a global setup.",
+  "pricingType": "freemium",
+  "billingType": "one_time",
+  "pricingDetails": "optional $2.99 one-time purchase.",
+  "sourceType": "open_source",
+  "youtubeUrl": null,
+  "categories": [
+    "mouse-gestures"
+  ],
+  "relatedAppSlugs": [
+    "bettertouchtool"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://mousefix.org&size=256",
+      "altText": "Mac Mouse Fix application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://image.thum.io/get/width/1200/crop/630/noanimate/https://mousefix.org/",
+      "altText": "Mac Mouse Fix application preview"
+    },
+    "screenshots": []
+  }
+}

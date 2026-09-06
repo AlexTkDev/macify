@@ -12,11 +12,7 @@
 
   .related-application-shelf { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
-  .management-layout { grid-template-columns: 1fr; grid-template-areas: "records" "create"; }
-  .management-create { position: static; }
-
   .media-library,
-  .media-upload-grid,
   .media-management-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -162,35 +158,4 @@
     border-bottom: 1px solid var(--line);
   }
 
-  .management-layout,
-  .import-layout { grid-template-columns: 1fr; }
-
-  .management-layout { grid-template-areas: "records" "create"; }
-  .management-create { position: static; }
-
-  .form-section {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .form-section-copy {
-    position: static;
-  }
-
-  .form-section-copy > span { margin-left: 2.65rem; }
-
-  .form-footer { position: static; }
-
-  .related-app-options {
-    grid-template-columns: 1fr;
-  }
-
-  .related-app-toolbar {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .related-app-search {
-    width: 100%;
-  }
 }

@@ -53,7 +53,3 @@ export function parseRemoteImageUrl(value: string) {
     return null;
   }
 }
-
-export function isAllowedRemoteImageUrl(value: string) {
-  return value === "" || parseRemoteImageUrl(value) !== null;
-}

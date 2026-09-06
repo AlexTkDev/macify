@@ -1,0 +1,32 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "DisplayBuddy",
+  "slug": "displaybuddy",
+  "websiteUrl": "https://displaybuddy.app/",
+  "tagline": "Control your displays directly from your Mac.",
+  "description": "DisplayBuddy is a Mac utility for controlling compatible external monitors without reaching for their physical buttons. It uses DDC when a display supports it, letting macOS adjust hardware brightness, contrast, volume, input source, resolution, rotation, and power controls from one place.\n\nIt is especially useful when a desk has more than one display. You can synchronize adjustments, save a preferred multi-monitor arrangement as a preset, and apply that preset manually or through a schedule tied to conditions such as time of day, dark mode, charging, or connected displays.\n\nMonitor support varies because DDC implementations and docking setups vary. DisplayBuddy includes a software-dimming fallback for unsupported displays and Wi-Fi control for compatible LG webOS and Samsung Tizen displays, but the specific controls should be tested with the actual hardware.\n\n## Features\n\n- Adjust compatible displays’ hardware brightness, contrast, volume, input source, resolution, rotation, and power controls through DDC.\n- Synchronize brightness and other supported adjustments across multiple external displays.\n- Save display presets that can include supported settings and a multi-display arrangement.\n- Schedule presets around time, sunrise or sunset, dark mode, charging, and display connection events.\n- Use keyboard shortcuts, menu-bar controls, Shortcuts, Siri, command-line tools, or supported MCP integrations to trigger controls.\n- Fall back to software gamma dimming when direct monitor control is unavailable, and control compatible LG and Samsung smart displays over Wi-Fi.\n\n## Where it fits\n\nDisplayBuddy fits a desk setup where external-monitor settings are adjusted often or need to move together. It is a focused alternative to changing each monitor with its own on-screen display.\n\nIt is not a guarantee that every port, dock, adapter, or monitor exposes the same controls. Try the free compatibility path before depending on a particular DDC or input-switching workflow.",
+  "pricingType": "paid",
+  "billingType": "one_time",
+  "pricingDetails": "$24.99 one-time purchase.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "display-controls"
+  ],
+  "relatedAppSlugs": [
+    "betterdisplay",
+    "lunar"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://displaybuddy.app/images/apple-touch-icon.png",
+      "altText": "DisplayBuddy application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://displaybuddy.app/og-image.jpeg",
+      "altText": "DisplayBuddy application preview"
+    },
+    "screenshots": []
+  }
+}

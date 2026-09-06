@@ -3,10 +3,9 @@ import Link from "next/link";
 import {
   AppWindow,
   ArrowUpRight,
-  FileUp,
   Image as ImageIcon,
+  GitPullRequest,
   LogOut,
-  Shapes,
 } from "lucide-react";
 import { logoutAdmin } from "@/app/dashboard/logout-action";
 import { MacifyLogo } from "@/components/macify-logo";
@@ -14,9 +13,8 @@ import { cn } from "@/lib/utils";
 
 const navigation = [
   { id: "applications", label: "Applications", description: "Curate the directory", icon: AppWindow, href: "/dashboard", tone: "blue" },
-  { id: "categories", label: "Categories", description: "Tune discovery", icon: Shapes, href: "/dashboard/categories", tone: "yellow" },
-  { id: "media", label: "Media", description: "Manage artwork", icon: ImageIcon, href: "/dashboard/media", tone: "mint" },
-  { id: "imports", label: "Imports", description: "Move data", icon: FileUp, href: "/dashboard/imports", tone: "lilac" },
+  { id: "catalogue", label: "Contributions", description: "Review GitHub changes", icon: GitPullRequest, href: "/dashboard/catalogue", tone: "mint" },
+  { id: "media", label: "Media", description: "Inspect synchronized artwork", icon: ImageIcon, href: "/dashboard/media", tone: "mint" },
 ] as const;
 
 export function DashboardShell({

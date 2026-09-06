@@ -1,0 +1,35 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "PopClip",
+  "slug": "popclip",
+  "websiteUrl": "https://www.popclip.app/",
+  "tagline": "Instant text actions.",
+  "description": "PopClip is a Mac text-selection utility that shows a small action bar whenever text is selected. It puts common actions such as copy, paste, search, translation, formatting, conversion, and app-specific commands next to the selected words instead of requiring a trip to a menu or keyboard shortcut.\n\nSelect text in the app you are already using, choose an action from the bar, and continue working. Extensions let the action set grow for services, writing tools, developer utilities, and custom scripts, making PopClip useful for people whose work consists of many small text transformations.\n\nPopClip is a context menu with an extensible surface, not a full automation system. The best configuration is a short list of actions that match repeated habits; an oversized menu can make selection slower rather than faster.\n\n## Features\n\n- Show an action bar when text is selected in supported Mac apps.\n- Copy, paste, search, translate, format, and transform selected text without leaving the current app.\n- Install extensions for services, text tools, scripts, and app-specific actions.\n- Configure which actions appear and tailor the menu to a personal writing or research workflow.\n\n## Where it fits\n\nPopClip fits writers, researchers, support staff, and developers who repeatedly act on short text selections. It complements keyboard shortcuts by making occasional actions discoverable at the selection itself.\n\nIt is less helpful for people who avoid mouse-led interaction or rarely select text. Keep only the actions that earn their place in the menu.",
+  "pricingType": "paid",
+  "billingType": "one_time",
+  "pricingDetails": "$16.99 one-time purchase.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "automation",
+    "notes-writing"
+  ],
+  "relatedAppSlugs": [
+    "antinote",
+    "droppy",
+    "pastepal",
+    "raycast"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://store.setapp.com/cdn-cgi/image/width=384,quality=75,format=auto/app/159/47842/icon-1784720696-6a60ad38cf7e0.png",
+      "altText": "PopClip application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://image.thum.io/get/width/1200/crop/630/noanimate/https://www.popclip.app/",
+      "altText": "PopClip application preview"
+    },
+    "screenshots": []
+  }
+}

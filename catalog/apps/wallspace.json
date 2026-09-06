@@ -1,0 +1,31 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Wallspace",
+  "slug": "wallspace",
+  "websiteUrl": "https://wallspace.app/",
+  "tagline": "Cinematic live wallpapers for macOS.",
+  "description": "Wallspace is a native macOS app for setting live wallpapers on the desktop and, on supported releases, the lock screen. It focuses on high-resolution motion backgrounds without requiring an account, advertising, or a subscription.\n\nChoose a wallpaper from its gallery or use an MP4 file from the Mac, then assign it to one or more displays. The app can use a separate wallpaper per screen and automatically pause playback when the Mac is on battery or doing intensive work.\n\nLive wallpaper is cosmetic, so it should remain lightweight and optional. Wallspace is designed to reduce its impact, but users who prioritize maximum battery life or distraction-free visuals may still prefer a static system wallpaper.\n\n## Features\n\n- Use a gallery of live wallpapers or assign a local MP4 file as a wallpaper without converting it.\n- Set different live wallpapers on multiple displays or mirror the same choice across all screens.\n- Extend compatible wallpaper setups to the lock screen on current macOS versions.\n- Search the wallpaper collection by a described mood, scene, or style through its current AI search feature.\n- Run without login, ads, or tracking according to the developer, and install through its download or Homebrew.\n\n## Where it fits\n\nWallspace fits Mac users who want a more personal desktop without adopting a cloud-based wallpaper service. It is a small visual utility rather than a productivity tool.\n\nIt requires macOS 15 or later, and lock-screen live wallpapers require macOS 26 or later. Check battery impact on your own hardware and avoid using it when minimal motion is important.",
+  "pricingType": "freemium",
+  "billingType": "one_time",
+  "pricingDetails": "Pro $8.99 one-time.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "customization"
+  ],
+  "relatedAppSlugs": [
+    "alcove"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://s4.wallspace.app/assets/logo.png",
+      "altText": "Wallspace application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://s4.wallspace.app/assets/Wallspace-Social-Banner.jpg",
+      "altText": "Wallspace application preview"
+    },
+    "screenshots": []
+  }
+}

@@ -7,7 +7,7 @@ export const pricingLabels: Record<PricingType, string> = {
   paid: "Paid",
 };
 
-export const billingLabels: Record<Exclude<BillingType, null>, string> = {
+const billingLabels: Record<Exclude<BillingType, null>, string> = {
   one_time: "One-time payment",
   subscription: "Subscription",
 };

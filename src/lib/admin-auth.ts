@@ -72,6 +72,9 @@ export async function createAdminSession() {
 }
 
 export async function isAdminAuthenticated(cookieHeader?: string | null) {
+  const { env: runtimeEnv } = await getCloudflareContext({ async: true });
+  if ((runtimeEnv as AdminEnv).APP_ENV === "local") return true;
+
   const env = await authEnv();
   if (!env) return false;
   const value = cookieHeader === undefined

@@ -3,7 +3,13 @@ import { PublicAppIcon } from "@/components/public-app-card";
 import type { ApplicationMedia, PublishedApplication } from "@/components/application-detail/types";
 import { pricingLabels } from "@/lib/pricing";
 
-export function ApplicationHero({ application, icon }: { application: PublishedApplication; icon?: ApplicationMedia }) {
+export function ApplicationHero({
+  application,
+  icon,
+}: {
+  application: PublishedApplication;
+  icon?: ApplicationMedia;
+}) {
   const displayName = /[.!?]$/.test(application.name) ? application.name : `${application.name}.`;
 
   return (
@@ -46,6 +52,13 @@ export function ApplicationHero({ application, icon }: { application: PublishedA
           )}
           {application.sourceType === "open_source" && <span className="application-source">Open source</span>}
         </div>
+        {application.deal && (
+          <aside className="application-deal" aria-label={`${application.name} deal`}>
+            <strong>{application.deal.discountPercent}% off</strong>
+            {application.deal.code && <span>Use code <code>{application.deal.code}</code></span>}
+            <a href={application.deal.url} rel="sponsored noreferrer" target="_blank">Get this deal</a>
+          </aside>
+        )}
       </div>
     </header>
   );

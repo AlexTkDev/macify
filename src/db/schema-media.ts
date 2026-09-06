@@ -13,7 +13,6 @@ export const mediaAssets = sqliteTable(
     byteSize: integer("byte_size").notNull(),
     width: integer("width"),
     height: integer("height"),
-    durationMs: integer("duration_ms"),
     checksum: text("checksum").notNull(),
     sourceUrl: text("source_url"),
     altText: text("alt_text"),

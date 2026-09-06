@@ -7,6 +7,7 @@ import {
   apps,
   mediaAssets,
   categories,
+  deals,
 } from "@/db/schema";
 import { getAppIcons, publicApplicationFields } from "@/lib/directory-shared";
 
@@ -29,9 +30,10 @@ export async function getPublishedApplicationBySlug(slug: string) {
     pricingType: relatedApp.pricingType,
     billingType: relatedApp.billingType,
     pricingDetails: relatedApp.pricingDetails,
-    confidence: appRelationships.confidence,
+    isFeatured: relatedApp.isFeatured,
   };
-  const [categoryRows, media, outgoing, incoming] = await Promise.all([
+  const now = new Date();
+  const [categoryRows, media, outgoing, incoming, dealRows] = await Promise.all([
     database
       .select({ id: categories.id, slug: categories.slug, name: categories.name })
       .from(appCategories)
@@ -46,7 +48,6 @@ export async function getPublishedApplicationBySlug(slug: string) {
         mimeType: mediaAssets.mimeType,
         width: mediaAssets.width,
         height: mediaAssets.height,
-        durationMs: mediaAssets.durationMs,
         altText: mediaAssets.altText,
       })
       .from(mediaAssets)
@@ -64,7 +65,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
         eq(relatedApp.status, "published"),
         isNull(relatedApp.deletedAt),
       ))
-      .orderBy(desc(appRelationships.confidence))
+      .orderBy(asc(relatedApp.name))
       .limit(6),
     database
       .select(relatedFields)
@@ -75,13 +76,17 @@ export async function getPublishedApplicationBySlug(slug: string) {
         eq(relatedApp.status, "published"),
         isNull(relatedApp.deletedAt),
       ))
-      .orderBy(desc(appRelationships.confidence))
+      .orderBy(asc(relatedApp.name))
       .limit(6),
+    database.select().from(deals).where(and(
+      eq(deals.appId, application.id),
+      sql`(${deals.startsAt} is null or ${deals.startsAt} <= ${now})`,
+      sql`(${deals.endsAt} is null or ${deals.endsAt} > ${now})`,
+    )).limit(1),
   ]);
 
   const relatedRecords = Array.from(
     [...outgoing, ...incoming]
-      .sort((a, b) => b.confidence - a.confidence)
       .reduce(
         (items, item) => items.set(item.id, item),
         new Map<string, (typeof outgoing)[number]>(),
@@ -97,6 +102,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
       ...record,
       icon: icons.get(record.id) ?? null,
     })),
+    deal: dealRows[0] ?? null,
   };
 }
 

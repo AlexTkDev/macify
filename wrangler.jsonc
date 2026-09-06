@@ -25,7 +25,8 @@
     }
   ],
   "vars": {
-    "APP_ENV": "local"
+    "APP_ENV": "local",
+    "CATALOG_REPOSITORY": "Beingpax/macify"
   },
   "limits": {
     "cpu_ms": 500
@@ -41,7 +42,8 @@
         "binding": "IMAGES"
       },
       "vars": {
-        "APP_ENV": "production"
+        "APP_ENV": "production",
+        "CATALOG_REPOSITORY": "Beingpax/macify"
       },
       "d1_databases": [
         {

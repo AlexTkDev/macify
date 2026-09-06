@@ -18,6 +18,7 @@ export const cardFields = {
   pricingType: apps.pricingType,
   billingType: apps.billingType,
   pricingDetails: apps.pricingDetails,
+  isFeatured: apps.isFeatured,
 };
 
 export const publicApplicationFields = {
@@ -32,9 +33,8 @@ export const publicApplicationFields = {
   pricingDetails: apps.pricingDetails,
   sourceType: apps.sourceType,
   youtubeUrl: apps.youtubeUrl,
-  seoTitle: apps.seoTitle,
-  seoDescription: apps.seoDescription,
   publishedAt: apps.publishedAt,
+  isFeatured: apps.isFeatured,
 };
 
 type AppIconMedia = {
@@ -72,21 +72,26 @@ export async function getAppIcons(appIds: string[]): Promise<Map<string, AppIcon
 export async function getCardMedia(appIds: string[]) {
   if (!appIds.length) return { icons: new Map(), previews: new Map() };
   const database = await getDatabase();
-  const rows = await database
-    .select({
-      appId: mediaAssets.appId,
-      role: mediaAssets.role,
-      storageKey: mediaAssets.storageKey,
-      altText: mediaAssets.altText,
-      width: mediaAssets.width,
-      height: mediaAssets.height,
-    })
-    .from(mediaAssets)
-    .where(and(
-      inArray(mediaAssets.appId, appIds),
-      or(eq(mediaAssets.role, "icon"), eq(mediaAssets.role, "preview_image")),
-    ))
-    .orderBy(desc(mediaAssets.createdAt));
+  const rows = [];
+  const chunkSize = 75;
+  for (let index = 0; index < appIds.length; index += chunkSize) {
+    const chunk = appIds.slice(index, index + chunkSize);
+    rows.push(...await database
+      .select({
+        appId: mediaAssets.appId,
+        role: mediaAssets.role,
+        storageKey: mediaAssets.storageKey,
+        altText: mediaAssets.altText,
+        width: mediaAssets.width,
+        height: mediaAssets.height,
+      })
+      .from(mediaAssets)
+      .where(and(
+        inArray(mediaAssets.appId, chunk),
+        or(eq(mediaAssets.role, "icon"), eq(mediaAssets.role, "preview_image")),
+      ))
+      .orderBy(desc(mediaAssets.createdAt)));
+  }
   const icons = new Map<string, (typeof rows)[number]>();
   const previews = new Map<string, (typeof rows)[number]>();
   for (const row of rows) {

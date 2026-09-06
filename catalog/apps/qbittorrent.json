@@ -1,0 +1,29 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "qBittorrent",
+  "slug": "qbittorrent",
+  "websiteUrl": "https://www.qbittorrent.org/",
+  "tagline": "A free and reliable P2P BitTorrent client.",
+  "description": "qBittorrent is a free, open-source BitTorrent client for macOS and other desktop platforms. It manages torrent and magnet-link downloads without ads, while exposing the queueing, bandwidth, tracker, peer, RSS, and remote-control settings that regular BitTorrent users need.\n\nThe main workflow is straightforward: add a legal torrent or magnet link, choose files and a destination, then let the client connect to peers and manage the transfer. More advanced users can prioritize content, automate downloads from RSS feeds, search supported torrent sources, or control the client from its web interface.\n\nqBittorrent is intentionally a general BitTorrent tool rather than a media storefront or cloud service. That keeps it powerful and portable, but users remain responsible for using it lawfully and for understanding the privacy and security implications of peer-to-peer transfers.\n\n## Features\n\n- Add torrent files and magnet links, choose individual files, and control download or upload priorities from one queue.\n- Set bandwidth limits, schedules, connection preferences, and peer or tracker behavior for a home connection or seedbox-style workflow.\n- Search supported torrent sources from the client and subscribe to RSS feeds for automatic download rules.\n- Create torrents and manage trackers, peers, categories, tags, and content selection in current releases.\n- Use the remote web interface to monitor or control a running qBittorrent instance from another device.\n- Run the same open-source client across macOS, Windows, Linux, FreeBSD, and other supported desktop platforms.\n\n## Where it fits\n\nqBittorrent suits users who need a capable, ad-free BitTorrent client and are comfortable with the protocol’s settings. It is useful for legal open-source downloads, large legitimate files, and controlled peer-to-peer distribution.\n\nIt does not make untrusted downloads safe or licensed content legal. Users should obtain torrents from legitimate sources, understand local law, and apply their own security and network-privacy practices.",
+  "pricingType": "free",
+  "billingType": null,
+  "pricingDetails": null,
+  "sourceType": "open_source",
+  "youtubeUrl": null,
+  "categories": [
+    "file-transfer-downloads"
+  ],
+  "relatedAppSlugs": [],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://www.qbittorrent.org&size=256",
+      "altText": "qBittorrent application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://imgproxy.flathub.org/insecure/dpr:1/f:webp/rs:fill-down/aHR0cHM6Ly9kbC5mbGF0aHViLm9yZy9tZWRpYS9vcmcvcWJpdHRvcnJlbnQvcUJpdHRvcnJlbnQvNTUyZDgxYzAxMmFhODk1ZjExOGIyYWFmZjU1YTVkYmYvc2NyZWVuc2hvdHMvaW1hZ2UtMV9vcmlnLnBuZw",
+      "altText": "qBittorrent application preview"
+    },
+    "screenshots": []
+  }
+}

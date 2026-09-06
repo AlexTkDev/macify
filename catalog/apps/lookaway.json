@@ -1,0 +1,34 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "LookAway",
+  "slug": "lookaway",
+  "websiteUrl": "https://lookaway.com/",
+  "tagline": "Smart Break Reminder App for Mac.",
+  "description": "LookAway is a screen-break and digital-wellness app for Mac. It reminds you to step away, blink, or correct posture at intervals that can adapt to what you are doing instead of simply interrupting on a rigid timer.\n\nThe useful part is its attempt to protect focus as well as eyes. LookAway can delay or pause reminders around typing, dragging, meetings, presentations, games, and natural periods away from the keyboard, then resume the schedule when a break actually makes sense.\n\nIt is built around sustainable computer use rather than guilt or forced productivity. The app gives you control over break timing, strength, snoozing, and automation, while its menu bar controls make the next break understandable rather than surprising.\n\n## Features\n\n- Schedule short and long screen breaks, with configurable timing and stronger controls when you want a break to be harder to ignore.\n- Receive blink and posture reminders alongside regular break prompts to reduce common all-day-screen habits.\n- Delay or pause reminders during typing, dragging, presentations, fullscreen games, and detected meetings so a break does not land in the middle of focused work.\n- Use heads-up notices, snooze controls, and menu bar actions to decide how the next break should behave.\n- Review Screen Score, session patterns, natural breaks, and other statistics to understand screen time without maintaining a manual log.\n- Run Apple Shortcuts or AppleScript when breaks begin or end, and use current iPhone-sync features where supported.\n\n## Where it fits\n\nLookAway is best for people who work at a Mac for long stretches and want reminders that respect real work instead of blindly firing on schedule. It is especially appealing when eye strain, posture, or missed breaks are recurring problems.\n\nIt cannot determine perfectly whether you are truly taking a break, and its notifications still require a willingness to step away. Users who dislike any wellness prompts may prefer a simple timer or no intervention at all.",
+  "pricingType": "paid",
+  "billingType": "one_time",
+  "pricingDetails": "$19 one-time purchase.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "focus-wellbeing",
+    "menu-bar"
+  ],
+  "relatedAppSlugs": [
+    "cold-turkey-blocker",
+    "dayflow",
+    "monocle"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://pub-00cbe4c645bf4b178da5fd991a0aa92e.r2.dev/1732168881685-LookAway",
+      "altText": "LookAway application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://lookaway.com/images/social-card.png?v=2",
+      "altText": "LookAway application preview"
+    },
+    "screenshots": []
+  }
+}

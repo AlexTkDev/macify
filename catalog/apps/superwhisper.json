@@ -1,0 +1,36 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Superwhisper",
+  "slug": "superwhisper",
+  "websiteUrl": "https://superwhisper.com/",
+  "tagline": "Turn your voice into polished text.",
+  "description": "Superwhisper is a voice-to-text utility that lets you dictate into the app or text field already in front of you. A shortcut starts recording, then the app turns speech into text that can be inserted into Slack, email, documents, chat tools, and other macOS applications.\n\nIt is built for writing at speaking speed while keeping the destination app in place. That makes it useful for rough drafts, long messages, meeting follow-ups, prompts, and notes where typing would interrupt the flow of a thought.\n\nThe important distinction is that Superwhisper is a dictation layer rather than a standalone editor. Its voice modes and writing controls are intended to shape spoken input for different contexts before the text lands in the app you were already using.\n\n## Features\n\n- Start dictation with a global shortcut and insert transcribed text into the active app or website.\n- Use voice modes and writing controls to adapt spoken input for different kinds of writing, such as messages, notes, or more polished drafts.\n- Dictate across macOS, Windows, and iOS, with the current availability and plan details determined by Superwhisper’s release and subscription options.\n- Keep the speaking workflow close to the cursor instead of moving text through a separate recording or transcription app.\n- Use personal vocabulary and language settings when supported by the selected model and current release.\n- Review and refine the resulting text when names, technical terms, punctuation, or context need a human check.\n\n## Where it fits\n\nSuperwhisper is best for people who regularly compose text but find spoken first drafts faster than typing. It works particularly well for solo writing, messages, email, and quick capture across many apps.\n\nIt is not a replacement for careful editing or a dedicated meeting-transcription workflow. Accuracy and available controls can depend on the chosen model, language, audio conditions, and current plan.",
+  "pricingType": "freemium",
+  "billingType": "subscription",
+  "pricingDetails": "Pro $8.49/month.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "ai",
+    "dictation-transcription",
+    "local-first-privacy"
+  ],
+  "relatedAppSlugs": [
+    "macwhisper",
+    "spokenly",
+    "voiceos",
+    "wispr-flow"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://superwhisper.com/app-icon/1024.png",
+      "altText": "Superwhisper application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://superwhisper.com/api/og",
+      "altText": "Superwhisper voice-to-text application preview"
+    },
+    "screenshots": []
+  }
+}

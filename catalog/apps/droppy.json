@@ -1,0 +1,34 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Droppy",
+  "slug": "droppy",
+  "websiteUrl": "https://getdroppy.app/",
+  "tagline": "Your Mac, just way better.",
+  "description": "Droppy is a macOS shelf and utility environment that appears around the notch or as a floating Dynamic Island-style pill on any display. It combines a temporary file tray, clipboard history, media controls, timers, calendar access, and many small system utilities in one highly visible place.\n\nDrag a file until the tray appears, hold it there while moving between apps, then drop it at its destination. The same shelf can provide recent clipboard items, music controls, voice recordings, notifications, reminders, and widgets without adding another permanent window to the desktop.\n\nDroppy is intentionally broad and customizable. Its value comes from selecting a few widgets that improve the way you work; loading every feature into the shelf can create more visual noise than the menu-bar sprawl it aims to reduce.\n\n## Features\n\n- Hold dragged files in a temporary tray, then convert, keep, share, or move them when the destination is ready.\n- Keep a searchable clipboard history with pinboards and baskets for recurring copied material.\n- Use media playback, AirPlay output selection, timers, calendar and reminders, notifications, volume, brightness, and battery controls from the shelf.\n- Record voice memos with transcription, and view supported AI-agent progress, meetings, windows, and other live-status widgets.\n- Show the interface in the notch or as a floating pill on displays without a notch, plus use optional lock-screen controls and widgets.\n- Add, reorder, and customize free Droplet add-ons; the current app requires macOS Sonoma or later and is sold as a one-time purchase.\n\n## Where it fits\n\nDroppy suits people who frequently drag files, reuse clipboard content, or want quick controls without juggling separate utility apps. It can replace several light menu-bar tools if its shelf becomes part of a deliberate routine.\n\nIt has a large feature surface and asks for the permissions appropriate to its widgets. Start with the file tray and clipboard, then add capabilities only where they genuinely reduce friction.",
+  "pricingType": "paid",
+  "billingType": "one_time",
+  "pricingDetails": "$6.99 one-time purchase.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "clipboard",
+    "file-management"
+  ],
+  "relatedAppSlugs": [
+    "pastepal",
+    "popclip",
+    "qspace"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://getdroppy.app/assets/apple-touch-icon.png",
+      "altText": "Droppy application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://getdroppy.app/assets/og/og-home-20260729.jpg",
+      "altText": "Droppy application preview"
+    },
+    "screenshots": []
+  }
+}

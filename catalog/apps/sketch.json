@@ -1,0 +1,31 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Sketch",
+  "slug": "sketch",
+  "websiteUrl": "https://www.sketch.com/",
+  "tagline": "The definitive design toolkit.",
+  "description": "Sketch is a macOS design tool for creating interfaces, vector graphics, component libraries, prototypes, and developer handoff material. It keeps the main editing experience native and local while adding web-based collaboration when a project needs it.\n\nDesign screens on an infinite canvas, build reusable components, connect screens into a prototype, then share the relevant work with teammates or developers. It is particularly useful for product designers who want a focused Mac editor without making the browser the center of their craft.\n\nSketch works offline, but shared workspaces and handoff add a broader collaboration layer. The best fit is a design team that agrees on its library and sharing workflow; importing a tool alone does not create consistency in a product system.\n\n## Features\n\n- Create interface and vector work with frames, stack layouts, components, templates, and shared libraries.\n- Work locally and offline in the macOS editor, which currently requires macOS Sonoma or later.\n- Build interactive prototypes with overlays, scrolling areas, hover, press, drag, and swipe interactions.\n- Co-edit in real time or share selected documents and password-protected previews for feedback.\n- Let developers inspect files, download assets, and export design tokens through the free handoff tools.\n\n## Where it fits\n\nSketch fits Mac-based product and interface designers who value a focused native editor and a mature component workflow. It can support individual exploration through to team review and developer handoff.\n\nIt is not a general image editor or a substitute for design-system governance. Teams should confirm compatibility and collaboration needs before standardizing on it.",
+  "pricingType": "paid",
+  "billingType": "subscription",
+  "pricingDetails": "$12/month, billed annually; or $120 Mac-only license.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "design-prototyping"
+  ],
+  "relatedAppSlugs": [
+    "xmind"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://cdn.jim-nielsen.com/macos/1024/sketch-2025-11-20.png?rf=1024",
+      "altText": "Sketch application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://www.sketch.com/images/metadata/pages/home.jpg",
+      "altText": "Sketch application preview"
+    },
+    "screenshots": []
+  }
+}

@@ -2,9 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Database,
-  FileUp,
-  Pencil,
-  Plus,
+  GitPullRequest,
+  SlidersHorizontal,
 } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getApplicationsDashboardData } from "@/lib/apps-data";
@@ -19,15 +18,8 @@ function formatBytes(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export default async function DashboardPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ created?: string }>;
-}) {
-  const [{ applications, stats, media }, params] = await Promise.all([
-    getApplicationsDashboardData(),
-    searchParams,
-  ]);
+export default async function DashboardPage() {
+  const { applications, stats, media, pendingRevisions } = await getApplicationsDashboardData();
 
   return (
     <DashboardShell active="applications">
@@ -37,25 +29,15 @@ export default async function DashboardPage({
           <h1>Applications</h1>
         </div>
         <div className="dashboard-actions">
-          <Link className="button-secondary" href="/dashboard/imports">
-            <FileUp size={16} /> Import file
-          </Link>
-          <Link className="button-primary" href="/dashboard/apps/new">
-            <Plus size={16} /> Add application
+          <Link className="button-primary" href="/dashboard/catalogue">
+            <GitPullRequest size={16} /> Review contributions
           </Link>
         </div>
       </header>
 
-      {params.created === "1" && (
-        <div className="success-banner" role="status">
-          <span aria-hidden="true">✓</span>
-          Application saved as a draft in local D1.
-        </div>
-      )}
-
       <section className="status-strip" aria-label="Directory status">
         <div><span>Published</span><strong>{stats.published}</strong><small>Visible in the public directory</small></div>
-        <div><span>Drafts</span><strong>{stats.drafts}</strong><small>Waiting for editorial review</small></div>
+        <div><span>Pending reviews</span><strong>{pendingRevisions}</strong><small>Merged GitHub revisions awaiting a decision</small></div>
         <div><span>Media</span><strong>{formatBytes(Number(media.bytes))}</strong><small>{media.count} files recorded for R2</small></div>
         <div><span>Database</span><strong className="status-ready"><Database size={15} /> Ready</strong><small>{stats.total} application records in local D1</small></div>
       </section>
@@ -64,18 +46,15 @@ export default async function DashboardPage({
         <div className="panel-toolbar">
           <div>
             <h2 id="recent-apps">Recent applications</h2>
-            <p>Review application details before publishing them.</p>
+            <p>Published catalogue records. Content changes come from reviewed GitHub revisions.</p>
           </div>
         </div>
 
         {applications.length === 0 ? (
           <div className="dashboard-empty">
-            <span className="empty-app-mark" aria-hidden="true">+</span>
+            <span className="empty-app-mark" aria-hidden="true">0</span>
             <h3>No applications yet</h3>
-            <p>Add the first Mac application to verify the local editing workflow.</p>
-            <Link className="button-primary" href="/dashboard/apps/new">
-              <Plus size={16} /> Add application
-            </Link>
+            <p>Merge a valid catalogue manifest and publish it from Contributions.</p>
           </div>
         ) : (
           <div className="data-table-wrap">
@@ -117,8 +96,8 @@ export default async function DashboardPage({
                       </span>
                     </td>
                     <td>
-                      <Link className="icon-button" href={`/dashboard/apps/${app.id}/edit`} aria-label={`Edit ${app.name}`}>
-                        <Pencil size={15} />
+                      <Link className="icon-button" href={`/dashboard/apps/${app.id}/edit`} aria-label={`Open editorial settings for ${app.name}`}>
+                        <SlidersHorizontal size={15} />
                       </Link>
                     </td>
                   </tr>

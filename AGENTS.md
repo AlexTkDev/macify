@@ -21,8 +21,8 @@ The protected dashboard uses single-administrator authentication. Preserve serve
 - Never deploy, migrate production, replace remote data, change DNS, create resources, or add secrets without explicit approval.
 - Never expose D1 or R2 bindings to browser code.
 - Never commit secrets, `.dev.vars`, exports, backups, or Wrangler state.
-- Back up D1 before production migrations, imports, catalogue replacement, or destructive operations.
-- Validate imported files, size, MIME type, signature, checksum, and remote URL safety.
+- Back up D1 before production migrations, bulk catalogue synchronization, restoration, or destructive operations.
+- Validate catalogue manifests, remote image size, MIME type, signature, checksum, and URL safety.
 
 ## Quality
 

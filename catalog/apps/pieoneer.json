@@ -1,0 +1,33 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Pieoneer",
+  "slug": "pieoneer",
+  "websiteUrl": "https://appahead.studio/apps/pieoneer/",
+  "tagline": "Let your apps fly—in a pie.",
+  "description": "Pieoneer is a macOS launcher that opens applications through a radial pie menu instead of a conventional dock, grid, or text search. Invoke it with a shortcut, move toward the desired slice, and launch the app with a small amount of directional muscle memory.\n\nThis is most useful for a compact personal set of frequently used apps. Put daily tools into a pie, use nested menus or additional layouts where available, and keep the launcher near the active pointer rather than moving attention to a fixed part of the screen.\n\nPieoneer changes the access method, not the applications themselves. It is an optional interaction preference that rewards a consistent layout; if the menu changes constantly or a user prefers keyboard search, it is likely slower than a standard launcher.\n\n## Features\n\n- Launch chosen Mac applications from a radial menu triggered by a shortcut.\n- Use spatial direction and pointer movement to build muscle memory for recurring app choices.\n- Keep the menu close to the current cursor position rather than navigating to a dock or opening a separate window.\n- Configure the app selection and menu arrangement for a personal set of frequent tools.\n\n## Where it fits\n\nPieoneer fits people who prefer a visual, mouse-led launcher and repeatedly open the same group of applications. It can sit beside Spotlight, Raycast, or Alfred rather than replace their search and automation capabilities.\n\nIt is most effective with a stable, small menu. A large catalog or constantly changing app set usually benefits more from a text-based launcher.",
+  "pricingType": "paid",
+  "billingType": "one_time",
+  "pricingDetails": "$9.99 one-time purchase.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "keyboard-shortcuts",
+    "launchers-search"
+  ],
+  "relatedAppSlugs": [
+    "alfred",
+    "raycast"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://appahead.studio/assets/images/page-thumbs/thumb-pieoneer@1920x1080.png",
+      "altText": "Pieoneer application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://lifehacker.com/imagery/articles/01JM2H526Y78Y9H0K7FXQ6AH8R/hero-image.jpg",
+      "altText": "Pieoneer application preview"
+    },
+    "screenshots": []
+  }
+}

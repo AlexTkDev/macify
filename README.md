@@ -39,8 +39,9 @@ src/components/ Shared interface components
 src/db/         D1 client and Drizzle schema
 src/lib/        Queries, validation, media, and utilities
 migrations/     Ordered D1 migrations and Drizzle metadata
-data/           Canonical catalogue preparation data
-scripts/        Editorial, media, import, and operations tools
+catalog/apps/   Public, one-file-per-application catalogue manifests
+catalog/schema/ Manifest schema
+scripts/        Catalogue validation and GitHub synchronization tools
 public/         Static public assets
 ```
 
@@ -53,6 +54,14 @@ public/         Static public assets
 - [`migrations/README.md`](migrations/README.md): database change workflow
 - [`OPERATIONS.md`](OPERATIONS.md): production data protection and recovery
 - [`RELEASE.md`](RELEASE.md): validation and production deployment
+- [`CONTRIBUTING.md`](CONTRIBUTING.md): public catalogue contribution workflow
+- [`SECURITY.md`](SECURITY.md): private vulnerability reporting
+
+## Catalogue workflow
+
+GitHub is the canonical source for contributed application content, while Cloudflare remains the serving layer. Pull requests validate one JSON manifest per application. After a merge, an authenticated workflow sends only changed manifests to the Worker. The Worker validates the manifest, safely downloads and optimizes changed remote images into R2, and stores a pending revision in D1. An administrator must publish that exact revision from the dashboard; a pending or failed update never replaces the live application.
+
+Featured placement and deals are dashboard-only D1 records. They cannot be changed from public manifests.
 
 ## Deferred public features
 
@@ -67,4 +76,4 @@ The homepage offers **Hot**, **Trending**, and **Latest** rankings. Hot uses uni
 - Never commit `.dev.vars`, credentials, exports, backups, or Wrangler state.
 - Browser code must not access D1 or R2 bindings directly.
 - Remote migrations, deployments, data replacement, DNS, resources, and secrets require explicit approval.
-- Back up production D1 before migrations, imports, catalogue replacement, or destructive operations.
+- Back up production D1 before migrations, bulk synchronization, or destructive operations.

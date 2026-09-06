@@ -1,0 +1,34 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Sorted³",
+  "slug": "sorted",
+  "websiteUrl": "https://www.sortedapp.com/",
+  "tagline": "Tasks, calendar events and notes in one timeline.",
+  "description": "Sorted³ is a task, calendar, and notes app organized around a single timeline for the day. Its central idea is hyper-scheduling: put a task next to real events, give it a time, and see the day as one practical sequence instead of separate lists and calendars.\n\nThat approach helps when a list has become too abstract. You can decide when a task will actually happen, rearrange it as meetings move, and use the resulting timeline to recognize when the day is already full rather than silently overcommitting.\n\nSorted³ is meant for personal day planning rather than a team project-management system. It works across its current Apple-platform apps, with free core functionality and optional paid capabilities, so the best use is to start with a small daily plan before importing every obligation.\n\n## Features\n\n- Combine tasks, calendar events, and notes into a unified timeline for scheduling a day in one place.\n- Assign tasks to times and rearrange them as priorities or appointments change.\n- Use hyper-scheduling to make the practical capacity of a day visible rather than treating all tasks as equally available.\n- Access the current iOS and macOS apps as part of the same personal planning workflow.\n- Start with the free core features, then assess the current Pro capabilities and separate platform pricing if they are needed.\n\n## Where it fits\n\nSorted³ fits people who already know what they need to do but need help deciding when it can happen. It is particularly helpful for students and individuals whose task list and calendar otherwise compete for attention.\n\nIt is less suited to complex shared projects, detailed dependencies, or users who do not want to time-block. Scheduling every task can also become busywork if the plan is not revisited as the day changes.",
+  "pricingType": "freemium",
+  "billingType": "one_time",
+  "pricingDetails": "Pro $24.99 one-time purchase for macOS.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "calendar-scheduling",
+    "planning-tasks"
+  ],
+  "relatedAppSlugs": [
+    "fantastical",
+    "session",
+    "things-3"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://cdn.prod.website-files.com/5f19954a624e07319b8d7220/5fad320ce807c3aac8668246_Webclip.png",
+      "altText": "Sorted³ application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://cdn.prod.website-files.com/5f19954a624e07319b8d7220/5f8d858cb71831f9355b3e90_Open-Graph-Home-02.png",
+      "altText": "Sorted³ application preview"
+    },
+    "screenshots": []
+  }
+}

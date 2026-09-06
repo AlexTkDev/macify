@@ -2,11 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, ExternalLink } from "lucide-react";
-import { ApplicationForm } from "@/components/application-form";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { MediaUploadForm } from "@/components/media-upload-form";
-import { PublicationControl } from "@/components/publication-control";
-import { getApplicationEditorData, getEditorialOptions } from "@/lib/apps-data";
+import { getDatabase } from "@/db/client";
+import { deals } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { removeApplicationDeal, saveApplicationDeal, setFeaturedApplication } from "@/app/dashboard/editorial-actions";
+import { getApplicationEditorData } from "@/lib/apps-data";
 
 export const dynamic = "force-dynamic";
 
@@ -31,14 +32,16 @@ export default async function EditApplicationPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ saved?: string; created?: string; published?: string; draft?: string }>;
+  searchParams: Promise<{ featured?: string; dealSaved?: string; dealRemoved?: string; dealError?: string }>;
 }) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
-  const [{ application, media }, options] = await Promise.all([
+  const database = await getDatabase();
+  const [{ application, media }, dealRows] = await Promise.all([
     getApplicationEditorData(id),
-    getEditorialOptions(id),
+    database.select().from(deals).where(eq(deals.appId, id)).limit(1),
   ]);
   if (!application) notFound();
+  const deal = dealRows[0];
 
   return (
     <DashboardShell active="applications">
@@ -52,44 +55,55 @@ export default async function EditApplicationPage({
         <div>
           <p>{application.status} record</p>
           <h1>{application.name}</h1>
-          <span>Update editorial details and keep media referenced through R2 storage keys.</span>
+          <span>Manage dashboard-only placement and deals. Catalogue content is reviewed through GitHub revisions.</span>
         </div>
         <div className="editor-header-actions">
           <a className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">
             Visit website <ExternalLink size={15} />
           </a>
-          <PublicationControl appId={application.id} slug={application.slug} status={application.status} />
         </div>
       </header>
+      {query.featured === "1" && <div className="success-banner" role="status">✓ Featured placement updated.</div>}
+      {query.dealSaved === "1" && <div className="success-banner" role="status">✓ Deal saved.</div>}
+      {query.dealRemoved === "1" && <div className="success-banner" role="status">✓ Deal removed.</div>}
+      {query.dealError === "1" && <div className="form-error" role="alert">Check the discount, HTTPS URL, and date range.</div>}
 
-      {query.saved === "1" && (
-        <div className="success-banner" role="status">
-          <span aria-hidden="true">✓</span>
-          Changes saved in local D1.
+      <section className="dashboard-panel editorial-controls" aria-labelledby="editorial-controls-heading">
+        <div className="media-editor-heading">
+          <div><h2 id="editorial-controls-heading">Editorial placement</h2><span>These settings live only in D1 and cannot be changed by GitHub contributions.</span></div>
         </div>
-      )}
-      {query.created === "1" && (
-        <div className="success-banner" role="status"><span aria-hidden="true">✓</span>Draft created. Add its required media below.</div>
-      )}
-      {query.published === "1" && (
-        <div className="success-banner" role="status"><span aria-hidden="true">✓</span>Application published.</div>
-      )}
-      {query.draft === "1" && (
-        <div className="success-banner" role="status"><span aria-hidden="true">✓</span>Application returned to draft.</div>
-      )}
-
-      <ApplicationForm
-        application={application}
-        mode="edit"
-        relatedApplications={options.relatedApplications}
-        categories={options.categories}
-      />
+        <div className="editorial-control-grid">
+          <form action={setFeaturedApplication} className="editorial-control-card">
+            <input name="appId" type="hidden" value={application.id} />
+            <h3>Featured application</h3>
+            <p>Give this application a distinct featured treatment in the public directory.</p>
+            <button className={application.isFeatured ? "button-secondary" : "button-primary"} name="featured" type="submit" value={application.isFeatured ? "false" : "true"}>
+              {application.isFeatured ? "Remove featured status" : "Feature application"}
+            </button>
+          </form>
+          <form action={saveApplicationDeal} className="editorial-control-card editorial-deal-form">
+            <input name="appId" type="hidden" value={application.id} />
+            <h3>Deal</h3>
+            <label>Discount percentage<input defaultValue={deal?.discountPercent ?? ""} max="100" min="1" name="discountPercent" required type="number" /></label>
+            <label>Code <span>(optional)</span><input defaultValue={deal?.code ?? ""} maxLength={80} name="code" /></label>
+            <label>Deal URL<input defaultValue={deal?.url ?? ""} name="url" required type="url" /></label>
+            <div className="editorial-date-grid">
+              <label>Starts<input defaultValue={toDateTimeInput(deal?.startsAt)} name="startsAt" required type="datetime-local" /></label>
+              <label>Ends<input defaultValue={toDateTimeInput(deal?.endsAt)} name="endsAt" required type="datetime-local" /></label>
+            </div>
+            <div className="catalogue-revision-actions">
+              <button className="button-primary" type="submit">Save deal</button>
+            </div>
+          </form>
+          {deal && <form action={removeApplicationDeal}><input name="appId" type="hidden" value={application.id} /><button className="button-secondary" type="submit">Remove current deal</button></form>}
+        </div>
+      </section>
 
       <section className="media-editor" aria-labelledby="media-heading">
         <div className="media-editor-heading">
           <div>
             <h2 id="media-heading">Media library</h2>
-            <span>Files are private R2 objects served through Macify’s controlled media route.</span>
+            <span>Read-only R2 assets synchronized from the application’s GitHub manifest.</span>
           </div>
           <strong>{media.length} stored</strong>
         </div>
@@ -117,31 +131,13 @@ export default async function EditApplicationPage({
             ))}
           </div>
         )}
-
-        <div className="media-upload-grid">
-          <MediaUploadForm
-            accept="image/png,image/jpeg,image/webp,image/avif"
-            appId={application.id}
-            description="Square artwork used in lists and application headers."
-            label="Application icon"
-            role="icon"
-          />
-          <MediaUploadForm
-            accept="image/png,image/jpeg,image/webp,image/avif"
-            appId={application.id}
-            description="Wide editorial image displayed as the main visual on the public application page."
-            label="Main preview image"
-            role="preview_image"
-          />
-          <MediaUploadForm
-            accept="image/png,image/jpeg,image/webp,image/avif"
-            appId={application.id}
-            description="Product interface or workflow screenshot. Multiple allowed."
-            label="Screenshot"
-            role="screenshot"
-          />
-        </div>
       </section>
     </DashboardShell>
   );
+}
+
+function toDateTimeInput(value: Date | null | undefined) {
+  if (!value) return "";
+  const local = new Date(value.getTime() - value.getTimezoneOffset() * 60_000);
+  return local.toISOString().slice(0, 16);
 }

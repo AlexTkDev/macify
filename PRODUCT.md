@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. Editors maintain the catalogue through a protected internal dashboard.
+Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. GitHub manifests hold catalogue content; editors review merged revisions and control placement through a protected dashboard.
 
 ## Public experience
 
@@ -21,7 +21,7 @@ Each application page presents the official identity, tagline, pricing, relevant
 
 ## Editorial dashboard
 
-The dashboard supports application creation and editing, drafts and publication, categories, relationships, media, reviewed imports and exports, and media optimization. It uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
+The dashboard supports GitHub revision review and publication, featured placement, time-bounded deals, application inspection, and a read-only R2 media inventory. Catalogue content is never edited directly in D1. The dashboard uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
 
 ## Content model
 
@@ -37,11 +37,15 @@ An application record includes:
 - mutual related-application links;
 - one icon, one main preview, and optional screenshots.
 
+Contributed catalogue content is stored as one public JSON manifest per application. Merged changes become pending D1 revisions and require dashboard approval. Existing published content remains live until its replacement is approved. Featured state and deals are editorial metadata stored only in D1 and never accepted from public manifests.
+
 Markdown is rendered as sanitized semantic HTML. Raw HTML is never executed.
 
 ## Media
 
-Binary media is stored in private R2 objects; D1 stores metadata and storage keys. Uploads and URL imports are size-limited, MIME-checked, signature-validated, optimized through Cloudflare Images, and served through Macify-controlled routes. Remote imports reject private networks, unsafe redirects, invalid formats, and oversized responses.
+Binary media is stored in private R2 objects; D1 stores metadata and storage keys. URL ingestion is size-limited, MIME-checked, signature-validated, optimized through Cloudflare Images, and served through Macify-controlled routes. Remote ingestion rejects private networks, unsafe redirects, invalid formats, and oversized responses.
+
+Public manifests contain HTTPS source URLs, not image binaries. During ingestion, unchanged source URLs reuse existing R2 objects; changed sources are validated and optimized before a revision can be reviewed.
 
 The homepage has one static 1200×630 social image. Each application has a generated social card using its preview and the line `App Name — tagline | Macify`.
 
