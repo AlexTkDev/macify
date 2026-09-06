@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { DirectoryAppGrid, type DirectoryApp } from "@/components/home/application-directory";
 
 type DirectoryView = "hot" | "trending" | "latest";
@@ -13,9 +13,18 @@ export function ApplicationDirectorySwitcher({
   views: Record<DirectoryView, DirectoryApp[]>;
 }) {
   const [activeView, setActiveView] = useState<DirectoryView>(initialView);
+  const pendingScrollPosition = useRef<{ left: number; top: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const position = pendingScrollPosition.current;
+    if (!position) return;
+    pendingScrollPosition.current = null;
+    window.scrollTo({ ...position, behavior: "instant" });
+  }, [activeView]);
 
   function selectView(view: DirectoryView) {
     if (view === activeView) return;
+    pendingScrollPosition.current = { left: window.scrollX, top: window.scrollY };
     setActiveView(view);
     const url = new URL(window.location.href);
     if (view === "hot") url.searchParams.delete("view");
