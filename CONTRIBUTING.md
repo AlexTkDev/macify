@@ -27,8 +27,8 @@ Each pull request may add one new application manifest or one new deal manifest.
 4. Verify the discount, code, destination, and availability window from an official source. Include a timezone in both timestamps.
 5. Run `npm run catalogue:validate` and open a pull request containing only the deal manifest.
 
-Deal edits and removals are made by repository maintainers through later GitHub changes. The dashboard never edits deal content.
+Maintainers handle changes to existing deals and listings.
 
 ## Review and publication
 
-Checks validate the manifest structure; an editor verifies its sources and content. Merging creates a pending revision, not a public record. An editor must publish that exact revision from the protected dashboard.
+Automated checks validate the manifest structure. Editors verify sources and content before publication; submission does not guarantee inclusion.

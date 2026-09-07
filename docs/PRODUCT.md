@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Macify is a curated macOS application directory. GitHub manifests hold application and deal content; a protected dashboard reviews revisions and controls publication and placement.
+Macify is a curated directory that helps people discover useful macOS applications without promotional clutter.
 
 ## Public experience
 
@@ -17,10 +17,6 @@ The homepage headline is “Mac apps worth making room for.” Its supporting co
 
 Application pages include identity, tagline, pricing, categories, source status when open source, editorial copy, media, optional demo, official website, and related applications.
 
-## Dashboard
-
-The single-administrator dashboard reviews and publishes GitHub revisions, controls featured placement, inspects applications, and exposes a read-only R2 inventory. Listing and deal content cannot be authored there. Every route and mutation requires server-side authorization; sessions are signed and login throttling is persistent.
-
 ## Content model
 
 An application record includes:
@@ -34,17 +30,13 @@ An application record includes:
 - mutual related-application links;
 - one icon, one main preview, and optional screenshots.
 
-Each application has one public JSON manifest; each optional time-bounded deal has a separate manifest keyed by application slug. Merged changes become pending D1 revisions. Published content stays live until a replacement is approved. Featured state is dashboard-only.
-
-Markdown is rendered as sanitized semantic HTML. Raw HTML is never executed.
+Applications may also have a verified, time-bounded deal. Homepage inclusion is an independent editorial decision and does not affect whether an application remains listed.
 
 ## Media
 
-R2 stores private media objects; D1 stores metadata and keys. Ingestion validates URL safety, redirects, size, MIME type, file signatures, and checksums before optimizing through Cloudflare Images. Macify-controlled routes serve the result.
+Listings use authentic application icons, previews, and optional screenshots. Media must come from official public sources and include useful alternative text.
 
-Manifests contain HTTPS source URLs, not binaries. Unchanged sources reuse R2 objects; changed sources are prepared before review.
-
-The homepage has one static 1200×630 social image. Each application has a generated social card using its preview and the line `App Name — tagline | Macify`.
+Social sharing images reflect the application identity and tagline.
 
 ## Boundaries
 

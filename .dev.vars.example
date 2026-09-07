@@ -1,8 +1,0 @@
-# Dashboard authentication
-ADMIN_EMAIL=
-ADMIN_PASSWORD=
-ADMIN_SESSION_SECRET=
-
-# Optional local integrations
-DATAFAST_API_KEY=
-CATALOG_SYNC_SECRET=

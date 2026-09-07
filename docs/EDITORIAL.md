@@ -31,4 +31,4 @@ Homepage inclusion is separate from publication. Follow [`HOMEPAGE_CURATION.md`]
 
 Deals must reference an existing application manifest. Immediately before merging, verify the discount, code, destination, and availability window against an official source. Use timezone-qualified timestamps and link directly to the offer. Do not infer terms from promotional artwork alone.
 
-Edit deals only in `catalog/deals`; the dashboard may publish or reject synchronized revisions.
+Deal manifests belong in `catalog/deals`.

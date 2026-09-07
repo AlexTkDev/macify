@@ -4,8 +4,6 @@ node_modules/
 .wrangler/
 .dev.vars*
 .env*
-!.env.example
-!.dev.vars.example
 cloudflare-env.d.ts
 *.tsbuildinfo
 .DS_Store

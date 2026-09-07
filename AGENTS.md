@@ -4,31 +4,20 @@
 
 Macify is a curated macOS application directory. Before changing behavior, public UI, or catalogue copy, read `docs/PRODUCT.md`, `docs/DESIGN.md`, or `docs/EDITORIAL.md` respectively.
 
-The single-administrator dashboard requires server-side authorization on every page, handler, and mutation. Public accounts, saved applications, submissions, payments, and subscriptions are out of scope unless requested.
-
-## Platform
-
-- Next.js App Router runs on Cloudflare Workers through OpenNext.
-- Use D1 through the `DB` binding and Drizzle ORM.
-- Use the `MEDIA` R2 binding for binaries and D1 for metadata.
-- Keep bindings, compatibility settings, and environments in `wrangler.jsonc`.
-- Run `npm run cf-typegen` after changing bindings.
-- Generate migrations with `npm run db:generate`, then review the SQL.
+Preserve authorization on protected features and do not expand product scope unless requested.
 
 ## Safety
 
-- Default to local commands; `--remote` and deployment commands change Cloudflare resources.
-- Never deploy, migrate production, replace remote data, change DNS, create resources, or add secrets without explicit approval.
-- Never expose D1 or R2 bindings to browser code.
-- Never commit secrets, `.dev.vars`, exports, backups, or Wrangler state.
-- Back up D1 before production migrations, bulk synchronization, restoration, or destructive work.
-- Validate catalogue manifests, remote image size, MIME type, signature, checksum, and URL safety.
+- Default to local commands. Production or remote changes require explicit approval.
+- Never commit credentials, local environment files, exports, backups, or tool state.
+- Preserve server-side authorization and validate all external input.
+- Back up persistent data before migrations, restoration, or destructive work.
 
 ## Quality
 
 - Prefer server components for public content and keep client JavaScript limited to necessary interaction.
 - Public application pages require canonical and Open Graph metadata, structured data, semantic headings, and crawlable links.
-- Use indexed, bounded D1 queries and avoid request-specific module globals.
+- Keep data access bounded and avoid request-specific module globals.
 - Run typecheck and lint after material TypeScript changes. Use preview for material Workers-runtime changes.
 
 ## Design and editorial
@@ -37,10 +26,6 @@ The single-administrator dashboard requires server-side authorization on every p
 - Avoid generic gradients, glass effects, excessive pills, nested cards, low contrast, and decorative motion.
 - Follow `docs/EDITORIAL.md`; research each application and verify changing facts.
 - Never alter a remote application record without explicit approval.
-
-## Release
-
-Read `docs/RELEASE.md` before deployment. A merge or push to `main` may deploy production through Cloudflare Workers Builds. Never push to `main` without explicit production approval.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
