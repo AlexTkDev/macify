@@ -27,7 +27,7 @@ Never commit exports or backups. Encrypt retained backups and restrict access.
 
 A Time Travel restore overwrites the database and interrupts active queries. Record the pre-restore bookmark so the restore can be reversed. Never restore production without explicit approval.
 
-After recovery, verify migration state, record counts, administrator login, search, media delivery, one application page, and one reversible featured or deal edit.
+After recovery, verify migration state, record counts, administrator login, search, media delivery, one application page, and one reversible featured-placement change. Verify deal review using a disposable test revision rather than editing a published offer directly.
 
 ## 🔄 Catalogue synchronization
 
@@ -35,7 +35,7 @@ Configure `CATALOG_SYNC_SECRET` as both a Worker secret and a GitHub Actions sec
 
 Protect `main` in GitHub: require pull requests, at least one code-owner approval, and the `Catalogue / validate` status check; dismiss stale approvals when new commits arrive; block force pushes and branch deletion. Keep workflow permissions read-only except where a future workflow explicitly requires more.
 
-Synchronization is incremental and non-destructive: each changed manifest creates a pending revision. Publishing from the protected dashboard applies the revision to D1. Image source changes are downloaded, validated, optimized, and stored in R2 before review. Never use synchronization as a bulk production replacement mechanism.
+Synchronization is incremental and non-destructive: each changed application or deal manifest creates a pending revision. Publishing from the protected dashboard applies that exact revision to D1; deal content is not edited in the dashboard. Application image source changes are downloaded, validated, optimized, and stored in R2 before review. Never use synchronization as a bulk production replacement mechanism.
 
 The old production replacement script has been removed. Restore only from a verified backup or D1 Time Travel after explicit approval.
 

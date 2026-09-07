@@ -22,7 +22,7 @@ Browse the collection, search for a specific tool, or take the surprise route. E
 
 Made a Mac app you are proud of? Know a great app that belongs in the collection but is not here yet? You are welcome to suggest it.
 
-Read the [contribution guidelines](CONTRIBUTING.md) to learn how to add an application. Each public contribution can introduce one new app. If an existing listing needs a correction, or you have an idea for Macify itself, [open an issue](https://github.com/Beingpax/macify/issues/new/choose).
+Read the [contribution guidelines](CONTRIBUTING.md) to learn how to add an application or a verified deal. Each public contribution can introduce one new catalogue record. If an existing record needs a correction, or you have an idea for Macify itself, [open an issue](https://github.com/Beingpax/macify/issues/new/choose).
 
 You can also help the project grow:
 
@@ -33,7 +33,7 @@ Every contribution helps us build a better collection of high quality macOS appl
 
 ## 🛠️ Make it run locally
 
-Macify uses Next.js and TypeScript on Cloudflare Workers. Reviewed listings live in D1, while application artwork lives in R2.
+Macify uses Next.js and TypeScript on Cloudflare Workers. Reviewed application and deal state lives in D1, while application artwork lives in R2. GitHub manifests remain the source for listing and deal content.
 
 To run it locally:
 

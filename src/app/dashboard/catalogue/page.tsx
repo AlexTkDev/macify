@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { desc, sql } from "drizzle-orm";
+import { desc, like, sql } from "drizzle-orm";
 import { AlertTriangle, CheckCircle2, GitBranch, PlusCircle, RefreshCcw } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
@@ -20,7 +20,7 @@ const errorMessages: Record<string, string> = {
   "invalid-manifest": "The stored manifest is invalid and cannot be published.",
   "missing-related-app": "Publish the related applications first, or remove those relationships in GitHub.",
   "missing-media": "The revision is missing its required icon or preview image.",
-  "stale-revision": "A newer pending revision exists for this application. Review the newest revision instead.",
+  "stale-revision": "A newer revision exists for this application. Review the newest revision instead.",
 };
 
 type View = "pending" | "history" | "failed";
@@ -34,13 +34,14 @@ export default async function CatalogueReviewPage({
   const view: View = query.view === "history" || query.view === "failed" ? query.view : "pending";
   const database = await getDatabase();
   const [recentRevisions, countRows] = await Promise.all([
-    database.select().from(catalogueRevisions).orderBy(desc(catalogueRevisions.createdAt)).limit(200),
+    database.select().from(catalogueRevisions).where(like(catalogueRevisions.sourcePath, "catalog/apps/%"))
+      .orderBy(desc(catalogueRevisions.createdAt)).limit(200),
     database.select({
       pending: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' then 1 else 0 end), 0)`,
       create: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'create' then 1 else 0 end), 0)`,
       update: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'update' then 1 else 0 end), 0)`,
       failed: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'failed' then 1 else 0 end), 0)`,
-    }).from(catalogueRevisions),
+    }).from(catalogueRevisions).where(like(catalogueRevisions.sourcePath, "catalog/apps/%")),
   ]);
   const revisions = recentRevisions.filter((revision) => (
     view === "pending" ? revision.status === "pending"
@@ -61,6 +62,11 @@ export default async function CatalogueReviewPage({
           <span>See exactly what changed before any merged application update reaches the public directory.</span>
         </div>
       </header>
+
+      <nav className="catalogue-kind-tabs" aria-label="Catalogue review type">
+        <Link aria-current="page" className="active" href="/dashboard/catalogue">Applications</Link>
+        <Link href="/dashboard/catalogue/deals">Deals</Link>
+      </nav>
 
       <section className="catalogue-queue-stats" aria-label="Review queue status">
         <div><GitBranch size={18} /><span>Awaiting review</span><strong>{counts.pending}</strong></div>

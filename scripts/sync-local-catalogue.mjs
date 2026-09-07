@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalogueDirectory = path.join(root, "catalog", "apps");
+const dealsDirectory = path.join(root, "catalog", "deals");
 const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
 const backupDirectory = path.join(root, ".wrangler", "backups");
 const backupPath = path.join(backupDirectory, "catalogue-local-before-sync.sql");
@@ -58,6 +59,10 @@ const manifests = readdirSync(catalogueDirectory)
   .filter((file) => file.endsWith(".json"))
   .sort()
   .map((file) => JSON.parse(readFileSync(path.join(catalogueDirectory, file), "utf8")));
+const dealManifests = readdirSync(dealsDirectory)
+  .filter((file) => file.endsWith(".json"))
+  .sort()
+  .map((file) => JSON.parse(readFileSync(path.join(dealsDirectory, file), "utf8")));
 
 const existingApps = query("SELECT id, slug FROM apps");
 const appIds = new Map(existingApps.map(({ id, slug }) => [slug, id]));
@@ -93,6 +98,26 @@ for (const manifest of manifests) {
     status = 'published',
     deleted_at = NULL,
     published_at = coalesce(apps.published_at, excluded.published_at),
+    updated_at = excluded.updated_at;`);
+}
+
+const dealAppIds = dealManifests.map(({ appSlug }) => appIds.get(appSlug));
+statements.push(dealAppIds.length > 0
+  ? `DELETE FROM deals WHERE app_id NOT IN (${dealAppIds.map(sql).join(", ")});`
+  : "DELETE FROM deals;");
+for (const deal of dealManifests) {
+  const appId = appIds.get(deal.appSlug);
+  statements.push(`INSERT INTO deals (
+    id, app_id, discount_percent, code, url, starts_at, ends_at, created_at, updated_at
+  ) VALUES (
+    ${sql(stableId("local-deal", deal.appSlug))}, ${sql(appId)}, ${sql(deal.discountPercent)},
+    ${sql(deal.code)}, ${sql(deal.url)}, ${Date.parse(deal.startsAt)}, ${Date.parse(deal.endsAt)}, ${now}, ${now}
+  ) ON CONFLICT(app_id) DO UPDATE SET
+    discount_percent = excluded.discount_percent,
+    code = excluded.code,
+    url = excluded.url,
+    starts_at = excluded.starts_at,
+    ends_at = excluded.ends_at,
     updated_at = excluded.updated_at;`);
 }
 
@@ -167,12 +192,14 @@ const summary = query(`SELECT
   sum(instr(description, '## Privacy and requirements') > 0) AS with_privacy,
   sum(instr(description, '## Pricing') > 0) AS with_pricing
   FROM apps WHERE status = 'published' AND deleted_at IS NULL`)[0];
+const dealSummary = query("SELECT count(*) AS count FROM deals")[0];
 
 if (Number(summary.published) !== manifests.length
   || Number(summary.with_privacy) !== manifests.length
-  || Number(summary.with_pricing) !== manifests.length) {
+  || Number(summary.with_pricing) !== manifests.length
+  || Number(dealSummary.count) !== dealManifests.length) {
   throw new Error(`Local catalogue verification failed: ${JSON.stringify(summary)}`);
 }
 
-console.log(`Synchronized ${manifests.length} catalogue manifests into local D1.`);
+console.log(`Synchronized ${manifests.length} application and ${dealManifests.length} deal manifest(s) into local D1.`);
 console.log(`Backup: ${path.relative(root, backupPath)}`);

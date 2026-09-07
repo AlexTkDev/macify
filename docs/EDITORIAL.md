@@ -50,3 +50,9 @@ Use this order:
 ```
 
 Homepage inclusion is separate from publication. Follow [`HOMEPAGE_CURATION.md`](HOMEPAGE_CURATION.md) without unpublishing an otherwise valid catalogue record.
+
+## 🏷️ Deal verification
+
+Deal manifests must point to an existing application manifest. Verify the discount, code, destination URL, and availability window against the developer's official website or store immediately before merging. Use timezone-qualified timestamps, link directly to the offer rather than an unrelated homepage, and do not infer an end date or discount from promotional artwork alone.
+
+Deals are changed in `catalog/deals`, then reviewed as synchronized revisions. The dashboard may publish or reject a revision, but it must not be used to rewrite the offer.

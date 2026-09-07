@@ -1,12 +1,13 @@
 import { and, desc, eq, inArray, isNull } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
-import { apps, catalogueRevisions, mediaAssets } from "@/db/schema";
+import { apps, catalogueRevisions, deals, mediaAssets } from "@/db/schema";
 import type { CataloguePreparedMedia } from "@/db/schema-catalogue";
 import {
   catalogueManifestSchema,
   manifestMediaSources,
   type CatalogueManifest,
 } from "@/lib/catalogue-manifest";
+import { dealManifestSchema } from "@/lib/deal-manifest";
 import { prepareMediaSource, putPreparedMedia } from "@/lib/media-upload";
 
 export type CatalogueSyncItem = {
@@ -16,6 +17,17 @@ export type CatalogueSyncItem = {
 };
 
 export async function ingestCatalogueItem(
+  item: CatalogueSyncItem,
+  source: { repository: string; commitSha: string },
+  env: CloudflareEnv,
+) {
+  if (/^catalog\/deals\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/.test(item.path)) {
+    return ingestDealItem(item, source);
+  }
+  return ingestApplicationItem(item, source, env);
+}
+
+async function ingestApplicationItem(
   item: CatalogueSyncItem,
   source: { repository: string; commitSha: string },
   env: CloudflareEnv,
@@ -83,7 +95,7 @@ export async function ingestCatalogueItem(
     .select({ id: catalogueRevisions.id })
     .from(catalogueRevisions)
     .where(and(
-      eq(catalogueRevisions.appSlug, pathSlug),
+      eq(catalogueRevisions.sourcePath, item.path),
       eq(catalogueRevisions.manifestHash, manifestHash),
       inArray(catalogueRevisions.status, ["pending", "published"]),
     ))
@@ -131,6 +143,86 @@ export async function ingestCatalogueItem(
   };
   if (retryRevisionId) await database.update(catalogueRevisions).set(readyValues).where(eq(catalogueRevisions.id, retryRevisionId));
   else await database.insert(catalogueRevisions).values({ id: revisionId, ...readyValues, createdAt: new Date() });
+  return { ok: true, revisionId } as const;
+}
+
+async function ingestDealItem(
+  item: CatalogueSyncItem,
+  source: { repository: string; commitSha: string },
+) {
+  const pathSlug = item.path.slice("catalog/deals/".length, -".json".length);
+  const database = await getDatabase();
+  const duplicate = await database.select({ id: catalogueRevisions.id, status: catalogueRevisions.status })
+    .from(catalogueRevisions).where(and(
+      eq(catalogueRevisions.sourceCommitSha, source.commitSha),
+      eq(catalogueRevisions.sourcePath, item.path),
+    )).limit(1);
+  if (duplicate[0] && duplicate[0].status !== "failed") {
+    return { ok: true, duplicate: true, revisionId: duplicate[0].id } as const;
+  }
+  const retryRevisionId = duplicate[0]?.id;
+  const applicationRows = await database.select({ id: apps.id }).from(apps)
+    .where(and(eq(apps.slug, pathSlug), isNull(apps.deletedAt))).limit(1);
+  const appId = applicationRows[0]?.id ?? null;
+  const dealRows = appId
+    ? await database.select({ id: deals.id }).from(deals).where(eq(deals.appId, appId)).limit(1)
+    : [];
+  const currentDeal = dealRows[0] ?? null;
+
+  if (item.changeType === "delete") {
+    if (!currentDeal) return { ok: true, ignored: true, reason: "Deal does not exist." } as const;
+    const revisionId = crypto.randomUUID();
+    await database.insert(catalogueRevisions).values({
+      id: revisionId,
+      appId,
+      appSlug: pathSlug,
+      changeType: "archive",
+      sourceRepository: source.repository,
+      sourcePath: item.path,
+      sourceCommitSha: source.commitSha,
+      manifestHash: await sha256Hex("deleted-deal"),
+      manifest: null,
+      preparedMedia: [],
+      errors: [],
+      createdAt: new Date(),
+    });
+    return { ok: true, revisionId } as const;
+  }
+
+  const parsed = dealManifestSchema.safeParse(item.manifest);
+  if (!parsed.success || parsed.data.appSlug !== pathSlug) {
+    const details = parsed.success
+      ? ["Deal appSlug must match its filename."]
+      : parsed.error.issues.map((issue) => `${issue.path.join(".") || "manifest"}: ${issue.message}`);
+    return { ok: false, status: 422, error: "Deal manifest validation failed.", details } as const;
+  }
+
+  const canonicalManifest = JSON.stringify(parsed.data);
+  const manifestHash = await sha256Hex(canonicalManifest);
+  const unchanged = await database.select({ id: catalogueRevisions.id }).from(catalogueRevisions)
+    .where(and(
+      eq(catalogueRevisions.sourcePath, item.path),
+      eq(catalogueRevisions.manifestHash, manifestHash),
+      inArray(catalogueRevisions.status, ["pending", "published"]),
+    )).orderBy(desc(catalogueRevisions.createdAt)).limit(1);
+  if (unchanged[0]) return { ok: true, ignored: true, reason: "Deal manifest content is unchanged." } as const;
+
+  const revisionId = retryRevisionId ?? crypto.randomUUID();
+  const values = {
+    appId,
+    appSlug: pathSlug,
+    changeType: currentDeal ? "update" as const : "create" as const,
+    sourceRepository: source.repository,
+    sourcePath: item.path,
+    sourceCommitSha: source.commitSha,
+    manifestHash,
+    manifest: parsed.data,
+    preparedMedia: [],
+    errors: [],
+    status: "pending" as const,
+  };
+  if (retryRevisionId) await database.update(catalogueRevisions).set(values).where(eq(catalogueRevisions.id, retryRevisionId));
+  else await database.insert(catalogueRevisions).values({ id: revisionId, ...values, createdAt: new Date() });
   return { ok: true, revisionId } as const;
 }
 

@@ -12,7 +12,7 @@ if (!baseSha || !commitSha || !endpoint || !secret || !repository) {
   throw new Error("Usage: sync-catalogue-changes.mjs <base-sha> <commit-sha> with CATALOG_SYNC_URL, CATALOG_SYNC_SECRET, and GITHUB_REPOSITORY set.");
 }
 
-const changes = execFileSync("git", ["diff", "--name-status", "--find-renames", baseSha, commitSha, "--", "catalog/apps"], { encoding: "utf8" })
+const changes = execFileSync("git", ["diff", "--name-status", "--find-renames", baseSha, commitSha, "--", "catalog/apps", "catalog/deals"], { encoding: "utf8" })
   .trim().split("\n").filter(Boolean);
 const items = [];
 for (const line of changes) {

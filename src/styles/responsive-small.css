@@ -193,6 +193,4 @@
   .prose-diff-cell[data-side="after"]::before { content: "Proposed"; }
   .catalogue-media-diff-row { grid-template-columns: 1fr; }
   .catalogue-media-cell { border-left: 0; border-top: 1px solid var(--line); }
-  .editorial-deal-link { grid-template-columns: 1fr; }
-  .editorial-deal-link .button-secondary { grid-column: auto; }
 }

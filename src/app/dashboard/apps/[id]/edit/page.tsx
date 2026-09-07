@@ -1,12 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { BadgePercent, ChevronRight, ExternalLink, GitBranch, Star } from "lucide-react";
+import { ChevronRight, ExternalLink, GitBranch, Star } from "lucide-react";
 import { setApplicationPublication, setFeaturedApplication } from "@/app/dashboard/editorial-actions";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { getDatabase } from "@/db/client";
-import { deals } from "@/db/schema";
 import { getApplicationEditorData } from "@/lib/apps-data";
 
 export const dynamic = "force-dynamic";
@@ -35,13 +32,8 @@ export default async function EditApplicationPage({
   searchParams: Promise<{ featured?: string; featureError?: string; publication?: string }>;
 }) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
-  const database = await getDatabase();
-  const [{ application, media }, dealRows] = await Promise.all([
-    getApplicationEditorData(id),
-    database.select({ id: deals.id }).from(deals).where(eq(deals.appId, id)).limit(1),
-  ]);
+  const { application, media } = await getApplicationEditorData(id);
   if (!application) notFound();
-  const deal = dealRows[0];
   const isPublished = application.status === "published";
 
   return (
@@ -109,11 +101,6 @@ export default async function EditApplicationPage({
             </form>
           </section>
         </div>
-        <aside className="editorial-deal-link">
-          <BadgePercent aria-hidden="true" size={19} />
-          <div><strong>Deals have their own catalogue.</strong><span>Discount percentages, promotion codes, and availability are managed separately from application placement.</span></div>
-          <Link className="button-secondary" href={deal ? `/dashboard/deals/${deal.id}` : `/dashboard/deals/new?app=${application.id}`}>{deal ? "Open current deal" : "Add a deal"}</Link>
-        </aside>
       </section>
 
       <section className="media-editor" aria-labelledby="media-heading">

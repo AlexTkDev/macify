@@ -38,11 +38,12 @@ export async function decideCatalogueRevision(formData: FormData) {
     .limit(1);
   const revision = row[0];
   if (!revision) redirect("/dashboard/catalogue?error=not-pending");
+  if (!revision.sourcePath.startsWith("catalog/apps/")) redirect("/dashboard/catalogue?error=invalid");
 
-  const newestPending = await database.select({ id: catalogueRevisions.id }).from(catalogueRevisions)
-    .where(and(eq(catalogueRevisions.appSlug, revision.appSlug), eq(catalogueRevisions.status, "pending")))
+  const newestRevision = await database.select({ id: catalogueRevisions.id }).from(catalogueRevisions)
+    .where(eq(catalogueRevisions.sourcePath, revision.sourcePath))
     .orderBy(desc(catalogueRevisions.createdAt)).limit(1);
-  if (newestPending[0]?.id !== revision.id) redirect("/dashboard/catalogue?error=stale-revision");
+  if (newestRevision[0]?.id !== revision.id) redirect("/dashboard/catalogue?error=stale-revision");
 
   if (parsed.data.intent === "reject") {
     const keys = [...new Set(revision.preparedMedia.map(({ storageKey }) => storageKey))];

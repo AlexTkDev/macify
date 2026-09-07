@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { and, desc, eq, lt } from "drizzle-orm";
+import { and, desc, eq, like, lt } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import {
   ChevronRight,
@@ -26,7 +26,7 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
   const database = await getDatabase();
   const rows = await database.select().from(catalogueRevisions).where(eq(catalogueRevisions.id, id)).limit(1);
   const revision = rows[0];
-  if (!revision) notFound();
+  if (!revision || !revision.sourcePath.startsWith("catalog/apps/")) notFound();
   const current = await getCatalogueReviewSnapshot(revision.appId);
   const comparison = revision.status === "pending" || revision.status === "failed"
     ? current
@@ -155,6 +155,7 @@ async function getHistoricalBaseline(
   const candidates = await database.select().from(catalogueRevisions).where(and(
     eq(catalogueRevisions.appSlug, appSlug),
     eq(catalogueRevisions.status, "published"),
+    like(catalogueRevisions.sourcePath, "catalog/apps/%"),
     lt(catalogueRevisions.createdAt, createdAt),
   )).orderBy(desc(catalogueRevisions.createdAt)).limit(10);
   for (const candidate of candidates) {

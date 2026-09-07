@@ -1,0 +1,10 @@
+{
+  "$schema": "../schema/deal.schema.json",
+  "schemaVersion": 1,
+  "appSlug": "example-app",
+  "discountPercent": 20,
+  "code": "MACIFY20",
+  "url": "https://example.com/deal",
+  "startsAt": "2026-09-01T00:00:00Z",
+  "endsAt": "2026-09-30T23:59:59Z"
+}

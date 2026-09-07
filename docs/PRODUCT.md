@@ -2,7 +2,7 @@
 
 ## 🎯 Purpose
 
-Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. GitHub manifests hold app listing information; editors review merged revisions and control placement through a protected dashboard.
+Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. GitHub manifests hold application listings and deals; editors review merged revisions and control publication and placement through a protected dashboard.
 
 ## 🌐 Public experience
 
@@ -22,7 +22,7 @@ Each application page presents the official identity, tagline, pricing, relevant
 
 ## 🗃️ Editorial dashboard
 
-The dashboard supports GitHub revision review and publication, featured placement, time-bounded deals, application inspection, and a read-only R2 media inventory. App listing information is never edited directly in D1. The dashboard uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
+The dashboard supports GitHub revision review and publication, featured placement, application inspection, and a read-only R2 media inventory. Application and deal content is never authored or edited directly in D1. The dashboard uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
 
 ## 🧩 Content model
 
@@ -38,7 +38,7 @@ An application record includes:
 - mutual related-application links;
 - one icon, one main preview, and optional screenshots.
 
-App listing information is stored as one public JSON manifest per application. Merged changes become pending D1 revisions and require dashboard approval. Existing published content remains live until its replacement is approved. Featured state and deals are editorial metadata stored only in D1 and never accepted from public manifests.
+Application listing information is stored as one public JSON manifest per application. Time-bounded deals are stored as separate JSON manifests keyed by application slug. Merged application and deal changes become pending D1 revisions and require dashboard approval. Existing published content remains live until its replacement is approved. Featured state is controlled only in the dashboard and is never accepted from public manifests.
 
 Markdown is rendered as sanitized semantic HTML. Raw HTML is never executed.
 
