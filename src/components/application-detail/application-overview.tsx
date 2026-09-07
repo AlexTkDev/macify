@@ -42,16 +42,15 @@ function descriptionParts(description: string, tagline: string, applicationName:
   return { lead, sections };
 }
 
-function EditorialImage({ application, media, priority = false }: { application: PublishedApplication; media: ApplicationMedia; priority?: boolean }) {
+function EditorialImage({ application, media, preload = false }: { application: PublishedApplication; media: ApplicationMedia; preload?: boolean }) {
   return (
     <Image
       alt={media.altText ?? `${application.name} application preview`}
-      fetchPriority={priority ? "high" : "low"}
       height={media.height ?? 900}
-      loading={priority ? "eager" : "lazy"}
-      priority={priority}
+      loading={preload ? undefined : "lazy"}
+      preload={preload}
       quality={78}
-      sizes={`(max-width: 38rem) calc(100vw - 2rem), min(calc(100vw - clamp(4rem, 6.4vw, 6rem)), ${priority ? "66rem" : "72rem"})`}
+      sizes={`(max-width: 38rem) calc(100vw - 2rem), min(calc(100vw - clamp(4rem, 6.4vw, 6rem)), ${preload ? "66rem" : "72rem"})`}
       src={mediaUrl(media.storageKey)}
       width={media.width ?? 1600}
     />
@@ -70,7 +69,7 @@ export function ApplicationOverview({
   const description = descriptionParts(application.description, application.tagline, application.name);
   return (
     <div className="application-overview">
-      {preview && <figure className="application-preview"><EditorialImage application={application} media={preview} priority /></figure>}
+      {preview && <figure className="application-preview"><EditorialImage application={application} media={preview} preload /></figure>}
       <div className="application-body">
         <article className="application-story">
           {description.lead && <div className="application-story-lead"><MarkdownContent>{description.lead}</MarkdownContent></div>}

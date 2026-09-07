@@ -61,7 +61,7 @@ export function DealsSection({ deals }: { deals: ActiveDeal[] }) {
           <div className="deals-ticket-stage" aria-label="Highlighted deals">
             {ticketDeals.map((deal, index) => (
               <Link className={`deals-ticket deals-ticket-${index + 1}`} href={`/apps/${deal.slug}`} key={deal.id} prefetch={false}>
-                <PublicAppIcon app={deal} decorative priority={index === 0} size={96} />
+                <PublicAppIcon app={deal} decorative size={96} />
                 <span className="deals-ticket-copy">
                   <b>{deal.name}</b>
                   <small>{deal.tagline}</small>

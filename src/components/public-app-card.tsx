@@ -23,7 +23,6 @@ export function PublicAppIcon({
   app,
   decorative = false,
   loading,
-  priority = false,
   size = 56,
   // Fixed icons use Next's compact density srcset; responsive callers opt in.
   sizes,
@@ -31,7 +30,6 @@ export function PublicAppIcon({
   app: Pick<PublicAppSummary, "name" | "icon">;
   decorative?: boolean;
   loading?: "eager" | "lazy";
-  priority?: boolean;
   size?: AppIconSize;
   sizes?: string;
 }) {
@@ -41,9 +39,7 @@ export function PublicAppIcon({
       alt={decorative ? "" : (app.icon.altText ?? `${app.name} icon`)}
       className={className}
       height={size}
-      fetchPriority={priority ? "high" : "low"}
-      loading={priority ? undefined : (loading ?? "lazy")}
-      priority={priority}
+      loading={loading ?? "lazy"}
       quality={88}
       sizes={sizes}
       src={mediaUrl(app.icon.storageKey)}

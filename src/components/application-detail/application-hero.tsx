@@ -50,7 +50,6 @@ export function ApplicationHero({
                     icon: icon ? { storageKey: icon.storageKey, altText: icon.altText } : null,
                   }}
                   decorative
-                  loading="eager"
                   size={96}
                   sizes="(max-width: 38rem) 48px, 72px"
                 />
