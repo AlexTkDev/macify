@@ -64,7 +64,7 @@ async function getApplicationVisits(startAt?: string, endAt?: string): Promise<A
         Accept: "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
-      next: { revalidate: 7200 },
+      next: { revalidate: 15 * 60 },
       signal: AbortSignal.timeout(5_000),
     });
     if (!response.ok) return null;
