@@ -5,7 +5,7 @@ export type DiffPart = {
   value: string;
 };
 
-export type ProseBlock = {
+type ProseBlock = {
   kind: "heading" | "paragraph" | "list" | "quote" | "code";
   label: string;
   text: string;
@@ -36,7 +36,7 @@ export type CatalogueSnapshot = Pick<
   relatedAppSlugs: string[];
 };
 
-export type ManifestFieldKey =
+type ManifestFieldKey =
   | "name"
   | "slug"
   | "website"

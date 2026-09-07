@@ -10,7 +10,7 @@ import {
 import { dealManifestSchema } from "@/lib/deal-manifest";
 import { prepareMediaSource, putPreparedMedia } from "@/lib/media-upload";
 
-export type CatalogueSyncItem = {
+type CatalogueSyncItem = {
   changeType: "upsert" | "delete";
   path: string;
   manifest?: unknown;

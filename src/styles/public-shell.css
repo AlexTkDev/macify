@@ -17,11 +17,8 @@
   --public-line: #e2e4e8;
   --public-line-soft: #eceef1;
   --public-surface: #f3f4f6;
-  --public-surface-soft: #f8f9fa;
   --header-canvas: oklch(0.985 0.012 82);
   --header-accent: oklch(0.34 0.075 326);
-  --header-accent-soft: oklch(0.95 0.045 82);
-  --header-line: oklch(0.9 0.018 82);
   min-height: 100vh;
   position: relative;
   overflow: clip;

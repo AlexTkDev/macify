@@ -6,7 +6,7 @@ type ImageSource = {
   fileName: string;
 };
 
-export type OptimizedImage = ImageSource & {
+type OptimizedImage = ImageSource & {
   width: number | null;
   height: number | null;
   optimized: boolean;

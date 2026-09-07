@@ -8,7 +8,7 @@ import {
 } from "@/lib/directory-shared";
 import { getHotApplicationVisits, getTrendingApplicationVisits } from "@/lib/datafast-analytics";
 
-export type HomepageView = "hot" | "trending" | "latest";
+type HomepageView = "hot" | "trending" | "latest";
 
 const HOMEPAGE_CURATED_SLUGS = [
   "clop",

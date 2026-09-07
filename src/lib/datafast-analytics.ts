@@ -18,7 +18,7 @@ type DataFastPageAnalyticsResponse = {
   };
 };
 
-export type ApplicationVisit = {
+type ApplicationVisit = {
   slug: string;
   visitors: number;
 };

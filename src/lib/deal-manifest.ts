@@ -17,5 +17,3 @@ export const dealManifestSchema = z.object({
     context.addIssue({ code: "custom", path: ["endsAt"], message: "End date must be after start date." });
   }
 });
-
-export type DealManifest = z.infer<typeof dealManifestSchema>;

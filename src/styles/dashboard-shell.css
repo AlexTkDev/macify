@@ -312,8 +312,7 @@
 }
 
 .dashboard-actions,
-.editor-header-actions,
-.publication-control {
+.editor-header-actions {
   display: flex;
   align-items: center;
   gap: 0.55rem;
@@ -342,9 +341,6 @@
   background: #fff;
 }
 
-.publication-control { flex-wrap: wrap; }
-.publication-control > p { width: 100%; margin: 0; color: var(--danger); font-size: 0.7rem; }
-
 .dashboard-breadcrumbs {
   width: max-content;
   max-width: 100%;
@@ -360,8 +356,7 @@
 .dashboard-breadcrumbs a { display: inline-flex; align-items: center; gap: 0.42rem; font-weight: 700; }
 .dashboard-breadcrumbs a:hover { color: var(--accent-dark); }
 
-.success-banner,
-.dashboard-notice {
+.success-banner {
   margin-bottom: 1.4rem;
   padding: 0.85rem 1rem;
   display: flex;
@@ -372,12 +367,6 @@
   color: var(--success);
   background: var(--success-soft);
   font-size: 0.76rem;
-}
-
-.dashboard-notice-error {
-  border-color: color-mix(in srgb, var(--danger) 25%, var(--line));
-  color: var(--danger);
-  background: var(--danger-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -13,7 +13,7 @@ function ApplicationFact({
   ...props
 }: ComponentPropsWithoutRef<"span"> & {
   icon: LucideIcon;
-  tone: "blue" | "green" | "orange" | "violet" | "yellow";
+  tone: "blue" | "green" | "orange" | "violet";
 }) {
   return (
     <span className={`application-fact application-fact-${tone}${className ? ` ${className}` : ""}`} {...props}>

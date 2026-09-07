@@ -646,8 +646,7 @@
 .deal-code-button[data-copied="true"] .deal-code-value { opacity: 0; transform: translateX(0.45rem); }
 .deal-code-button[data-copied="true"] .deal-code-confirmation { opacity: 1; transform: translateX(0); }
 
-.deal-card code,
-.application-deal code {
+.deal-card code {
   color: var(--public-ink-strong);
   background: transparent;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
