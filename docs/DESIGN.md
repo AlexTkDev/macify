@@ -47,7 +47,7 @@ Previews keep their natural proportions. Editorial content uses one readable art
 
 ## Dashboard
 
-Application grids use at most three columns, then two or one according to the available content width. Use semantic cards with consistent preview proportions, aligned identities, and bottom-aligned management actions. Keep pricing and source details on the listing page instead of repeating them on every card.
+Application grids use at most three columns, then two or one according to the available content width. Use semantic cards with the source image’s natural proportions, aligned identities, and bottom-aligned management actions. Keep pricing and source details on the listing page instead of repeating them on every card.
 
 App and deal queues use full-width review rows with names, change summaries, and consistently placed actions. Show three useful summary counts and avoid repeating the selected view's status on every row.
 

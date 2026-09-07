@@ -15,7 +15,7 @@
   "relatedAppSlugs": ["supercharge", "raycast"],
   "media": {
     "icon": {"sourceUrl": "https://vorssaint.com/favicon.ico", "altText": "Vorssaint application icon"},
-    "preview": {"sourceUrl": "https://vorssaint.com/app-icon.png", "altText": "Vorssaint modular utility app preview"},
+    "preview": {"sourceUrl": "https://raw.githubusercontent.com/vorssaint/vorssaint-utils/main/docs/assets/readme/features-hub.png", "altText": "Vorssaint Features settings showing utility bundles and window controls"},
     "screenshots": []
   }
 }

@@ -31,7 +31,7 @@ export async function getApplicationsDashboardData() {
       })
       .from(apps)
       .where(isNull(apps.deletedAt))
-      .orderBy(desc(apps.updatedAt))
+      .orderBy(desc(apps.createdAt), asc(apps.id))
       .limit(50),
     database
       .select({
@@ -57,6 +57,8 @@ export async function getApplicationsDashboardData() {
         role: mediaAssets.role,
         storageKey: mediaAssets.storageKey,
         altText: mediaAssets.altText,
+        width: mediaAssets.width,
+        height: mediaAssets.height,
       })
       .from(mediaAssets)
       .where(and(
@@ -86,6 +88,8 @@ export async function getApplicationsDashboardData() {
         iconAltText: icon?.altText ?? null,
         previewStorageKey: preview?.storageKey ?? null,
         previewAltText: preview?.altText ?? null,
+        previewWidth: preview?.width ?? null,
+        previewHeight: preview?.height ?? null,
       };
     }),
     stats: statsRows[0] ?? { total: 0, published: 0 },

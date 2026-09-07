@@ -134,12 +134,13 @@
 }
 .dashboard-app-card {
   min-width: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
 }
-.dashboard-app-card-link { display: grid; gap: 1rem; }
+.dashboard-app-card-link { display: grid; grid-template-rows: subgrid; grid-row: span 2; gap: 1rem; }
 .dashboard-app-card-media {
-  aspect-ratio: 16 / 10;
+  align-self: start;
   position: relative;
   display: grid;
   place-items: center;
@@ -149,7 +150,8 @@
   background: oklch(94% 0.012 300);
   font-size: 0.9rem;
 }
-.dashboard-app-card-media img { object-fit: contain; transition: transform 180ms ease-out; }
+.dashboard-app-card-media > span { min-height: 10rem; display: grid; place-items: center; }
+.dashboard-app-card-media img { display: block; width: 100%; height: auto; object-fit: contain; transition: transform 180ms ease-out; }
 .dashboard-app-card-link:hover .dashboard-app-card-media img { transform: scale(1.018); }
 .dashboard-app-card-identity { display: grid; grid-template-columns: 3rem minmax(0, 1fr); align-items: start; gap: 0.8rem; }
 .dashboard-app-card-identity > span { min-width: 0; }

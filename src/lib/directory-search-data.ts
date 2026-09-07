@@ -73,7 +73,7 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
     view === "latest"
       ? database.select(cardFields).from(apps)
         .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
-        .orderBy(desc(apps.publishedAt), desc(apps.createdAt)).limit(30)
+        .orderBy(desc(apps.createdAt), asc(apps.id)).limit(30)
       : database.select(cardFields).from(apps).where(and(
         eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, HOMEPAGE_CURATED_SLUGS),
       )).limit(30),

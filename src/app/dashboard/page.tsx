@@ -26,7 +26,7 @@ export default async function DashboardPage() {
 
       <section className="dashboard-panel" aria-labelledby="recent-apps">
         <div className="panel-toolbar">
-          <div><h2 id="recent-apps">Recent applications</h2><p>{applications.length} of {stats.total} listings, most recently updated first.</p></div>
+          <div><h2 id="recent-apps">Latest additions</h2><p>{applications.length} of {stats.total} listings, newest additions first.</p></div>
         </div>
         {applications.length === 0 ? (
           <div className="dashboard-empty">
@@ -39,7 +39,7 @@ export default async function DashboardPage() {
               <li className="dashboard-app-card" key={app.id}>
                 <Link className="dashboard-app-card-link" href={`/dashboard/apps/${app.id}`}>
                   <span className="dashboard-app-card-media">
-                    {app.previewStorageKey ? <Image alt={app.previewAltText ?? `${app.name} preview`} fill sizes="(max-width: 608px) 100vw, (max-width: 1000px) 50vw, 33vw" src={mediaUrl(app.previewStorageKey, "dashboard")} unoptimized /> : <span>Preview unavailable</span>}
+                    {app.previewStorageKey ? <Image alt={app.previewAltText ?? `${app.name} preview`} width={app.previewWidth ?? 1200} height={app.previewHeight ?? 630} sizes="(max-width: 608px) 100vw, (max-width: 1000px) 50vw, 33vw" src={mediaUrl(app.previewStorageKey, "dashboard")} unoptimized /> : <span>Preview unavailable</span>}
                   </span>
                   <span className="dashboard-app-card-identity">
                     {app.iconStorageKey ? <Image alt="" className="app-icon-table" height={48} src={mediaUrl(app.iconStorageKey, "dashboard")} unoptimized width={48} /> : <span className="app-icon-table dashboard-app-icon-fallback" aria-hidden="true">{app.name.slice(0, 2).toUpperCase()}</span>}
