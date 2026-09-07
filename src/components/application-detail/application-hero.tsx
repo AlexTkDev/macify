@@ -69,7 +69,7 @@ export function ApplicationHero({
             ))}
           </div>
         )}
-        <div className="application-facts" aria-label="Application details">
+        <div className="application-facts" aria-label="Application details" tabIndex={0}>
           <ApplicationFact icon={pricingIcon} tone={application.pricingType === "paid" ? "orange" : application.pricingType === "free" ? "green" : "blue"}>
             <strong>{pricingLabels[application.pricingType]}</strong>
           </ApplicationFact>

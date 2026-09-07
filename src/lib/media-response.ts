@@ -1,5 +1,5 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { apps, mediaAssets } from "@/db/schema";
 
@@ -59,6 +59,7 @@ export async function serveMedia(
         and(
           eq(mediaAssets.storageKey, key),
           eq(apps.status, "published"),
+          isNull(apps.deletedAt),
           sql`${mediaAssets.role} <> 'audio'`,
         ),
       )
@@ -67,7 +68,29 @@ export async function serveMedia(
     if (!publishedAsset[0]) return new Response("Not found", { status: 404 });
   }
 
-  const { env } = getCloudflareContext();
+  const { env, ctx } = getCloudflareContext();
+  // Publication is checked above even for a warm rendition. Dashboard media
+  // and range requests must never reuse a public cache entry.
+  const cache = visibility === "published" && request.method === "GET"
+    && transformWidth !== null && !request.headers.has("range")
+    && typeof caches !== "undefined"
+      ? (caches as CacheStorage & { default?: Cache }).default
+      : undefined;
+  const cacheUrl = new URL(request.url);
+  cacheUrl.search = new URLSearchParams({
+    width: String(transformWidth),
+    quality: String(transformQuality),
+    rendition: "1",
+  }).toString();
+  const cacheKey = new Request(cacheUrl, { method: "GET" });
+  if (cache) {
+    try {
+      const cached = await cache.match(cacheKey);
+      if (cached) return cached;
+    } catch {
+      // Cache availability must not determine whether an image can be served.
+    }
+  }
   const requestedRange = transformWidth === null ? parseRangeHeader(request.headers.get("range")) : undefined;
   const object = requestedRange
     ? await env.MEDIA.get(key, { range: requestedRange })
@@ -85,12 +108,18 @@ export async function serveMedia(
         .output({ format: "image/webp", quality: transformQuality, anim: false });
       const response = transformed.response();
       const headers = new Headers(response.headers);
-      headers.set("Cache-Control", "public, max-age=31536000, s-maxage=31536000, immutable");
+      headers.set("Cache-Control", visibility === "published"
+        ? "public, max-age=31536000, s-maxage=31536000, immutable"
+        : "private, no-store");
       headers.set("X-Content-Type-Options", "nosniff");
       headers.set("Content-Security-Policy", "default-src 'none'");
       headers.set("Vary", "Accept");
-      await fallbackBody.cancel();
-      return new Response(response.body, { status: response.status, headers });
+      ctx.waitUntil(fallbackBody.cancel().catch(() => {}));
+      const result = new Response(response.body, { status: response.status, headers });
+      if (cache && result.status === 200) {
+        ctx.waitUntil(cache.put(cacheKey, result.clone()).catch(() => {}));
+      }
+      return result;
     } catch (error) {
       console.error(JSON.stringify({
         event: "media.resize.failed",

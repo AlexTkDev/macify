@@ -25,7 +25,8 @@ export function PublicAppIcon({
   loading,
   priority = false,
   size = 56,
-  sizes = `${size}px`,
+  // Fixed icons use Next's compact density srcset; responsive callers opt in.
+  sizes,
 }: {
   app: Pick<PublicAppSummary, "name" | "icon">;
   decorative?: boolean;
