@@ -63,11 +63,6 @@ export default async function CatalogueReviewPage({
         </div>
       </header>
 
-      <nav className="catalogue-kind-tabs" aria-label="Catalogue review type">
-        <Link aria-current="page" className="active" href="/dashboard/catalogue">Applications</Link>
-        <Link href="/dashboard/catalogue/deals">Deals</Link>
-      </nav>
-
       <section className="catalogue-queue-stats" aria-label="Review queue status">
         <div><GitBranch size={18} /><span>Awaiting review</span><strong>{counts.pending}</strong></div>
         <div><PlusCircle size={18} /><span>New applications</span><strong>{counts.create}</strong></div>

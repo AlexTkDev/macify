@@ -1,6 +1,6 @@
 # Contribute to the Macify catalogue
 
-Each pull request may add one new application manifest or one new deal manifest. Use an issue for code, documentation, design, or changes to an existing record.
+Each pull request may add one new application manifest. Use an issue for code, documentation, design, or changes to an existing record.
 
 ## Before you begin
 
@@ -19,15 +19,9 @@ Each pull request may add one new application manifest or one new deal manifest.
 6. Run `npm run catalogue:validate`.
 7. Open a pull request containing only the new manifest and cite the official sources used.
 
-## Add a deal
+Deals are not currently available, so deal submissions are not being accepted. The repository retains supporting catalogue and backend code for future implementation.
 
-1. Confirm the application already exists in [`catalog/apps`](catalog/apps).
-2. Copy [`catalog/examples/deal.example.json`](catalog/examples/deal.example.json) to `catalog/deals/<app-slug>.json`.
-3. Match the filename and `appSlug` to the application.
-4. Verify the discount, code, destination, and availability window from an official source. Include a timezone in both timestamps.
-5. Run `npm run catalogue:validate` and open a pull request containing only the deal manifest.
-
-Maintainers handle changes to existing deals and listings.
+Maintainers handle changes to existing listings.
 
 ## Review and publication
 

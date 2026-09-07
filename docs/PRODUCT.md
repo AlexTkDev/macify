@@ -30,7 +30,7 @@ An application record includes:
 - mutual related-application links;
 - one icon, one main preview, and optional screenshots.
 
-Applications may also have a verified, time-bounded deal. Homepage inclusion is an independent editorial decision and does not affect whether an application remains listed.
+The data model includes preliminary support for verified, time-bounded deals, but deals are not currently available and are not exposed in the public website or dashboard. Homepage inclusion is an independent editorial decision and does not affect whether an application remains listed.
 
 ## Media
 

@@ -16,7 +16,7 @@ Macify helps people discover useful Mac applications through a curated homepage,
 
 ## Contribute
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) to propose one new application or verified deal. Use [GitHub Issues](https://github.com/Beingpax/macify/issues/new/choose) for corrections, bugs, or product ideas.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) to propose a new application. Use [GitHub Issues](https://github.com/Beingpax/macify/issues/new/choose) for corrections, bugs, or product ideas.
 
 ## Project guides
 
