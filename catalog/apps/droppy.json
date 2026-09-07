@@ -25,11 +25,11 @@
   ],
   "media": {
     "icon": {
-      "sourceUrl": "https://getdroppy.app/assets/brand/droppy-icon-default-512.webp",
+      "sourceUrl": "https://getdroppy.app/assets/brand/droppy-icon-default-512.webp?v=20260908",
       "altText": "Droppy application icon"
     },
     "preview": {
-      "sourceUrl": "https://getdroppy.app/assets/og/og-home-20260814.jpg",
+      "sourceUrl": "https://getdroppy.app/assets/og/og-home-20260814.jpg?v=20260908",
       "altText": "Droppy application preview"
     },
     "screenshots": []
