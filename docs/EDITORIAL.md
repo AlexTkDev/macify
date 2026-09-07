@@ -8,7 +8,7 @@ Application descriptions are stored as Markdown. Aim for roughly 300 useful word
 
 ## 🔎 Research
 
-1. Read the official website, documentation, changelog, pricing, and platform requirements.
+1. Read the official website, documentation, changelog, pricing, privacy policy, and platform requirements.
 2. Consult independent reviews or substantial first-hand discussions for real-world experience.
 3. Verify changing claims such as pricing, availability, licensing, privacy, sync, and system requirements against current official sources.
 4. Separate stable behavior from beta, announced, experimental, or discontinued features.
@@ -48,6 +48,10 @@ Use this order as a suggested template. Adapt or omit sections, paragraph counts
 
 [Commercial model and concise current pricing context.]
 ```
+
+Descriptions must contain 40–20,000 characters. Use level-two Markdown headings for sections; raw HTML is skipped by the renderer. These format limits do not replace editorial review.
+
+Structured pricing uses `pricingType` (`free`, `freemium`, or `paid`) and `billingType` (`one_time`, `subscription`, or `null`). Free applications require `null`; freemium and paid applications require a billing type. Public pricing uses `pricingDetails` when present, otherwise the generated classification label. Keep those fields consistent with the description.
 
 Homepage inclusion is separate from publication. Follow [`HOMEPAGE_CURATION.md`](HOMEPAGE_CURATION.md) without unpublishing an otherwise valid catalogue record.
 

@@ -53,3 +53,11 @@ Application grids use at most three columns, then two or one according to the av
 App and deal queues use full-width review rows with names, change summaries, and consistently placed actions. Show three useful summary counts and avoid repeating the selected view's status on every row.
 
 Dashboard listing previews reuse the public application hero, editorial content, screenshots, and related-app components. Serve unpublished artwork through authenticated dashboard media routes. Keep publication controls and record metadata outside the listing preview.
+
+## 🗺️ Implementation references
+
+Public fonts and stylesheet imports live in [`src/app/layout.tsx`](../src/app/layout.tsx), with shared tokens in [`src/styles/tokens.css`](../src/styles/tokens.css). The navigation and page shell live in [`src/components/public-site.tsx`](../src/components/public-site.tsx); the footer has its own component and stylesheet.
+
+Dashboard styles load from [`src/app/dashboard/layout.tsx`](../src/app/dashboard/layout.tsx). Read the complete import order when comparing behavior: `dashboard-variations.css` loads last and overrides earlier layout rules, including the three-column application grid and three review-queue summary counts. Responsive rules reduce these layouts as space narrows.
+
+The mockups above establish visual direction. The current components and final CSS cascade define implemented behavior; accessibility and design requirements in this guide remain targets to verify when changing the interface.

@@ -51,6 +51,9 @@ and updates only those history names in one SQL statement before applying pendin
 It does not replay previously applied SQL. Backups also include the original migration
 history. Local backups copy the D1 persistence directory; production backups export SQL.
 Backups may contain private data: keep them private and do not commit them.
+The wrapper creates these backups only when historical filenames need reconciliation;
+it does not back up every ordinary migration run. Follow [production operations](../docs/OPERATIONS.md)
+before applying production migrations.
 
 Fresh databases need no filename reconciliation. Subsequent runs skip it once the
 history has descriptive names. Conflicting old/new history entries stop execution.

@@ -13,6 +13,8 @@ The intended Cloudflare Workers Builds configuration is below; confirm the remot
 
 When Workers Builds is connected to `main`, a merge or direct push can deploy production. Do not push to `main` without explicit production approval. Work in the shared `main` checkout unless the user explicitly requests a branch; review the local diff before an authorized push. Do not run a second manual deployment after a successful GitHub-triggered deployment.
 
+The GitHub `CI` workflow runs `npm ci` and `npm run ci:check` on pull requests and pushes to `main`. The separate `Catalogue` workflow validates manifests and synchronizes qualifying pushes or manual runs. Neither checked-in workflow deploys the Worker; Workers Builds settings are managed outside this repository.
+
 ## ✅ Validation
 
 For an isolated copy, CSS, or static asset change:
@@ -36,7 +38,7 @@ For behavior, authentication, data, schema, catalogue synchronization, media, ro
 
 ## 🛡️ Remote safety
 
-- Commands are local unless they use `--remote` or deploy.
+- Check each command’s target: `npm run db:migrate:production` passes `--remote --env production` through the migration wrapper, and `npm run deploy` builds and deploys production.
 - Never deploy, migrate production, replace data, create resources, change DNS, or add secrets without explicit approval.
 - Never commit `.dev.vars`, credentials, exports, backups, or Wrangler state.
 - Read [`migrations/README.md`](../migrations/README.md) before schema changes.

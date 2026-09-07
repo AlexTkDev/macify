@@ -35,7 +35,7 @@ Every contribution helps us build a better collection of high quality macOS appl
 
 Macify uses Next.js and TypeScript on Cloudflare Workers. Reviewed listings live in D1, while application artwork lives in R2.
 
-To run it locally:
+Use Node.js 22, matching the repository’s CI workflows. To run it locally:
 
 ```bash
 npm install
@@ -44,11 +44,7 @@ npm run db:migrate:local
 npm run dev
 ```
 
-For dashboard access, create a private `.dev.vars` file with `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_SESSION_SECRET`. Keep it out of Git.
-
-The development server applies local migrations, validates the catalogue, and syncs changed manifests when it starts. Use `npm run setup` for a full local setup and media check. To refresh catalogue changes while it is already running, use `npm run catalogue:sync:local`.
-
-Before changing product behavior, interface design, or catalogue copy, read [`docs/PRODUCT.md`](docs/PRODUCT.md), [`docs/DESIGN.md`](docs/DESIGN.md), and [`docs/EDITORIAL.md`](docs/EDITORIAL.md). Operational and release details live in [`docs/OPERATIONS.md`](docs/OPERATIONS.md) and [`docs/RELEASE.md`](docs/RELEASE.md).
+The development server applies local migrations, validates the catalogue, and loads application and deal manifests into the local database when it starts. Local synchronization publishes records directly for development; it does not use the production review queue. The fast startup path reuses stored media without checking its bytes. Use `npm run setup` for a full local setup and media check. To refresh catalogue changes while it is already running, use `npm run catalogue:sync:local`.
 
 Before submitting changes, run the checks that match your work:
 

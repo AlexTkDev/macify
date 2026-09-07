@@ -27,13 +27,13 @@ Never commit exports or backups. Encrypt retained backups and restrict access.
 
 A Time Travel restore overwrites the database and interrupts active queries. Record the pre-restore bookmark so the restore can be reversed. Never restore production without explicit approval.
 
-After recovery, verify migration state, record counts, administrator login, search, media delivery, one application page, and one reversible featured or deal edit.
+After recovery, verify migration state, record counts, administrator login, search, media delivery, one application page, and one reversible publication or featured-status change. Check deal changes through the catalogue revision workflow.
 
 ## 🔄 Catalogue synchronization
 
 Configure `CATALOG_SYNC_SECRET` as both a Worker secret and a GitHub Actions secret. Configure `CATALOG_SYNC_URL` in GitHub Actions with the full `/api/internal/catalogue-sync` URL, and set `CATALOG_REPOSITORY` on the Worker to the exact `owner/repository` value.
 
-Protect `main` in GitHub: require pull requests, at least one code-owner approval, and the `Catalogue / validate` status check; dismiss stale approvals when new commits arrive; block force pushes and branch deletion. Keep workflow permissions read-only except where a future workflow explicitly requires more.
+Recommended branch protection (verify the actual repository settings before release): protect `main` in GitHub: require pull requests, at least one code-owner approval, and the `Catalogue / validate` status check; dismiss stale approvals when new commits arrive; block force pushes and branch deletion. Keep workflow permissions read-only except where a future workflow explicitly requires more.
 
 Synchronization reconciles every current application and deal manifest, skips already-reviewed hashes, retries missed or failed records, and creates pending revisions for changes. Deleted or renamed manifests create removal revisions. One invalid file does not prevent other valid records from reaching review. Publishing from the protected dashboard applies the revision to D1. Image source changes are downloaded, validated, optimized, and stored in R2 before review. Never use synchronization as a bulk production replacement mechanism.
 
@@ -42,6 +42,6 @@ The old production replacement script has been removed. Restore only from a veri
 ## 📡 Monitoring
 
 - Monitor Worker exceptions, sustained 5xx responses, failed D1 operations, and abnormal authentication failures.
-- Use an external uptime check for the homepage and one application page.
+- Use an external uptime check for the homepage and one application page. `/api/health` reports the service, environment, and a D1 `SELECT 1` result; it does not verify R2 or the full publication workflow.
 - Configure Cloudflare usage and billing notifications.
 - Never log credentials, cookies, session values, synchronized content bodies, or private data.

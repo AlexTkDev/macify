@@ -10,7 +10,7 @@ Explain what the application or deal offers and why it belongs on Macify.
 
 ## Sources
 
-Link official sources for its features, pricing, privacy, requirements, and media.
+For an application, link official sources for its features, pricing, privacy, requirements, and media. For a deal, link the official offer confirming the discount, code, destination, and availability dates.
 
 ## Checklist
 
