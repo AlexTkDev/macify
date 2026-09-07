@@ -16,7 +16,13 @@ Macify helps people discover useful Mac applications through a curated homepage,
 
 ## Contribute
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) to propose a new application. Use [GitHub Issues](https://github.com/Beingpax/macify/issues/new/choose) for corrections, bugs, or product ideas.
+We accept application and deal submissions through pull requests. Read [CONTRIBUTING.md](CONTRIBUTING.md) to add a new application or an offer for an existing application. Use [GitHub Issues](https://github.com/Beingpax/macify/issues/new/choose) for corrections, bugs, or product ideas.
+
+## Deals
+
+Deals uses catalogue applications and time-bounded offers. The public page and application detail queries support active offers, with an empty state when none are available. The header keeps Deals before Categories regardless of offer availability.
+
+Submit a verified offer as a manifest in `catalog/deals`. Include the discount, optional code, official offer URL, and availability dates. Follow the [deal submission guide](CONTRIBUTING.md#add-a-deal) and [editorial standard](docs/EDITORIAL.md#deal-verification). Submissions are reviewed before publication.
 
 ## Project guides
 

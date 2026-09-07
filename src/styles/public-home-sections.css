@@ -79,7 +79,7 @@
   background: var(--public-canvas);
 }
 
-.directory-view-tabs button {
+.directory-view-tabs a {
   padding: 0.52rem 0.82rem;
   border: 0;
   border-radius: 999px;
@@ -90,12 +90,12 @@
   cursor: pointer;
 }
 
-.directory-view-tabs button[aria-pressed="true"] {
+.directory-view-tabs a[aria-current="page"] {
   color: var(--public-canvas);
   background: var(--public-ink);
 }
 
-.directory-view-tabs button:focus-visible {
+.directory-view-tabs a:focus-visible {
   outline: 0.16rem solid var(--play-blue);
   outline-offset: 0.12rem;
 }
@@ -1068,3 +1068,7 @@
   .deal-card-action:hover,
   .deal-card-action:active { transform: none; }
 }
+
+.directory-loading-identity { display: block; height: 5rem; }
+
+.directory-loading-preview { background: #f2f3f5; }

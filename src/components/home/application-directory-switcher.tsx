@@ -1,56 +1,50 @@
-"use client";
-
-import { useLayoutEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { DirectoryAppGrid, type DirectoryApp } from "@/components/home/application-directory";
 
 type DirectoryView = "hot" | "trending" | "latest";
 
 export function ApplicationDirectorySwitcher({
   initialView,
-  views,
+  applications,
+  loading = false,
 }: {
   initialView: DirectoryView;
-  views: Record<DirectoryView, DirectoryApp[]>;
+  applications: DirectoryApp[];
+  loading?: boolean;
 }) {
-  const [activeView, setActiveView] = useState<DirectoryView>(initialView);
-  const pendingScrollPosition = useRef<{ left: number; top: number } | null>(null);
-
-  useLayoutEffect(() => {
-    const position = pendingScrollPosition.current;
-    if (!position) return;
-    pendingScrollPosition.current = null;
-    window.scrollTo({ ...position, behavior: "instant" });
-  }, [activeView]);
-
-  function selectView(view: DirectoryView) {
-    if (view === activeView) return;
-    pendingScrollPosition.current = { left: window.scrollX, top: window.scrollY };
-    setActiveView(view);
-    const url = new URL(window.location.href);
-    if (view === "hot") url.searchParams.delete("view");
-    else url.searchParams.set("view", view);
-    window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
-  }
-
   return (
     <section className="home-section application-directory" id="all-apps" aria-labelledby="all-apps-title">
       <div className="directory-heading">
         <h2 id="all-apps-title">Apps worth trying.</h2>
-        <div aria-label="Application ranking" className="directory-view-tabs" role="group">
+        <nav aria-label="Application ranking" className="directory-view-tabs">
           {(["hot", "trending", "latest"] as const).map((view) => (
-            <button
-              aria-pressed={activeView === view}
+            <Link
+              aria-current={initialView === view ? "page" : undefined}
+              href={view === "hot" ? "/" : `/?view=${view}`}
               key={view}
-              onClick={() => selectView(view)}
-              type="button"
+              prefetch={false}
+              replace
+              scroll={false}
             >
               {view[0].toUpperCase() + view.slice(1)}
-            </button>
+            </Link>
           ))}
-        </div>
+        </nav>
       </div>
       <div aria-live="polite" aria-atomic="false">
-        <DirectoryAppGrid applications={views[activeView]} />
+        {loading ? (
+          <div aria-busy="true">
+            <p className="sr-only" role="status">Loading applications…</p>
+            <div className="directory-app-grid" aria-hidden="true">
+              {Array.from({ length: 6 }, (_, index) => (
+                <div key={index}>
+                  <span className="directory-app-preview directory-loading-preview" />
+                  <span className="directory-loading-identity" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : <DirectoryAppGrid applications={applications} />}
       </div>
     </section>
   );

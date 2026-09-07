@@ -150,7 +150,7 @@
     min-height: 0;
     padding: 0.2rem;
   }
-  .directory-view-tabs button {
+  .directory-view-tabs a {
     width: auto;
     height: auto;
     position: static;
@@ -203,40 +203,4 @@
   .related-application-shelf strong { max-width: 5.2rem; font-size: 0.8rem; }
   .policy-page { width: min(calc(100% - 2rem), 62rem); }
   .policy-intro h1 { font-size: clamp(3.2rem, 16vw, 4.8rem); }
-  .dashboard-brand > span { display: none; }
-  .dashboard-site-link-mobile { width: 2.45rem; padding: 0; justify-content: center; font-size: 0; }
-  .dashboard-header h1,
-  .editor-header h1 { font-size: 2.2rem; }
-  .status-strip { grid-template-columns: 1fr; }
-  .dashboard-detail-identity { align-items: flex-start; }
-  .dashboard-detail-icon { width: 4rem; height: 4rem; }
-  .dashboard-detail-header .dashboard-actions { width: 100%; display: grid; grid-template-columns: 1fr; }
-  .dashboard-detail-preview { min-height: 15rem; }
-
-  .status-strip > div {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .status-strip > div:last-child { border-bottom: 0; }
-
-  .media-library,
-  .media-management-grid { grid-template-columns: 1fr; }
-  .media-editor { padding-inline: 1rem; }
-  .catalogue-queue-stats { grid-template-columns: 1fr; }
-  .catalogue-queue-stats > div { border-right: 0; border-bottom: 1px solid var(--line); }
-  .catalogue-queue-stats > div:last-child { border-bottom: 0; }
-  .catalogue-revision-identity { align-items: flex-start; }
-  .catalogue-revision-actions { display: grid; grid-template-columns: 1fr; }
-  .catalogue-review-panel { padding: .9rem; }
-  .catalogue-review-summary { grid-template-columns: 1fr; }
-  .catalogue-review-jump { overflow-x: auto; }
-  .prose-diff-head { display: none; }
-  .prose-diff-row { grid-template-columns: 1fr; }
-  .prose-diff-cell:first-child { border-right: 0; border-bottom: 1px solid var(--line); }
-  .prose-diff-cell::before { margin-bottom: .4rem; display: block; color: var(--faint); font-size: .56rem; font-weight: 720; text-transform: uppercase; }
-  .prose-diff-cell[data-side="before"]::before { content: "Previous"; }
-  .prose-diff-cell[data-side="after"]::before { content: "Proposed"; }
-  .catalogue-media-diff-row { grid-template-columns: 1fr; }
-  .catalogue-media-cell { border-left: 0; border-top: 1px solid var(--line); }
 }

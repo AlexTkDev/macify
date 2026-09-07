@@ -20,7 +20,7 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
                 height={app.preview.height ?? 630}
                 loading="lazy"
                 quality={78}
-                sizes="(max-width: 608px) calc(100vw - 32px), (max-width: 832px) 46vw, 30vw"
+                sizes="(max-width: 38rem) calc(100vw - 2rem), (max-width: 52rem) calc((100vw - clamp(4rem, 6.4vw, 6rem) - 2.25rem) / 2), (max-width: 68rem) calc((100vw - clamp(4rem, 6.4vw, 6rem) - 4.5rem) / 3), min(calc((100vw - clamp(4rem, 6.4vw, 6rem) - 6rem) / 3), 23.34rem)"
                 src={mediaUrl(app.preview.storageKey)}
                 width={app.preview.width ?? 1200}
               />

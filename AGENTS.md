@@ -13,6 +13,11 @@ Preserve authorization on protected features and do not expand product scope unl
 - Preserve server-side authorization and validate all external input.
 - Back up persistent data before migrations, restoration, or destructive work.
 
+## Shared checkout and branches
+
+- Work directly on `main`. Do not create or switch to another branch unless the user explicitly requests it.
+- Tasks share this checkout. Coordinate Git operations with other active tasks and preserve their tracked and untracked changes.
+
 ## Quality
 
 - Prefer server components for public content and keep client JavaScript limited to necessary interaction.

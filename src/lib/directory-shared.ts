@@ -48,20 +48,25 @@ type AppIconMedia = {
 export async function getAppIcons(appIds: string[]): Promise<Map<string, AppIconMedia>> {
   if (!appIds.length) return new Map<string, AppIconMedia>();
   const database = await getDatabase();
-  const rows = await database
-    .select({
-      appId: mediaAssets.appId,
-      storageKey: mediaAssets.storageKey,
-      altText: mediaAssets.altText,
-      width: mediaAssets.width,
-      height: mediaAssets.height,
-    })
-    .from(mediaAssets)
-    .where(and(
-      inArray(mediaAssets.appId, appIds),
-      eq(mediaAssets.role, "icon"),
-    ))
-    .orderBy(desc(mediaAssets.createdAt));
+  const uniqueIds = [...new Set(appIds)];
+  const rows = [];
+  // Leave room for other bindings under D1's per-query parameter limit.
+  for (let index = 0; index < uniqueIds.length; index += 75) {
+    rows.push(...await database
+      .select({
+        appId: mediaAssets.appId,
+        storageKey: mediaAssets.storageKey,
+        altText: mediaAssets.altText,
+        width: mediaAssets.width,
+        height: mediaAssets.height,
+      })
+      .from(mediaAssets)
+      .where(and(
+        inArray(mediaAssets.appId, uniqueIds.slice(index, index + 75)),
+        eq(mediaAssets.role, "icon"),
+      ))
+      .orderBy(desc(mediaAssets.createdAt)));
+  }
   const icons = new Map<string, (typeof rows)[number]>();
   for (const row of rows) {
     if (row.appId && !icons.has(row.appId)) icons.set(row.appId, row);

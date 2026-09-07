@@ -1,4 +1,3 @@
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { and, asc, desc, eq, gte, isNull, lte, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 import { getDatabase } from "@/db/client";
@@ -13,7 +12,6 @@ import {
 import { getAppIcons, publicApplicationFields } from "@/lib/directory-shared";
 
 export async function getPublishedApplicationBySlug(slug: string) {
-  const { env } = await getCloudflareContext({ async: true });
   const database = await getDatabase();
   const applicationRows = await database
     .select(publicApplicationFields)
@@ -69,7 +67,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
       ))
       .orderBy(asc(relatedApp.name))
       .limit(6),
-    env.APP_ENV === "local" ? database
+    database
       .select({
         discountPercent: deals.discountPercent,
         code: deals.code,
@@ -83,7 +81,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
         lte(deals.startsAt, now),
         gte(deals.endsAt, now),
       ))
-      .limit(1) : Promise.resolve([]),
+      .limit(1),
     database
       .select(relatedFields)
       .from(appRelationships)

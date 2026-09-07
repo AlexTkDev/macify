@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cache } from "react";
+import { cache, Suspense } from "react";
 import { ApplicationHero } from "@/components/application-detail/application-hero";
 import { ApplicationOverview } from "@/components/application-detail/application-overview";
 import { RelatedApplications } from "@/components/application-detail/related-applications";
 import { PublicShell } from "@/components/public-site";
 import { mediaUrl } from "@/components/public-app-card";
 import { getPublishedApplicationBySlug } from "@/lib/apps-data";
-import { getAllTimeApplicationVisitors } from "@/lib/datafast-analytics";
+import { ApplicationVisitors } from "@/components/application-detail/application-visitors";
 
 export const dynamic = "force-dynamic";
 const getApplication = cache(getPublishedApplicationBySlug);
@@ -30,10 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ApplicationPage({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
-  const [application, visitors] = await Promise.all([
-    getApplication(slug),
-    getAllTimeApplicationVisitors(slug),
-  ]);
+  const application = await getApplication(slug);
   if (!application) notFound();
   const icon = application.media.find(({ role }) => role === "icon");
   const preview = application.media.find(({ role }) => role === "preview_image");
@@ -54,7 +51,15 @@ export default async function ApplicationPage({ params }: { params: Promise<{ sl
   return (
     <PublicShell>
       <main className="application-page" id="main-content">
-        <ApplicationHero application={application} icon={icon} visitors={visitors} />
+        <ApplicationHero
+          application={application}
+          icon={icon}
+          visitorContent={
+            <Suspense fallback={<span className="application-visitors-slot" aria-hidden="true" />}>
+              <ApplicationVisitors slug={slug} />
+            </Suspense>
+          }
+        />
         <ApplicationOverview application={application} preview={preview} screenshots={screenshots} />
         <RelatedApplications applications={application.related} />
       </main>

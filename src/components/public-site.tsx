@@ -2,16 +2,13 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import { Plus, Shuffle } from "lucide-react";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { InlineAppSearch } from "@/components/inline-app-search";
 import { LiveVisitorCount } from "@/components/live-visitor-count";
 import { MacifyLogo } from "@/components/macify-logo";
 
 const contributionGuideUrl = "https://github.com/Beingpax/macify/blob/main/CONTRIBUTING.md";
 
-async function PublicHeader() {
-  const { env } = await getCloudflareContext({ async: true });
-  const showDeals = env.APP_ENV === "local";
+function PublicHeader() {
   return (
     <header className="public-header">
       <div className="public-header-inner">
@@ -20,7 +17,7 @@ async function PublicHeader() {
         </div>
         <nav className="public-navigation" aria-label="Primary navigation">
           <Link className="public-home-link" href="/">Home</Link>
-          {showDeals && <Link className="public-deals-link" href="/deals">Deals</Link>}
+          <Link className="public-deals-link" href="/deals">Deals</Link>
           <Link className="public-categories-link" href="/categories">Categories</Link>
           <a className="public-surprise-link" href="/surprise" aria-label="Surprise me with an app">
             <span className="public-navigation-icon" aria-hidden="true"><Shuffle size={15} /></span>

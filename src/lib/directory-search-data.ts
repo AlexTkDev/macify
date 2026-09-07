@@ -69,8 +69,7 @@ function searchConditions(filters?: DirectorySearchFilters) {
 
 export async function getHomepageDirectoryData(filters?: DirectorySearchFilters, view: HomepageView = "hot") {
   const database = await getDatabase();
-  const heroSlugs = ["dayflow", "cleanshot-x", "swish", "droppy"];
-  const [fallbackRecords, heroRecords, analyticsVisits] = await Promise.all([
+  const [fallbackRecords, analyticsVisits] = await Promise.all([
     view === "latest"
       ? database.select(cardFields).from(apps)
         .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
@@ -78,10 +77,6 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
       : database.select(cardFields).from(apps).where(and(
         eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, HOMEPAGE_CURATED_SLUGS),
       )).limit(30),
-    database
-      .select(cardFields)
-      .from(apps)
-      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, heroSlugs))),
     view === "hot" ? getHotApplicationVisits() : view === "trending" ? getTrendingApplicationVisits() : Promise.resolve([]),
   ]);
 
@@ -120,7 +115,7 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
       .where(and(...conditions)),
   ]) : [[], [{ total: 0 }]];
 
-  const appIds = [...new Set([...records, ...heroRecords, ...searchRecords].map(({ id }) => id))];
+  const appIds = [...new Set([...records, ...searchRecords].map(({ id }) => id))];
   const { icons, previews } = await getCardMedia(appIds);
   const orderedRecords = view !== "latest" && !analyticsVisits.length ? [...records].sort((left, right) => (
     (HOMEPAGE_CURATED_ORDER.get(left.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
@@ -128,11 +123,6 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
   )) : records;
   return {
     applications: orderedRecords.map((record) => ({
-      ...record,
-      icon: icons.get(record.id) ?? null,
-      preview: previews.get(record.id) ?? null,
-    })),
-    heroApplications: heroRecords.map((record) => ({
       ...record,
       icon: icons.get(record.id) ?? null,
       preview: previews.get(record.id) ?? null,
@@ -148,4 +138,20 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
       total: Number(countRows[0]?.total ?? 0),
     },
   };
+}
+
+// Keep hero artwork independent of optional ranking analytics.
+export async function getHomepageHeroData() {
+  const database = await getDatabase();
+  const records = await database.select(cardFields).from(apps).where(and(
+    eq(apps.status, "published"),
+    isNull(apps.deletedAt),
+    inArray(apps.slug, ["dayflow", "cleanshot-x", "swish", "droppy"]),
+  )).limit(4);
+  const { icons, previews } = await getCardMedia(records.map(({ id }) => id));
+  return records.map((record) => ({
+    ...record,
+    icon: icons.get(record.id) ?? null,
+    preview: previews.get(record.id) ?? null,
+  }));
 }

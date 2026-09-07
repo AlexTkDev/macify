@@ -10,10 +10,6 @@ import "../styles/public-home-sections.css";
 import "../styles/public-application.css";
 import "../styles/public-markdown.css";
 import "../styles/public-policy.css";
-import "../styles/dashboard-shell.css";
-import "../styles/dashboard-content.css";
-import "../styles/dashboard-media.css";
-import "../styles/editor-login.css";
 import "../styles/responsive.css";
 import "../styles/responsive-small.css";
 

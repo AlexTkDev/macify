@@ -1,6 +1,6 @@
 # Contribute to the Macify catalogue
 
-Each pull request may add one new application manifest. Use an issue for code, documentation, design, or changes to an existing record.
+Application and deal submissions are welcome. Each pull request may add one new application or deal manifest. Use an issue for code, documentation, design, or changes to an existing record.
 
 ## Before you begin
 
@@ -19,7 +19,15 @@ Each pull request may add one new application manifest. Use an issue for code, d
 6. Run `npm run catalogue:validate`.
 7. Open a pull request containing only the new manifest and cite the official sources used.
 
-Deals are not currently available in production, so deal submissions are not being accepted. The repository retains supporting implementation and local preview fixtures for future development.
+## Add a deal
+
+1. Choose an existing application in [`catalog/apps`](catalog/apps) and check that it does not already have a manifest in [`catalog/deals`](catalog/deals).
+2. Copy [`catalog/examples/deal.example.json`](catalog/examples/deal.example.json) to `catalog/deals/<app-slug>.json`. Match `appSlug` and the filename to the existing application slug.
+3. Enter the verified discount percentage, the code (or `null` when no code is required), and the official HTTPS offer URL.
+4. Set `startsAt` and `endsAt` to the offer's actual availability dates using ISO 8601 timestamps with a timezone. The end must follow the start.
+5. Verify the terms against an official source and follow the [deal verification standard](docs/EDITORIAL.md#deal-verification).
+6. Run `npm run catalogue:validate`.
+7. Open a pull request containing only the new deal manifest and cite the official source confirming the offer. Replace every example value with the actual offer details.
 
 Maintainers handle changes to existing listings.
 

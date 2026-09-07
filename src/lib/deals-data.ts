@@ -1,12 +1,9 @@
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { and, asc, eq, gte, isNull, lte } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { apps, deals } from "@/db/schema";
 import { cardFields, getAppIcons } from "@/lib/directory-shared";
 
 export async function getActiveDeals(limit = 12) {
-  const { env } = await getCloudflareContext({ async: true });
-  if (env.APP_ENV !== "local") return [];
   const database = await getDatabase();
   const now = new Date();
   const rows = await database

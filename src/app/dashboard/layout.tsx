@@ -1,3 +1,7 @@
+import "@/styles/dashboard-shell.css";
+import "@/styles/dashboard-content.css";
+import "@/styles/dashboard-media.css";
+import "@/styles/dashboard-responsive.css";
 import type { Metadata } from "next";
 import { requireAdmin } from "@/lib/admin-auth";
 

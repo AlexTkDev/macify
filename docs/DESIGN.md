@@ -40,7 +40,7 @@ Previews keep their natural proportions. Editorial content uses one readable art
 ## Interaction and accessibility
 
 - Search results, forms, navigation, and controls must work by keyboard.
-- Navigation presents Home, Categories, and Surprise me as links, followed by a dark Submit app button linking to GitHub.
+- Navigation always presents Home, Deals, Categories, and Surprise me as links, followed by a dark Submit app button linking to GitHub. Deals remains visible when no offers are active.
 - Motion is limited to direct feedback and removed when reduced motion is requested.
 - No headline or application name may clip between 320 px and desktop widths.
 - Public pages share consistent responsive gutters and target WCAG 2.2 AA.

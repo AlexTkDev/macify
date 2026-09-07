@@ -1,3 +1,4 @@
+import "@/styles/editor-login.css";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/app/editor-login/login-form";

@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, isNull } from "drizzle-orm";
+import { and, asc, count, desc, eq, isNull, lte, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { appCategories, apps, categories } from "@/db/schema";
 import { cardFields, getAppIcons, getCardMedia } from "@/lib/directory-shared";
@@ -44,6 +44,17 @@ export async function getPublishedCategorySlugs() {
 
 export async function getPublishedCategories() {
   const database = await getDatabase();
+  const rankedApplications = database.select({
+    categoryId: appCategories.categoryId,
+    ...cardFields,
+    categoryRank: sql<number>`row_number() over (
+      partition by ${appCategories.categoryId}
+      order by ${apps.publishedAt} desc, ${apps.name} asc, ${apps.id} asc
+    )`.as("category_rank"),
+  }).from(appCategories)
+    .innerJoin(apps, eq(apps.id, appCategories.appId))
+    .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
+    .as("ranked_applications");
   const [categoryRows, applicationRows] = await Promise.all([
     database.select({
       id: categories.id,
@@ -56,11 +67,9 @@ export async function getPublishedCategories() {
       .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
       .groupBy(categories.id)
       .orderBy(desc(count(appCategories.appId)), asc(categories.name)),
-    database.select({ categoryId: appCategories.categoryId, ...cardFields })
-      .from(appCategories)
-      .innerJoin(apps, eq(apps.id, appCategories.appId))
-      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
-      .orderBy(desc(apps.publishedAt), asc(apps.name)),
+    database.select().from(rankedApplications)
+      .where(lte(rankedApplications.categoryRank, 4))
+      .orderBy(asc(rankedApplications.categoryId), asc(rankedApplications.categoryRank)),
   ]);
   const icons = await getAppIcons([...new Set(applicationRows.map(({ id }) => id))]);
   const applicationsByCategory = new Map<string, Array<(typeof applicationRows)[number] & {

@@ -14,10 +14,14 @@ export function LiveVisitorCount() {
 
   useEffect(() => {
     let active = true;
+    let pending = false;
+    const controller = new AbortController();
 
     async function refreshVisitorCount() {
+      if (document.hidden || pending) return;
+      pending = true;
       try {
-        const response = await fetch(realtimeVisitorsUrl, { cache: "no-store", credentials: "same-origin" });
+        const response = await fetch(realtimeVisitorsUrl, { credentials: "same-origin", signal: controller.signal });
         if (!response.ok) return;
 
         const data = await response.json() as RealtimeVisitorsResponse;
@@ -26,6 +30,8 @@ export function LiveVisitorCount() {
         }
       } catch {
         // Keep the previous value when DataFast is temporarily unavailable.
+      } finally {
+        pending = false;
       }
     }
 
@@ -34,6 +40,7 @@ export function LiveVisitorCount() {
 
     return () => {
       active = false;
+      controller.abort();
       window.clearInterval(interval);
     };
   }, []);

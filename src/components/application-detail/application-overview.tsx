@@ -51,7 +51,7 @@ function EditorialImage({ application, media, priority = false }: { application:
       loading={priority ? "eager" : "lazy"}
       priority={priority}
       quality={78}
-      sizes="(max-width: 900px) 100vw, 76rem"
+      sizes={`(max-width: 38rem) calc(100vw - 2rem), min(calc(100vw - clamp(4rem, 6.4vw, 6rem)), ${priority ? "66rem" : "72rem"})`}
       src={mediaUrl(media.storageKey)}
       width={media.width ?? 1600}
     />
