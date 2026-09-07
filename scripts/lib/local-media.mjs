@@ -1,12 +1,24 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
 
+import { decodeIco } from "icojs";
 import sharp from "sharp";
 
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 export const MAX_APPLICATION_MEDIA_BYTES = 40 * 1024 * 1024;
 
-const allowedImageTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/avif"]);
+const allowedImageTypes = {
+  icon: new Set([
+    "image/png",
+    "image/jpeg",
+    "image/webp",
+    "image/avif",
+    "image/vnd.microsoft.icon",
+    "image/x-icon",
+  ]),
+  preview_image: new Set(["image/png", "image/jpeg", "image/webp", "image/avif"]),
+  screenshot: new Set(["image/png", "image/jpeg", "image/webp", "image/avif"]),
+};
 function bytesStartWith(bytes, signature, offset = 0) {
   return signature.every((value, index) => bytes[offset + index] === value);
 }
@@ -23,6 +35,9 @@ export function matchesFileSignature(bytes, mimeType) {
     case "image/avif":
       return bytesStartWith(bytes, [0x66, 0x74, 0x79, 0x70], 4)
         && ["avif", "avis"].includes(new TextDecoder().decode(bytes.slice(8, 12)));
+    case "image/vnd.microsoft.icon":
+    case "image/x-icon":
+      return bytesStartWith(bytes, [0x00, 0x00, 0x01, 0x00]);
     default:
       return false;
   }
@@ -97,7 +112,7 @@ async function readResponseWithLimit(response) {
   return bytes;
 }
 
-export async function fetchRemoteImage(value) {
+export async function fetchRemoteImage(value, role = "icon") {
   let url = parseRemoteImageUrl(value);
   if (!url) throw new Error("Use a public HTTPS image URL.");
   const sourceUrl = url.toString();
@@ -117,8 +132,10 @@ export async function fetchRemoteImage(value) {
     }
     if (!response.ok) throw new Error(`The image server returned HTTP ${response.status}.`);
     const mimeType = response.headers.get("content-type")?.split(";", 1)[0].trim().toLowerCase() ?? "";
-    if (!allowedImageTypes.has(mimeType)) {
-      throw new Error("The URL does not return a supported PNG, JPEG, WebP, or AVIF image.");
+    if (!allowedImageTypes[role]?.has(mimeType)) {
+      throw new Error(role === "icon"
+        ? "The URL does not return a supported PNG, JPEG, WebP, AVIF, or ICO image."
+        : "The URL does not return a supported PNG, JPEG, WebP, or AVIF image.");
     }
     if (Number(response.headers.get("content-length") ?? 0) > MAX_UPLOAD_BYTES) {
       throw new Error("The remote image is larger than the 10 MB limit.");
@@ -143,7 +160,20 @@ function webpFileName(fileName) {
 }
 
 export async function prepareLocalMedia(appId, role, sourceUrl, altText) {
-  const source = await fetchRemoteImage(sourceUrl);
+  let source = await fetchRemoteImage(sourceUrl, role);
+  if (["image/vnd.microsoft.icon", "image/x-icon"].includes(source.mimeType)) {
+    const images = await decodeIco(source.bytes, "image/png");
+    const largest = images.toSorted((left, right) =>
+      (right.width * right.height) - (left.width * left.height) || right.bpp - left.bpp
+    )[0];
+    if (!largest) throw new Error("The ICO file does not contain a decodable image.");
+    source = {
+      ...source,
+      bytes: new Uint8Array(largest.buffer),
+      mimeType: "image/png",
+      fileName: `${source.fileName.replace(/\.ico$/i, "") || "icon"}.png`,
+    };
+  }
   const pipeline = sharp(source.bytes, { animated: false }).rotate();
   const metadata = await pipeline.metadata();
   const transformed = await pipeline.clone().webp({ quality: role === "icon" ? 92 : 88 }).toBuffer({ resolveWithObject: true });

@@ -129,7 +129,7 @@
   .deals-featured-app strong { min-width: 4.7rem; }
   .deals-featured-app strong > span { font-size: 0.68rem; }
   .deals-heading { padding: 3.5rem 0 2rem; }
-  .deals-heading h2 { align-items: center; flex-direction: column; gap: 0.55rem; }
+  .deals-heading h2 { align-items: flex-start; flex-direction: column; gap: 0.55rem; }
   .deals-heading h2 > span { font-size: clamp(2.1rem, 10vw, 3rem); }
   .deals-heading h2 > em { font-size: clamp(1.3rem, 6vw, 1.8rem); }
   .deals-grid { grid-template-columns: 1fr; }

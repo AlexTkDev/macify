@@ -2,6 +2,7 @@ import { allowedImageTypes, MAX_UPLOAD_BYTES, type MediaRole, type PreparedMedia
 import { bytesToHex, matchesFileSignature, safeFileName } from "@/lib/media-validation";
 import { fetchRemoteImage } from "@/lib/remote-image";
 import { optimizeImage } from "@/lib/image-optimization";
+import { normalizeIcoSource } from "@/lib/ico";
 
 export type { MediaRole, PreparedMedia } from "@/lib/media-types";
 
@@ -27,6 +28,15 @@ export async function prepareMediaSource(
     source = { bytes, mimeType: file.type, fileName: file.name, sourceUrl: null };
   } else {
     return { ok: false, error: "Choose a file or enter an image URL." } as const;
+  }
+
+  try {
+    source = await normalizeIcoSource(source);
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "The ICO file could not be decoded.",
+    } as const;
   }
 
   const optimized = await optimizeImage(images, role, source);

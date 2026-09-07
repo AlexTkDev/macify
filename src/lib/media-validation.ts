@@ -12,6 +12,9 @@ export function matchesFileSignature(bytes: Uint8Array, mimeType: string) {
       return bytesStartWith(bytes, [0x52, 0x49, 0x46, 0x46]) && bytesStartWith(bytes, [0x57, 0x45, 0x42, 0x50], 8);
     case "image/avif":
       return bytesStartWith(bytes, [0x66, 0x74, 0x79, 0x70], 4) && ["avif", "avis"].includes(new TextDecoder().decode(bytes.slice(8, 12)));
+    case "image/vnd.microsoft.icon":
+    case "image/x-icon":
+      return bytesStartWith(bytes, [0x00, 0x00, 0x01, 0x00]);
     default:
       return false;
   }

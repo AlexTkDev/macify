@@ -1,8 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { parseRemoteImageUrl as parseLocalRemoteImageUrl } from "../lib/local-media.mjs";
-import { parseRemoteImageUrl as parseWorkerRemoteImageUrl } from "../../src/lib/media-validation.ts";
+import {
+  matchesFileSignature as matchesLocalFileSignature,
+  parseRemoteImageUrl as parseLocalRemoteImageUrl,
+} from "../lib/local-media.mjs";
+import {
+  matchesFileSignature as matchesWorkerFileSignature,
+  parseRemoteImageUrl as parseWorkerRemoteImageUrl,
+} from "../../src/lib/media-validation.ts";
 
 const parsers = [
   ["Worker", parseWorkerRemoteImageUrl],
@@ -31,5 +37,22 @@ for (const [name, parseRemoteImageUrl] of parsers) {
     ]) {
       assert.equal(parseRemoteImageUrl(value), null, value);
     }
+  });
+}
+
+for (const [name, matchesFileSignature] of [
+  ["Worker", matchesWorkerFileSignature],
+  ["local sync", matchesLocalFileSignature],
+]) {
+  test(`${name} accepts ICO signatures for common MIME types`, () => {
+    const ico = new Uint8Array([0x00, 0x00, 0x01, 0x00, 0x01, 0x00]);
+    assert.equal(matchesFileSignature(ico, "image/vnd.microsoft.icon"), true);
+    assert.equal(matchesFileSignature(ico, "image/x-icon"), true);
+  });
+
+  test(`${name} rejects cursor and malformed files declared as ICO`, () => {
+    const cursor = new Uint8Array([0x00, 0x00, 0x02, 0x00, 0x01, 0x00]);
+    assert.equal(matchesFileSignature(cursor, "image/vnd.microsoft.icon"), false);
+    assert.equal(matchesFileSignature(new Uint8Array([0x00, 0x00]), "image/x-icon"), false);
   });
 }

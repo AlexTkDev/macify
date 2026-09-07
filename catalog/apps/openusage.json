@@ -24,7 +24,7 @@
       "altText": "OpenUsage application icon"
     },
     "preview": {
-      "sourceUrl": "https://raw.githubusercontent.com/robinebers/openusage/main/assets/screenshot.jpg",
+      "sourceUrl": "https://github.com/robinebers/openusage/blob/main/assets/screenshot.jpg?raw=true",
       "altText": "OpenUsage for macOS showing Codex, Claude, and Cursor usage limits in its menu-bar dashboard"
     },
     "screenshots": []

@@ -93,7 +93,15 @@ export function DealsSection({ deals }: { deals: ActiveDeal[] }) {
         </div>
       </header>
       <div className="deals-heading" id="handpicked-deals">
-        <h2><span>Handpicked deals.</span><em>At a friendlier price.</em></h2>
+        <h2>
+          <span>Handpicked deals.</span>
+          <em>
+            At a friendlier price.
+            <svg aria-hidden="true" className="deals-heading-squiggle" focusable="false" preserveAspectRatio="none" viewBox="0 0 242 20">
+              <path d="M1 10c8-8 16-8 24 0s16 6 24 0 16-7 24 0 16 8 24 0 16-6 24 0 16 7 24 0 16-8 24 0 16 6 24 0 16-7 24 0 16 8 24 0" vectorEffect="non-scaling-stroke" />
+            </svg>
+          </em>
+        </h2>
       </div>
       <div className="deals-grid">
         {deals.map((deal) => (
