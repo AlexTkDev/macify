@@ -1,6 +1,7 @@
 name: Catalogue
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - "catalog/apps/**"
@@ -10,6 +11,7 @@ on:
     paths:
       - "catalog/apps/**"
       - "catalog/deals/**"
+      - "scripts/sync-catalogue-changes.mjs"
 
 permissions:
   contents: read
@@ -45,7 +47,8 @@ jobs:
       - run: node scripts/validate-catalogue.mjs
 
   sync:
-    if: github.event_name == 'push'
+    # Reconcile valid files even when a different manifest fails validation.
+    if: ${{ always() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
     needs: validate
     runs-on: ubuntu-latest
     steps:
@@ -61,4 +64,4 @@ jobs:
         env:
           CATALOG_SYNC_SECRET: ${{ secrets.CATALOG_SYNC_SECRET }}
           CATALOG_SYNC_URL: ${{ secrets.CATALOG_SYNC_URL }}
-        run: node scripts/sync-catalogue-changes.mjs "${{ github.event.before }}" "${{ github.sha }}"
+        run: node scripts/sync-catalogue-changes.mjs "${{ github.event.before || github.sha }}" "${{ github.sha }}"

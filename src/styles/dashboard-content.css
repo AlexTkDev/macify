@@ -107,6 +107,7 @@
 .catalogue-revision-meta span[data-status="pending"] { color: #72571c; background: #fff2c9; }
 .catalogue-revision-meta span[data-status="published"] { color: #176543; background: #e0f2e8; }
 .catalogue-revision-meta span[data-status="failed"], .catalogue-revision-meta span[data-status="rejected"] { color: var(--danger); background: var(--danger-soft); }
+.catalogue-revision-meta span[data-status="resolved"], .catalogue-revision-meta span[data-status="dismissed"], .catalogue-revision-meta span[data-status="superseded"] { color: #425166; background: #e9edf3; }
 .catalogue-revision-actions, .catalogue-revision-actions form { display: flex; align-items: center; gap: .55rem; }
 
 .catalogue-review-layout { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; align-items: start; gap: 1.25rem; }

@@ -22,7 +22,7 @@ export const catalogueRevisions = sqliteTable(
     appId: text("app_id").references(() => apps.id, { onDelete: "set null" }),
     appSlug: text("app_slug").notNull(),
     changeType: text("change_type", { enum: ["create", "update", "archive"] }).notNull(),
-    status: text("status", { enum: ["pending", "published", "rejected", "failed"] }).notNull().default("pending"),
+    status: text("status", { enum: ["pending", "published", "rejected", "failed", "resolved", "dismissed", "superseded"] }).notNull().default("pending"),
     sourceRepository: text("source_repository").notNull(),
     sourcePath: text("source_path").notNull(),
     sourceCommitSha: text("source_commit_sha").notNull(),

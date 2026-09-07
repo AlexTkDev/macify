@@ -7,6 +7,9 @@ export const revisionStatusLabels: Record<Revision["status"], string> = {
   published: "Published",
   rejected: "Rejected",
   failed: "Sync failed",
+  resolved: "Resolved",
+  dismissed: "Dismissed",
+  superseded: "Superseded",
 };
 
 export const revisionChangeLabels: Record<Revision["changeType"], string> = {

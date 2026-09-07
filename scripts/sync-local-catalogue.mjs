@@ -11,6 +11,7 @@ import { MAX_APPLICATION_MEDIA_BYTES, prepareLocalMedia } from "./lib/local-medi
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalogueDirectory = path.join(root, "catalog", "apps");
+const dealsDirectory = path.join(root, "catalog", "deals");
 const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
 const wranglerConfigPath = path.join(root, "wrangler.jsonc");
 const now = Date.now();
@@ -157,6 +158,10 @@ const manifests = readdirSync(catalogueDirectory)
   .filter((file) => file.endsWith(".json"))
   .sort()
   .map((file) => JSON.parse(readFileSync(path.join(catalogueDirectory, file), "utf8")));
+const dealManifests = readdirSync(dealsDirectory)
+  .filter((file) => file.endsWith(".json"))
+  .sort()
+  .map((file) => JSON.parse(readFileSync(path.join(dealsDirectory, file), "utf8")));
 const existingApps = query("SELECT id, slug FROM apps");
 const appIds = new Map(existingApps.map(({ id, slug }) => [slug, id]));
 for (const manifest of manifests) {
@@ -195,6 +200,15 @@ for (const manifest of manifests) {
 }
 
 statements.push("DELETE FROM deals;");
+for (const deal of dealManifests) {
+  const appId = appIds.get(deal.appSlug);
+  statements.push(`INSERT INTO deals (
+    id, app_id, discount_percent, code, url, starts_at, ends_at, created_at, updated_at
+  ) VALUES (
+    ${sql(stableId("local-deal", deal.appSlug))}, ${sql(appId)}, ${deal.discountPercent},
+    ${sql(deal.code)}, ${sql(deal.url)}, ${Date.parse(deal.startsAt)}, ${Date.parse(deal.endsAt)}, ${now}, ${now}
+  );`);
+}
 
 const manifestSlugs = manifests.map(({ slug }) => slug);
 statements.push(`UPDATE apps SET status = 'archived', updated_at = ${now}
@@ -374,11 +388,11 @@ const expectedMedia = manifests.reduce((total, manifest) => total + manifestMedi
 if (Number(summary.published) !== manifests.length
   || Number(summary.with_privacy) !== manifests.length
   || Number(summary.with_pricing) !== manifests.length
-  || Number(dealSummary.count) !== 0
+  || Number(dealSummary.count) !== dealManifests.length
   || Number(mediaSummary.count) !== expectedMedia) {
   throw new Error(`Local catalogue verification failed: ${JSON.stringify({ summary, dealSummary, mediaSummary })}`);
 }
 
-console.log(`Synchronized ${manifests.length} applications and cleared local deal data.`);
+console.log(`Synchronized ${manifests.length} applications and ${dealManifests.length} deals.`);
 console.log(`Media: ${reusedMedia} reused, ${storedMedia} stored, ${removedMedia} removed from local R2.`);
 console.log(`Backup: ${path.relative(root, backupPath)}`);

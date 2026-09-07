@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, isNull } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, lte, ne } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { apps, catalogueRevisions, deals, mediaAssets } from "@/db/schema";
 import type { CataloguePreparedMedia } from "@/db/schema-catalogue";
@@ -14,6 +14,7 @@ type CatalogueSyncItem = {
   changeType: "upsert" | "delete";
   path: string;
   manifest?: unknown;
+  sourceError?: string;
 };
 
 export async function ingestCatalogueItem(
@@ -38,7 +39,7 @@ async function ingestApplicationItem(
   const pathSlug = item.path.slice("catalog/apps/".length, -".json".length);
   const database = await getDatabase();
   const duplicate = await database
-    .select({ id: catalogueRevisions.id, status: catalogueRevisions.status })
+    .select({ id: catalogueRevisions.id, status: catalogueRevisions.status, createdAt: catalogueRevisions.createdAt })
     .from(catalogueRevisions)
     .where(and(
       eq(catalogueRevisions.sourceCommitSha, source.commitSha),
@@ -46,6 +47,7 @@ async function ingestApplicationItem(
     ))
     .limit(1);
   if (duplicate[0] && duplicate[0].status !== "failed") {
+    await resolveOlderFailures(database, item.path, duplicate[0].createdAt);
     return { ok: true, duplicate: true, revisionId: duplicate[0].id } as const;
   }
   const retryRevisionId = duplicate[0]?.id;
@@ -57,9 +59,14 @@ async function ingestApplicationItem(
     .limit(1);
 
   if (item.changeType === "delete") {
-    if (!current[0]) return { ok: true, ignored: true, reason: "Application does not exist." } as const;
+    if (!current[0]) {
+      await resolveOlderFailures(database, item.path);
+      return { ok: true, ignored: true, reason: "Application does not exist." } as const;
+    }
     const id = crypto.randomUUID();
-    await database.insert(catalogueRevisions).values({
+    const createdAt = new Date();
+    await database.batch([
+      database.insert(catalogueRevisions).values({
       id,
       appId: current[0].id,
       appSlug: pathSlug,
@@ -71,17 +78,39 @@ async function ingestApplicationItem(
       manifest: null,
       preparedMedia: [],
       errors: [],
-      createdAt: new Date(),
-    });
+      createdAt,
+      }),
+      resolveOlderFailuresQuery(database, item.path, createdAt),
+      supersedeOlderPendingQuery(database, item.path, id, createdAt),
+    ]);
     return { ok: true, revisionId: id } as const;
   }
 
   const parsed = catalogueManifestSchema.safeParse(item.manifest);
   if (!parsed.success || parsed.data.slug !== pathSlug) {
-    const details = parsed.success
+    const details = item.sourceError ? [item.sourceError] : parsed.success
       ? ["Manifest slug must match its filename."]
       : parsed.error.issues.map((issue) => `${issue.path.join(".") || "manifest"}: ${issue.message}`);
-    return { ok: false, status: 422, error: "Manifest validation failed.", details } as const;
+    const revisionId = retryRevisionId ?? crypto.randomUUID();
+    const createdAt = duplicate[0]?.createdAt ?? new Date();
+    const failedValues = {
+      appId: current[0]?.id ?? null,
+      appSlug: pathSlug,
+      changeType: current[0] ? "update" as const : "create" as const,
+      status: "failed" as const,
+      sourceRepository: source.repository,
+      sourcePath: item.path,
+      sourceCommitSha: source.commitSha,
+      manifestHash: await sha256Hex(JSON.stringify(item.manifest ?? null)),
+      manifest: manifestRecord(item.manifest),
+      preparedMedia: [],
+      errors: details,
+    };
+    const writeFailure = retryRevisionId
+      ? database.update(catalogueRevisions).set(failedValues).where(eq(catalogueRevisions.id, retryRevisionId))
+      : database.insert(catalogueRevisions).values({ id: revisionId, ...failedValues, createdAt });
+    await database.batch([writeFailure, supersedeOlderPendingQuery(database, item.path, revisionId, createdAt)]);
+    return { ok: false, status: 422, error: "Manifest validation failed.", details, revisionId } as const;
   }
 
   if (!current[0]) {
@@ -92,20 +121,24 @@ async function ingestApplicationItem(
   const canonicalManifest = JSON.stringify(parsed.data);
   const manifestHash = await sha256Hex(canonicalManifest);
   const unchanged = await database
-    .select({ id: catalogueRevisions.id })
+    .select({ id: catalogueRevisions.id, createdAt: catalogueRevisions.createdAt })
     .from(catalogueRevisions)
     .where(and(
       eq(catalogueRevisions.sourcePath, item.path),
       eq(catalogueRevisions.manifestHash, manifestHash),
-      inArray(catalogueRevisions.status, ["pending", "published"]),
+      inArray(catalogueRevisions.status, ["pending", "published", "rejected", "dismissed"]),
     ))
     .orderBy(desc(catalogueRevisions.createdAt))
     .limit(1);
-  if (unchanged[0]) return { ok: true, ignored: true, reason: "Manifest content is unchanged." } as const;
+  if (unchanged[0]) {
+    await resolveOlderFailures(database, item.path, unchanged[0].createdAt);
+    return { ok: true, ignored: true, reason: "Manifest content is unchanged." } as const;
+  }
 
   const revisionId = retryRevisionId ?? crypto.randomUUID();
   const prepared = await prepareRevisionMedia(parsed.data, current[0]?.id, revisionId, env);
   if (!prepared.ok) {
+    const createdAt = duplicate[0]?.createdAt ?? new Date();
     const failedValues = {
       appId: current[0]?.id ?? null,
       appSlug: pathSlug,
@@ -119,12 +152,10 @@ async function ingestApplicationItem(
       preparedMedia: [],
       errors: [prepared.error],
     };
-    if (retryRevisionId) await database.update(catalogueRevisions).set(failedValues).where(eq(catalogueRevisions.id, retryRevisionId));
-    else await database.insert(catalogueRevisions).values({
-      id: revisionId,
-      ...failedValues,
-      createdAt: new Date(),
-    });
+    const writeFailure = retryRevisionId
+      ? database.update(catalogueRevisions).set(failedValues).where(eq(catalogueRevisions.id, retryRevisionId))
+      : database.insert(catalogueRevisions).values({ id: revisionId, ...failedValues, createdAt });
+    await database.batch([writeFailure, supersedeOlderPendingQuery(database, item.path, revisionId, createdAt)]);
     return { ok: false, status: 422, error: prepared.error, revisionId } as const;
   }
 
@@ -141,8 +172,26 @@ async function ingestApplicationItem(
     errors: [],
     status: "pending" as const,
   };
-  if (retryRevisionId) await database.update(catalogueRevisions).set(readyValues).where(eq(catalogueRevisions.id, retryRevisionId));
-  else await database.insert(catalogueRevisions).values({ id: revisionId, ...readyValues, createdAt: new Date() });
+  const createdAt = duplicate[0]?.createdAt ?? new Date();
+  const writeRevision = retryRevisionId
+    ? database.update(catalogueRevisions).set(readyValues).where(eq(catalogueRevisions.id, retryRevisionId))
+    : database.insert(catalogueRevisions).values({ id: revisionId, ...readyValues, createdAt });
+  try {
+    await database.batch([
+      writeRevision,
+      resolveOlderFailuresQuery(database, item.path, createdAt),
+      supersedeOlderPendingQuery(database, item.path, revisionId, createdAt),
+    ]);
+  } catch (error) {
+    if (prepared.storedKeys.length) {
+      try {
+        await env.MEDIA.delete(prepared.storedKeys);
+      } catch (cleanupError) {
+        console.error("Catalogue revision write failed and its prepared media could not be removed.", cleanupError);
+      }
+    }
+    throw error;
+  }
   return { ok: true, revisionId } as const;
 }
 
@@ -152,12 +201,13 @@ async function ingestDealItem(
 ) {
   const pathSlug = item.path.slice("catalog/deals/".length, -".json".length);
   const database = await getDatabase();
-  const duplicate = await database.select({ id: catalogueRevisions.id, status: catalogueRevisions.status })
+  const duplicate = await database.select({ id: catalogueRevisions.id, status: catalogueRevisions.status, createdAt: catalogueRevisions.createdAt })
     .from(catalogueRevisions).where(and(
       eq(catalogueRevisions.sourceCommitSha, source.commitSha),
       eq(catalogueRevisions.sourcePath, item.path),
     )).limit(1);
   if (duplicate[0] && duplicate[0].status !== "failed") {
+    await resolveOlderFailures(database, item.path, duplicate[0].createdAt);
     return { ok: true, duplicate: true, revisionId: duplicate[0].id } as const;
   }
   const retryRevisionId = duplicate[0]?.id;
@@ -170,9 +220,14 @@ async function ingestDealItem(
   const currentDeal = dealRows[0] ?? null;
 
   if (item.changeType === "delete") {
-    if (!currentDeal) return { ok: true, ignored: true, reason: "Deal does not exist." } as const;
+    if (!currentDeal) {
+      await resolveOlderFailures(database, item.path);
+      return { ok: true, ignored: true, reason: "Deal does not exist." } as const;
+    }
     const revisionId = crypto.randomUUID();
-    await database.insert(catalogueRevisions).values({
+    const createdAt = new Date();
+    await database.batch([
+      database.insert(catalogueRevisions).values({
       id: revisionId,
       appId,
       appSlug: pathSlug,
@@ -184,28 +239,53 @@ async function ingestDealItem(
       manifest: null,
       preparedMedia: [],
       errors: [],
-      createdAt: new Date(),
-    });
+      createdAt,
+      }),
+      resolveOlderFailuresQuery(database, item.path, createdAt),
+      supersedeOlderPendingQuery(database, item.path, revisionId, createdAt),
+    ]);
     return { ok: true, revisionId } as const;
   }
 
   const parsed = dealManifestSchema.safeParse(item.manifest);
   if (!parsed.success || parsed.data.appSlug !== pathSlug) {
-    const details = parsed.success
+    const details = item.sourceError ? [item.sourceError] : parsed.success
       ? ["Deal appSlug must match its filename."]
       : parsed.error.issues.map((issue) => `${issue.path.join(".") || "manifest"}: ${issue.message}`);
-    return { ok: false, status: 422, error: "Deal manifest validation failed.", details } as const;
+    const revisionId = retryRevisionId ?? crypto.randomUUID();
+    const createdAt = duplicate[0]?.createdAt ?? new Date();
+    const failedValues = {
+      appId,
+      appSlug: pathSlug,
+      changeType: currentDeal ? "update" as const : "create" as const,
+      status: "failed" as const,
+      sourceRepository: source.repository,
+      sourcePath: item.path,
+      sourceCommitSha: source.commitSha,
+      manifestHash: await sha256Hex(JSON.stringify(item.manifest ?? null)),
+      manifest: manifestRecord(item.manifest),
+      preparedMedia: [],
+      errors: details,
+    };
+    const writeFailure = retryRevisionId
+      ? database.update(catalogueRevisions).set(failedValues).where(eq(catalogueRevisions.id, retryRevisionId))
+      : database.insert(catalogueRevisions).values({ id: revisionId, ...failedValues, createdAt });
+    await database.batch([writeFailure, supersedeOlderPendingQuery(database, item.path, revisionId, createdAt)]);
+    return { ok: false, status: 422, error: "Deal manifest validation failed.", details, revisionId } as const;
   }
 
   const canonicalManifest = JSON.stringify(parsed.data);
   const manifestHash = await sha256Hex(canonicalManifest);
-  const unchanged = await database.select({ id: catalogueRevisions.id }).from(catalogueRevisions)
+  const unchanged = await database.select({ id: catalogueRevisions.id, createdAt: catalogueRevisions.createdAt }).from(catalogueRevisions)
     .where(and(
       eq(catalogueRevisions.sourcePath, item.path),
       eq(catalogueRevisions.manifestHash, manifestHash),
-      inArray(catalogueRevisions.status, ["pending", "published"]),
+      inArray(catalogueRevisions.status, ["pending", "published", "rejected", "dismissed"]),
     )).orderBy(desc(catalogueRevisions.createdAt)).limit(1);
-  if (unchanged[0]) return { ok: true, ignored: true, reason: "Deal manifest content is unchanged." } as const;
+  if (unchanged[0]) {
+    await resolveOlderFailures(database, item.path, unchanged[0].createdAt);
+    return { ok: true, ignored: true, reason: "Deal manifest content is unchanged." } as const;
+  }
 
   const revisionId = retryRevisionId ?? crypto.randomUUID();
   const values = {
@@ -221,9 +301,56 @@ async function ingestDealItem(
     errors: [],
     status: "pending" as const,
   };
-  if (retryRevisionId) await database.update(catalogueRevisions).set(values).where(eq(catalogueRevisions.id, retryRevisionId));
-  else await database.insert(catalogueRevisions).values({ id: revisionId, ...values, createdAt: new Date() });
+  const createdAt = duplicate[0]?.createdAt ?? new Date();
+  const writeRevision = retryRevisionId
+    ? database.update(catalogueRevisions).set(values).where(eq(catalogueRevisions.id, retryRevisionId))
+    : database.insert(catalogueRevisions).values({ id: revisionId, ...values, createdAt });
+  await database.batch([
+    writeRevision,
+    resolveOlderFailuresQuery(database, item.path, createdAt),
+    supersedeOlderPendingQuery(database, item.path, revisionId, createdAt),
+  ]);
   return { ok: true, revisionId } as const;
+}
+
+async function resolveOlderFailures(
+  database: Awaited<ReturnType<typeof getDatabase>>,
+  sourcePath: string,
+  through: Date = new Date(),
+) {
+  await resolveOlderFailuresQuery(database, sourcePath, through);
+}
+
+function resolveOlderFailuresQuery(
+  database: Awaited<ReturnType<typeof getDatabase>>,
+  sourcePath: string,
+  through: Date,
+) {
+  return database.update(catalogueRevisions).set({ status: "resolved", reviewedAt: new Date() }).where(and(
+    eq(catalogueRevisions.sourcePath, sourcePath),
+    eq(catalogueRevisions.status, "failed"),
+    lte(catalogueRevisions.createdAt, through),
+  ));
+}
+
+function supersedeOlderPendingQuery(
+  database: Awaited<ReturnType<typeof getDatabase>>,
+  sourcePath: string,
+  currentRevisionId: string,
+  through: Date,
+) {
+  return database.update(catalogueRevisions).set({ status: "superseded", reviewedAt: new Date() }).where(and(
+    eq(catalogueRevisions.sourcePath, sourcePath),
+    eq(catalogueRevisions.status, "pending"),
+    ne(catalogueRevisions.id, currentRevisionId),
+    lte(catalogueRevisions.createdAt, through),
+  ));
+}
+
+function manifestRecord(value: unknown) {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : null;
 }
 
 async function prepareRevisionMedia(
@@ -290,7 +417,7 @@ async function prepareRevisionMedia(
     if (newlyStoredKeys.length) await env.MEDIA.delete(newlyStoredKeys);
     return { ok: false, error: error instanceof Error ? error.message : "Media preparation failed." } as const;
   }
-  return { ok: true, media: prepared } as const;
+  return { ok: true, media: prepared, storedKeys: newlyStoredKeys } as const;
 }
 
 async function sha256Hex(value: string) {

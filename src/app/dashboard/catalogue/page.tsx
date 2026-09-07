@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { desc, sql } from "drizzle-orm";
 import { AlertTriangle, CheckCircle2, GitBranch, PlusCircle, RefreshCcw } from "lucide-react";
+import { dismissCatalogueFailure, retryCatalogueFailure } from "@/app/dashboard/catalogue/actions";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
 import { catalogueRevisions } from "@/db/schema";
@@ -25,6 +26,8 @@ const errorMessages: Record<string, string> = {
   "missing-deal-app": "Publish the application before publishing its deal.",
   "invalid-deal-manifest": "The stored deal manifest is invalid and cannot be published.",
   "stale-revision": "A newer revision exists for this application. Review the newest revision instead.",
+  "not-failed": "That synchronization failure is no longer unresolved.",
+  "retry-failed": "Synchronization failed again. Open the revision to review the latest error.",
 };
 
 type View = "pending" | "history" | "failed";
@@ -32,7 +35,7 @@ type View = "pending" | "history" | "failed";
 export default async function CatalogueReviewPage({
   searchParams,
 }: {
-  searchParams: Promise<{ published?: string; rejected?: string; error?: string; view?: string }>;
+  searchParams: Promise<{ published?: string; rejected?: string; dismissed?: string; retried?: string; error?: string; view?: string }>;
 }) {
   const query = await searchParams;
   const view: View = query.view === "history" || query.view === "failed" ? query.view : "pending";
@@ -49,7 +52,7 @@ export default async function CatalogueReviewPage({
   const revisions = recentRevisions.filter((revision) => (
     view === "pending" ? revision.status === "pending"
       : view === "failed" ? revision.status === "failed"
-        : revision.status === "published" || revision.status === "rejected"
+        : ["published", "rejected", "resolved", "dismissed", "superseded"].includes(revision.status)
   )).slice(0, 100);
   const applications = await getCatalogueQueueApplications(
     revisions.flatMap(({ appId }) => appId ? [appId] : []),
@@ -75,6 +78,8 @@ export default async function CatalogueReviewPage({
 
       {query.published === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Revision published.</div>}
       {query.rejected === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Revision rejected. The public listing was not changed.</div>}
+      {query.dismissed === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Failure dismissed and retained in history.</div>}
+      {query.retried === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Synchronization succeeded. The revision is ready for review.</div>}
       {query.error && <div className="form-error" role="alert">{errorMessages[query.error] ?? "The revision could not be reviewed."}</div>}
 
       <section className="dashboard-panel catalogue-queue-panel" aria-labelledby="revisions-heading">
@@ -92,8 +97,12 @@ export default async function CatalogueReviewPage({
         {revisions.length === 0 ? (
           <div className="catalogue-queue-empty">
             <CheckCircle2 aria-hidden="true" size={24} />
-            <strong>{view === "pending" ? "Everything is reviewed" : "No revisions in this view"}</strong>
-            <span>{view === "pending" ? "New merged GitHub changes will appear here automatically." : "Choose another queue view to continue."}</span>
+            <strong>{view === "pending" ? "Everything is reviewed" : view === "failed" ? "No unresolved failures" : "No revisions in this view"}</strong>
+            <span>{view === "pending"
+              ? "New merged GitHub changes will appear here automatically."
+              : view === "failed"
+                ? "Resolved and dismissed failures remain available in history."
+                : "Choose another queue view to continue."}</span>
           </div>
         ) : (
           <div className="catalogue-revision-list">
@@ -109,7 +118,9 @@ export default async function CatalogueReviewPage({
               const changeLabel = isDeal ? dealChangeLabel(revision.changeType) : revisionChangeLabels[revision.changeType];
               const summary = revision.status === "pending"
                 ? isDeal ? summarizeDealRevision(dealManifest, revision.changeType) : summarizeRevision(manifest, current ?? null, revision.preparedMedia)
-                : `${changeLabel} revision ${revisionStatusLabels[revision.status].toLowerCase()}.`;
+                : revision.status === "failed"
+                  ? revision.errors[0] ?? `${changeLabel} could not be synchronized.`
+                  : `${changeLabel} revision ${revisionStatusLabels[revision.status].toLowerCase()}.`;
               return (
                 <article className="catalogue-revision" key={revision.id}>
                   <div className="catalogue-revision-identity">
@@ -129,6 +140,18 @@ export default async function CatalogueReviewPage({
                   </div>
                   <div className="catalogue-revision-actions">
                     {revision.appId && <Link className="button-secondary" href={`/dashboard/apps/${revision.appId}`}>Current listing</Link>}
+                    {revision.status === "failed" && (
+                      <>
+                        <form action={retryCatalogueFailure}>
+                          <input name="revisionId" type="hidden" value={revision.id} />
+                          <button className="button-primary" type="submit">Retry synchronization</button>
+                        </form>
+                        <form action={dismissCatalogueFailure}>
+                          <input name="revisionId" type="hidden" value={revision.id} />
+                          <button className="button-secondary" type="submit">Dismiss failure</button>
+                        </form>
+                      </>
+                    )}
                     <Link className={revision.status === "pending" ? "button-primary" : "button-secondary"} href={`/dashboard/catalogue/${revision.id}`}>
                       {revision.status === "pending" ? "Review changes" : "View revision"}
                     </Link>
@@ -203,8 +226,8 @@ function viewDescription(view: View) {
   return view === "pending"
     ? "Newest proposed changes appear first. Nothing here is public until you publish it."
     : view === "history"
-      ? "Previously published and rejected revisions remain available for audit."
-      : "These revisions could not be prepared for review and need a corrected GitHub manifest.";
+      ? "Published, rejected, resolved, dismissed, and superseded revisions remain available for audit."
+      : "Only unresolved failures appear here. A later successful sync resolves an older failure automatically; dismiss one when no retry is needed.";
 }
 
 function mediaUrl(storageKey: string) {

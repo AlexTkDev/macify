@@ -16,6 +16,7 @@ const requestSchema = z.object({
     changeType: z.enum(["upsert", "delete"]),
     path: z.string(),
     manifest: z.unknown().optional(),
+    sourceError: z.string().max(500).optional(),
   })).length(1),
 });
 

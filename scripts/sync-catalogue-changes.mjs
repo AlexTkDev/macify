@@ -2,7 +2,7 @@
 
 import { createHmac } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 
 const [baseSha, commitSha] = process.argv.slice(2);
 const endpoint = process.env.CATALOG_SYNC_URL;
@@ -14,26 +14,43 @@ if (!baseSha || !commitSha || !endpoint || !secret || !repository) {
 
 const changes = execFileSync("git", ["diff", "--name-status", "--find-renames", baseSha, commitSha, "--", "catalog/apps", "catalog/deals"], { encoding: "utf8" })
   .trim().split("\n").filter(Boolean);
-const items = [];
+const deletedPaths = new Set();
 for (const line of changes) {
   const [status, ...paths] = line.split("\t");
-  const path = paths.at(-1);
-  if (!path?.endsWith(".json")) continue;
-  if (status.startsWith("D")) items.push({ changeType: "delete", path });
-  if (!status.startsWith("D")) {
-    items.push({ changeType: "upsert", path, manifest: JSON.parse(await readFile(path, "utf8")) });
-  }
+  if (status.startsWith("D") && paths[0]?.endsWith(".json")) deletedPaths.add(paths[0]);
+  if (status.startsWith("R") && paths[0]?.endsWith(".json")) deletedPaths.add(paths[0]);
 }
 
-if (items.length === 0) {
-  console.log("No catalogue manifest changes to synchronize.");
-  process.exit(0);
+const manifestPaths = [];
+for (const directory of ["catalog/apps", "catalog/deals"]) {
+  const files = await readdir(directory, { withFileTypes: true });
+  for (const file of files) {
+    if (file.isFile() && file.name.endsWith(".json")) manifestPaths.push(`${directory}/${file.name}`);
+  }
 }
+manifestPaths.sort();
+
+const items = [
+  ...[...deletedPaths].sort().map((path) => ({ changeType: "delete", path })),
+  ...manifestPaths.map((path) => ({ changeType: "upsert", path })),
+];
 
 let failed = 0;
 for (const item of items) {
   try {
-    const body = JSON.stringify({ repository, commitSha, items: [item] });
+    let syncItem = item;
+    if (item.changeType === "upsert") {
+      try {
+        syncItem = { ...item, manifest: JSON.parse(await readFile(item.path, "utf8")) };
+      } catch (error) {
+        syncItem = {
+          ...item,
+          manifest: null,
+          sourceError: `JSON parsing failed: ${error instanceof Error ? error.message : "Invalid JSON."}`,
+        };
+      }
+    }
+    const body = JSON.stringify({ repository, commitSha, items: [syncItem] });
     const signature = createHmac("sha256", secret).update(body).digest("hex");
     const response = await fetch(endpoint, {
       method: "POST",
@@ -44,7 +61,11 @@ for (const item of items) {
       const details = (await response.text()).slice(0, 2_000);
       throw new Error(`HTTP ${response.status}: ${details}`);
     }
-    console.log(`Synchronized ${item.path} as a pending editorial revision.`);
+    const payload = await response.json();
+    const result = payload.results?.[0]?.result;
+    if (result?.ignored) console.log(`Checked ${item.path}: ${result.reason}`);
+    else if (result?.duplicate) console.log(`Checked ${item.path}: revision already recorded.`);
+    else console.log(`Queued ${item.path} for editorial review.`);
   } catch (error) {
     failed += 1;
     console.error(`${item.path}: ${error instanceof Error ? error.message : "Catalogue synchronization failed."}`);
@@ -55,5 +76,5 @@ if (failed > 0) {
   console.error(`Catalogue synchronization completed with ${failed} failure(s) and ${items.length - failed} success(es).`);
   process.exitCode = 1;
 } else {
-  console.log(`Synchronized ${items.length} catalogue change(s) as pending editorial revisions.`);
+  console.log(`Catalogue reconciliation checked ${items.length} manifest(s).`);
 }

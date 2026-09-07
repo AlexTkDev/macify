@@ -10,7 +10,7 @@ import {
   ListChecks,
   TicketPercent,
 } from "lucide-react";
-import { decideCatalogueRevision } from "@/app/dashboard/catalogue/actions";
+import { decideCatalogueRevision, dismissCatalogueFailure, retryCatalogueFailure } from "@/app/dashboard/catalogue/actions";
 import { CatalogueChangeReview } from "@/components/catalogue-change-review";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
@@ -100,16 +100,30 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
         <aside className="catalogue-review-sidebar" aria-label="Review decision">
           <section className="dashboard-panel catalogue-decision-panel">
             <p className="section-kicker">Decision</p>
-            <h2>{revision.status === "pending" ? "Ready for review" : `Revision ${revisionStatusLabels[revision.status].toLowerCase()}`}</h2>
+            <h2>{revision.status === "pending" ? "Ready for review" : revision.status === "failed" ? "Synchronization failed" : `Revision ${revisionStatusLabels[revision.status].toLowerCase()}`}</h2>
             <p>{revision.status === "pending"
               ? "Publishing replaces the current public listing with the proposed values and prepared media. Rejecting keeps the current listing unchanged."
-              : `This revision was reviewed${revision.reviewedAt ? ` on ${revision.reviewedAt.toLocaleString()}` : ""}.`}</p>
+              : revision.status === "failed"
+                ? "A later successful sync for this file will resolve this failure automatically. Dismiss it if no retry is needed."
+                : `This revision was closed${revision.reviewedAt ? ` on ${revision.reviewedAt.toLocaleString()}` : ""}.`}</p>
             {revision.status === "pending" && (
               <form action={decideCatalogueRevision} className="catalogue-review-decision">
                 <input name="revisionId" type="hidden" value={revision.id} />
                 <button className="button-primary" name="intent" type="submit" value="publish">{publishActionLabels[revision.changeType]}</button>
                 <button className="button-secondary button-danger" name="intent" type="submit" value="reject">Reject revision</button>
               </form>
+            )}
+            {revision.status === "failed" && (
+              <div className="catalogue-review-decision">
+                <form action={retryCatalogueFailure}>
+                  <input name="revisionId" type="hidden" value={revision.id} />
+                  <button className="button-primary" type="submit">Retry synchronization</button>
+                </form>
+                <form action={dismissCatalogueFailure}>
+                  <input name="revisionId" type="hidden" value={revision.id} />
+                  <button className="button-secondary" type="submit">Dismiss failure</button>
+                </form>
+              </div>
             )}
           </section>
           <section className="dashboard-panel catalogue-revision-context">
@@ -217,14 +231,30 @@ async function DealRevisionPage({
         <aside className="catalogue-review-sidebar" aria-label="Review decision">
           <section className="dashboard-panel catalogue-decision-panel">
             <p className="section-kicker">Decision</p>
-            <h2>{revision.status === "pending" ? "Ready for review" : `Revision ${revisionStatusLabels[revision.status].toLowerCase()}`}</h2>
-            <p>{revision.status === "pending" ? "Publishing updates the public deal. The application must be published first." : `This revision was reviewed${revision.reviewedAt ? ` on ${revision.reviewedAt.toLocaleString()}` : ""}.`}</p>
+            <h2>{revision.status === "pending" ? "Ready for review" : revision.status === "failed" ? "Synchronization failed" : `Revision ${revisionStatusLabels[revision.status].toLowerCase()}`}</h2>
+            <p>{revision.status === "pending"
+              ? "Publishing updates the public deal. The application must be published first."
+              : revision.status === "failed"
+                ? "A later successful sync for this file will resolve this failure automatically. Dismiss it if no retry is needed."
+                : `This revision was closed${revision.reviewedAt ? ` on ${revision.reviewedAt.toLocaleString()}` : ""}.`}</p>
             {revision.status === "pending" && (
               <form action={decideCatalogueRevision} className="catalogue-review-decision">
                 <input name="revisionId" type="hidden" value={revision.id} />
                 <button className="button-primary" name="intent" type="submit" value="publish">{publishLabel}</button>
                 <button className="button-secondary button-danger" name="intent" type="submit" value="reject">Reject revision</button>
               </form>
+            )}
+            {revision.status === "failed" && (
+              <div className="catalogue-review-decision">
+                <form action={retryCatalogueFailure}>
+                  <input name="revisionId" type="hidden" value={revision.id} />
+                  <button className="button-primary" type="submit">Retry synchronization</button>
+                </form>
+                <form action={dismissCatalogueFailure}>
+                  <input name="revisionId" type="hidden" value={revision.id} />
+                  <button className="button-secondary" type="submit">Dismiss failure</button>
+                </form>
+              </div>
             )}
           </section>
           <section className="dashboard-panel catalogue-revision-context">

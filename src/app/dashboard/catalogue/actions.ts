@@ -16,6 +16,7 @@ import {
   mediaAssets,
 } from "@/db/schema";
 import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
+import { ingestCatalogueItem } from "@/lib/catalogue-ingestion";
 import { dealManifestSchema } from "@/lib/deal-manifest";
 import { requireAdmin } from "@/lib/admin-auth";
 
@@ -23,6 +24,56 @@ const decisionSchema = z.object({
   revisionId: z.uuid(),
   intent: z.enum(["publish", "reject"]),
 });
+
+const failureActionSchema = z.object({ revisionId: z.uuid() });
+
+export async function retryCatalogueFailure(formData: FormData) {
+  await requireAdmin();
+  const parsed = failureActionSchema.safeParse({ revisionId: formData.get("revisionId") });
+  if (!parsed.success) redirect("/dashboard/catalogue?view=failed&error=invalid");
+
+  const database = await getDatabase();
+  const rows = await database.select().from(catalogueRevisions).where(and(
+    eq(catalogueRevisions.id, parsed.data.revisionId),
+    eq(catalogueRevisions.status, "failed"),
+  )).limit(1);
+  const revision = rows[0];
+  if (!revision || !revision.manifest) redirect("/dashboard/catalogue?view=failed&error=not-failed");
+
+  const { env } = await getCloudflareContext({ async: true });
+  const result = await ingestCatalogueItem({
+    changeType: "upsert",
+    path: revision.sourcePath,
+    manifest: revision.manifest,
+  }, {
+    repository: revision.sourceRepository,
+    commitSha: revision.sourceCommitSha,
+  }, env);
+
+  revalidatePath("/dashboard/catalogue");
+  revalidatePath(`/dashboard/catalogue/${revision.id}`);
+  if (!result.ok) redirect("/dashboard/catalogue?view=failed&error=retry-failed");
+  redirect("/dashboard/catalogue?retried=1");
+}
+
+export async function dismissCatalogueFailure(formData: FormData) {
+  await requireAdmin();
+  const parsed = failureActionSchema.safeParse({ revisionId: formData.get("revisionId") });
+  if (!parsed.success) redirect("/dashboard/catalogue?view=failed&error=invalid");
+
+  const database = await getDatabase();
+  const result = await database.update(catalogueRevisions).set({
+    status: "dismissed",
+    reviewedAt: new Date(),
+  }).where(and(
+    eq(catalogueRevisions.id, parsed.data.revisionId),
+    eq(catalogueRevisions.status, "failed"),
+  )).returning({ id: catalogueRevisions.id });
+  if (result.length === 0) redirect("/dashboard/catalogue?view=failed&error=not-failed");
+
+  revalidatePath("/dashboard/catalogue");
+  redirect("/dashboard/catalogue?view=failed&dismissed=1");
+}
 
 export async function decideCatalogueRevision(formData: FormData) {
   await requireAdmin();
@@ -51,18 +102,24 @@ export async function decideCatalogueRevision(formData: FormData) {
 
   if (parsed.data.intent === "reject") {
     const keys = [...new Set(revision.preparedMedia.map(({ storageKey }) => storageKey))];
+    const rejected = await database.update(catalogueRevisions).set({ status: "rejected", reviewedAt: new Date() })
+      .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending")))
+      .returning({ id: catalogueRevisions.id });
+    if (rejected.length === 0) redirect("/dashboard/catalogue?error=not-pending");
     if (keys.length) {
-      const referenced = await database.select({ storageKey: mediaAssets.storageKey }).from(mediaAssets)
-        .where(inArray(mediaAssets.storageKey, keys));
-      const referencedKeys = new Set(referenced.map(({ storageKey }) => storageKey));
-      const disposable = keys.filter((key) => !referencedKeys.has(key));
-      if (disposable.length) {
-        const { env } = await getCloudflareContext({ async: true });
-        await env.MEDIA.delete(disposable);
+      try {
+        const referenced = await database.select({ storageKey: mediaAssets.storageKey }).from(mediaAssets)
+          .where(inArray(mediaAssets.storageKey, keys));
+        const referencedKeys = new Set(referenced.map(({ storageKey }) => storageKey));
+        const disposable = keys.filter((key) => !referencedKeys.has(key));
+        if (disposable.length) {
+          const { env } = await getCloudflareContext({ async: true });
+          await env.MEDIA.delete(disposable);
+        }
+      } catch (error) {
+        console.error("Rejected catalogue revision but could not remove its unreferenced media.", error);
       }
     }
-    await database.update(catalogueRevisions).set({ status: "rejected", reviewedAt: new Date() })
-      .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending")));
     revalidatePath("/dashboard/catalogue");
     redirect("/dashboard/catalogue?rejected=1");
   }
@@ -71,7 +128,7 @@ export async function decideCatalogueRevision(formData: FormData) {
     const applicationRows = await database.select({ id: apps.id, status: apps.status }).from(apps)
       .where(and(eq(apps.slug, revision.appSlug), isNull(apps.deletedAt))).limit(1);
     const application = applicationRows[0];
-    if (!application || application.status !== "published") {
+    if (!application || (revision.changeType !== "archive" && application.status !== "published")) {
       redirect("/dashboard/catalogue?error=missing-deal-app");
     }
 

@@ -27,10 +27,14 @@ An application record includes:
 - source status;
 - one to 12 focused categories;
 - optional YouTube URL;
-- mutual related-application links;
+- related-application links that display bidirectionally when declared by either application;
 - one icon, one main preview, and optional screenshots.
 
 The data model and public interface include preliminary support for verified, time-bounded deals. When no verified offer is active, the deals page presents an explicit empty state. Homepage inclusion is an independent editorial decision and does not affect whether an application remains listed.
+
+Catalogue synchronization failures remain visible until a later successful synchronization for the same file resolves them or an administrator dismisses them. Resolved and dismissed failures remain in review history for auditability.
+
+Each catalogue update reconciles every current application and deal manifest with the review system. Previously reviewed manifests are ignored by content hash, while a manifest that was missed or failed is queued or retried. A newer revision supersedes an older pending revision for the same path. Deleted and renamed manifests still create explicit removal revisions. Parsing and ingestion failures are isolated per file so one broken manifest cannot prevent valid records from reaching review.
 
 ## Media
 
