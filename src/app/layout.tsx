@@ -12,6 +12,7 @@ import "../styles/public-markdown.css";
 import "../styles/public-policy.css";
 import "../styles/responsive.css";
 import "../styles/responsive-small.css";
+import "../styles/public-footer-variants.css";
 
 const urbanist = Urbanist({
   subsets: ["latin"],

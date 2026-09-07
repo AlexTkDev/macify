@@ -13,13 +13,15 @@
   "youtubeUrl": null,
   "categories": [
     "ai",
-    "dictation-transcription"
+    "dictation",
+    "voice-control"
   ],
   "relatedAppSlugs": [
     "chatgpt",
     "claude",
     "spokenly",
     "superwhisper",
+    "voiceink",
     "wispr-flow"
   ],
   "media": {

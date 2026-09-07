@@ -13,11 +13,14 @@
   "youtubeUrl": null,
   "categories": [
     "ai",
+    "app-launchers",
     "automation",
-    "launchers-search"
+    "clipboard-managers",
+    "window-management"
   ],
   "relatedAppSlugs": [
     "alfred",
+    "bettertouchtool",
     "chatgpt",
     "paste",
     "pieoneer",

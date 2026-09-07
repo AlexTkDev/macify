@@ -4,7 +4,7 @@ import Script from "next/script";
 import { Plus, Shuffle } from "lucide-react";
 import { InlineAppSearch } from "@/components/inline-app-search";
 import { LiveVisitorCount } from "@/components/live-visitor-count";
-import { MacifyLogo } from "@/components/macify-logo";
+import { PublicFooter } from "@/components/public-footer";
 
 const contributionGuideUrl = "https://github.com/Beingpax/macify/blob/main/CONTRIBUTING.md";
 
@@ -39,43 +39,6 @@ function PublicHeader() {
         </div>
       </div>
     </header>
-  );
-}
-
-function PublicFooter() {
-  return (
-    <footer className="public-footer">
-      <div className="public-footer-panel">
-        <div className="public-footer-main">
-          <div className="public-footer-identity">
-            <MacifyLogo />
-            <p>Useful Mac applications, selected carefully and explained clearly.</p>
-          </div>
-          <div className="public-footer-links">
-            <nav aria-label="Explore Macify">
-              <p>Explore</p>
-              <Link href="/">Home</Link>
-              <Link href="/#all-apps">Browse apps</Link>
-              <Link href="/categories">Categories</Link>
-              <a href="/surprise">Surprise me</a>
-              <a href={contributionGuideUrl} target="_blank" rel="noreferrer">Submit an app</a>
-            </nav>
-            <nav aria-label="About Macify">
-              <p>About</p>
-              <Link href="/editorial-policy">Editorial policy</Link>
-              <Link href="/privacy">Privacy</Link>
-            </nav>
-          </div>
-        </div>
-        <p className="public-footer-affiliate">
-          Macify may earn a commission from qualifying purchases made through affiliate links on this website. <Link href="/privacy#affiliate-links">Learn about affiliate links</Link>.
-        </p>
-        <div className="public-footer-bottom">
-          <p>© 2026 Macify. Independent, carefully maintained, and made for Mac users.</p>
-          <p>Product names and artwork belong to their respective owners.</p>
-        </div>
-      </div>
-    </footer>
   );
 }
 

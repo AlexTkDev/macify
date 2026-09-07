@@ -12,15 +12,16 @@
   "sourceType": "closed_source",
   "youtubeUrl": null,
   "categories": [
-    "focus-wellbeing",
+    "distraction-blockers",
+    "focus-timers",
     "time-tracking"
   ],
   "relatedAppSlugs": [
     "balance",
     "chronoid",
     "cold-turkey-blocker",
-    "lookaway",
-    "sorted"
+    "dayflow",
+    "lookaway"
   ],
   "media": {
     "icon": {

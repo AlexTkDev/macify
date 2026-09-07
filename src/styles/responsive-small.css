@@ -136,29 +136,34 @@
   .deal-card { min-height: 12.5rem; padding: 1.35rem; gap: 1.6rem; }
   .directory-heading {
     margin-bottom: 2rem;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.75rem;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.6rem;
   }
   .directory-heading h2 {
     min-width: 0;
     max-width: none;
-    font-size: clamp(1.65rem, 8.25vw, 3rem);
+    font-size: clamp(1.35rem, 6.6vw, 1.75rem);
+    white-space: nowrap;
   }
   .directory-view-tabs {
+    flex: 0 0 auto;
     width: auto;
     min-height: 0;
-    padding: 0.2rem;
+    padding: 0.12rem;
   }
   .directory-view-tabs a {
-    width: auto;
-    height: auto;
+    width: 1.5rem;
+    height: 1.5rem;
     position: static;
-    padding: 0.48rem 0.7rem;
+    justify-content: center;
+    padding: 0;
     overflow: visible;
     clip: auto;
-    white-space: normal;
+    white-space: nowrap;
   }
+  .directory-view-tabs a > span:not(.directory-view-icon) { display: none; }
+  .directory-view-icon { width: 0.8rem; height: 0.8rem; }
   .category-index-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
   .category-index-grid a,
   .category-index-grid a:nth-child(n) { min-height: 9.5rem; padding: 1.05rem; grid-column: span 1; }

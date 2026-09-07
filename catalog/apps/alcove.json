@@ -12,12 +12,12 @@
   "sourceType": "closed_source",
   "youtubeUrl": null,
   "categories": [
+    "notch-utilities",
     "customization"
   ],
   "relatedAppSlugs": [
-    "dynamiclake",
     "droppy",
-    "wallspace"
+    "dynamiclake"
   ],
   "media": {
     "icon": {

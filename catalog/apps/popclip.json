@@ -12,7 +12,8 @@
   "sourceType": "closed_source",
   "youtubeUrl": null,
   "categories": [
-    "automation"
+    "automation",
+    "text-utilities"
   ],
   "relatedAppSlugs": [
     "antinote",

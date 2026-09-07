@@ -12,11 +12,10 @@
   "sourceType": "closed_source",
   "youtubeUrl": null,
   "categories": [
-    "bookmarks-knowledge"
+    "mind-mapping"
   ],
   "relatedAppSlugs": [
-    "obsidian",
-    "sketch"
+    "obsidian"
   ],
   "media": {
     "icon": {

@@ -12,7 +12,8 @@
   "sourceType": "closed_source",
   "youtubeUrl": null,
   "categories": [
-    "bookmarks-knowledge"
+    "bookmarks-read-later",
+    "knowledge-management"
   ],
   "relatedAppSlugs": [
     "anybox",

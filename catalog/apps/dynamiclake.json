@@ -12,10 +12,13 @@
   "sourceType": "closed_source",
   "youtubeUrl": "https://www.youtube.com/watch?v=S_18DQFhoME",
   "categories": [
-    "customization"
+    "customization",
+    "file-management",
+    "notch-utilities"
   ],
   "relatedAppSlugs": [
-    "alcove"
+    "alcove",
+    "droppy"
   ],
   "media": {
     "icon": {

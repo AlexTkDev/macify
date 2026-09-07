@@ -12,9 +12,12 @@
   "sourceType": "closed_source",
   "youtubeUrl": null,
   "categories": [
-    "file-transfer-downloads"
+    "file-transfer"
   ],
-  "relatedAppSlugs": [],
+  "relatedAppSlugs": [
+    "droppy",
+    "qspace"
+  ],
   "media": {
     "icon": {
       "sourceUrl": "https://blip.net/apple-touch-icon.png",

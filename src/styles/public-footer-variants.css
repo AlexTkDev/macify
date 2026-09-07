@@ -1,0 +1,211 @@
+.footer-lab {
+  margin-top: clamp(5rem, 8vw, 8rem);
+  background: var(--public-canvas);
+}
+
+.footer-lab-switcher {
+  width: min(calc(100% - var(--public-page-inset)), var(--content-width));
+  margin-inline: auto;
+  padding: 0.8rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--public-ink);
+}
+
+.footer-lab-switcher-copy { display: grid; gap: 0.08rem; }
+.footer-lab-switcher-copy span { color: var(--public-text-muted); font-size: 0.72rem; font-weight: 650; }
+.footer-lab-switcher-copy strong { font-size: 0.88rem; letter-spacing: -0.02em; }
+.footer-lab-options { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.3rem; }
+.footer-lab-options button {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--public-line);
+  border-radius: 0.45rem;
+  color: var(--public-text-secondary);
+  background: transparent;
+  font: 750 0.74rem/1 var(--font-body);
+  cursor: pointer;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+.footer-lab-options button:hover { color: var(--public-ink); background: var(--public-surface); transform: translateY(-0.08rem); }
+.footer-lab-options button:active { transform: translateY(0.02rem) scale(0.96); }
+.footer-lab-options button.is-active { border-color: var(--public-ink); color: white; background: var(--public-ink); }
+
+.public-footer {
+  --footer-bg: white;
+  --footer-ink: var(--public-ink);
+  --footer-muted: var(--public-text-secondary);
+  --footer-line: var(--public-line);
+  width: 100%;
+  margin-top: 0;
+  position: relative;
+  overflow: hidden;
+  border-top: 0;
+  color: var(--footer-ink);
+  background: var(--footer-bg);
+}
+.public-footer-panel { position: relative; z-index: 1; }
+.public-footer .brand { color: inherit; }
+.public-footer .brand-word { font-family: var(--font-urbanist), "Avenir Next", sans-serif; }
+.public-footer-identity > p,
+.public-footer-affiliate,
+.public-footer-bottom,
+.footer-lab-links a { color: var(--footer-muted); }
+.footer-lab-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+.footer-lab-links nav { display: flex; align-items: flex-start; flex-direction: column; gap: 0.66rem; }
+.footer-lab-links nav > p { margin: 0 0 0.25rem; color: var(--footer-ink); font-size: 0.78rem; font-weight: 800; }
+.footer-lab-links a { font-size: 0.84rem; font-weight: 600; transition: color 150ms ease, transform 150ms ease; }
+.footer-lab-links a:hover { color: var(--footer-ink); transform: translateX(0.1rem); }
+.footer-lab-submit {
+  width: max-content;
+  margin-top: 1.35rem;
+  padding-bottom: 0.18rem;
+  display: inline-flex;
+  gap: 0.45rem;
+  border-bottom: 1px solid currentColor;
+  color: var(--footer-ink);
+  font-size: 0.84rem;
+  font-weight: 750;
+}
+.footer-lab-submit span { transition: transform 160ms ease; }
+.footer-lab-submit:hover span { transform: translate(0.12rem, -0.12rem); }
+.public-footer-affiliate a { color: inherit; }
+.public-footer-bottom { border-color: var(--footer-line); }
+.footer-lab-decoration { display: none; }
+
+/* 01: a compact cobalt ribbon with the navigation running along its edge. */
+.public-footer[data-footer-variant="1"] {
+  --footer-bg: #1457ff; --footer-ink: #fff; --footer-muted: #dce6ff; --footer-line: #5d87ff;
+}
+.public-footer[data-footer-variant="1"] .public-footer-panel { padding-top: 3rem; }
+.public-footer[data-footer-variant="1"] .public-footer-main { grid-template-columns: minmax(20rem, 1fr) 1.2fr; align-items: end; }
+.public-footer[data-footer-variant="1"] .brand-word { font-size: clamp(3rem, 7vw, 6rem); letter-spacing: -0.04em; }
+.public-footer[data-footer-variant="1"] .public-footer-identity > p { max-width: 28rem; }
+.public-footer[data-footer-variant="1"] .footer-lab-links { padding-bottom: 0.5rem; }
+
+/* 02: a sunny playbill, centered and deliberately oversized. */
+.public-footer[data-footer-variant="2"] {
+  --footer-bg: #ffdc28; --footer-ink: #17140a; --footer-muted: #554b10; --footer-line: #b9a018;
+  text-align: center;
+}
+.public-footer[data-footer-variant="2"] .public-footer-panel { width: min(calc(100% - 2rem), 68rem); padding-top: clamp(4rem, 8vw, 7rem); }
+.public-footer[data-footer-variant="2"] .public-footer-main { display: flex; align-items: center; flex-direction: column; gap: 3.5rem; }
+.public-footer[data-footer-variant="2"] .brand-word { font-size: clamp(4rem, 12vw, 9rem); }
+.public-footer[data-footer-variant="2"] .public-footer-identity > p { margin-inline: auto; font-size: 1.1rem; }
+.public-footer[data-footer-variant="2"] .footer-lab-submit { margin-inline: auto; }
+.public-footer[data-footer-variant="2"] .footer-lab-links { width: min(100%, 44rem); }
+.public-footer[data-footer-variant="2"] .footer-lab-links nav { align-items: center; }
+.public-footer[data-footer-variant="2"] .public-footer-bottom { align-items: center; flex-direction: column; }
+
+/* 03: a quiet desktop dock floating over open white space. */
+.public-footer[data-footer-variant="3"] { --footer-bg: #f3f4f6; }
+.public-footer[data-footer-variant="3"] .public-footer-panel { padding-top: 5rem; }
+.public-footer[data-footer-variant="3"] .public-footer-main { padding: 1.5rem; align-items: center; border-radius: 1rem; background: white; box-shadow: 0 0.4rem 0.8rem rgb(29 36 48 / 0.08); }
+.public-footer[data-footer-variant="3"] .public-footer-identity { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 1.25rem; }
+.public-footer[data-footer-variant="3"] .public-footer-identity > p { margin: 0; }
+.public-footer[data-footer-variant="3"] .footer-lab-submit { grid-column: 2; margin-top: 0.5rem; }
+.public-footer[data-footer-variant="3"] .footer-lab-links nav > p { display: none; }
+.public-footer[data-footer-variant="3"] .footer-lab-links nav { flex-direction: row; flex-wrap: wrap; }
+
+/* 04: a hard two-color split, like two pieces of stationery meeting. */
+.public-footer[data-footer-variant="4"] { --footer-bg: #e5e9ff; --footer-ink: #241024; --footer-muted: #5f4660; --footer-line: #bebfe0; }
+.public-footer[data-footer-variant="4"]::after { content: ""; width: 43%; position: absolute; inset: 0 0 0 auto; background: #b7f2d4; }
+.public-footer[data-footer-variant="4"] .public-footer-main { grid-template-columns: 1.25fr 0.75fr; }
+.public-footer[data-footer-variant="4"] .brand-word { font-size: clamp(3.5rem, 9vw, 7rem); }
+.public-footer[data-footer-variant="4"] .footer-lab-links { padding-left: clamp(1rem, 5vw, 5rem); }
+
+/* 05: an indexed catalogue with one long typographic baseline. */
+.public-footer[data-footer-variant="5"] .public-footer-panel { padding-top: 2rem; }
+.public-footer[data-footer-variant="5"] .public-footer-main { display: flex; flex-direction: column; gap: 4rem; }
+.public-footer[data-footer-variant="5"] .public-footer-identity { display: grid; grid-template-columns: 1fr 1fr auto; align-items: end; gap: 2rem; }
+.public-footer[data-footer-variant="5"] .brand-word { font-size: clamp(4rem, 13vw, 10rem); }
+.public-footer[data-footer-variant="5"] .public-footer-identity > p { margin: 0 0 0.8rem; }
+.public-footer[data-footer-variant="5"] .footer-lab-submit { margin-bottom: 0.8rem; }
+.public-footer[data-footer-variant="5"] .footer-lab-links { display: flex; flex-wrap: wrap; gap: 0.6rem 1.25rem; border-top: 2px solid var(--footer-ink); padding-top: 1rem; }
+.public-footer[data-footer-variant="5"] .footer-lab-links nav { display: contents; }
+.public-footer[data-footer-variant="5"] .footer-lab-links nav > p { display: none; }
+
+/* 06: a periwinkle postcard with a playful stamp in the corner. */
+.public-footer[data-footer-variant="6"] { --footer-bg: #e5e9ff; --footer-ink: #151e58; --footer-muted: #4d5686; --footer-line: #b9c0e7; }
+.public-footer[data-footer-variant="6"] .public-footer-panel { width: min(calc(100% - 2rem), 76rem); margin-block: 2rem; padding: clamp(2.5rem, 5vw, 4.5rem); border: 2px solid #151e58; }
+.public-footer[data-footer-variant="6"] .brand-word { font-family: var(--font-caprasimo), var(--font-display); font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 400; }
+.public-footer[data-footer-variant="6"] .footer-lab-decoration { width: 5rem; height: 6rem; position: absolute; z-index: 2; top: 3.2rem; right: max(2rem, calc((100% - 72rem) / 2)); display: grid; place-items: center; border: 2px dashed #151e58; }
+.public-footer[data-footer-variant="6"] .footer-lab-decoration span:first-child { display: block; font: 400 2.4rem/1 var(--font-caprasimo), serif; }
+.public-footer[data-footer-variant="6"] .footer-lab-decoration span:not(:first-child) { display: none; }
+
+/* 07: color stickers pinned to a dark aubergine ground. */
+.public-footer[data-footer-variant="7"] { --footer-bg: #32102e; --footer-ink: #fff; --footer-muted: #ead8e7; --footer-line: #74446e; }
+.public-footer[data-footer-variant="7"] .public-footer-main { grid-template-columns: 0.8fr 1.2fr; }
+.public-footer[data-footer-variant="7"] .brand-word { font-size: clamp(3rem, 8vw, 6.5rem); }
+.public-footer[data-footer-variant="7"] .footer-lab-links nav { padding: 1.35rem; border-radius: 0.75rem; color: #111; transform: rotate(-1.25deg); }
+.public-footer[data-footer-variant="7"] .footer-lab-links nav:first-child { background: #ffdc28; }
+.public-footer[data-footer-variant="7"] .footer-lab-links nav:last-child { background: #b7f2d4; transform: translateY(1.5rem) rotate(1.25deg); }
+.public-footer[data-footer-variant="7"] .footer-lab-links nav > p,
+.public-footer[data-footer-variant="7"] .footer-lab-links a { color: #17140a; }
+
+/* 08: a looping word marquee, cropped like a passing train. */
+.public-footer[data-footer-variant="8"] { --footer-bg: #ff5b27; --footer-ink: #1b0903; --footer-muted: #552013; --footer-line: #bc3b15; }
+.public-footer[data-footer-variant="8"] .public-footer-panel { padding-top: clamp(7rem, 14vw, 12rem); }
+.public-footer[data-footer-variant="8"] .footer-lab-decoration { position: absolute; top: -0.22em; left: -0.04em; display: flex; gap: 0.3em; color: #fff; font: 400 clamp(6rem, 19vw, 16rem)/0.9 var(--font-caprasimo), serif; white-space: nowrap; opacity: 0.95; }
+.public-footer[data-footer-variant="8"] .footer-lab-decoration span:not(:first-child) { display: none; }
+.public-footer[data-footer-variant="8"] .footer-lab-decoration span:first-child::after { content: "acify · Macify · Macify"; }
+.public-footer[data-footer-variant="8"] .public-footer-main { align-items: end; }
+.public-footer[data-footer-variant="8"] .public-footer-identity .brand { display: none; }
+
+/* 09: a shallow shelf with navigation arranged as labelled objects. */
+.public-footer[data-footer-variant="9"] { --footer-bg: #fff; }
+.public-footer[data-footer-variant="9"] .public-footer-panel { padding-top: 5rem; }
+.public-footer[data-footer-variant="9"] .public-footer-main { grid-template-columns: 1fr 1.35fr; align-items: end; }
+.public-footer[data-footer-variant="9"] .brand-word { font-size: clamp(3rem, 7vw, 5.75rem); }
+.public-footer[data-footer-variant="9"] .footer-lab-links nav { min-height: 13rem; padding: 1.4rem; justify-content: flex-end; border-radius: 0.85rem 0.85rem 0 0; }
+.public-footer[data-footer-variant="9"] .footer-lab-links nav:first-child { background: #e5e9ff; }
+.public-footer[data-footer-variant="9"] .footer-lab-links nav:last-child { min-height: 16rem; background: #ffdc28; }
+.public-footer[data-footer-variant="9"] .public-footer-main { border-bottom: 0.7rem solid #32102e; }
+
+/* 10: a quiet blue nightcap with orbiting typographic marks. */
+.public-footer[data-footer-variant="10"] { --footer-bg: #101b3a; --footer-ink: #fff; --footer-muted: #bdc8e9; --footer-line: #33456f; }
+.public-footer[data-footer-variant="10"] .public-footer-panel { padding-block: clamp(5rem, 9vw, 8rem) 2rem; }
+.public-footer[data-footer-variant="10"] .public-footer-main { grid-template-columns: 1.25fr 0.75fr; }
+.public-footer[data-footer-variant="10"] .brand-word { font-family: var(--font-caprasimo), var(--font-display); font-size: clamp(4rem, 11vw, 8rem); font-weight: 400; color: #b7f2d4; }
+.public-footer[data-footer-variant="10"] .footer-lab-decoration { width: 16rem; height: 16rem; position: absolute; right: 7%; bottom: -7rem; display: block; border: 1px solid #6377ae; border-radius: 50%; }
+.public-footer[data-footer-variant="10"] .footer-lab-decoration span { width: 2.8rem; height: 2.8rem; position: absolute; display: grid; place-items: center; border-radius: 50%; color: #101b3a; background: #ffdc28; font-weight: 900; }
+.public-footer[data-footer-variant="10"] .footer-lab-decoration span:nth-child(1) { top: -1.4rem; left: 6rem; }
+.public-footer[data-footer-variant="10"] .footer-lab-decoration span:nth-child(2) { top: 4rem; right: -1.4rem; background: #b7f2d4; }
+.public-footer[data-footer-variant="10"] .footer-lab-decoration span:nth-child(3) { top: 5rem; left: -1.4rem; background: #e5e9ff; }
+
+@media (max-width: 52rem) {
+  .footer-lab-switcher { align-items: flex-start; flex-direction: column; }
+  .footer-lab-options { justify-content: flex-start; }
+  .public-footer[data-footer-variant] .public-footer-main { grid-template-columns: 1fr; gap: 2.5rem; }
+  .public-footer[data-footer-variant="3"] .public-footer-identity,
+  .public-footer[data-footer-variant="5"] .public-footer-identity { grid-template-columns: 1fr; }
+  .public-footer[data-footer-variant="3"] .footer-lab-submit { grid-column: 1; }
+  .public-footer[data-footer-variant="4"]::after { width: 100%; height: 48%; inset: auto 0 0; }
+  .public-footer[data-footer-variant="4"] .footer-lab-links { padding: 2rem 0 0; }
+  .public-footer[data-footer-variant="6"] .footer-lab-decoration { display: none; }
+  .public-footer[data-footer-variant="7"] .footer-lab-links nav:last-child { transform: rotate(1.25deg); }
+  .public-footer[data-footer-variant="8"] .public-footer-panel { padding-top: 7rem; }
+}
+
+@media (max-width: 34rem) {
+  .footer-lab-options { gap: 0.25rem; }
+  .footer-lab-options button { width: 1.85rem; height: 1.85rem; }
+  .footer-lab-links { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .public-footer[data-footer-variant="2"] .footer-lab-links { grid-template-columns: 1fr; }
+  .public-footer[data-footer-variant="5"] .footer-lab-links { display: grid; }
+  .public-footer[data-footer-variant="5"] .footer-lab-links nav { display: flex; }
+  .public-footer[data-footer-variant="9"] .footer-lab-links nav { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-lab-options button,
+  .footer-lab-links a,
+  .footer-lab-submit span { transition: none; }
+  .footer-lab-options button:hover,
+  .footer-lab-options button:active,
+  .footer-lab-links a:hover,
+  .footer-lab-submit:hover span { transform: none; }
+}

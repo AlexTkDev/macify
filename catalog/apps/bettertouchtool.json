@@ -13,12 +13,13 @@
   "youtubeUrl": null,
   "categories": [
     "automation",
-    "keyboard-shortcuts",
-    "mouse-gestures"
+    "input-customization",
+    "window-management"
   ],
   "relatedAppSlugs": [
     "mac-mouse-fix",
     "magnet",
+    "raycast",
     "rectangle",
     "swish"
   ],

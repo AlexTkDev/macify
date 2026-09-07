@@ -12,12 +12,11 @@
   "sourceType": "closed_source",
   "youtubeUrl": null,
   "categories": [
-    "focus-wellbeing",
+    "focus-timers",
     "time-tracking"
   ],
   "relatedAppSlugs": [
     "chronoid",
-    "dayflow",
     "session"
   ],
   "media": {

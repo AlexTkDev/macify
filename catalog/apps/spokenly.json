@@ -13,11 +13,12 @@
   "youtubeUrl": null,
   "categories": [
     "ai",
-    "dictation-transcription"
+    "dictation"
   ],
   "relatedAppSlugs": [
     "macwhisper",
     "superwhisper",
+    "voiceink",
     "voiceos",
     "wispr-flow"
   ],

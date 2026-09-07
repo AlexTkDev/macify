@@ -12,11 +12,14 @@
   "sourceType": "closed_source",
   "youtubeUrl": null,
   "categories": [
-    "clipboard",
-    "file-management"
+    "clipboard-managers",
+    "file-management",
+    "notch-utilities"
   ],
   "relatedAppSlugs": [
     "alcove",
+    "blip",
+    "dynamiclake",
     "pastepal",
     "qspace"
   ],

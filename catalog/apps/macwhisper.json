@@ -12,11 +12,13 @@
   "sourceType": "closed_source",
   "youtubeUrl": null,
   "categories": [
-    "dictation-transcription"
+    "dictation",
+    "transcription"
   ],
   "relatedAppSlugs": [
     "spokenly",
     "superwhisper",
+    "voiceink",
     "wispr-flow"
   ],
   "media": {
