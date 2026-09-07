@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { desc, sql } from "drizzle-orm";
+import { desc, like, sql } from "drizzle-orm";
 import { AlertTriangle, CheckCircle2, GitBranch, PlusCircle, RefreshCcw } from "lucide-react";
 import { dismissCatalogueFailure, retryCatalogueFailure } from "@/app/dashboard/catalogue/actions";
+import { CatalogueBulkReview } from "@/components/catalogue-bulk-review";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
 import { catalogueRevisions } from "@/db/schema";
@@ -28,6 +29,7 @@ const errorMessages: Record<string, string> = {
   "stale-revision": "A newer revision exists for this application. Review the newest revision instead.",
   "not-failed": "That synchronization failure is no longer unresolved.",
   "retry-failed": "Synchronization failed again. Open the revision to review the latest error.",
+  "invalid-selection": "Select at least one pending revision to continue.",
 };
 
 type View = "pending" | "history" | "failed";
@@ -35,19 +37,32 @@ type View = "pending" | "history" | "failed";
 export default async function CatalogueReviewPage({
   searchParams,
 }: {
-  searchParams: Promise<{ published?: string; rejected?: string; dismissed?: string; retried?: string; error?: string; view?: string }>;
+  searchParams: Promise<{ published?: string; rejected?: string; dismissed?: string; retried?: string; error?: string; view?: string; bulkIntent?: string; bulkCompleted?: string; bulkFailed?: string }>;
+}) {
+  return <ReviewQueuePage kind="apps" searchParams={searchParams} />;
+}
+
+export async function ReviewQueuePage({
+  kind,
+  searchParams,
+}: {
+  kind: "apps" | "deals";
+  searchParams: Promise<{ published?: string; rejected?: string; dismissed?: string; retried?: string; error?: string; view?: string; bulkIntent?: string; bulkCompleted?: string; bulkFailed?: string }>;
 }) {
   const query = await searchParams;
   const view: View = query.view === "history" || query.view === "failed" ? query.view : "pending";
   const database = await getDatabase();
+  const sourcePattern = kind === "deals" ? "catalog/deals/%" : "catalog/apps/%";
+  const queuePath = kind === "deals" ? "/dashboard/deals" : "/dashboard/catalogue";
+  const queueLabel = kind === "deals" ? "Deal queue" : "App queue";
   const [recentRevisions, countRows] = await Promise.all([
-    database.select().from(catalogueRevisions).orderBy(desc(catalogueRevisions.createdAt)).limit(200),
+    database.select().from(catalogueRevisions).where(like(catalogueRevisions.sourcePath, sourcePattern)).orderBy(desc(catalogueRevisions.createdAt)).limit(200),
     database.select({
       pending: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' then 1 else 0 end), 0)`,
       create: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'create' then 1 else 0 end), 0)`,
       update: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'update' then 1 else 0 end), 0)`,
       failed: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'failed' then 1 else 0 end), 0)`,
-    }).from(catalogueRevisions),
+    }).from(catalogueRevisions).where(like(catalogueRevisions.sourcePath, sourcePattern)),
   ]);
   const revisions = recentRevisions.filter((revision) => (
     view === "pending" ? revision.status === "pending"
@@ -60,12 +75,12 @@ export default async function CatalogueReviewPage({
   const counts = countRows[0] ?? { pending: 0, create: 0, update: 0, failed: 0 };
 
   return (
-    <DashboardShell active="catalogue">
+    <DashboardShell active={kind === "deals" ? "deals" : "catalogue"}>
       <header className="editor-header editor-header-row">
         <div>
           <p>GitHub updates</p>
-          <h1>Review queue</h1>
-          <span>See exactly what changed before any merged application or deal reaches the public directory.</span>
+          <h1>{queueLabel}</h1>
+          <span>{kind === "deals" ? "Review offer terms before merged deals reach the public site." : "Review listing content and media before merged applications reach the public directory."}</span>
         </div>
       </header>
 
@@ -80,6 +95,13 @@ export default async function CatalogueReviewPage({
       {query.rejected === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Revision rejected. The public listing was not changed.</div>}
       {query.dismissed === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Failure dismissed and retained in history.</div>}
       {query.retried === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Synchronization succeeded. The revision is ready for review.</div>}
+      {query.bulkCompleted && Number(query.bulkCompleted) > 0 && (
+        <div className="success-banner" role="status"><CheckCircle2 size={17} />
+          {query.bulkCompleted} {query.bulkIntent === "reject" ? "rejected" : "published"} successfully.
+          {Number(query.bulkFailed) > 0 ? ` ${query.bulkFailed} could not be processed and remain pending.` : ""}
+        </div>
+      )}
+      {query.bulkCompleted === "0" && Number(query.bulkFailed) > 0 && <div className="form-error" role="alert">None of the selected revisions could be processed. They remain pending for individual review.</div>}
       {query.error && <div className="form-error" role="alert">{errorMessages[query.error] ?? "The revision could not be reviewed."}</div>}
 
       <section className="dashboard-panel catalogue-queue-panel" aria-labelledby="revisions-heading">
@@ -88,10 +110,10 @@ export default async function CatalogueReviewPage({
             <h2 id="revisions-heading">{viewLabel(view)}</h2>
             <p>{viewDescription(view)}</p>
           </div>
-          <nav className="catalogue-view-tabs" aria-label="Review queue views">
-            <Link className={cn(view === "pending" && "active")} href="/dashboard/catalogue">Pending <span>{counts.pending}</span></Link>
-            <Link className={cn(view === "history" && "active")} href="/dashboard/catalogue?view=history">History</Link>
-            <Link className={cn(view === "failed" && "active")} href="/dashboard/catalogue?view=failed">Failed <span>{counts.failed}</span></Link>
+          <nav className="catalogue-view-tabs" aria-label={`${queueLabel} views`}>
+            <Link className={cn(view === "pending" && "active")} href={queuePath}>Pending <span>{counts.pending}</span></Link>
+            <Link className={cn(view === "history" && "active")} href={`${queuePath}?view=history`}>History</Link>
+            <Link className={cn(view === "failed" && "active")} href={`${queuePath}?view=failed`}>Failed <span>{counts.failed}</span></Link>
           </nav>
         </div>
         {revisions.length === 0 ? (
@@ -105,6 +127,7 @@ export default async function CatalogueReviewPage({
                 : "Choose another queue view to continue."}</span>
           </div>
         ) : (
+          <CatalogueBulkReview enabled={view === "pending"} itemCount={revisions.length} returnPath={queuePath}>
           <div className="catalogue-revision-list">
             {revisions.map((revision) => {
               const isDeal = revision.sourcePath.startsWith("catalog/deals/");
@@ -122,7 +145,13 @@ export default async function CatalogueReviewPage({
                   ? revision.errors[0] ?? `${changeLabel} could not be synchronized.`
                   : `${changeLabel} revision ${revisionStatusLabels[revision.status].toLowerCase()}.`;
               return (
-                <article className="catalogue-revision" key={revision.id}>
+                <article className="catalogue-revision" data-selectable={revision.status === "pending" || undefined} key={revision.id}>
+                  {revision.status === "pending" && (
+                    <label className="catalogue-revision-select">
+                      <input aria-label={`Select ${manifest?.name ?? current?.name ?? revision.appSlug}`} name="revisionId" type="checkbox" value={revision.id} />
+                      <span aria-hidden="true" />
+                    </label>
+                  )}
                   <div className="catalogue-revision-identity">
                     <div className="catalogue-revision-icon">
                       {icon ? <Image alt={manifest?.name ? `${manifest.name} icon` : "Application icon"} height={48} src={mediaUrl(icon.storageKey)} unoptimized width={48} />
@@ -144,15 +173,17 @@ export default async function CatalogueReviewPage({
                       <>
                         <form action={retryCatalogueFailure}>
                           <input name="revisionId" type="hidden" value={revision.id} />
+                          <input name="returnPath" type="hidden" value={queuePath} />
                           <button className="button-primary" type="submit">Retry synchronization</button>
                         </form>
                         <form action={dismissCatalogueFailure}>
                           <input name="revisionId" type="hidden" value={revision.id} />
+                          <input name="returnPath" type="hidden" value={queuePath} />
                           <button className="button-secondary" type="submit">Dismiss failure</button>
                         </form>
                       </>
                     )}
-                    <Link className={revision.status === "pending" ? "button-primary" : "button-secondary"} href={`/dashboard/catalogue/${revision.id}`}>
+                    <Link className={revision.status === "pending" ? "button-primary" : "button-secondary"} href={`${queuePath}/${revision.id}`}>
                       {revision.status === "pending" ? "Review changes" : "View revision"}
                     </Link>
                   </div>
@@ -160,6 +191,7 @@ export default async function CatalogueReviewPage({
               );
             })}
           </div>
+          </CatalogueBulkReview>
         )}
       </section>
     </DashboardShell>

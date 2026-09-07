@@ -1,6 +1,6 @@
 "use server";
 
-import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, like, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -25,20 +25,43 @@ const decisionSchema = z.object({
   intent: z.enum(["publish", "reject"]),
 });
 
+const bulkDecisionSchema = z.object({
+  revisionIds: z.array(z.uuid()).min(1).max(100),
+  intent: z.enum(["publish", "reject"]),
+});
+
+type DecisionIntent = z.infer<typeof decisionSchema>["intent"];
+
+class CatalogueDecisionError extends Error {
+  constructor(readonly code: string) {
+    super(code);
+  }
+}
+
 const failureActionSchema = z.object({ revisionId: z.uuid() });
+
+function reviewQueuePath(formData: FormData) {
+  return formData.get("returnPath") === "/dashboard/deals" ? "/dashboard/deals" : "/dashboard/catalogue";
+}
+
+function reviewSourcePattern(queuePath: ReturnType<typeof reviewQueuePath>) {
+  return queuePath === "/dashboard/deals" ? "catalog/deals/%" : "catalog/apps/%";
+}
 
 export async function retryCatalogueFailure(formData: FormData) {
   await requireAdmin();
+  const queuePath = reviewQueuePath(formData);
   const parsed = failureActionSchema.safeParse({ revisionId: formData.get("revisionId") });
-  if (!parsed.success) redirect("/dashboard/catalogue?view=failed&error=invalid");
+  if (!parsed.success) redirect(`${queuePath}?view=failed&error=invalid`);
 
   const database = await getDatabase();
   const rows = await database.select().from(catalogueRevisions).where(and(
     eq(catalogueRevisions.id, parsed.data.revisionId),
     eq(catalogueRevisions.status, "failed"),
+    like(catalogueRevisions.sourcePath, reviewSourcePattern(queuePath)),
   )).limit(1);
   const revision = rows[0];
-  if (!revision || !revision.manifest) redirect("/dashboard/catalogue?view=failed&error=not-failed");
+  if (!revision || !revision.manifest) redirect(`${queuePath}?view=failed&error=not-failed`);
 
   const { env } = await getCloudflareContext({ async: true });
   const result = await ingestCatalogueItem({
@@ -51,15 +74,17 @@ export async function retryCatalogueFailure(formData: FormData) {
   }, env);
 
   revalidatePath("/dashboard/catalogue");
+  revalidatePath("/dashboard/deals");
   revalidatePath(`/dashboard/catalogue/${revision.id}`);
-  if (!result.ok) redirect("/dashboard/catalogue?view=failed&error=retry-failed");
-  redirect("/dashboard/catalogue?retried=1");
+  if (!result.ok) redirect(`${queuePath}?view=failed&error=retry-failed`);
+  redirect(`${queuePath}?retried=1`);
 }
 
 export async function dismissCatalogueFailure(formData: FormData) {
   await requireAdmin();
+  const queuePath = reviewQueuePath(formData);
   const parsed = failureActionSchema.safeParse({ revisionId: formData.get("revisionId") });
-  if (!parsed.success) redirect("/dashboard/catalogue?view=failed&error=invalid");
+  if (!parsed.success) redirect(`${queuePath}?view=failed&error=invalid`);
 
   const database = await getDatabase();
   const result = await database.update(catalogueRevisions).set({
@@ -68,44 +93,126 @@ export async function dismissCatalogueFailure(formData: FormData) {
   }).where(and(
     eq(catalogueRevisions.id, parsed.data.revisionId),
     eq(catalogueRevisions.status, "failed"),
+    like(catalogueRevisions.sourcePath, reviewSourcePattern(queuePath)),
   )).returning({ id: catalogueRevisions.id });
-  if (result.length === 0) redirect("/dashboard/catalogue?view=failed&error=not-failed");
+  if (result.length === 0) redirect(`${queuePath}?view=failed&error=not-failed`);
 
   revalidatePath("/dashboard/catalogue");
-  redirect("/dashboard/catalogue?view=failed&dismissed=1");
+  revalidatePath("/dashboard/deals");
+  redirect(`${queuePath}?view=failed&dismissed=1`);
 }
 
 export async function decideCatalogueRevision(formData: FormData) {
   await requireAdmin();
+  const queuePath = reviewQueuePath(formData);
   const parsed = decisionSchema.safeParse({
     revisionId: formData.get("revisionId"),
     intent: formData.get("intent"),
   });
-  if (!parsed.success) redirect("/dashboard/catalogue?error=invalid");
+  if (!parsed.success) redirect(`${queuePath}?error=invalid`);
+
+  try {
+    await applyCatalogueDecision(parsed.data.revisionId, parsed.data.intent, reviewSourcePattern(queuePath));
+  } catch (error) {
+    if (error instanceof CatalogueDecisionError) redirect(`${queuePath}?error=${error.code}`);
+    throw error;
+  }
+
+  revalidateCataloguePaths();
+  redirect(`${queuePath}?${parsed.data.intent === "publish" ? "published" : "rejected"}=1`);
+}
+
+export async function decideCatalogueRevisions(formData: FormData) {
+  await requireAdmin();
+  const queuePath = reviewQueuePath(formData);
+  const parsed = bulkDecisionSchema.safeParse({
+    revisionIds: [...new Set(formData.getAll("revisionId"))],
+    intent: formData.get("intent"),
+  });
+  if (!parsed.success) redirect(`${queuePath}?error=invalid-selection`);
+
+  const database = await getDatabase();
+  const selected = await database.select({
+    id: catalogueRevisions.id,
+    sourcePath: catalogueRevisions.sourcePath,
+    createdAt: catalogueRevisions.createdAt,
+  }).from(catalogueRevisions).where(and(
+    inArray(catalogueRevisions.id, parsed.data.revisionIds),
+    eq(catalogueRevisions.status, "pending"),
+    like(catalogueRevisions.sourcePath, reviewSourcePattern(queuePath)),
+  ));
+
+  const selectedIds = new Set(selected.map(({ id }) => id));
+  let failed = parsed.data.revisionIds.length - selectedIds.size;
+  let completed = 0;
+  const ordered = selected.sort((left, right) => {
+    const leftIsDeal = left.sourcePath.startsWith("catalog/deals/");
+    const rightIsDeal = right.sourcePath.startsWith("catalog/deals/");
+    return Number(leftIsDeal) - Number(rightIsDeal) || left.createdAt.getTime() - right.createdAt.getTime();
+  });
+  let remaining = ordered.map(({ id }) => id);
+
+  // A second pass lets a selected app publish before a related app or deal that depends on it.
+  for (let pass = 0; pass < 2 && remaining.length > 0; pass += 1) {
+    const retry: string[] = [];
+    for (const revisionId of remaining) {
+      try {
+        await applyCatalogueDecision(revisionId, parsed.data.intent, reviewSourcePattern(queuePath));
+        completed += 1;
+      } catch (error) {
+        if (error instanceof CatalogueDecisionError) retry.push(revisionId);
+        else {
+          console.error(`Bulk catalogue decision failed for revision ${revisionId}.`, error);
+          retry.push(revisionId);
+        }
+      }
+    }
+    if (retry.length === remaining.length) {
+      remaining = retry;
+      break;
+    }
+    remaining = retry;
+  }
+  failed += remaining.length;
+
+  revalidateCataloguePaths();
+  const params = new URLSearchParams({
+    bulkIntent: parsed.data.intent,
+    bulkCompleted: String(completed),
+    bulkFailed: String(failed),
+  });
+  redirect(`${queuePath}?${params}`);
+}
+
+async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent, sourcePattern: string) {
 
   const database = await getDatabase();
   const row = await database
     .select()
     .from(catalogueRevisions)
-    .where(and(eq(catalogueRevisions.id, parsed.data.revisionId), eq(catalogueRevisions.status, "pending")))
+    .where(and(
+      eq(catalogueRevisions.id, revisionId),
+      eq(catalogueRevisions.status, "pending"),
+      like(catalogueRevisions.sourcePath, sourcePattern),
+    ))
     .limit(1);
   const revision = row[0];
-  if (!revision) redirect("/dashboard/catalogue?error=not-pending");
+  if (!revision) throw new CatalogueDecisionError("not-pending");
   const isApplicationRevision = revision.sourcePath.startsWith("catalog/apps/");
   const isDealRevision = revision.sourcePath.startsWith("catalog/deals/");
-  if (!isApplicationRevision && !isDealRevision) redirect("/dashboard/catalogue?error=invalid");
+  if (!isApplicationRevision && !isDealRevision) throw new CatalogueDecisionError("invalid");
 
   const newestRevision = await database.select({ id: catalogueRevisions.id }).from(catalogueRevisions)
     .where(eq(catalogueRevisions.sourcePath, revision.sourcePath))
     .orderBy(desc(catalogueRevisions.createdAt)).limit(1);
-  if (newestRevision[0]?.id !== revision.id) redirect("/dashboard/catalogue?error=stale-revision");
+  if (newestRevision[0]?.id !== revision.id) throw new CatalogueDecisionError("stale-revision");
 
-  if (parsed.data.intent === "reject") {
+  if (intent === "reject") {
     const keys = [...new Set(revision.preparedMedia.map(({ storageKey }) => storageKey))];
     const rejected = await database.update(catalogueRevisions).set({ status: "rejected", reviewedAt: new Date() })
       .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending")))
       .returning({ id: catalogueRevisions.id });
-    if (rejected.length === 0) redirect("/dashboard/catalogue?error=not-pending");
+    if (rejected.length === 0) throw new CatalogueDecisionError("not-pending");
     if (keys.length) {
       try {
         const referenced = await database.select({ storageKey: mediaAssets.storageKey }).from(mediaAssets)
@@ -120,8 +227,7 @@ export async function decideCatalogueRevision(formData: FormData) {
         console.error("Rejected catalogue revision but could not remove its unreferenced media.", error);
       }
     }
-    revalidatePath("/dashboard/catalogue");
-    redirect("/dashboard/catalogue?rejected=1");
+    return;
   }
 
   if (isDealRevision) {
@@ -129,7 +235,7 @@ export async function decideCatalogueRevision(formData: FormData) {
       .where(and(eq(apps.slug, revision.appSlug), isNull(apps.deletedAt))).limit(1);
     const application = applicationRows[0];
     if (!application || (revision.changeType !== "archive" && application.status !== "published")) {
-      redirect("/dashboard/catalogue?error=missing-deal-app");
+      throw new CatalogueDecisionError("missing-deal-app");
     }
 
     const reviewedAt = new Date();
@@ -141,7 +247,7 @@ export async function decideCatalogueRevision(formData: FormData) {
       ]);
     } else {
       const manifestResult = dealManifestSchema.safeParse(revision.manifest);
-      if (!manifestResult.success) redirect("/dashboard/catalogue?error=invalid-deal-manifest");
+      if (!manifestResult.success) throw new CatalogueDecisionError("invalid-deal-manifest");
       const manifest = manifestResult.data;
       const values = {
         discountPercent: manifest.discountPercent,
@@ -163,28 +269,21 @@ export async function decideCatalogueRevision(formData: FormData) {
       ]);
     }
 
-    revalidatePath("/");
-    revalidatePath("/deals");
-    revalidatePath("/dashboard/catalogue");
-    revalidatePath(`/apps/${revision.appSlug}`);
-    redirect("/dashboard/catalogue?published=1");
+    return;
   }
 
   if (revision.changeType === "archive") {
-    if (!revision.appId) redirect("/dashboard/catalogue?error=missing-app");
+    if (!revision.appId) throw new CatalogueDecisionError("missing-app");
     await database.batch([
       database.update(apps).set({ status: "archived", isFeatured: false, featuredAt: null, updatedAt: new Date() }).where(eq(apps.id, revision.appId)),
       database.update(catalogueRevisions).set({ status: "published", reviewedAt: new Date() })
         .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending"))),
     ]);
-    revalidatePath("/dashboard");
-    revalidatePath("/dashboard/catalogue");
-    revalidatePath(`/apps/${revision.appSlug}`);
-    redirect("/dashboard/catalogue?published=1");
+    return;
   }
 
   const manifestResult = catalogueManifestSchema.safeParse(revision.manifest);
-  if (!manifestResult.success) redirect("/dashboard/catalogue?error=invalid-manifest");
+  if (!manifestResult.success) throw new CatalogueDecisionError("invalid-manifest");
   const manifest = manifestResult.data;
   const appId = revision.appId ?? crypto.randomUUID();
   const relatedSlugs = [...new Set(manifest.relatedAppSlugs)].filter((slug) => slug !== manifest.slug);
@@ -192,10 +291,10 @@ export async function decideCatalogueRevision(formData: FormData) {
     ? await database.select({ id: apps.id, slug: apps.slug }).from(apps)
       .where(and(inArray(apps.slug, relatedSlugs), isNull(apps.deletedAt)))
     : [];
-  if (related.length !== relatedSlugs.length) redirect("/dashboard/catalogue?error=missing-related-app");
+  if (related.length !== relatedSlugs.length) throw new CatalogueDecisionError("missing-related-app");
   if (!revision.preparedMedia.some((asset) => asset.role === "icon")
     || !revision.preparedMedia.some((asset) => asset.role === "preview_image")) {
-    redirect("/dashboard/catalogue?error=missing-media");
+    throw new CatalogueDecisionError("missing-media");
   }
 
   const now = new Date();
@@ -265,10 +364,15 @@ export async function decideCatalogueRevision(formData: FormData) {
     }
   }
 
+}
+
+function revalidateCataloguePaths() {
+  revalidatePath("/");
+  revalidatePath("/deals");
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/catalogue");
-  revalidatePath(`/apps/${manifest.slug}`);
-  redirect("/dashboard/catalogue?published=1");
+  revalidatePath("/dashboard/deals");
+  revalidatePath("/apps/[slug]", "page");
 }
 
 function normalizeManifestCategories(values: string[]) {

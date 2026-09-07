@@ -109,6 +109,7 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
             {revision.status === "pending" && (
               <form action={decideCatalogueRevision} className="catalogue-review-decision">
                 <input name="revisionId" type="hidden" value={revision.id} />
+                <input name="returnPath" type="hidden" value="/dashboard/catalogue" />
                 <button className="button-primary" name="intent" type="submit" value="publish">{publishActionLabels[revision.changeType]}</button>
                 <button className="button-secondary button-danger" name="intent" type="submit" value="reject">Reject revision</button>
               </form>
@@ -117,10 +118,12 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
               <div className="catalogue-review-decision">
                 <form action={retryCatalogueFailure}>
                   <input name="revisionId" type="hidden" value={revision.id} />
+                  <input name="returnPath" type="hidden" value="/dashboard/catalogue" />
                   <button className="button-primary" type="submit">Retry synchronization</button>
                 </form>
                 <form action={dismissCatalogueFailure}>
                   <input name="revisionId" type="hidden" value={revision.id} />
+                  <input name="returnPath" type="hidden" value="/dashboard/catalogue" />
                   <button className="button-secondary" type="submit">Dismiss failure</button>
                 </form>
               </div>
@@ -173,9 +176,9 @@ async function DealRevisionPage({
   ] as const;
 
   return (
-    <DashboardShell active="catalogue">
+    <DashboardShell active="deals">
       <nav className="dashboard-breadcrumbs" aria-label="Breadcrumb">
-        <Link href="/dashboard/catalogue">Review queue</Link><ChevronRight size={14} aria-hidden="true" />
+        <Link href="/dashboard/deals">Deal queue</Link><ChevronRight size={14} aria-hidden="true" />
         <span aria-current="page">{revision.appSlug} deal</span>
       </nav>
       <header className="editor-header editor-header-row">
@@ -240,6 +243,7 @@ async function DealRevisionPage({
             {revision.status === "pending" && (
               <form action={decideCatalogueRevision} className="catalogue-review-decision">
                 <input name="revisionId" type="hidden" value={revision.id} />
+                <input name="returnPath" type="hidden" value="/dashboard/deals" />
                 <button className="button-primary" name="intent" type="submit" value="publish">{publishLabel}</button>
                 <button className="button-secondary button-danger" name="intent" type="submit" value="reject">Reject revision</button>
               </form>
@@ -248,10 +252,12 @@ async function DealRevisionPage({
               <div className="catalogue-review-decision">
                 <form action={retryCatalogueFailure}>
                   <input name="revisionId" type="hidden" value={revision.id} />
+                  <input name="returnPath" type="hidden" value="/dashboard/deals" />
                   <button className="button-primary" type="submit">Retry synchronization</button>
                 </form>
                 <form action={dismissCatalogueFailure}>
                   <input name="revisionId" type="hidden" value={revision.id} />
+                  <input name="returnPath" type="hidden" value="/dashboard/deals" />
                   <button className="button-secondary" type="submit">Dismiss failure</button>
                 </form>
               </div>

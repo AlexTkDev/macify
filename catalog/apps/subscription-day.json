@@ -1,0 +1,21 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Subscription Day",
+  "slug": "subscription-day",
+  "websiteUrl": "https://subsday.appps.od.ua/",
+  "tagline": "Track recurring bills with a visual subscription calendar.",
+  "description": "Subscription Day is a subscription tracker for Mac, iPhone, and Apple Watch. It places recurring charges on a compact calendar, converts totals across currencies, and sends reminders before payments are due without pretending it can discover every subscription automatically.\n\n## Features\n\n- Add recurring services with billing interval, price, currency, category, logo, and renewal date.\n- Review upcoming payments in a mini calendar and inspect spending statistics by period or category.\n- Convert totals among 168 supported currencies using current exchange rates.\n- Import records from the App Store, Notion, Google Sheets, or CSV where supported.\n- Send alerts through the app, Calendar, or Apple Reminders.\n- Sync the database through iCloud and access companion views on iPhone and Apple Watch.\n\n## Where it fits\n\nSubscription Day is useful for people with recurring software, media, membership, or household charges spread across providers and currencies. It is a planning ledger, not a bank-connected cancellation service: entries still need to be added, imported, and corrected by the user.\n\n## Privacy and requirements\n\nThe Mac app requires macOS 14 or later. Subscription data stays locally on the device or in the user's iCloud when sync is enabled. Currency conversion and imports can contact their respective services, which have separate privacy policies.\n\n## Pricing\n\nThe core app is free with limits. Pro is available as a one-time lifetime in-app purchase; its current regional price appears in the App Store.",
+  "pricingType": "freemium",
+  "billingType": "one_time",
+  "pricingDetails": "Free with limitations; optional Pro lifetime in-app purchase priced by App Store region.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": ["personal-finance", "calendar-scheduling"],
+  "relatedAppSlugs": ["expenses"],
+  "media": {
+    "icon": {"sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/de/84/2b/de842bf2-62cc-15ca-67dc-38a8e0ad4251/SubscriptionDayIcon2-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg", "altText": "Subscription Day application icon"},
+    "preview": {"sourceUrl": "https://subsday.appps.od.ua/img/subscription-cover.jpg?v=1", "altText": "Subscription Day calendar and spending overview"},
+    "screenshots": []
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "Portal",
+  "slug": "portal",
+  "websiteUrl": "https://portal.app/mac",
+  "tagline": "Immersive nature soundscapes for focus, sleep, and escape.",
+  "description": "Portal brings filmed natural environments and spatial soundscapes to the Mac. Each location combines landscape footage with layered environmental audio, creating a background for focused work, relaxation, or a short break from a noisy room.\n\n## Features\n\n- Explore immersive portals recorded in forests, coastlines, mountains, and other natural settings.\n- Listen through headphones or speakers, with spatial-audio support on compatible hardware.\n- Use focus and relaxation modes to shape a work session or wind-down routine.\n- Turn supported scenes into a desktop backdrop or screen-based ambient environment.\n- Download selected content for access when a connection is unavailable.\n- Continue with the same Portal membership across supported Apple devices.\n\n## Where it fits\n\nPortal is for people who find nature audio more helpful than music or silence while working. The visual component also makes it suitable for an idle second display. It is an ambience tool, not a clinical treatment for stress, sleep, or attention problems.\n\n## Privacy and requirements\n\nPortal for Mac requires macOS 13 or later. Streaming and downloading environments uses network access and local storage. Account, purchase, and analytics handling follow Portal's and Apple's current privacy disclosures; downloaded material remains subject to the service's access rules.\n\n## Pricing\n\nThe app is free to download with limited access. Portal Premium is available through monthly, annual, and lifetime in-app purchases, and the annual option includes a seven-day trial. Prices vary by region.",
+  "pricingType": "freemium",
+  "billingType": "subscription",
+  "pricingDetails": "Free download; Premium monthly, annual, and lifetime options. Annual plan includes a 7-day trial.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": ["focus-tools", "wallpapers"],
+  "relatedAppSlugs": ["balance"],
+  "media": {
+    "icon": {"sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5b/48/95/5b4895f8-9ad4-f0c0-ce71-b92572a48a54/AppIcon-0-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg", "altText": "Portal application icon"},
+    "preview": {"sourceUrl": "https://images.portal.app/site/press/mac-product-images/01_Bluebells_Text.jpg", "altText": "Portal nature soundscape running on a Mac"},
+    "screenshots": []
+  }
+}

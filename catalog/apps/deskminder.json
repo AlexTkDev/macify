@@ -1,0 +1,35 @@
+{
+  "$schema": "../schema/application.schema.json",
+  "schemaVersion": 1,
+  "name": "DeskMinder",
+  "slug": "deskminder",
+  "websiteUrl": "https://deskminder.appps.od.ua/",
+  "tagline": "Quick desktop reminders for easily distracted minds.",
+  "description": "DeskMinder is a short-term reminder and task timer for Mac. It keeps a small control on the desktop or in the menu bar so an urgent follow-up, break, or temporary task can be scheduled in a few seconds without opening a calendar or building a larger task system.\n\nA reminder can end with a full-screen alert when an ordinary notification would be too easy to miss. Task mode records the start of a piece of work, while the history provides a simple view of completed timers and reminders.\n\n## Features\n\n- Create quick reminders through preset five, ten, fifteen, and twenty-five minute shortcuts or enter a custom duration.\n- Use full-screen notifications and configurable sounds for reminders that need a stronger interruption.\n- Start and track short tasks from the same lightweight desktop control.\n- Place the widget anywhere on the screen, hide it behind a keyboard shortcut, or run DeskMinder from the menu bar.\n- Review a history of tasks and reminders to see what was completed during the day.\n- Sync newly created reminders into Apple Reminders for alerts on an iPhone, iPad, or Apple Watch.\n\n## Where it fits\n\nDeskMinder fits people who lose track of immediate intentions while working, including those who find persistent or full-screen cues more effective than a notification banner. It is intentionally quicker and more visible than entering the same item in a project manager.\n\nThat simplicity creates limits. Preset timers focus on short intervals, existing timers cannot be edited, and the app is not designed for projects, recurring schedules, dependencies, or shared work. Things 3 is a better long-term task system; Toki is a narrower keyboard-first timer.\n\n## Privacy and requirements\n\nDeskMinder requires macOS 14 or later and is distributed through the Mac App Store. Its App Store privacy label states that the developer does not collect data. Notification access is central to the app, while optional Apple Reminders integration sends created reminders into the user's Apple data and across devices according to their iCloud configuration.\n\n## Pricing\n\nDeskMinder is free to download with a $5.99 lifetime Pro in-app purchase. It is also available through Setapp; regional pricing may vary.",
+  "pricingType": "freemium",
+  "billingType": "one_time",
+  "pricingDetails": "DeskMinder Pro: $5.99 lifetime in-app purchase; also on Setapp.",
+  "sourceType": "closed_source",
+  "youtubeUrl": null,
+  "categories": [
+    "focus-timers",
+    "menu-bar-utilities",
+    "task-management"
+  ],
+  "relatedAppSlugs": [
+    "balance",
+    "things-3",
+    "toki"
+  ],
+  "media": {
+    "icon": {
+      "sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/6d/6f/fb/6d6ffb35-0c81-c187-2465-4d81dc03af35/DeskMinderIcon-0-0-85-220-0-0-6-0-2x.png/512x512bb.png",
+      "altText": "DeskMinder application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://deskminder.appps.od.ua/img/deskminder-cover.jpg?v=2",
+      "altText": "DeskMinder desktop reminder interface"
+    },
+    "screenshots": []
+  }
+}

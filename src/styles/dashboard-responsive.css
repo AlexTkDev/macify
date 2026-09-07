@@ -110,6 +110,12 @@
   .catalogue-queue-stats > div { border-right: 0; border-bottom: 1px solid var(--line); }
   .catalogue-queue-stats > div:last-child { border-bottom: 0; }
   .catalogue-revision-identity { align-items: flex-start; }
+  .catalogue-bulk-toolbar { align-items: flex-start; flex-wrap: wrap; }
+  .catalogue-bulk-toolbar > span { min-width: 40%; padding-top: .45rem; text-align: right; }
+  .catalogue-bulk-toolbar > div { width: 100%; display: grid; grid-template-columns: 1fr; }
+  .catalogue-revision[data-selectable] { align-items: flex-start; flex-wrap: wrap; }
+  .catalogue-revision[data-selectable] .catalogue-revision-identity { width: calc(100% - 2.2rem); }
+  .catalogue-revision[data-selectable] .catalogue-revision-actions { width: 100%; padding-left: 2.2rem; }
   .catalogue-revision-actions { display: grid; grid-template-columns: 1fr; }
   .catalogue-review-panel { padding: .9rem; }
   .catalogue-review-summary { grid-template-columns: 1fr; }

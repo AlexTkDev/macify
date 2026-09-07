@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, inArray, isNull, like, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import {
   appCategories,
@@ -38,7 +38,10 @@ export async function getApplicationsDashboardData() {
     database
       .select({ count: count(), bytes: sql<number>`coalesce(sum(${mediaAssets.byteSize}), 0)` })
       .from(mediaAssets),
-    database.select({ count: count() }).from(catalogueRevisions).where(eq(catalogueRevisions.status, "pending")),
+    database.select({ count: count() }).from(catalogueRevisions).where(and(
+      eq(catalogueRevisions.status, "pending"),
+      like(catalogueRevisions.sourcePath, "catalog/apps/%"),
+    )),
   ]);
 
   const applicationIds = records.map(({ id }) => id);

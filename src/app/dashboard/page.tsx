@@ -31,14 +31,14 @@ export default async function DashboardPage() {
         </div>
         <div className="dashboard-actions">
           <Link className="button-primary" href="/dashboard/catalogue">
-            <GitPullRequest size={16} /> Open review queue
+            <GitPullRequest size={16} /> Open app queue
           </Link>
         </div>
       </header>
 
       <section className="status-strip" aria-label="Directory status">
         <div><span>Published</span><strong>{stats.published}</strong><small>Visible in the public directory</small></div>
-        <div><span>Awaiting publication</span><strong>{pendingRevisions}</strong><small>Merged GitHub updates ready for review</small></div>
+        <div><span>Apps awaiting review</span><strong>{pendingRevisions}</strong><small>Merged application updates ready for review</small></div>
         <div><span>Media</span><strong>{formatBytes(Number(media.bytes))}</strong><small>{media.count} files recorded for R2</small></div>
         <div><span>Database</span><strong className="status-ready"><Database size={15} /> Ready</strong><small>{stats.total} application records stored in D1</small></div>
       </section>
