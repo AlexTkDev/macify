@@ -5,14 +5,19 @@ import { getAppIcons } from "@/lib/directory-shared";
 
 export const dynamic = "force-dynamic";
 
+function escapeLikePattern(value: string) {
+  return value.replace(/[!%_]/g, (character) => `!${character}`);
+}
+
 export async function GET(request: Request) {
   const query = new URL(request.url).searchParams.get("q")?.trim().slice(0, 80) ?? "";
   if (query.length < 2) return Response.json({ results: [] });
 
   const database = await getDatabase();
   const term = query.toLowerCase();
-  const pattern = `%${term}%`;
-  const prefix = `${term}%`;
+  const escapedTerm = escapeLikePattern(term);
+  const pattern = `%${escapedTerm}%`;
+  const prefix = `${escapedTerm}%`;
   const applicationRows = await database
     .select({
       id: apps.id,
@@ -25,18 +30,18 @@ export async function GET(request: Request) {
       eq(apps.status, "published"),
       isNull(apps.deletedAt),
       sql`(
-        lower(${apps.name}) like ${pattern}
-        or lower(${apps.tagline}) like ${pattern}
-        or lower(${apps.description}) like ${pattern}
+        lower(${apps.name}) like ${pattern} escape '!'
+        or lower(${apps.tagline}) like ${pattern} escape '!'
+        or lower(${apps.description}) like ${pattern} escape '!'
         or exists (
           select 1 from ${appCategories}
           inner join ${categories} on ${categories.id} = ${appCategories.categoryId}
-          where ${appCategories.appId} = ${apps.id} and lower(${categories.name}) like ${pattern}
+          where ${appCategories.appId} = ${apps.id} and lower(${categories.name}) like ${pattern} escape '!'
         )
       )`,
     ))
     .orderBy(
-      sql`case when lower(${apps.name}) = ${term} then 0 when lower(${apps.name}) like ${prefix} then 1 else 2 end`,
+      sql`case when lower(${apps.name}) = ${term} then 0 when lower(${apps.name}) like ${prefix} escape '!' then 1 else 2 end`,
       asc(apps.name),
     )
     .limit(8);

@@ -54,7 +54,7 @@ export default async function EditApplicationPage({
         </div>
         <div className="editor-header-actions">
           <a className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">
-            Visit website <ExternalLink size={15} />
+            Visit site <ExternalLink size={15} />
           </a>
           <a className="button-secondary" href={`https://github.com/Beingpax/macify/edit/main/catalog/apps/${application.slug}.json`} rel="noreferrer" target="_blank">
             Edit listing <GitBranch size={15} />

@@ -5,7 +5,7 @@
 - [`examples/`](examples): contribution templates
 - [`schema/`](schema): JSON schemas
 
-Deal support is incomplete and is not exposed in the website or dashboard. Do not submit deal manifests until the feature is implemented.
+Deal support is incomplete and is not available in production. Local development uses fixtures outside the catalogue to exercise the interface. Do not submit deal manifests until the feature is implemented.
 
 Run `npm run catalogue:validate` before submitting an application change.
 

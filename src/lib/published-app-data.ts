@@ -1,16 +1,19 @@
-import { and, asc, desc, eq, isNull, sql } from "drizzle-orm";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { and, asc, desc, eq, gte, isNull, lte, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 import { getDatabase } from "@/db/client";
 import {
   appRelationships,
   appCategories,
   apps,
+  deals,
   mediaAssets,
   categories,
 } from "@/db/schema";
 import { getAppIcons, publicApplicationFields } from "@/lib/directory-shared";
 
 export async function getPublishedApplicationBySlug(slug: string) {
+  const { env } = await getCloudflareContext({ async: true });
   const database = await getDatabase();
   const applicationRows = await database
     .select(publicApplicationFields)
@@ -31,7 +34,8 @@ export async function getPublishedApplicationBySlug(slug: string) {
     pricingDetails: relatedApp.pricingDetails,
     isFeatured: relatedApp.isFeatured,
   };
-  const [categoryRows, media, outgoing, incoming] = await Promise.all([
+  const now = new Date();
+  const [categoryRows, media, outgoing, dealRows, incoming] = await Promise.all([
     database
       .select({ id: categories.id, slug: categories.slug, name: categories.name })
       .from(appCategories)
@@ -65,6 +69,21 @@ export async function getPublishedApplicationBySlug(slug: string) {
       ))
       .orderBy(asc(relatedApp.name))
       .limit(6),
+    env.APP_ENV === "local" ? database
+      .select({
+        discountPercent: deals.discountPercent,
+        code: deals.code,
+        url: deals.url,
+        startsAt: deals.startsAt,
+        endsAt: deals.endsAt,
+      })
+      .from(deals)
+      .where(and(
+        eq(deals.appId, application.id),
+        lte(deals.startsAt, now),
+        gte(deals.endsAt, now),
+      ))
+      .limit(1) : Promise.resolve([]),
     database
       .select(relatedFields)
       .from(appRelationships)
@@ -91,6 +110,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
     ...application,
     categories: categoryRows,
     media,
+    deal: dealRows[0] ?? null,
     related: relatedRecords.map((record) => ({
       ...record,
       icon: icons.get(record.id) ?? null,

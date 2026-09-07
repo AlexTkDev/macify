@@ -85,7 +85,7 @@ export function ApplicationOverview({
             </div>
           )}
           <a className="application-website" href={application.websiteUrl} rel="noreferrer" target="_blank">
-            Visit website
+            Visit site
             <ArrowUpRight aria-hidden="true" size={19} strokeWidth={1.8} />
           </a>
         </article>

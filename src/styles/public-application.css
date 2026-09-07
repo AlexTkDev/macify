@@ -11,6 +11,51 @@
   container-type: inline-size;
 }
 
+.application-deal {
+  max-width: 54rem;
+  margin: 2rem auto 0;
+  padding: 1rem 1.1rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  border-radius: 0.85rem;
+  background: var(--play-yellow);
+}
+
+.application-deal-icon {
+  width: 2.7rem;
+  height: 2.7rem;
+  display: grid;
+  place-items: center;
+  border-radius: 0.55rem;
+  color: #fff;
+  background: var(--public-ink);
+  transform: rotate(-4deg);
+}
+
+.application-deal-copy { display: grid; gap: 0.15rem; text-align: left; }
+.application-deal-copy strong { font-size: 1.15rem; font-weight: 900; letter-spacing: -0.025em; }
+.application-deal-copy > span { color: #4b3d1b; font-size: 0.84rem; font-weight: 650; }
+.application-deal-copy .deal-code-button { margin-top: 0.45rem; }
+
+.application-deal > a {
+  min-height: 2.7rem;
+  padding: 0.65rem 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 0.55rem;
+  color: #fff;
+  background: var(--public-ink);
+  font-size: 0.84rem;
+  font-weight: 800;
+  transition: background-color 160ms cubic-bezier(0.22, 1, 0.36, 1), transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.application-deal > a:focus-visible { outline: 0.18rem solid var(--play-blue); outline-offset: 0.2rem; }
+.application-deal > a:active { background: var(--play-blue); transform: translateY(0.12rem) scale(0.98); }
+
 .application-title-icon .public-app-icon {
   width: 100%;
   height: 100%;
@@ -215,7 +260,7 @@
   text-decoration: none;
 }
 
-.application-website:active { transform: translateY(0.04rem); }
+.application-website:active { background: var(--play-blue); transform: translateY(0.12rem) scale(0.98); }
 
 .application-overview { padding-top: clamp(1.3rem, 2.4vw, 2rem); }
 
@@ -410,25 +455,20 @@
     transition: background-color 160ms cubic-bezier(0.22, 1, 0.36, 1), transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .application-website:hover {
-    color: #fff;
-    background: var(--play-blue);
-    text-decoration: none;
-    transform: translateY(-0.06rem);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .application-title-icon,
   .application-category,
   .application-category::before,
-  .application-website { transition: none; }
+  .application-website,
+  .application-deal > a { transition: none; }
   .application-title-icon:hover,
   .application-title-icon:focus-visible,
   .application-title-icon:active { transform: rotate(5deg) translateY(-0.01em); }
   .application-category:hover,
   .application-category:active,
-  .application-website:hover,
   .application-website:focus-visible,
-  .application-website:active { transform: none; }
+  .application-website:active,
+  .application-deal > a:active { transform: none; }
 }

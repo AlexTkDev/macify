@@ -19,7 +19,7 @@ Each pull request may add one new application manifest. Use an issue for code, d
 6. Run `npm run catalogue:validate`.
 7. Open a pull request containing only the new manifest and cite the official sources used.
 
-Deals are not currently available, so deal submissions are not being accepted. The repository retains supporting catalogue and backend code for future implementation.
+Deals are not currently available in production, so deal submissions are not being accepted. The repository retains supporting implementation and local preview fixtures for future development.
 
 Maintainers handle changes to existing listings.
 

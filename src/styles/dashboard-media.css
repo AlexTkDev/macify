@@ -33,7 +33,7 @@
 }
 
 .media-preview img { width: 100%; height: 100%; object-fit: cover; }
-.media-preview-icon img { width: 6rem; height: 6rem; border-radius: 22%; box-shadow: 0 0.4rem 1rem rgb(25 31 45 / 0.14); }
+.media-preview-icon img { width: 6rem; height: 6rem; border-radius: 22%; background: #fff; box-shadow: 0 0.4rem 1rem rgb(25 31 45 / 0.14); }
 .media-asset-meta { padding: 0.85rem; display: flex; flex-direction: column; font-size: 0.69rem; }
 .media-asset-meta > span,
 .media-asset-meta > p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.62rem; }
@@ -62,4 +62,4 @@
 
 .media-management-preview img { width: 100%; height: 100%; padding: 0.5rem; object-fit: contain; }
 .media-management-icon { aspect-ratio: 1; }
-.media-management-icon img { padding: 2.4rem; border-radius: 22%; }
+.media-management-icon img { padding: 2.4rem; border-radius: 22%; background: #fff; }
