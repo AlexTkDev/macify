@@ -53,7 +53,7 @@ Descriptions must contain 40–20,000 characters. Use level-two Markdown heading
 
 Structured pricing uses `pricingType` (`free`, `freemium`, or `paid`) and `billingType` (`one_time`, `subscription`, or `null`). Free applications require `null`; freemium and paid applications require a billing type. Public pricing uses `pricingDetails` when present, otherwise the generated classification label. Keep those fields consistent with the description.
 
-Homepage inclusion is separate from publication. Follow [`HOMEPAGE_CURATION.md`](HOMEPAGE_CURATION.md) without unpublishing an otherwise valid catalogue record.
+Homepage inclusion is separate from publication; an application can remain in the directory without being featured on the homepage.
 
 <a id="deal-verification"></a>
 

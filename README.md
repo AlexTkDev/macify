@@ -14,6 +14,8 @@
 
 Macify brings together excellent macOS applications across a wide range of categories. Every app is selected for its quality, usefulness, and ability to make the Mac experience better.
 
+![Macify homepage showing curated Mac apps and the featured Droppy application](docs/assets/macify-homepage.webp)
+
 The collection includes both free and paid software. It is focused entirely on applications made for macOS, so iPhone and iPad apps are not included.
 
 Browse the collection, search for a specific tool, or take the surprise route. Every listing explains what the app does, who it suits, what it costs, and what you should know before installing it.
@@ -33,7 +35,7 @@ Every contribution helps us build a better collection of high quality macOS appl
 
 ## 🛠️ Make it run locally
 
-Macify uses Next.js and TypeScript on Cloudflare Workers. Reviewed listings live in D1, while application artwork lives in R2.
+Macify uses Next.js and TypeScript on Cloudflare Workers.
 
 Use Node.js 22, matching the repository’s CI workflows. To run it locally:
 
@@ -44,7 +46,7 @@ npm run db:migrate:local
 npm run dev
 ```
 
-The development server applies local migrations, validates the catalogue, and loads application and deal manifests into the local database when it starts. Local synchronization publishes records directly for development; it does not use the production review queue. The fast startup path reuses stored media without checking its bytes. Use `npm run setup` for a full local setup and media check. To refresh catalogue changes while it is already running, use `npm run catalogue:sync:local`.
+The development server prepares the local catalogue when it starts. Use `npm run setup` to refresh local data and artwork.
 
 Before submitting changes, run the checks that match your work:
 
