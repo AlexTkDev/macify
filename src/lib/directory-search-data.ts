@@ -69,7 +69,7 @@ function searchConditions(filters?: DirectorySearchFilters) {
 
 export async function getHomepageDirectoryData(filters?: DirectorySearchFilters, view: HomepageView = "hot") {
   const database = await getDatabase();
-  const [fallbackRecords, analyticsVisits] = await Promise.all([
+  const [fallbackRecords, analyticsVisits, featuredRecords] = await Promise.all([
     view === "latest"
       ? database.select(cardFields).from(apps)
         .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
@@ -78,6 +78,10 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
         eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, HOMEPAGE_CURATED_SLUGS),
       )).limit(30),
     view === "hot" ? getHotApplicationVisits() : view === "trending" ? getTrendingApplicationVisits() : Promise.resolve([]),
+    database.select(cardFields).from(apps)
+      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt), eq(apps.isFeatured, true)))
+      .orderBy(desc(apps.featuredAt), asc(apps.name), asc(apps.id))
+      .limit(30),
   ]);
 
   let records = fallbackRecords;
@@ -115,14 +119,19 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
       .where(and(...conditions)),
   ]) : [[], [{ total: 0 }]];
 
-  const appIds = [...new Set([...records, ...searchRecords].map(({ id }) => id))];
-  const { icons, previews } = await getCardMedia(appIds);
   const orderedRecords = view !== "latest" && !analyticsVisits.length ? [...records].sort((left, right) => (
     (HOMEPAGE_CURATED_ORDER.get(left.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
     - (HOMEPAGE_CURATED_ORDER.get(right.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
   )) : records;
+  const featuredIds = new Set(featuredRecords.map(({ id }) => id));
+  const directoryRecords = [
+    ...featuredRecords,
+    ...orderedRecords.filter(({ id }) => !featuredIds.has(id)),
+  ].slice(0, 30);
+  const appIds = [...new Set([...directoryRecords, ...searchRecords].map(({ id }) => id))];
+  const { icons, previews } = await getCardMedia(appIds);
   return {
-    applications: orderedRecords.map((record) => ({
+    applications: directoryRecords.map((record) => ({
       ...record,
       icon: icons.get(record.id) ?? null,
       preview: previews.get(record.id) ?? null,

@@ -23,3 +23,9 @@ Missing media should be fixed in the record. Keep curated fallback entries in th
 5. Confirm the curated fallback contains only approved eligible entries, and check Hot, Trending, and Latest independently.
 
 The curated fallback contains up to 30 eligible applications from the approved pool.
+
+## ⭐ Featured applications
+
+Featured applications appear first inside “Apps worth trying” in Hot, Trending, and Latest, with a gold check seal beside the application name. Only published, non-deleted applications qualify. Featured entries are ordered by most recent featured date, then name.
+
+The remaining applications follow the selected view’s ranking, with duplicates removed. Each view contains up to 30 applications in total.

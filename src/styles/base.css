@@ -98,14 +98,14 @@ img {
 
 .primary-button:hover,
 .button-primary:hover {
-  border-color: var(--accent-dark);
-  background: var(--accent-dark);
-  transform: translateY(-0.08rem);
+  border-color: color-mix(in oklch, var(--ink) 90%, white);
+  background: color-mix(in oklch, var(--ink) 90%, white);
 }
 
 .button-secondary:hover {
-  border-color: var(--accent);
-  color: var(--accent-dark);
+  border-color: color-mix(in oklch, var(--line-strong) 90%, var(--ink));
+  color: var(--ink);
+  background: color-mix(in oklch, var(--paper-strong) 96%, var(--ink));
 }
 
 .primary-button:active,

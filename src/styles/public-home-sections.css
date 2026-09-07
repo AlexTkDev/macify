@@ -1,4 +1,5 @@
 .home-section { padding: 0 0 7rem; }
+.application-directory { scroll-margin-top: 9rem; }
 
 .category-page {
   width: min(calc(100% - var(--public-page-inset)), 76rem);
@@ -312,7 +313,7 @@
 
 .deals-hero-action:focus-visible { outline: 0.2rem solid var(--play-blue); outline-offset: 0.22rem; }
 .deals-hero-action:hover,
-.deals-hero-action:focus-visible { background: #0047dc; }
+.deals-hero-action:focus-visible { background: color-mix(in oklch, var(--play-blue) 92%, black); }
 .deals-hero-action:active { transform: translateY(0.03rem) scale(0.985); }
 
 .deals-hero-copy > .deals-hero-disclaimer {
@@ -837,7 +838,9 @@
 }
 
 .deal-card-action:focus-visible { outline: 0.18rem solid var(--play-blue); outline-offset: 0.2rem; }
-.deal-card-action:active { background: var(--play-blue); transform: translateY(0.12rem) scale(0.98); }
+.deal-card-action:hover,
+.deal-card-action:focus-visible { background: color-mix(in oklch, var(--public-ink) 90%, white); }
+.deal-card-action:active { background: color-mix(in oklch, var(--public-ink) 95%, white); transform: translateY(0.12rem) scale(0.98); }
 
 .category-index-grid {
   display: grid;
@@ -926,6 +929,7 @@
 }
 
 .directory-app-row {
+  position: relative;
   min-width: 0;
   display: block;
   text-align: left;
@@ -948,21 +952,7 @@
   background: #000;
 }
 
-.directory-featured-badge {
-  position: absolute;
-  top: .75rem;
-  left: .75rem;
-  z-index: 3;
-  padding: .38rem .58rem;
-  border: 1px solid rgb(255 255 255 / .7);
-  border-radius: .35rem;
-  color: #10131a;
-  background: #f8bd32;
-  font-size: .66rem;
-  font-weight: 850;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-}
+
 
 .directory-app-preview::before {
   content: "";
@@ -1057,7 +1047,7 @@
   white-space: nowrap;
 }
 
-.directory-app-copy > span {
+.directory-app-copy > span:not(.directory-app-name) {
   min-height: 2.55rem;
   margin-top: 0.34rem;
   display: -webkit-box;
@@ -1109,3 +1099,23 @@
 .directory-loading-identity { display: block; height: 5rem; }
 
 .directory-loading-preview { background: #f2f3f5; }
+
+/* Keep the card link and the featured control as separate interactive targets. */
+.directory-app-link::after { content: ""; position: absolute; inset: 0; }
+.directory-app-link:focus-visible { outline: none; }
+.directory-app-row:has(.directory-app-link:focus-visible) { outline: 0.18rem solid var(--play-blue); outline-offset: 0.3rem; border-radius: 0.45rem; }
+.directory-app-name { display: flex; align-items: center; gap: 0.35rem; min-height: 1.5rem; }
+.directory-app-link { min-width: 0; }
+.featured-seal { display: inline-flex; flex-shrink: 0; }
+.featured-seal-trigger { position: relative; z-index: 3; display: grid; place-items: center; width: 1.55rem; height: 1.55rem; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+.featured-seal-mark { width: 1.3rem; height: 1.3rem; overflow: visible; color: oklch(72% 0.17 70); filter: drop-shadow(0 1px 1px rgb(105 67 3 / 0.18)); transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1); }
+.featured-seal-trigger:hover .featured-seal-mark { transform: scale(1.08); }
+.featured-seal-trigger:active { transform: translateY(1px); }
+.featured-seal-trigger:focus-visible { outline: 2px solid var(--play-blue); outline-offset: 2px; }
+.featured-seal-panel { position: absolute; z-index: 5; top: calc(100% - 2.8rem); left: 0; width: max-content; max-width: calc(100vw - 2rem); padding-top: 0.55rem; }
+.featured-seal-content { display: grid; gap: 0.6rem; padding: 0.8rem; border: 1px solid oklch(88% 0.01 85); border-radius: 0.65rem; background: var(--public-canvas); box-shadow: 0 0.25rem 0.5rem rgb(var(--shadow-color) / 0.1); color: var(--public-ink); }
+.featured-seal-description { display: block; font-size: 0.94rem; font-weight: 800; line-height: 1.3; white-space: nowrap; }
+.featured-seal-content a { width: fit-content; display: inline-flex; align-items: center; color: oklch(39% 0.13 250); font-size: 0.84rem; font-weight: 800; line-height: 1.3; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.2em; transition: color 160ms ease; }
+.featured-seal-content a:hover { color: oklch(31% 0.11 250); }
+.featured-seal-content a:focus-visible { outline: 2px solid var(--play-blue); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .featured-seal-mark, .featured-seal-content a { transition: none; } }

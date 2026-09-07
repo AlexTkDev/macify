@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { FeaturedSeal } from "@/components/home/featured-seal";
 import Link from "next/link";
 import { mediaUrl, PublicAppIcon, type PublicAppSummary } from "@/components/public-app-card";
 
@@ -10,9 +11,8 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
   return (
     <div className="directory-app-grid">
       {applications.map((app) => (
-        <Link className="directory-app-row" href={`/apps/${app.slug}`} key={app.id} prefetch={false}>
+        <article className="directory-app-row" key={app.id}>
           <span className="directory-app-preview">
-            {app.isFeatured && <span className="directory-featured-badge">Featured</span>}
             {app.preview ? (
               <Image
                 alt={app.preview.altText ?? `${app.name} preview`}
@@ -35,11 +35,14 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
               <PublicAppIcon app={app} decorative size={60} />
             </span>
             <span className="directory-app-copy">
-              <strong>{app.name}</strong>
+              <span className="directory-app-name">
+                <Link className="directory-app-link" href={`/apps/${app.slug}`} prefetch={false}><strong>{app.name}</strong></Link>
+                {app.isFeatured && <FeaturedSeal appName={app.name} />}
+              </span>
               <span>{app.tagline}</span>
             </span>
           </span>
-        </Link>
+        </article>
       ))}
     </div>
   );

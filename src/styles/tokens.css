@@ -1,4 +1,6 @@
 :root {
+  --button-dark-hover: oklch(25% 0.008 260);
+  --button-dark-active: oklch(21% 0.008 260);
   --canvas: #f3f5f6;
   --paper: #fbfcfc;
   --paper-strong: #ffffff;

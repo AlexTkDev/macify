@@ -38,7 +38,7 @@ export default function EditorialPolicyPage() {
       </section>
       <section id="featured">
         <h2>Featured placements and disclosures</h2>
-        <p>Featured applications are marked with a “Featured” label in the directory.</p>
+        <p>Featured applications appear at the top of the homepage directory and are marked with a gold check seal.</p>
         <p>Paid placements and sponsorships will be labelled separately from editorial selections.</p>
       </section>
       <section id="affiliate-disclosure">

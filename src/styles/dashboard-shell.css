@@ -364,8 +364,8 @@
 }
 
 .dashboard-shell .button-primary:hover {
-  border-color: var(--accent-dark);
-  background: var(--accent-dark);
+  border-color: color-mix(in oklch, var(--accent) 92%, black);
+  background: color-mix(in oklch, var(--accent) 92%, black);
 }
 
 .dashboard-shell .button-secondary {

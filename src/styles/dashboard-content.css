@@ -415,9 +415,9 @@ img.app-icon-table { background: #fff; }
 }
 
 .icon-button:hover {
-  border-color: #b7c6f3;
-  color: var(--accent-dark);
-  background: var(--accent-soft);
+  border-color: var(--line-strong);
+  color: var(--ink);
+  background: color-mix(in oklch, white 96%, var(--ink));
   transform: translateY(-1px);
 }
 
