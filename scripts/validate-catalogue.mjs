@@ -2,6 +2,8 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import approvedRemoteImageHostnameValues from "../config/approved-remote-image-hostnames.json" with { type: "json" };
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const appsDirectory = path.join(root, "catalog", "apps");
 const dealsDirectory = path.join(root, "catalog", "deals");
@@ -10,6 +12,7 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const allowedPricing = new Set(["free", "freemium", "paid"]);
 const allowedBilling = new Set(["one_time", "subscription"]);
 const allowedSource = new Set(["open_source", "closed_source"]);
+const approvedRemoteImageHostnames = new Set(approvedRemoteImageHostnameValues);
 const requiredManifestKeys = ["$schema", "schemaVersion", "name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "categories", "relatedAppSlugs", "media"];
 
 function isHttpUrl(value, httpsOnly = false) {
@@ -33,19 +36,22 @@ function isHttpUrl(value, httpsOnly = false) {
   }
 }
 
-function validateMedia(value, label, issues) {
+function validateMedia(value, label, issues, enforceApprovedHost) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     issues.push(`${label} must be an object.`);
     return;
   }
   for (const key of Object.keys(value)) if (!["sourceUrl", "altText"].includes(key)) issues.push(`${label}.${key} is not allowed.`);
   if (!isHttpUrl(value.sourceUrl, true)) issues.push(`${label}.sourceUrl must be a public HTTPS URL.`);
+  else if (enforceApprovedHost && !approvedRemoteImageHostnames.has(new URL(value.sourceUrl).hostname.toLowerCase())) {
+    issues.push(`${label}.sourceUrl host is not approved for catalogue ingestion.`);
+  }
   if (typeof value.altText !== "string" || value.altText.trim().length < 3 || value.altText.length > 300) {
     issues.push(`${label}.altText must contain 3 to 300 characters.`);
   }
 }
 
-function validateManifest(manifest, expectedSlug) {
+function validateManifest(manifest, expectedSlug, enforceApprovedHost = true) {
   const issues = [];
   if (!manifest || typeof manifest !== "object" || Array.isArray(manifest)) {
     return ["manifest must be a JSON object."];
@@ -86,12 +92,12 @@ function validateManifest(manifest, expectedSlug) {
     issues.push("media is required.");
   } else {
     for (const key of Object.keys(manifest.media)) if (!["icon", "preview", "screenshots"].includes(key)) issues.push(`media.${key} is not allowed.`);
-    validateMedia(manifest.media.icon, "media.icon", issues);
-    validateMedia(manifest.media.preview, "media.preview", issues);
+    validateMedia(manifest.media.icon, "media.icon", issues, enforceApprovedHost);
+    validateMedia(manifest.media.preview, "media.preview", issues, enforceApprovedHost);
     if (!Array.isArray(manifest.media.screenshots) || manifest.media.screenshots.length > 8) {
       issues.push("media.screenshots must be an array containing no more than 8 items.");
     } else {
-      manifest.media.screenshots.forEach((item, index) => validateMedia(item, `media.screenshots[${index}]`, issues));
+      manifest.media.screenshots.forEach((item, index) => validateMedia(item, `media.screenshots[${index}]`, issues, enforceApprovedHost));
       const mediaUrls = [manifest.media.icon?.sourceUrl, manifest.media.preview?.sourceUrl, ...manifest.media.screenshots.map(({ sourceUrl }) => sourceUrl)];
       if (new Set(mediaUrls).size !== mediaUrls.length) issues.push("Every media source URL must be unique within an application.");
     }
@@ -217,7 +223,7 @@ for (const [file, validate, expectedSlug] of [
 ]) {
   try {
     const manifest = JSON.parse(await readFile(path.join(examplesDirectory, file), "utf8"));
-    const issues = validate(manifest, expectedSlug);
+    const issues = validate(manifest, expectedSlug, false);
     for (const issue of issues) console.error(`examples/${file}: ${issue}`);
     failed ||= issues.length > 0;
   } catch (error) {

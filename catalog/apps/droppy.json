@@ -22,11 +22,11 @@
   ],
   "media": {
     "icon": {
-      "sourceUrl": "https://getdroppy.app/assets/apple-touch-icon.png",
+      "sourceUrl": "https://getdroppy.app/assets/brand/droppy-icon-default-512.webp",
       "altText": "Droppy application icon"
     },
     "preview": {
-      "sourceUrl": "https://getdroppy.app/assets/og/og-home-20260729.jpg",
+      "sourceUrl": "https://getdroppy.app/assets/og/og-home-20260814.jpg",
       "altText": "Droppy application preview"
     },
     "screenshots": []
