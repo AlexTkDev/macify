@@ -6,9 +6,16 @@ import {
   parseRemoteImageUrl as parseLocalRemoteImageUrl,
 } from "../lib/local-media.mjs";
 import {
+  detectImageMimeType,
   matchesFileSignature as matchesWorkerFileSignature,
   parseRemoteImageUrl as parseWorkerRemoteImageUrl,
 } from "../../src/lib/media-validation.ts";
+
+test("Worker detects a supported image when the server declares the wrong MIME type", () => {
+  const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0]);
+  assert.equal(detectImageMimeType(jpeg), "image/jpeg");
+  assert.equal(matchesWorkerFileSignature(jpeg, "image/png"), false);
+});
 
 const parsers = [
   ["Worker", parseWorkerRemoteImageUrl],

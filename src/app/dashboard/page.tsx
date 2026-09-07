@@ -59,21 +59,21 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="data-table-wrap">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th scope="col">Application</th>
-                  <th scope="col">Pricing</th>
-                  <th scope="col">Source</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Homepage</th>
-                  <th scope="col"><span className="sr-only">Actions</span></th>
+            <table className="data-table" role="table">
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th role="columnheader" scope="col">Application</th>
+                  <th role="columnheader" scope="col">Pricing</th>
+                  <th role="columnheader" scope="col">Source</th>
+                  <th role="columnheader" scope="col">Status</th>
+                  <th role="columnheader" scope="col">Homepage</th>
+                  <th role="columnheader" scope="col"><span className="sr-only">Actions</span></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody role="rowgroup">
                 {applications.map((app) => (
-                  <tr key={app.id}>
-                    <td>
+                  <tr key={app.id} role="row">
+                    <td role="cell">
                       <Link className="table-app table-app-link" href={`/dashboard/apps/${app.id}`}>
                         {app.iconStorageKey ? (
                           <Image
@@ -90,15 +90,15 @@ export default async function DashboardPage() {
                         <span><strong>{app.name}</strong><small>/{app.slug}</small></span>
                       </Link>
                     </td>
-                    <td>{formatPricing(app)}</td>
-                    <td>{app.sourceType === "open_source" ? "Open source" : <span className="table-muted">Not displayed</span>}</td>
-                    <td>
+                    <td role="cell" data-label="Pricing">{formatPricing(app)}</td>
+                    <td role="cell" data-label="Source">{app.sourceType === "open_source" ? "Open source" : <span className="table-muted">Not displayed</span>}</td>
+                    <td role="cell" data-label="Status">
                       <span className={cn(app.status === "published" ? "published-badge" : "draft-badge")}>
                         {app.status === "published" ? "Published" : app.status === "archived" ? "Unpublished" : "Draft"}
                       </span>
                     </td>
-                    <td>{app.isFeatured ? <span className="featured-badge"><Star size={12} /> Featured</span> : <span className="table-muted">Standard</span>}</td>
-                    <td>
+                    <td role="cell" data-label="Homepage">{app.isFeatured ? <span className="featured-badge"><Star size={12} /> Featured</span> : <span className="table-muted">Standard</span>}</td>
+                    <td role="cell">
                       <Link className="icon-button" href={`/dashboard/apps/${app.id}/edit`} aria-label={`Manage publication and placement for ${app.name}`}>
                         <SlidersHorizontal size={15} />
                       </Link>

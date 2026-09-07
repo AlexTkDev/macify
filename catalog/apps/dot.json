@@ -14,7 +14,7 @@
   "categories": ["calendar-scheduling", "menu-bar-utilities"],
   "relatedAppSlugs": ["dato", "fantastical"],
   "media": {
-    "icon": {"sourceUrl": "https://www.trydot.app/favicon.ico", "altText": "Dot application icon"},
+    "icon": {"sourceUrl": "https://trydot.app/dot-final.png", "altText": "Dot application icon"},
     "preview": {"sourceUrl": "https://trydot.app/og-image.png", "altText": "Dot menu-bar calendar preview"},
     "screenshots": []
   }

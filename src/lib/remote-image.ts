@@ -1,5 +1,5 @@
 import { allowedImageTypes, MAX_UPLOAD_BYTES, type MediaRole } from "@/lib/media-types";
-import { matchesFileSignature, parseRemoteImageUrl } from "@/lib/media-validation";
+import { detectImageMimeType, matchesFileSignature, parseRemoteImageUrl } from "@/lib/media-validation";
 
 async function readResponseWithLimit(response: Response) {
   if (!response.body) throw new Error("The remote server returned an empty response.");
@@ -44,7 +44,7 @@ export async function fetchRemoteImage(value: string, role: MediaRole) {
         continue;
       }
       if (!response.ok) return { ok: false, error: `The image server returned HTTP ${response.status}.` } as const;
-      const mimeType = response.headers.get("content-type")?.split(";", 1)[0].trim().toLowerCase() ?? "";
+      let mimeType = response.headers.get("content-type")?.split(";", 1)[0].trim().toLowerCase() ?? "";
       if (!allowedImageTypes[role].has(mimeType)) {
         return {
           ok: false,
@@ -55,7 +55,13 @@ export async function fetchRemoteImage(value: string, role: MediaRole) {
       }
       if (Number(response.headers.get("content-length") ?? 0) > MAX_UPLOAD_BYTES) return { ok: false, error: "The remote image is larger than the 10 MB limit." } as const;
       const bytes = await readResponseWithLimit(response);
-      if (!matchesFileSignature(bytes, mimeType)) return { ok: false, error: "The downloaded content does not match its image type." } as const;
+      if (!matchesFileSignature(bytes, mimeType)) {
+        const detectedMimeType = detectImageMimeType(bytes);
+        if (!detectedMimeType || !allowedImageTypes[role].has(detectedMimeType)) {
+          return { ok: false, error: "The downloaded content does not match its image type." } as const;
+        }
+        mimeType = detectedMimeType;
+      }
       return {
         ok: true,
         bytes,

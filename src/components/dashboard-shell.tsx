@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { logoutAdmin } from "@/app/dashboard/logout-action";
 import { MacifyLogo } from "@/components/macify-logo";
+import { DashboardStylePicker } from "@/components/dashboard-appearance";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -57,6 +58,7 @@ export function DashboardShell({
             <span className="dashboard-current-icon" data-tone={current.tone}><CurrentIcon aria-hidden="true" size={16} strokeWidth={1.8} /></span>
             <span><small>Macify dashboard</small><strong>{current.label}</strong></span>
           </div>
+          <DashboardStylePicker />
           <Link className="dashboard-site-link dashboard-site-link-mobile" href="/">Open Macify <ArrowUpRight aria-hidden="true" size={15} /></Link>
         </header>
         <main className="dashboard-main" id="main-content">{children}</main>

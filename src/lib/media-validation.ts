@@ -20,6 +20,13 @@ export function matchesFileSignature(bytes: Uint8Array, mimeType: string) {
   }
 }
 
+export function detectImageMimeType(bytes: Uint8Array) {
+  for (const mimeType of ["image/png", "image/jpeg", "image/webp", "image/avif", "image/vnd.microsoft.icon"] as const) {
+    if (matchesFileSignature(bytes, mimeType)) return mimeType;
+  }
+  return null;
+}
+
 export function safeFileName(name: string) {
   const normalized = name
     .normalize("NFKD")
