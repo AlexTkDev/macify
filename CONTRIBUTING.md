@@ -1,15 +1,15 @@
-# Contribute to the Macify catalogue
+# 🌱 Contribute to the Macify catalogue
 
 Application and deal submissions are welcome. Each pull request may add one new application or deal manifest. Use an issue for code, documentation, design, or changes to an existing record.
 
-## Before you begin
+## 🔎 Before you begin
 
 - Check that the application is not already in [`catalog/apps`](catalog/apps).
 - Confirm it is built for macOS or offers a meaningful Mac experience.
 - Gather current official sources for features, pricing, requirements, privacy, and media.
 - Follow the [editorial standard](docs/EDITORIAL.md).
 
-## Add an application
+## 📦 Add an application
 
 1. Fork this repository and create a branch for the application.
 2. Copy [`catalog/examples/application.example.json`](catalog/examples/application.example.json) to `catalog/apps/<slug>.json` using a lowercase, hyphenated slug.
@@ -19,7 +19,7 @@ Application and deal submissions are welcome. Each pull request may add one new 
 6. Run `npm run catalogue:validate`.
 7. Open a pull request containing only the new manifest and cite the official sources used.
 
-## Add a deal
+## 🏷️ Add a deal
 
 1. Choose an existing application in [`catalog/apps`](catalog/apps) and check that it does not already have a manifest in [`catalog/deals`](catalog/deals).
 2. Copy [`catalog/examples/deal.example.json`](catalog/examples/deal.example.json) to `catalog/deals/<app-slug>.json`. Match `appSlug` and the filename to the existing application slug.
@@ -31,6 +31,6 @@ Application and deal submissions are welcome. Each pull request may add one new 
 
 Maintainers handle changes to existing listings.
 
-## Review and publication
+## ✅ Review and publication
 
 Automated checks validate the manifest structure. Editors verify sources and content before publication; submission does not guarantee inclusion.
