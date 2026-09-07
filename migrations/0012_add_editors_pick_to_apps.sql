@@ -1,0 +1,1 @@
+ALTER TABLE `apps` ADD `is_editors_pick` integer DEFAULT false NOT NULL;

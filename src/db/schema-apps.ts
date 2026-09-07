@@ -17,6 +17,7 @@ export const apps = sqliteTable(
     youtubeUrl: text("youtube_url"),
     status: text("status", { enum: ["draft", "published", "archived"] }).notNull().default("draft"),
     isFeatured: integer("is_featured", { mode: "boolean" }).notNull().default(false),
+    isEditorsPick: integer("is_editors_pick", { mode: "boolean" }).notNull().default(false),
     featuredAt: integer("featured_at", { mode: "timestamp_ms" }),
     publishedAt: integer("published_at", { mode: "timestamp_ms" }),
     deletedAt: integer("deleted_at", { mode: "timestamp_ms" }),

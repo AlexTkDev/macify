@@ -2,8 +2,8 @@ import { PendingSubmitButton } from "@/components/pending-submit-button";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, ExternalLink, GitBranch, Star } from "lucide-react";
-import { setApplicationPublication, setFeaturedApplication } from "@/app/dashboard/editorial-actions";
+import { BadgeCheck, ChevronRight, ExternalLink, GitBranch, Star } from "lucide-react";
+import { setApplicationPublication, setEditorsPickApplication, setFeaturedApplication } from "@/app/dashboard/editorial-actions";
 import { getApplicationEditorData } from "@/lib/apps-data";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +29,7 @@ export default async function EditApplicationPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ featured?: string; featureError?: string; publication?: string }>;
+  searchParams: Promise<{ featured?: string; featureError?: string; editorsPick?: string; editorsPickError?: string; publication?: string }>;
 }) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const { application, media } = await getApplicationEditorData(id);
@@ -63,9 +63,11 @@ export default async function EditApplicationPage({
       </header>
 
       {query.featured === "1" && <div className="success-banner" role="status">Featured placement updated.</div>}
+      {query.editorsPick === "1" && <div className="success-banner" role="status">Editor’s Pick status updated.</div>}
       {query.publication === "publish" && <div className="success-banner" role="status">Application published to the directory.</div>}
-      {query.publication === "unpublish" && <div className="success-banner" role="status">Application removed from the public directory and homepage placement.</div>}
+      {query.publication === "unpublish" && <div className="success-banner" role="status">Application removed from the public directory, homepage placement, and editorial recognition.</div>}
       {query.featureError === "not-published" && <div className="form-error" role="alert">Publish the application before featuring it on the homepage.</div>}
+      {query.editorsPickError === "not-published" && <div className="form-error" role="alert">Publish the application before marking it as an Editor’s Pick.</div>}
 
       <section className="dashboard-panel editorial-controls" aria-labelledby="editorial-controls-heading">
         <div className="media-editor-heading">
@@ -97,6 +99,20 @@ export default async function EditApplicationPage({
               <input name="appId" type="hidden" value={application.id} />
               <PendingSubmitButton className={application.isFeatured ? "button-secondary" : "button-primary"} disabled={!isPublished} name="featured" type="submit" value={application.isFeatured ? "false" : "true"}>
                 {application.isFeatured ? "Remove featured status" : isPublished ? "Feature application" : "Publish before featuring"}
+              </PendingSubmitButton>
+            </form>
+          </section>
+
+          <section className="editorial-control-card">
+            <div className="editorial-control-icon" data-tone={application.isEditorsPick ? "editors-pick" : "muted"}><BadgeCheck size={18} /></div>
+            <div><p className="section-kicker">Editorial recognition</p><h3>{application.isEditorsPick ? "Editor’s Pick" : "Standard listing"}</h3></div>
+            <p>{application.isEditorsPick
+              ? "This application carries the Editor’s Pick badge in the public directory."
+              : "Choose this application as an Editor’s Pick when it reflects Macify’s strongest recommendations."}</p>
+            <form action={setEditorsPickApplication}>
+              <input name="appId" type="hidden" value={application.id} />
+              <PendingSubmitButton className={application.isEditorsPick ? "button-secondary" : "button-primary"} disabled={!isPublished} name="editorsPick" type="submit" value={application.isEditorsPick ? "false" : "true"}>
+                {application.isEditorsPick ? "Remove Editor’s Pick" : isPublished ? "Mark as Editor’s Pick" : "Publish before selecting"}
               </PendingSubmitButton>
             </form>
           </section>

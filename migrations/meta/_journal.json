@@ -78,6 +78,13 @@
       "when": 1788714384529,
       "tag": "0011_remove_legacy_imports_redirects_and_metadata",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1788815829499,
+      "tag": "0012_add_editors_pick_to_apps",
+      "breakpoints": true
     }
   ]
 }

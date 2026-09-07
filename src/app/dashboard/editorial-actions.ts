@@ -36,6 +36,32 @@ export async function setFeaturedApplication(formData: FormData) {
   redirect(`/dashboard/apps/${parsed.data.appId}/edit?featured=1`);
 }
 
+export async function setEditorsPickApplication(formData: FormData) {
+  await requireAdmin();
+  const parsed = z.object({ appId: z.uuid(), editorsPick: z.enum(["true", "false"]) }).safeParse({
+    appId: formData.get("appId"), editorsPick: formData.get("editorsPick"),
+  });
+  if (!parsed.success) redirect("/dashboard?error=invalid-editors-pick");
+  const editorsPick = parsed.data.editorsPick === "true";
+  const database = await getDatabase();
+  const row = await database.select({ slug: apps.slug, status: apps.status }).from(apps)
+    .where(and(eq(apps.id, parsed.data.appId), isNull(apps.deletedAt))).limit(1);
+  if (!row[0]) redirect("/dashboard");
+  if (editorsPick && row[0].status !== "published") {
+    redirect(`/dashboard/apps/${parsed.data.appId}/edit?editorsPickError=not-published`);
+  }
+  const updated = await database.update(apps).set({ isEditorsPick: editorsPick, updatedAt: new Date() })
+    .where(and(eq(apps.id, parsed.data.appId), isNull(apps.deletedAt), editorsPick ? eq(apps.status, "published") : undefined))
+    .returning({ id: apps.id });
+  if (!updated.length) redirect(`/dashboard/apps/${parsed.data.appId}/edit?editorsPickError=not-published`);
+  revalidatePath("/");
+  revalidatePath("/categories", "layout");
+  revalidatePath("/apps/[slug]", "page");
+  revalidatePath("/dashboard", "layout");
+  revalidatePath(`/apps/${row[0].slug}`);
+  redirect(`/dashboard/apps/${parsed.data.appId}/edit?editorsPick=1`);
+}
+
 export async function setApplicationPublication(formData: FormData) {
   await requireAdmin();
   const parsed = z.object({ appId: z.uuid(), intent: z.enum(["publish", "unpublish"]) }).safeParse({
@@ -55,6 +81,7 @@ export async function setApplicationPublication(formData: FormData) {
   } : {
     status: "archived",
     isFeatured: false,
+    isEditorsPick: false,
     featuredAt: null,
     updatedAt: now,
   }).where(and(eq(apps.id, parsed.data.appId), isNull(apps.deletedAt)));

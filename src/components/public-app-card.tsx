@@ -10,6 +10,7 @@ export type PublicAppSummary = {
   billingType: BillingType;
   pricingDetails: string | null;
   isFeatured: boolean;
+  isEditorsPick: boolean;
   icon: { storageKey: string; altText: string | null } | null;
 };
 

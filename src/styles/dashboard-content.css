@@ -233,7 +233,7 @@
 .editorial-controls { margin-top: 1rem; padding: 1.35rem; }
 .application-control-state { padding: .25rem .46rem; border-radius: .32rem; color: #72571c; background: #fff2c9; font-size: .62rem !important; font-weight: 760; }
 .application-control-state[data-state="published"] { color: #176543; background: #e0f2e8; }
-.editorial-control-grid { margin-top: 1.15rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: .62rem; overflow: hidden; }
+.editorial-control-grid { margin-top: 1.15rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: .62rem; overflow: hidden; }
 .editorial-control-card { min-height: 17rem; padding: 1.25rem; display: flex; align-items: flex-start; flex-direction: column; border-right: 1px solid var(--line); }
 .editorial-control-card:last-child { border-right: 0; }
 .editorial-control-card h3 { margin: 0; font-size: 1.05rem; }
@@ -242,6 +242,7 @@
 .editorial-control-icon { width: 2.5rem; height: 2.5rem; margin-bottom: 1rem; display: grid; place-items: center; border-radius: .55rem; color: var(--muted); background: #eef0f4; }
 .editorial-control-icon[data-tone="success"] { color: #176543; background: #e0f2e8; }
 .editorial-control-icon[data-tone="featured"] { color: #72571c; background: #fff2c9; }
+.editorial-control-icon[data-tone="editors-pick"] { color: #176543; background: #e0f2e8; }
 
 @media (max-width: 760px) {
   .catalogue-queue-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -388,7 +389,8 @@ img.app-icon-table { background: #fff; }
 
 .published-badge,
 .draft-badge,
-.featured-badge {
+.featured-badge,
+.editors-pick-badge {
   padding: 0.27rem 0.5rem;
   display: inline-flex;
   border-radius: 0.35rem;
@@ -401,6 +403,7 @@ img.app-icon-table { background: #fff; }
 .published-badge { color: #176543; background: #e0f2e8; }
 .draft-badge { color: #72571c; background: #f8edcf; }
 .featured-badge { align-items: center; gap: .28rem; color: #72571c; background: #fff2c9; }
+.editors-pick-badge { align-items: center; gap: .28rem; color: #176543; background: #e0f2e8; }
 
 .icon-button {
   width: 2.15rem;

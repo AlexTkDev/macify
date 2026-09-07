@@ -21,6 +21,7 @@ be preserved.
 | [0009_add_catalogue_revisions_deals_and_featured_apps.sql](0009_add_catalogue_revisions_deals_and_featured_apps.sql) | Add catalogue review history, deals, and featured application fields. |
 | [0010_remove_processor_compatibility_fields.sql](0010_remove_processor_compatibility_fields.sql) | Remove Apple Silicon and Intel compatibility fields. |
 | [0011_remove_legacy_imports_redirects_and_metadata.sql](0011_remove_legacy_imports_redirects_and_metadata.sql) | Remove legacy imports, redirects, and unused app, relationship, and media metadata. |
+| [0012_add_editors_pick_to_apps.sql](0012_add_editors_pick_to_apps.sql) | Add independently managed Editor’s Pick recognition to applications. |
 
 ## 📦 Supporting files
 

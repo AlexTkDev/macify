@@ -170,7 +170,7 @@
 }
 .dashboard-card-manage { margin-left: auto; min-height: 2.75rem; display: inline-flex; align-items: center; gap: 0.4rem; color: var(--ink-soft); font-size: 0.85rem; font-weight: 650; }
 .dashboard-card-manage:hover { color: var(--accent); }
-.dashboard-app-card-footer :is(.published-badge, .draft-badge, .featured-badge) { font-size: 0.75rem; }
+.dashboard-app-card-footer :is(.published-badge, .draft-badge, .featured-badge, .editors-pick-badge) { font-size: 0.75rem; }
 
 .catalogue-queue-toolbar { padding-inline: 0; }
 .catalogue-queue-toolbar p { max-width: 65ch; font-size: 0.875rem; line-height: 1.5; }

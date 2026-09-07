@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { FeaturedSeal } from "@/components/home/featured-seal";
+import { EditorsPickSeal, FeaturedSeal } from "@/components/home/featured-seal";
 import Link from "next/link";
 import { mediaUrl, PublicAppIcon, type PublicAppSummary } from "@/components/public-app-card";
 
@@ -38,6 +38,7 @@ export function DirectoryAppGrid({ applications }: { applications: DirectoryApp[
               <span className="directory-app-name">
                 <Link className="directory-app-link" href={`/apps/${app.slug}`} prefetch={false}><strong>{app.name}</strong></Link>
                 {app.isFeatured && <FeaturedSeal appName={app.name} />}
+                {app.isEditorsPick && <EditorsPickSeal appName={app.name} />}
               </span>
               <span>{app.tagline}</span>
             </span>

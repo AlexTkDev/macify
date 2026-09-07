@@ -28,4 +28,6 @@ The curated fallback contains up to 30 eligible applications from the approved p
 
 Featured applications appear first inside “Apps worth trying” in Hot, Trending, and Latest, with a gold check seal beside the application name. Only published, non-deleted applications qualify. Featured entries are ordered by most recent featured date, then name.
 
+Editor’s Picks carry a green check seal and remain in the normal ranking order. Only published applications can be selected. If an application is both Featured and an Editor’s Pick, the gold Featured seal appears first.
+
 The remaining applications follow the selected view’s ranking, with duplicates removed. Each view contains up to 30 applications in total.

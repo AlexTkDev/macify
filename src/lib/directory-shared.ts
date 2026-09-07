@@ -19,6 +19,7 @@ export const cardFields = {
   billingType: apps.billingType,
   pricingDetails: apps.pricingDetails,
   isFeatured: apps.isFeatured,
+  isEditorsPick: apps.isEditorsPick,
 };
 
 export const publicApplicationFields = {
@@ -35,6 +36,7 @@ export const publicApplicationFields = {
   youtubeUrl: apps.youtubeUrl,
   publishedAt: apps.publishedAt,
   isFeatured: apps.isFeatured,
+  isEditorsPick: apps.isEditorsPick,
 };
 
 type AppIconMedia = {

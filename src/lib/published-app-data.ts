@@ -31,6 +31,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
     billingType: relatedApp.billingType,
     pricingDetails: relatedApp.pricingDetails,
     isFeatured: relatedApp.isFeatured,
+    isEditorsPick: relatedApp.isEditorsPick,
   };
   const now = new Date();
   const [categoryRows, media, outgoing, dealRows, incoming] = await Promise.all([

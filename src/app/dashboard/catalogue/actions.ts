@@ -266,7 +266,7 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
   if (revision.changeType === "archive") {
     if (!revision.appId) throw new CatalogueDecisionError("missing-app");
     await database.batch([
-      database.update(apps).set({ status: "archived", isFeatured: false, featuredAt: null, updatedAt: new Date() }).where(eq(apps.id, revision.appId)),
+      database.update(apps).set({ status: "archived", isFeatured: false, isEditorsPick: false, featuredAt: null, updatedAt: new Date() }).where(eq(apps.id, revision.appId)),
       database.update(catalogueRevisions).set({ status: publicationStatus(revision.id, revision.sourcePath, revision.createdAt), errors: [], reviewedAt: new Date() })
         .where(eq(catalogueRevisions.id, revision.id)),
     ]);

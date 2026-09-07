@@ -27,6 +27,7 @@ export async function getApplicationsDashboardData() {
         sourceType: apps.sourceType,
         status: apps.status,
         isFeatured: apps.isFeatured,
+        isEditorsPick: apps.isEditorsPick,
         updatedAt: apps.updatedAt,
       })
       .from(apps)
@@ -114,6 +115,7 @@ export async function getApplicationEditorData(id: string) {
         updatedAt: apps.updatedAt,
         status: apps.status,
         isFeatured: apps.isFeatured,
+        isEditorsPick: apps.isEditorsPick,
       })
       .from(apps)
       .where(and(eq(apps.id, id), isNull(apps.deletedAt)))

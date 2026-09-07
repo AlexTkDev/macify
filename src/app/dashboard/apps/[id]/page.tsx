@@ -34,6 +34,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
       <div className="dashboard-listing-state" role="status">
         <span className={application.status === "published" ? "published-badge" : "draft-badge"}>{application.status === "published" ? "Published" : application.status === "archived" ? "Unpublished" : "Draft"}</span>
         <span>{application.isFeatured ? "Featured on the homepage" : "Not featured on the homepage"}</span>
+        {application.isEditorsPick && <span>Editor’s Pick</span>}
       </div>
 
       <article className="application-page application-presentation dashboard-listing-preview" aria-label="Application listing preview">
