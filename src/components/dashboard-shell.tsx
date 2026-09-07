@@ -26,9 +26,6 @@ export function DashboardShell({
   active: (typeof navigation)[number]["id"];
   children: ReactNode;
 }) {
-  const current = navigation.find(({ id }) => id === active) ?? navigation[0];
-  const CurrentIcon = current.icon;
-
   return (
     <div className="dashboard-shell">
       <aside className="dashboard-rail">
@@ -52,14 +49,6 @@ export function DashboardShell({
         </div>
       </aside>
       <section className="dashboard-workspace">
-        <header className="dashboard-workspace-bar">
-          <div className="dashboard-current-section">
-            <span className="dashboard-current-icon" data-tone={current.tone}><CurrentIcon aria-hidden="true" size={16} strokeWidth={1.8} /></span>
-            <span><small>Macify dashboard</small><strong>{current.label}</strong></span>
-          </div>
-          <span className="dashboard-workspace-label">Curate useful Mac apps.</span>
-          <Link className="dashboard-site-link dashboard-site-link-mobile" href="/">Open Macify <ArrowUpRight aria-hidden="true" size={15} /></Link>
-        </header>
         <main className="dashboard-main" id="main-content">{children}</main>
       </section>
     </div>

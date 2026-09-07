@@ -307,7 +307,7 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
   const normalizedCategories = normalizeManifestCategories(manifest.categories);
   const appQuery = revision.changeType === "create"
     ? database.insert(apps).values({ id: appId, ...appValues, createdAt: now })
-    : database.update(apps).set(appValues).where(eq(apps.id, appId));
+    : database.update(apps).set({ ...appValues, publishedAt: sql`coalesce(${apps.publishedAt}, ${now.getTime()})` }).where(and(eq(apps.id, appId), isNull(apps.deletedAt)));
 
   await database.batch([
     appQuery,

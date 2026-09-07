@@ -2,7 +2,7 @@ import { PendingSubmitButton } from "@/components/pending-submit-button";
 import Image from "next/image";
 import Link from "next/link";
 import { and, desc, eq, inArray, like, sql } from "drizzle-orm";
-import { AlertTriangle, CheckCircle2, GitBranch, PlusCircle, RefreshCcw } from "lucide-react";
+import { AlertTriangle, CheckCircle2, GitBranch } from "lucide-react";
 import { dismissCatalogueFailure, retryCatalogueFailure } from "@/app/dashboard/catalogue/actions";
 import { CatalogueBulkReview } from "@/components/catalogue-bulk-review";
 import { DashboardShell } from "@/components/dashboard-shell";
@@ -67,8 +67,7 @@ export async function ReviewQueuePage({
     database.select().from(catalogueRevisions).where(and(like(catalogueRevisions.sourcePath, sourcePattern), viewCondition)).orderBy(desc(catalogueRevisions.createdAt), desc(catalogueRevisions.id)).limit(101).offset((page - 1) * 100),
     database.select({
       pending: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' then 1 else 0 end), 0)`,
-      create: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'create' then 1 else 0 end), 0)`,
-      update: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'update' then 1 else 0 end), 0)`,
+      reviewed: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} not in ('pending', 'failed') then 1 else 0 end), 0)`,
       failed: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'failed' then 1 else 0 end), 0)`,
     }).from(catalogueRevisions).where(like(catalogueRevisions.sourcePath, sourcePattern)),
   ]);
@@ -77,23 +76,21 @@ export async function ReviewQueuePage({
   const applications = await getCatalogueQueueApplications(
     revisions.flatMap(({ appId }) => appId ? [appId] : []),
   );
-  const counts = countRows[0] ?? { pending: 0, create: 0, update: 0, failed: 0 };
+  const counts = countRows[0] ?? { pending: 0, reviewed: 0, failed: 0 };
 
   return (
     <DashboardShell active={kind === "deals" ? "deals" : "catalogue"}>
       <header className="editor-header editor-header-row">
         <div>
-          <p>GitHub updates</p>
           <h1>{queueLabel}</h1>
-          <span>{kind === "deals" ? "Review offer terms before merged deals reach the public site." : "Review listing content and media before merged applications reach the public directory."}</span>
+          <span>{kind === "deals" ? "Review offer terms before publishing." : "Review listing changes before publishing."}</span>
         </div>
       </header>
 
       <section className="catalogue-queue-stats" aria-label="Review queue status">
         <div><GitBranch size={18} /><span>Awaiting review</span><strong>{counts.pending}</strong></div>
-        <div><PlusCircle size={18} /><span>New records</span><strong>{counts.create}</strong></div>
-        <div><RefreshCcw size={18} /><span>Updates</span><strong>{counts.update}</strong></div>
-        <div><AlertTriangle size={18} /><span>Sync failures</span><strong>{counts.failed}</strong></div>
+        <div><AlertTriangle aria-hidden="true" size={18} /><span>Needs attention</span><strong>{counts.failed}</strong></div>
+        <div><CheckCircle2 aria-hidden="true" size={18} /><span>In history</span><strong>{counts.reviewed}</strong></div>
       </section>
 
       {query.published === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Revision published.</div>}
@@ -165,16 +162,16 @@ export async function ReviewQueuePage({
                     <div>
                       <div className="catalogue-revision-meta">
                         <span>{changeLabel}</span>
-                        <span data-status={revision.status}>{revisionStatusLabels[revision.status]}</span>
+                        {view === "history" && <span data-status={revision.status}>{revisionStatusLabels[revision.status]}</span>}
                       </div>
-                      <h3>{manifest?.name ?? current?.name ?? revision.appSlug}</h3>
+                      <h3><Link href={`${queuePath}/${revision.id}`}>{manifest?.name ?? current?.name ?? revision.appSlug}</Link></h3>
                       <p>{summary}</p>
                       {revision.status === "pending" && revision.errors.length > 0 && <p role="alert">{revision.errors.join(" ")}</p>}
                       <small>{revision.createdAt.toLocaleString()} · commit {revision.sourceCommitSha.slice(0, 8)}</small>
                     </div>
                   </div>
                   <div className="catalogue-revision-actions">
-                    {revision.appId && <Link className="button-secondary" href={`/dashboard/apps/${revision.appId}`}>Current listing</Link>}
+                    {revision.appId && <Link className="catalogue-current-link" href={`/dashboard/apps/${revision.appId}`}>Current listing</Link>}
                     {revision.status === "failed" && (
                       <>
                         <form action={retryCatalogueFailure}>
@@ -267,10 +264,10 @@ function viewLabel(view: View) {
 
 function viewDescription(view: View) {
   return view === "pending"
-    ? "Newest proposed changes appear first. Nothing here is public until you publish it."
+    ? "Newest changes first. Select updates to review together."
     : view === "history"
-      ? "Published, rejected, resolved, dismissed, and superseded revisions remain available for audit."
-      : "Only unresolved failures appear here. A later successful sync resolves an older failure automatically; dismiss one when no retry is needed.";
+      ? "Past decisions and resolved failures."
+      : "Retry a failed sync, or dismiss it to keep it in history.";
 }
 
 function mediaUrl(storageKey: string) {

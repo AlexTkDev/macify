@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -22,8 +22,10 @@ export async function setFeaturedApplication(formData: FormData) {
   if (featured && row[0].status !== "published") {
     redirect(`/dashboard/apps/${parsed.data.appId}/edit?featureError=not-published`);
   }
-  await database.update(apps).set({ isFeatured: featured, featuredAt: featured ? new Date() : null, updatedAt: new Date() })
-    .where(eq(apps.id, parsed.data.appId));
+  const updated = await database.update(apps).set({ isFeatured: featured, featuredAt: featured ? new Date() : null, updatedAt: new Date() })
+    .where(and(eq(apps.id, parsed.data.appId), isNull(apps.deletedAt), featured ? eq(apps.status, "published") : undefined))
+    .returning({ id: apps.id });
+  if (!updated.length) redirect(`/dashboard/apps/${parsed.data.appId}/edit?featureError=not-published`);
   revalidatePath("/");
   revalidatePath("/deals");
   revalidatePath("/categories", "layout");
@@ -48,14 +50,14 @@ export async function setApplicationPublication(formData: FormData) {
   const now = new Date();
   await database.update(apps).set(parsed.data.intent === "publish" ? {
     status: "published",
-    publishedAt: now,
+    publishedAt: sql`coalesce(${apps.publishedAt}, ${now.getTime()})`,
     updatedAt: now,
   } : {
     status: "archived",
     isFeatured: false,
     featuredAt: null,
     updatedAt: now,
-  }).where(eq(apps.id, parsed.data.appId));
+  }).where(and(eq(apps.id, parsed.data.appId), isNull(apps.deletedAt)));
   revalidatePath("/");
   revalidatePath("/deals");
   revalidatePath("/categories", "layout");

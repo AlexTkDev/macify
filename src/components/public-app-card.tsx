@@ -13,8 +13,8 @@ export type PublicAppSummary = {
   icon: { storageKey: string; altText: string | null } | null;
 };
 
-export function mediaUrl(storageKey: string) {
-  return `/media/${storageKey.split("/").map(encodeURIComponent).join("/")}`;
+export function mediaUrl(storageKey: string, scope: "public" | "dashboard" = "public") {
+  return `${scope === "dashboard" ? "/dashboard" : ""}/media/${storageKey.split("/").map(encodeURIComponent).join("/")}`;
 }
 
 type AppIconSize = 44 | 50 | 56 | 58 | 60 | 66 | 76 | 96;
@@ -22,6 +22,7 @@ type AppIconSize = 44 | 50 | 56 | 58 | 60 | 66 | 76 | 96;
 export function PublicAppIcon({
   app,
   decorative = false,
+  mediaScope = "public",
   loading,
   size = 56,
   // Fixed icons use Next's compact density srcset; responsive callers opt in.
@@ -29,6 +30,7 @@ export function PublicAppIcon({
 }: {
   app: Pick<PublicAppSummary, "name" | "icon">;
   decorative?: boolean;
+  mediaScope?: "public" | "dashboard";
   loading?: "eager" | "lazy";
   size?: AppIconSize;
   sizes?: string;
@@ -42,7 +44,8 @@ export function PublicAppIcon({
       loading={loading ?? "lazy"}
       quality={88}
       sizes={sizes}
-      src={mediaUrl(app.icon.storageKey)}
+      src={mediaUrl(app.icon.storageKey, mediaScope)}
+      unoptimized={mediaScope === "dashboard"}
       width={size}
     />
   ) : (

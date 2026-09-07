@@ -1,3 +1,4 @@
+import { PendingSubmitButton } from "@/components/pending-submit-button";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -50,14 +51,14 @@ export default async function EditApplicationPage({
         <div>
           <p>{isPublished ? "Published application" : application.status === "archived" ? "Unpublished application" : "Draft application"}</p>
           <h1>{application.name}</h1>
-          <span>Control public visibility and homepage placement. Listing content and media continue to come from GitHub revisions.</span>
+          <span>Manage publication and homepage placement.</span>
         </div>
         <div className="editor-header-actions">
           <a className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">
             Visit site <ExternalLink size={15} />
           </a>
           <a className="button-secondary" href={`https://github.com/Beingpax/macify/edit/main/catalog/apps/${application.slug}.json`} rel="noreferrer" target="_blank">
-            Edit listing <GitBranch size={15} />
+            Edit in GitHub <GitBranch size={15} />
           </a>
         </div>
       </header>
@@ -69,7 +70,7 @@ export default async function EditApplicationPage({
 
       <section className="dashboard-panel editorial-controls" aria-labelledby="editorial-controls-heading">
         <div className="media-editor-heading">
-          <div><h2 id="editorial-controls-heading">Application controls</h2><span>These dashboard-only settings determine whether and where the approved listing appears.</span></div>
+          <div><h2 id="editorial-controls-heading">Publication and placement</h2></div>
           <span className="application-control-state" data-state={application.status}>{isPublished ? "Live" : application.status === "archived" ? "Unpublished" : "Draft"}</span>
         </div>
         <div className="editorial-control-grid">
@@ -81,9 +82,9 @@ export default async function EditApplicationPage({
               : "Publishing makes the latest approved record visible again. This does not publish a pending GitHub revision."}</p>
             <form action={setApplicationPublication}>
               <input name="appId" type="hidden" value={application.id} />
-              <button className={isPublished ? "button-secondary button-danger" : "button-primary"} name="intent" type="submit" value={isPublished ? "unpublish" : "publish"}>
+              <PendingSubmitButton className={isPublished ? "button-secondary button-danger" : "button-primary"} name="intent" type="submit" value={isPublished ? "unpublish" : "publish"}>
                 {isPublished ? "Unpublish application" : "Publish application"}
-              </button>
+              </PendingSubmitButton>
             </form>
           </section>
 
@@ -95,9 +96,9 @@ export default async function EditApplicationPage({
               : "Feature this application when it should receive priority placement on the homepage."}</p>
             <form action={setFeaturedApplication}>
               <input name="appId" type="hidden" value={application.id} />
-              <button className={application.isFeatured ? "button-secondary" : "button-primary"} disabled={!isPublished} name="featured" type="submit" value={application.isFeatured ? "false" : "true"}>
+              <PendingSubmitButton className={application.isFeatured ? "button-secondary" : "button-primary"} disabled={!isPublished} name="featured" type="submit" value={application.isFeatured ? "false" : "true"}>
                 {application.isFeatured ? "Remove featured status" : isPublished ? "Feature application" : "Publish before featuring"}
-              </button>
+              </PendingSubmitButton>
             </form>
           </section>
         </div>
@@ -107,7 +108,7 @@ export default async function EditApplicationPage({
         <div className="media-editor-heading">
           <div>
             <h2 id="media-heading">Media library</h2>
-            <span>Read-only R2 assets synchronized from the application’s GitHub manifest.</span>
+            <span>Artwork included in this listing.</span>
           </div>
           <strong>{media.length} stored</strong>
         </div>

@@ -27,8 +27,10 @@ export function ApplicationHero({
   application,
   icon,
   visitorContent,
+  mediaScope = "public",
 }: {
-  application: PublishedApplication;
+  application: Pick<PublishedApplication, "name" | "tagline" | "categories" | "pricingType" | "billingType" | "pricingDetails" | "sourceType">;
+  mediaScope?: "public" | "dashboard";
   icon?: ApplicationMedia;
   visitorContent?: ReactNode;
 }) {
@@ -49,6 +51,7 @@ export function ApplicationHero({
                     name: application.name,
                     icon: icon ? { storageKey: icon.storageKey, altText: icon.altText } : null,
                   }}
+                  mediaScope={mediaScope}
                   decorative
                   size={96}
                   sizes="(max-width: 38rem) 48px, 72px"

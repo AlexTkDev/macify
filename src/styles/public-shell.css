@@ -1,4 +1,5 @@
-.public-site {
+.public-site,
+.application-presentation {
   --content-width: 90rem;
   --public-page-inset: clamp(4rem, 6.4vw, 6rem);
   --font-body: var(--font-urbanist), "Avenir Next", sans-serif;
@@ -19,6 +20,11 @@
   --public-surface: #f3f4f6;
   --header-canvas: oklch(0.985 0.012 82);
   --header-accent: oklch(0.34 0.075 326);
+}
+
+.application-presentation { font-family: var(--font-body); }
+
+.public-site {
   min-height: 100vh;
   position: relative;
   overflow: clip;

@@ -15,7 +15,7 @@ const secondaryLinks = [["Home", "/"], ["Editorial policy", "/editorial-policy"]
 export function PublicFooter() {
   return (
     <section className="footer-transition-study footer-transition-horizon">
-      <div className="footer-transition-word" aria-hidden="true"><span>Macify.app</span><span>Macify.app</span><span>Macify.app</span></div>
+      <div className="footer-transition-word" aria-hidden="true"><span>Macify.app</span></div>
       <footer className="public-footer curious-footer">
         <div className="curious-footer-shell">
           <div className="curious-footer-content">

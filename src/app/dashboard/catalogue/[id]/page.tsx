@@ -71,7 +71,6 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
         <div className="catalogue-review-main">
           <section className="dashboard-panel catalogue-review-panel">
             <div className="catalogue-review-summary">
-              <div><span>Revision</span><strong>{revisionChangeLabels[revision.changeType]}</strong><small>{revisionStatusLabels[revision.status]}</small></div>
               <div><span>Listing fields</span><strong>{manifest ? changedFields.size : "—"}</strong><small>{manifest ? "changed in this revision" : "manifest unavailable"}</small></div>
               <div><span>Media</span><strong>{changedMedia}</strong><small>asset changes detected</small></div>
               <div><span>Public state</span><strong>{current ? publicStateLabel(current.status) : "Not created"}</strong><small>{current?.isFeatured ? "Featured on the homepage" : "Not featured"}</small></div>
@@ -200,7 +199,6 @@ async function DealRevisionPage({
         <div className="catalogue-review-main">
           <section className="dashboard-panel catalogue-review-panel">
             <div className="catalogue-review-summary">
-              <div><span>Revision</span><strong>{changeLabel}</strong><small>{revisionStatusLabels[revision.status]}</small></div>
               <div><span>Application</span><strong>{application?.name ?? revision.appSlug}</strong><small>{application?.status ?? "Not published"}</small></div>
               <div><span>Discount</span><strong>{manifest ? `${manifest.discountPercent}%` : "—"}</strong><small>{manifest?.code ? `Code ${manifest.code}` : "No code"}</small></div>
               <div><span>Public state</span><strong>{current ? "Published" : "Not published"}</strong><small>{current ? `Ends ${current.endsAt.toLocaleDateString()}` : "No current deal"}</small></div>
