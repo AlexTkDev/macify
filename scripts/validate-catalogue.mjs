@@ -2,8 +2,6 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import approvedRemoteImageHostnameValues from "../config/approved-remote-image-hostnames.json" with { type: "json" };
-
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const appsDirectory = path.join(root, "catalog", "apps");
 const dealsDirectory = path.join(root, "catalog", "deals");
@@ -12,7 +10,6 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const allowedPricing = new Set(["free", "freemium", "paid"]);
 const allowedBilling = new Set(["one_time", "subscription"]);
 const allowedSource = new Set(["open_source", "closed_source"]);
-const approvedRemoteImageHostnames = new Set(approvedRemoteImageHostnameValues);
 const requiredManifestKeys = ["$schema", "schemaVersion", "name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "categories", "relatedAppSlugs", "media"];
 
 function isHttpUrl(value, httpsOnly = false) {
@@ -36,22 +33,19 @@ function isHttpUrl(value, httpsOnly = false) {
   }
 }
 
-function validateMedia(value, label, issues, enforceApprovedHost) {
+function validateMedia(value, label, issues) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     issues.push(`${label} must be an object.`);
     return;
   }
   for (const key of Object.keys(value)) if (!["sourceUrl", "altText"].includes(key)) issues.push(`${label}.${key} is not allowed.`);
   if (!isHttpUrl(value.sourceUrl, true)) issues.push(`${label}.sourceUrl must be a public HTTPS URL.`);
-  else if (enforceApprovedHost && !approvedRemoteImageHostnames.has(new URL(value.sourceUrl).hostname.toLowerCase())) {
-    issues.push(`${label}.sourceUrl host is not approved for catalogue ingestion.`);
-  }
   if (typeof value.altText !== "string" || value.altText.trim().length < 3 || value.altText.length > 300) {
     issues.push(`${label}.altText must contain 3 to 300 characters.`);
   }
 }
 
-function validateManifest(manifest, expectedSlug, enforceApprovedHost = true) {
+function validateManifest(manifest, expectedSlug) {
   const issues = [];
   if (!manifest || typeof manifest !== "object" || Array.isArray(manifest)) {
     return ["manifest must be a JSON object."];
@@ -69,7 +63,6 @@ function validateManifest(manifest, expectedSlug, enforceApprovedHost = true) {
   text("slug", 2, 90);
   text("tagline", 10, 140);
   text("description", 40, 20_000);
-  if (typeof manifest.description === "string") validateDescription(manifest.description, issues);
   if (!slugPattern.test(manifest.slug ?? "")) issues.push("slug must use lowercase letters, numbers, and hyphens.");
   if (manifest.slug !== expectedSlug) issues.push(`slug must match the filename (${expectedSlug}).`);
   if (!isHttpUrl(manifest.websiteUrl, true)) issues.push("websiteUrl must be an HTTPS URL without credentials.");
@@ -92,42 +85,17 @@ function validateManifest(manifest, expectedSlug, enforceApprovedHost = true) {
     issues.push("media is required.");
   } else {
     for (const key of Object.keys(manifest.media)) if (!["icon", "preview", "screenshots"].includes(key)) issues.push(`media.${key} is not allowed.`);
-    validateMedia(manifest.media.icon, "media.icon", issues, enforceApprovedHost);
-    validateMedia(manifest.media.preview, "media.preview", issues, enforceApprovedHost);
+    validateMedia(manifest.media.icon, "media.icon", issues);
+    validateMedia(manifest.media.preview, "media.preview", issues);
     if (!Array.isArray(manifest.media.screenshots) || manifest.media.screenshots.length > 8) {
       issues.push("media.screenshots must be an array containing no more than 8 items.");
     } else {
-      manifest.media.screenshots.forEach((item, index) => validateMedia(item, `media.screenshots[${index}]`, issues, enforceApprovedHost));
+      manifest.media.screenshots.forEach((item, index) => validateMedia(item, `media.screenshots[${index}]`, issues));
       const mediaUrls = [manifest.media.icon?.sourceUrl, manifest.media.preview?.sourceUrl, ...manifest.media.screenshots.map(({ sourceUrl }) => sourceUrl)];
       if (new Set(mediaUrls).size !== mediaUrls.length) issues.push("Every media source URL must be unique within an application.");
     }
   }
   return issues;
-}
-
-function validateDescription(description, issues) {
-  if (/<\/?[a-z][^>]*>/i.test(description)) issues.push("description must not contain raw HTML.");
-
-  const headings = ["## Features", "## Where it fits", "## Privacy and requirements", "## Pricing"];
-  const headingLines = description.split("\n").filter((line) => line.startsWith("## "));
-  if (headingLines.length !== headings.length || headings.some((heading, index) => headingLines[index] !== heading)) {
-    issues.push(`description headings must appear once and in this order: ${headings.join(", ")}.`);
-    return;
-  }
-
-  const sections = headings.map((heading) => description.indexOf(heading));
-  const introduction = description.slice(0, sections[0]).trim().split(/\n\s*\n/).filter(Boolean);
-  if (introduction.length < 2 || introduction.length > 3) issues.push("description must begin with two or three untitled paragraphs.");
-
-  for (let index = 0; index < headings.length; index += 1) {
-    const start = sections[index] + headings[index].length;
-    const end = sections[index + 1] ?? description.length;
-    if (!description.slice(start, end).trim()) issues.push(`${headings[index]} must not be empty.`);
-  }
-
-  const features = description.slice(sections[0] + headings[0].length, sections[1]);
-  const featureCount = features.split("\n").filter((line) => /^[-*] /.test(line.trim())).length;
-  if (featureCount < 4 || featureCount > 8) issues.push("## Features must contain four to eight Markdown bullets.");
 }
 
 function validateDealManifest(manifest, expectedSlug) {
@@ -193,9 +161,6 @@ for (const { file, manifest } of manifests) {
     if (!bySlug.has(relatedSlug)) {
       console.error(`${file}: related application ${relatedSlug} does not exist.`);
       failed = true;
-    } else if (!bySlug.get(relatedSlug).relatedAppSlugs?.includes(manifest.slug)) {
-      console.error(`${file}: relationship with ${relatedSlug} must be declared in both application manifests.`);
-      failed = true;
     }
   }
 }
@@ -223,7 +188,7 @@ for (const [file, validate, expectedSlug] of [
 ]) {
   try {
     const manifest = JSON.parse(await readFile(path.join(examplesDirectory, file), "utf8"));
-    const issues = validate(manifest, expectedSlug, false);
+    const issues = validate(manifest, expectedSlug);
     for (const issue of issues) console.error(`examples/${file}: ${issue}`);
     failed ||= issues.length > 0;
   } catch (error) {

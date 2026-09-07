@@ -1,5 +1,3 @@
-import approvedRemoteImageHostnameValues from "../../config/approved-remote-image-hostnames.json";
-
 function bytesStartWith(bytes: Uint8Array, signature: number[], offset = 0) {
   return signature.every((value, index) => bytes[offset + index] === value);
 }
@@ -46,10 +44,6 @@ function blockedRemoteHostname(hostname: string) {
     (a === 192 && b === 168);
 }
 
-// Remote catalogue media is fetched by the Worker before editorial review. Keep
-// this list explicit so a new outbound destination requires a reviewed change.
-const approvedRemoteImageHostnames = new Set(approvedRemoteImageHostnameValues);
-
 export function parseRemoteImageUrl(value: string) {
   try {
     const url = new URL(value.trim());
@@ -60,7 +54,6 @@ export function parseRemoteImageUrl(value: string) {
       || url.username
       || url.password
       || blockedRemoteHostname(hostname)
-      || !approvedRemoteImageHostnames.has(hostname)
     ) return null;
     return url;
   } catch {

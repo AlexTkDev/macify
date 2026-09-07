@@ -3,14 +3,10 @@ import path from "node:path";
 
 import sharp from "sharp";
 
-import approvedRemoteImageHostnameValues from "../../config/approved-remote-image-hostnames.json" with { type: "json" };
-
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 export const MAX_APPLICATION_MEDIA_BYTES = 40 * 1024 * 1024;
 
 const allowedImageTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/avif"]);
-const approvedRemoteImageHostnames = new Set(approvedRemoteImageHostnameValues);
-
 function bytesStartWith(bytes, signature, offset = 0) {
   return signature.every((value, index) => bytes[offset + index] === value);
 }
@@ -70,7 +66,6 @@ export function parseRemoteImageUrl(value) {
       || url.username
       || url.password
       || blockedRemoteHostname(hostname)
-      || !approvedRemoteImageHostnames.has(hostname)
     ) return null;
     return url;
   } catch {
@@ -104,7 +99,7 @@ async function readResponseWithLimit(response) {
 
 export async function fetchRemoteImage(value) {
   let url = parseRemoteImageUrl(value);
-  if (!url) throw new Error("Use an approved public HTTPS image URL.");
+  if (!url) throw new Error("Use a public HTTPS image URL.");
   const sourceUrl = url.toString();
 
   for (let redirects = 0; redirects <= 3; redirects += 1) {

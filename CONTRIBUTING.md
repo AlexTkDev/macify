@@ -13,8 +13,8 @@ Application and deal submissions are welcome. Each pull request may add one new 
 
 1. Fork this repository and create a branch for the application.
 2. Copy [`catalog/examples/application.example.json`](catalog/examples/application.example.json) to `catalog/apps/<slug>.json` using a lowercase, hyphenated slug.
-3. Complete every field. Keep `relatedAppSlugs` empty and use `null` or an empty array only where allowed.
-4. Write a factual description covering purpose, features, audience, tradeoffs, privacy, requirements, and pricing.
+3. Complete every field. Add existing application slugs to `relatedAppSlugs` when useful; a relationship declared by either application appears on both application pages.
+4. Write a factual description covering purpose, features, audience, tradeoffs, privacy, requirements, and pricing. The editorial structure is a flexible template rather than a required heading layout.
 5. Use direct public HTTPS URLs for authentic icons and screenshots. Do not commit image files.
 6. Run `npm run catalogue:validate`.
 7. Open a pull request containing only the new manifest and cite the official sources used.

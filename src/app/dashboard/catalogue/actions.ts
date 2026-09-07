@@ -1,6 +1,6 @@
 "use server";
 
-import { and, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -12,9 +12,11 @@ import {
   apps,
   catalogueRevisions,
   categories,
+  deals,
   mediaAssets,
 } from "@/db/schema";
 import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
+import { dealManifestSchema } from "@/lib/deal-manifest";
 import { requireAdmin } from "@/lib/admin-auth";
 
 const decisionSchema = z.object({
@@ -38,7 +40,9 @@ export async function decideCatalogueRevision(formData: FormData) {
     .limit(1);
   const revision = row[0];
   if (!revision) redirect("/dashboard/catalogue?error=not-pending");
-  if (!revision.sourcePath.startsWith("catalog/apps/")) redirect("/dashboard/catalogue?error=invalid");
+  const isApplicationRevision = revision.sourcePath.startsWith("catalog/apps/");
+  const isDealRevision = revision.sourcePath.startsWith("catalog/deals/");
+  if (!isApplicationRevision && !isDealRevision) redirect("/dashboard/catalogue?error=invalid");
 
   const newestRevision = await database.select({ id: catalogueRevisions.id }).from(catalogueRevisions)
     .where(eq(catalogueRevisions.sourcePath, revision.sourcePath))
@@ -61,6 +65,52 @@ export async function decideCatalogueRevision(formData: FormData) {
       .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending")));
     revalidatePath("/dashboard/catalogue");
     redirect("/dashboard/catalogue?rejected=1");
+  }
+
+  if (isDealRevision) {
+    const applicationRows = await database.select({ id: apps.id, status: apps.status }).from(apps)
+      .where(and(eq(apps.slug, revision.appSlug), isNull(apps.deletedAt))).limit(1);
+    const application = applicationRows[0];
+    if (!application || application.status !== "published") {
+      redirect("/dashboard/catalogue?error=missing-deal-app");
+    }
+
+    const reviewedAt = new Date();
+    if (revision.changeType === "archive") {
+      await database.batch([
+        database.delete(deals).where(eq(deals.appId, application.id)),
+        database.update(catalogueRevisions).set({ appId: application.id, status: "published", reviewedAt })
+          .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending"))),
+      ]);
+    } else {
+      const manifestResult = dealManifestSchema.safeParse(revision.manifest);
+      if (!manifestResult.success) redirect("/dashboard/catalogue?error=invalid-deal-manifest");
+      const manifest = manifestResult.data;
+      const values = {
+        discountPercent: manifest.discountPercent,
+        code: manifest.code,
+        url: manifest.url,
+        startsAt: new Date(manifest.startsAt),
+        endsAt: new Date(manifest.endsAt),
+        updatedAt: reviewedAt,
+      };
+      await database.batch([
+        database.insert(deals).values({
+          id: crypto.randomUUID(),
+          appId: application.id,
+          ...values,
+          createdAt: reviewedAt,
+        }).onConflictDoUpdate({ target: deals.appId, set: values }),
+        database.update(catalogueRevisions).set({ appId: application.id, status: "published", reviewedAt })
+          .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending"))),
+      ]);
+    }
+
+    revalidatePath("/");
+    revalidatePath("/deals");
+    revalidatePath("/dashboard/catalogue");
+    revalidatePath(`/apps/${revision.appSlug}`);
+    redirect("/dashboard/catalogue?published=1");
   }
 
   if (revision.changeType === "archive") {
@@ -126,16 +176,12 @@ export async function decideCatalogueRevision(formData: FormData) {
         categoryId: sql`(select ${categories.id} from ${categories} where ${categories.slug} = ${slug})`,
       }),
     ]),
-    database.delete(appRelationships).where(or(
-      eq(appRelationships.sourceAppId, appId),
-      eq(appRelationships.targetAppId, appId),
-    )),
+    database.delete(appRelationships).where(eq(appRelationships.sourceAppId, appId)),
     ...related.map(({ id: relatedId }) => {
-      const [sourceAppId, targetAppId] = [appId, relatedId].sort();
       return database.insert(appRelationships).values({
         id: crypto.randomUUID(),
-        sourceAppId,
-        targetAppId,
+        sourceAppId: appId,
+        targetAppId: relatedId,
         createdAt: now,
       }).onConflictDoNothing();
     }),

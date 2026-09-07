@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { and, desc, eq, like, lt } from "drizzle-orm";
+import { and, desc, eq, isNull, like, lt } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import {
   ChevronRight,
@@ -8,14 +8,16 @@ import {
   GitBranch,
   Image as ImageIcon,
   ListChecks,
+  TicketPercent,
 } from "lucide-react";
 import { decideCatalogueRevision } from "@/app/dashboard/catalogue/actions";
 import { CatalogueChangeReview } from "@/components/catalogue-change-review";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
-import { catalogueRevisions } from "@/db/schema";
+import { apps, catalogueRevisions, deals } from "@/db/schema";
 import { getChangedManifestFields } from "@/lib/catalogue-diff";
 import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
+import { dealManifestSchema } from "@/lib/deal-manifest";
 import { publishActionLabels, revisionChangeLabels, revisionStatusLabels } from "@/lib/catalogue-revision-labels";
 import { getCatalogueReviewSnapshot } from "@/lib/catalogue-review-data";
 
@@ -26,7 +28,11 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
   const database = await getDatabase();
   const rows = await database.select().from(catalogueRevisions).where(eq(catalogueRevisions.id, id)).limit(1);
   const revision = rows[0];
-  if (!revision || !revision.sourcePath.startsWith("catalog/apps/")) notFound();
+  if (!revision) notFound();
+  if (revision.sourcePath.startsWith("catalog/deals/")) {
+    return <DealRevisionPage database={database} revision={revision} />;
+  }
+  if (!revision.sourcePath.startsWith("catalog/apps/")) notFound();
   const current = await getCatalogueReviewSnapshot(revision.appId);
   const comparison = revision.status === "pending" || revision.status === "failed"
     ? current
@@ -118,6 +124,113 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
             <GitBranch aria-hidden="true" size={18} />
             <div><strong>Listing copy stays in GitHub.</strong><span>Publish and reject here. Edit content in the manifest, then merge a new revision.</span></div>
           </aside>
+        </aside>
+      </div>
+    </DashboardShell>
+  );
+}
+
+async function DealRevisionPage({
+  database,
+  revision,
+}: {
+  database: Awaited<ReturnType<typeof getDatabase>>;
+  revision: typeof catalogueRevisions.$inferSelect;
+}) {
+  const applicationRows = await database.select({ id: apps.id, name: apps.name, status: apps.status })
+    .from(apps).where(and(eq(apps.slug, revision.appSlug), isNull(apps.deletedAt))).limit(1);
+  const application = applicationRows[0] ?? null;
+  const currentRows = application
+    ? await database.select().from(deals).where(eq(deals.appId, application.id)).limit(1)
+    : [];
+  const current = currentRows[0] ?? null;
+  const manifestResult = dealManifestSchema.safeParse(revision.manifest);
+  const manifest = manifestResult.success ? manifestResult.data : null;
+  const sourceUrl = `https://github.com/${revision.sourceRepository}/blob/${revision.sourceCommitSha}/${revision.sourcePath}`;
+  const editUrl = `https://github.com/${revision.sourceRepository}/edit/main/${revision.sourcePath}`;
+  const changeLabel = revision.changeType === "create" ? "New deal" : revision.changeType === "update" ? "Deal update" : "Deal removal";
+  const publishLabel = revision.changeType === "archive" ? "Remove deal" : current ? "Publish deal update" : "Publish new deal";
+  const fields = [
+    ["Discount", current ? `${current.discountPercent}%` : null, manifest ? `${manifest.discountPercent}%` : null],
+    ["Code", current?.code ?? null, manifest?.code ?? null],
+    ["Destination", current?.url ?? null, manifest?.url ?? null],
+    ["Starts", current ? current.startsAt.toLocaleString() : null, manifest ? new Date(manifest.startsAt).toLocaleString() : null],
+    ["Ends", current ? current.endsAt.toLocaleString() : null, manifest ? new Date(manifest.endsAt).toLocaleString() : null],
+  ] as const;
+
+  return (
+    <DashboardShell active="catalogue">
+      <nav className="dashboard-breadcrumbs" aria-label="Breadcrumb">
+        <Link href="/dashboard/catalogue">Review queue</Link><ChevronRight size={14} aria-hidden="true" />
+        <span aria-current="page">{revision.appSlug} deal</span>
+      </nav>
+      <header className="editor-header editor-header-row">
+        <div>
+          <p>{changeLabel} · {revisionStatusLabels[revision.status]}</p>
+          <h1>{application?.name ?? revision.appSlug}</h1>
+          <span>Review the offer terms before making this deal public.</span>
+        </div>
+        <div className="editor-header-actions">
+          {manifest && <a className="button-secondary" href={editUrl} rel="noreferrer" target="_blank">Edit manifest <GitBranch size={15} /></a>}
+          <a className="button-secondary" href={sourceUrl} rel="noreferrer" target="_blank">Source commit <ExternalLink size={15} /></a>
+        </div>
+      </header>
+
+      {revision.errors.length > 0 && <div className="form-error" role="alert">{revision.errors.join(" ")}</div>}
+
+      <div className="catalogue-review-layout">
+        <div className="catalogue-review-main">
+          <section className="dashboard-panel catalogue-review-panel">
+            <div className="catalogue-review-summary">
+              <div><span>Revision</span><strong>{changeLabel}</strong><small>{revisionStatusLabels[revision.status]}</small></div>
+              <div><span>Application</span><strong>{application?.name ?? revision.appSlug}</strong><small>{application?.status ?? "Not published"}</small></div>
+              <div><span>Discount</span><strong>{manifest ? `${manifest.discountPercent}%` : "—"}</strong><small>{manifest?.code ? `Code ${manifest.code}` : "No code"}</small></div>
+              <div><span>Public state</span><strong>{current ? "Published" : "Not published"}</strong><small>{current ? `Ends ${current.endsAt.toLocaleDateString()}` : "No current deal"}</small></div>
+            </div>
+
+            {manifest ? (
+              <section className="catalogue-review-section" id="deal-changes">
+                <div className="catalogue-review-heading">
+                  <div><p className="section-kicker">Offer terms</p><h2>{current ? "What changed" : "New deal information"}</h2><p>Previous public values are shown beside the proposed GitHub values.</p></div>
+                  <strong className="catalogue-review-count"><TicketPercent size={16} /> {manifest.discountPercent}% off</strong>
+                </div>
+                <div className="catalogue-field-diff" role="table" aria-label="Deal field changes">
+                  <div className="catalogue-field-diff-head" role="row"><span role="columnheader">Field</span><span role="columnheader">Previous</span><span role="columnheader">Proposed</span></div>
+                  {fields.map(([label, before, after]) => (
+                    <div className="catalogue-field-diff-row" data-changed={before !== after} key={label} role="row">
+                      <div className="catalogue-field-name" role="rowheader"><strong>{label}</strong><span>{before !== after ? current ? "Changed" : "New" : "Unchanged"}</span></div>
+                      <div className="catalogue-field-value" data-state={before !== after ? "removed" : "unchanged"} role="cell"><span>{before ?? "Not set"}</span></div>
+                      <div className="catalogue-field-value" data-state={before !== after ? "added" : "unchanged"} role="cell"><span>{after ?? "Not set"}</span></div>
+                    </div>
+                  ))}
+                </div>
+                <details className="catalogue-json-review"><summary>View deal JSON</summary><pre>{JSON.stringify(revision.manifest, null, 2)}</pre></details>
+              </section>
+            ) : revision.changeType === "archive" ? (
+              <div className="catalogue-archive-request"><h2>Remove this deal</h2><p>Publishing this revision removes the offer without unpublishing the application.</p></div>
+            ) : (
+              <div className="catalogue-archive-request"><h2>Deal information unavailable</h2><p>Correct the JSON in GitHub and synchronize a new revision.</p></div>
+            )}
+          </section>
+        </div>
+
+        <aside className="catalogue-review-sidebar" aria-label="Review decision">
+          <section className="dashboard-panel catalogue-decision-panel">
+            <p className="section-kicker">Decision</p>
+            <h2>{revision.status === "pending" ? "Ready for review" : `Revision ${revisionStatusLabels[revision.status].toLowerCase()}`}</h2>
+            <p>{revision.status === "pending" ? "Publishing updates the public deal. The application must be published first." : `This revision was reviewed${revision.reviewedAt ? ` on ${revision.reviewedAt.toLocaleString()}` : ""}.`}</p>
+            {revision.status === "pending" && (
+              <form action={decideCatalogueRevision} className="catalogue-review-decision">
+                <input name="revisionId" type="hidden" value={revision.id} />
+                <button className="button-primary" name="intent" type="submit" value="publish">{publishLabel}</button>
+                <button className="button-secondary button-danger" name="intent" type="submit" value="reject">Reject revision</button>
+              </form>
+            )}
+          </section>
+          <section className="dashboard-panel catalogue-revision-context">
+            <h2>Revision context</h2>
+            <dl><div><dt>Commit</dt><dd>{revision.sourceCommitSha.slice(0, 12)}</dd></div><div><dt>Received</dt><dd>{revision.createdAt.toLocaleString()}</dd></div><div><dt>Source</dt><dd>{revision.sourcePath}</dd></div></dl>
+          </section>
         </aside>
       </div>
     </DashboardShell>

@@ -18,6 +18,7 @@
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "db:migrate:production": "wrangler d1 migrations apply DB --remote --env production",
     "setup": "node scripts/setup-local.mjs",
+    "test:media-validation": "node --experimental-strip-types --test scripts/tests/media-validation.test.mjs",
     "catalogue:validate": "node scripts/validate-catalogue.mjs",
     "catalogue:sync:local": "node scripts/sync-local-catalogue.mjs"
   },

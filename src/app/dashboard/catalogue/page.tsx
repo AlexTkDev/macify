@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { desc, like, sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import { AlertTriangle, CheckCircle2, GitBranch, PlusCircle, RefreshCcw } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
 import { catalogueRevisions } from "@/db/schema";
 import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
 import type { CatalogueManifest } from "@/lib/catalogue-manifest";
+import { dealManifestSchema } from "@/lib/deal-manifest";
+import type { DealManifest } from "@/lib/deal-manifest";
 import { revisionChangeLabels, revisionStatusLabels } from "@/lib/catalogue-revision-labels";
 import { getCatalogueQueueApplications } from "@/lib/catalogue-review-data";
 import { cn } from "@/lib/utils";
@@ -20,6 +22,8 @@ const errorMessages: Record<string, string> = {
   "invalid-manifest": "The stored manifest is invalid and cannot be published.",
   "missing-related-app": "Publish the related applications first, or remove those relationships in GitHub.",
   "missing-media": "The revision is missing its required icon or preview image.",
+  "missing-deal-app": "Publish the application before publishing its deal.",
+  "invalid-deal-manifest": "The stored deal manifest is invalid and cannot be published.",
   "stale-revision": "A newer revision exists for this application. Review the newest revision instead.",
 };
 
@@ -34,14 +38,13 @@ export default async function CatalogueReviewPage({
   const view: View = query.view === "history" || query.view === "failed" ? query.view : "pending";
   const database = await getDatabase();
   const [recentRevisions, countRows] = await Promise.all([
-    database.select().from(catalogueRevisions).where(like(catalogueRevisions.sourcePath, "catalog/apps/%"))
-      .orderBy(desc(catalogueRevisions.createdAt)).limit(200),
+    database.select().from(catalogueRevisions).orderBy(desc(catalogueRevisions.createdAt)).limit(200),
     database.select({
       pending: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' then 1 else 0 end), 0)`,
       create: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'create' then 1 else 0 end), 0)`,
       update: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'update' then 1 else 0 end), 0)`,
       failed: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'failed' then 1 else 0 end), 0)`,
-    }).from(catalogueRevisions).where(like(catalogueRevisions.sourcePath, "catalog/apps/%")),
+    }).from(catalogueRevisions),
   ]);
   const revisions = recentRevisions.filter((revision) => (
     view === "pending" ? revision.status === "pending"
@@ -59,14 +62,14 @@ export default async function CatalogueReviewPage({
         <div>
           <p>GitHub updates</p>
           <h1>Review queue</h1>
-          <span>See exactly what changed before any merged application update reaches the public directory.</span>
+          <span>See exactly what changed before any merged application or deal reaches the public directory.</span>
         </div>
       </header>
 
       <section className="catalogue-queue-stats" aria-label="Review queue status">
         <div><GitBranch size={18} /><span>Awaiting review</span><strong>{counts.pending}</strong></div>
-        <div><PlusCircle size={18} /><span>New applications</span><strong>{counts.create}</strong></div>
-        <div><RefreshCcw size={18} /><span>Application updates</span><strong>{counts.update}</strong></div>
+        <div><PlusCircle size={18} /><span>New records</span><strong>{counts.create}</strong></div>
+        <div><RefreshCcw size={18} /><span>Updates</span><strong>{counts.update}</strong></div>
         <div><AlertTriangle size={18} /><span>Sync failures</span><strong>{counts.failed}</strong></div>
       </section>
 
@@ -95,14 +98,18 @@ export default async function CatalogueReviewPage({
         ) : (
           <div className="catalogue-revision-list">
             {revisions.map((revision) => {
-              const manifestResult = catalogueManifestSchema.safeParse(revision.manifest);
-              const manifest = manifestResult.success ? manifestResult.data : null;
+              const isDeal = revision.sourcePath.startsWith("catalog/deals/");
+              const applicationManifestResult = isDeal ? null : catalogueManifestSchema.safeParse(revision.manifest);
+              const manifest = applicationManifestResult?.success ? applicationManifestResult.data : null;
+              const dealManifestResult = isDeal ? dealManifestSchema.safeParse(revision.manifest) : null;
+              const dealManifest = dealManifestResult?.success ? dealManifestResult.data : null;
               const current = revision.appId ? applications.get(revision.appId) : null;
               const icon = revision.preparedMedia.find(({ role }) => role === "icon")
                 ?? current?.media.find(({ role }) => role === "icon");
+              const changeLabel = isDeal ? dealChangeLabel(revision.changeType) : revisionChangeLabels[revision.changeType];
               const summary = revision.status === "pending"
-                ? summarizeRevision(manifest, current ?? null, revision.preparedMedia)
-                : `${revisionChangeLabels[revision.changeType]} revision ${revisionStatusLabels[revision.status].toLowerCase()}.`;
+                ? isDeal ? summarizeDealRevision(dealManifest, revision.changeType) : summarizeRevision(manifest, current ?? null, revision.preparedMedia)
+                : `${changeLabel} revision ${revisionStatusLabels[revision.status].toLowerCase()}.`;
               return (
                 <article className="catalogue-revision" key={revision.id}>
                   <div className="catalogue-revision-identity">
@@ -112,10 +119,10 @@ export default async function CatalogueReviewPage({
                     </div>
                     <div>
                       <div className="catalogue-revision-meta">
-                        <span>{revisionChangeLabels[revision.changeType]}</span>
+                        <span>{changeLabel}</span>
                         <span data-status={revision.status}>{revisionStatusLabels[revision.status]}</span>
                       </div>
-                      <h3>{manifest?.name ?? revision.appSlug}</h3>
+                      <h3>{manifest?.name ?? current?.name ?? revision.appSlug}</h3>
                       <p>{summary}</p>
                       <small>{revision.createdAt.toLocaleString()} · commit {revision.sourceCommitSha.slice(0, 8)}</small>
                     </div>
@@ -172,6 +179,20 @@ function summarizeRevision(
   const parts = [changed ? `${changed} listing ${changed === 1 ? "field" : "fields"}` : null, mediaChanged ? "media" : null]
     .filter(Boolean);
   return parts.length ? `${parts.join(" and ")} changed.` : "Taxonomy or relationship changes ready for review.";
+}
+
+function summarizeDealRevision(
+  manifest: DealManifest | null,
+  changeType: "create" | "update" | "archive",
+) {
+  if (changeType === "archive") return "Remove this application's public deal.";
+  if (!manifest) return "Deal removal or a revision without a valid deal manifest.";
+  const code = manifest.code ? ` with code ${manifest.code}` : " without a code";
+  return `${manifest.discountPercent}% off${code}, ending ${new Date(manifest.endsAt).toLocaleString()}.`;
+}
+
+function dealChangeLabel(changeType: "create" | "update" | "archive") {
+  return changeType === "create" ? "New deal" : changeType === "update" ? "Deal update" : "Deal removal";
 }
 
 function viewLabel(view: View) {

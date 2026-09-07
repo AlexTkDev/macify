@@ -30,17 +30,30 @@ if (items.length === 0) {
   process.exit(0);
 }
 
+let failed = 0;
 for (const item of items) {
-  const body = JSON.stringify({ repository, commitSha, items: [item] });
-  const signature = createHmac("sha256", secret).update(body).digest("hex");
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: { "content-type": "application/json", "x-macify-signature": signature },
-    body,
-  });
-  if (!response.ok) {
-    const details = (await response.text()).slice(0, 2_000);
-    throw new Error(`Catalogue synchronization failed (${response.status}): ${details}`);
+  try {
+    const body = JSON.stringify({ repository, commitSha, items: [item] });
+    const signature = createHmac("sha256", secret).update(body).digest("hex");
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-macify-signature": signature },
+      body,
+    });
+    if (!response.ok) {
+      const details = (await response.text()).slice(0, 2_000);
+      throw new Error(`HTTP ${response.status}: ${details}`);
+    }
+    console.log(`Synchronized ${item.path} as a pending editorial revision.`);
+  } catch (error) {
+    failed += 1;
+    console.error(`${item.path}: ${error instanceof Error ? error.message : "Catalogue synchronization failed."}`);
   }
 }
-console.log(`Synchronized ${items.length} catalogue change(s) as pending editorial revisions.`);
+
+if (failed > 0) {
+  console.error(`Catalogue synchronization completed with ${failed} failure(s) and ${items.length - failed} success(es).`);
+  process.exitCode = 1;
+} else {
+  console.log(`Synchronized ${items.length} catalogue change(s) as pending editorial revisions.`);
+}

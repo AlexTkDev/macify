@@ -15,7 +15,13 @@
     "ai",
     "dictation-transcription"
   ],
-  "relatedAppSlugs": [],
+  "relatedAppSlugs": [
+    "macwhisper",
+    "spokenly",
+    "superwhisper",
+    "voiceos",
+    "wispr-flow"
+  ],
   "media": {
     "icon": {
       "sourceUrl": "https://tryvoiceink.com/apple-touch-icon.png",
