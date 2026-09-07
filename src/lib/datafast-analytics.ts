@@ -95,8 +95,8 @@ export async function getHotApplicationVisits() {
 
 export async function getTrendingApplicationVisits() {
   const [current, previous] = await Promise.all([
-    getApplicationVisits(utcDate(2), utcDate(0)),
-    getApplicationVisits(utcDate(5), utcDate(3)),
+    getApplicationVisits(utcDate(6), utcDate(0)),
+    getApplicationVisits(utcDate(13), utcDate(7)),
   ]);
   const previousBySlug = new Map((previous ?? []).map(({ slug, visitors }) => [slug, visitors]));
   return (current ?? [])
