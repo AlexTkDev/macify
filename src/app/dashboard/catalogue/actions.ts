@@ -18,6 +18,7 @@ import {
 import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
 import { ingestCatalogueItem } from "@/lib/catalogue-ingestion";
 import { dealManifestSchema } from "@/lib/deal-manifest";
+import { publicationStatus } from "@/lib/catalogue-publication-guard";
 import { requireAdmin } from "@/lib/admin-auth";
 
 const decisionSchema = z.object({
@@ -61,7 +62,12 @@ export async function retryCatalogueFailure(formData: FormData) {
     like(catalogueRevisions.sourcePath, reviewSourcePattern(queuePath)),
   )).limit(1);
   const revision = rows[0];
-  if (!revision || !revision.manifest) redirect(`${queuePath}?view=failed&error=not-failed`);
+  if (!revision) redirect(`${queuePath}?view=failed&error=not-failed`);
+  if (!revision.manifest) redirect(`${queuePath}?view=failed&error=missing-retry-manifest`);
+  const newest = await database.select({ id: catalogueRevisions.id }).from(catalogueRevisions)
+    .where(eq(catalogueRevisions.sourcePath, revision.sourcePath))
+    .orderBy(desc(catalogueRevisions.createdAt)).limit(1);
+  if (newest[0]?.id !== revision.id) redirect(`${queuePath}?view=failed&error=stale-revision`);
 
   const { env } = await getCloudflareContext({ async: true });
   const result = await ingestCatalogueItem({
@@ -73,8 +79,7 @@ export async function retryCatalogueFailure(formData: FormData) {
     commitSha: revision.sourceCommitSha,
   }, env);
 
-  revalidatePath("/dashboard/catalogue");
-  revalidatePath("/dashboard/deals");
+  revalidatePath("/dashboard", "layout");
   revalidatePath(`/dashboard/catalogue/${revision.id}`);
   if (!result.ok) redirect(`${queuePath}?view=failed&error=retry-failed`);
   redirect(`${queuePath}?retried=1`);
@@ -97,8 +102,7 @@ export async function dismissCatalogueFailure(formData: FormData) {
   )).returning({ id: catalogueRevisions.id });
   if (result.length === 0) redirect(`${queuePath}?view=failed&error=not-failed`);
 
-  revalidatePath("/dashboard/catalogue");
-  revalidatePath("/dashboard/deals");
+  revalidatePath("/dashboard", "layout");
   redirect(`${queuePath}?view=failed&dismissed=1`);
 }
 
@@ -114,8 +118,9 @@ export async function decideCatalogueRevision(formData: FormData) {
   try {
     await applyCatalogueDecision(parsed.data.revisionId, parsed.data.intent, reviewSourcePattern(queuePath));
   } catch (error) {
-    if (error instanceof CatalogueDecisionError) redirect(`${queuePath}?error=${error.code}`);
-    throw error;
+    await recordDecisionFailure(parsed.data.revisionId, parsed.data.intent, error);
+    revalidateCataloguePaths();
+    redirect(`${queuePath}?error=${error instanceof CatalogueDecisionError ? error.code : "decision-failed"}`);
   }
 
   revalidateCataloguePaths();
@@ -152,18 +157,19 @@ export async function decideCatalogueRevisions(formData: FormData) {
   });
   let remaining = ordered.map(({ id }) => id);
 
-  // A second pass lets a selected app publish before a related app or deal that depends on it.
-  for (let pass = 0; pass < 2 && remaining.length > 0; pass += 1) {
+  // Each productive pass resolves another dependency level; stop when no progress is possible.
+  for (let pass = 0; pass < ordered.length && remaining.length > 0; pass += 1) {
     const retry: string[] = [];
     for (const revisionId of remaining) {
       try {
         await applyCatalogueDecision(revisionId, parsed.data.intent, reviewSourcePattern(queuePath));
         completed += 1;
       } catch (error) {
-        if (error instanceof CatalogueDecisionError) retry.push(revisionId);
-        else {
-          console.error(`Bulk catalogue decision failed for revision ${revisionId}.`, error);
+        await recordDecisionFailure(revisionId, parsed.data.intent, error);
+        if (error instanceof CatalogueDecisionError && error.code === "missing-related-app") {
           retry.push(revisionId);
+        } else {
+          failed += 1;
         }
       }
     }
@@ -208,25 +214,10 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
   if (newestRevision[0]?.id !== revision.id) throw new CatalogueDecisionError("stale-revision");
 
   if (intent === "reject") {
-    const keys = [...new Set(revision.preparedMedia.map(({ storageKey }) => storageKey))];
     const rejected = await database.update(catalogueRevisions).set({ status: "rejected", reviewedAt: new Date() })
       .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending")))
       .returning({ id: catalogueRevisions.id });
     if (rejected.length === 0) throw new CatalogueDecisionError("not-pending");
-    if (keys.length) {
-      try {
-        const referenced = await database.select({ storageKey: mediaAssets.storageKey }).from(mediaAssets)
-          .where(inArray(mediaAssets.storageKey, keys));
-        const referencedKeys = new Set(referenced.map(({ storageKey }) => storageKey));
-        const disposable = keys.filter((key) => !referencedKeys.has(key));
-        if (disposable.length) {
-          const { env } = await getCloudflareContext({ async: true });
-          await env.MEDIA.delete(disposable);
-        }
-      } catch (error) {
-        console.error("Rejected catalogue revision but could not remove its unreferenced media.", error);
-      }
-    }
     return;
   }
 
@@ -242,8 +233,8 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
     if (revision.changeType === "archive") {
       await database.batch([
         database.delete(deals).where(eq(deals.appId, application.id)),
-        database.update(catalogueRevisions).set({ appId: application.id, status: "published", reviewedAt })
-          .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending"))),
+        database.update(catalogueRevisions).set({ appId: application.id, status: publicationStatus(revision.id, revision.sourcePath, revision.createdAt), errors: [], reviewedAt })
+          .where(eq(catalogueRevisions.id, revision.id)),
       ]);
     } else {
       const manifestResult = dealManifestSchema.safeParse(revision.manifest);
@@ -264,8 +255,8 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
           ...values,
           createdAt: reviewedAt,
         }).onConflictDoUpdate({ target: deals.appId, set: values }),
-        database.update(catalogueRevisions).set({ appId: application.id, status: "published", reviewedAt })
-          .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending"))),
+        database.update(catalogueRevisions).set({ appId: application.id, status: publicationStatus(revision.id, revision.sourcePath, revision.createdAt), errors: [], reviewedAt })
+          .where(eq(catalogueRevisions.id, revision.id)),
       ]);
     }
 
@@ -276,8 +267,8 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
     if (!revision.appId) throw new CatalogueDecisionError("missing-app");
     await database.batch([
       database.update(apps).set({ status: "archived", isFeatured: false, featuredAt: null, updatedAt: new Date() }).where(eq(apps.id, revision.appId)),
-      database.update(catalogueRevisions).set({ status: "published", reviewedAt: new Date() })
-        .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending"))),
+      database.update(catalogueRevisions).set({ status: publicationStatus(revision.id, revision.sourcePath, revision.createdAt), errors: [], reviewedAt: new Date() })
+        .where(eq(catalogueRevisions.id, revision.id)),
     ]);
     return;
   }
@@ -298,9 +289,6 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
   }
 
   const now = new Date();
-  const previousMedia = revision.appId
-    ? await database.select({ storageKey: mediaAssets.storageKey }).from(mediaAssets).where(eq(mediaAssets.appId, revision.appId))
-    : [];
   const appValues = {
     name: manifest.name,
     slug: manifest.slug,
@@ -349,29 +337,21 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
       altText: asset.altText,
       createdAt: now,
     })),
-    database.update(catalogueRevisions).set({ appId, status: "published", reviewedAt: now })
-      .where(and(eq(catalogueRevisions.id, revision.id), eq(catalogueRevisions.status, "pending"))),
+    database.update(catalogueRevisions).set({ appId, status: publicationStatus(revision.id, revision.sourcePath, revision.createdAt), errors: [], reviewedAt: now })
+      .where(eq(catalogueRevisions.id, revision.id)),
   ]);
 
-  const publishedKeys = new Set(revision.preparedMedia.map(({ storageKey }) => storageKey));
-  const obsoleteKeys = previousMedia.map(({ storageKey }) => storageKey).filter((key) => !publishedKeys.has(key));
-  if (obsoleteKeys.length) {
-    try {
-      const { env } = await getCloudflareContext({ async: true });
-      await env.MEDIA.delete(obsoleteKeys);
-    } catch (error) {
-      console.error("Published catalogue revision but could not remove superseded R2 media.", error);
-    }
-  }
+  // Retain stored media: other pending revisions and review history reference it.
+  // Reclamation requires a separate reference-aware retention process.
 
 }
 
 function revalidateCataloguePaths() {
   revalidatePath("/");
   revalidatePath("/deals");
-  revalidatePath("/dashboard");
-  revalidatePath("/dashboard/catalogue");
-  revalidatePath("/dashboard/deals");
+  revalidatePath("/dashboard", "layout");
+  revalidatePath("/categories", "layout");
+  revalidatePath("/sitemap.xml");
   revalidatePath("/apps/[slug]", "page");
 }
 
@@ -381,4 +361,18 @@ function normalizeManifestCategories(values: string[]) {
     name: name.trim().replace(/\s+/g, " "),
     slug: name.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""),
   })).filter(({ slug }) => slug.length >= 2 && !seen.has(slug) && seen.add(slug));
+}
+
+async function recordDecisionFailure(revisionId: string, intent: DecisionIntent, error: unknown) {
+  const message = error instanceof CatalogueDecisionError
+    ? `Could not ${intent}: ${error.code}.`
+    : `Could not ${intent} because of an internal error. Retry after checking the server logs.`;
+  console.error("Catalogue decision failed.", { revisionId, intent, error });
+  try {
+    const database = await getDatabase();
+    await database.update(catalogueRevisions).set({ errors: [message] })
+      .where(and(eq(catalogueRevisions.id, revisionId), eq(catalogueRevisions.status, "pending")));
+  } catch (loggingError) {
+    console.error("Could not persist catalogue decision failure.", { revisionId, loggingError });
+  }
 }

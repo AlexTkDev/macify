@@ -25,6 +25,11 @@ export async function setFeaturedApplication(formData: FormData) {
   await database.update(apps).set({ isFeatured: featured, featuredAt: featured ? new Date() : null, updatedAt: new Date() })
     .where(eq(apps.id, parsed.data.appId));
   revalidatePath("/");
+  revalidatePath("/deals");
+  revalidatePath("/categories", "layout");
+  revalidatePath("/apps/[slug]", "page");
+  revalidatePath("/dashboard", "layout");
+  revalidatePath("/sitemap.xml");
   revalidatePath(`/apps/${row[0].slug}`);
   redirect(`/dashboard/apps/${parsed.data.appId}/edit?featured=1`);
 }
@@ -52,6 +57,11 @@ export async function setApplicationPublication(formData: FormData) {
     updatedAt: now,
   }).where(eq(apps.id, parsed.data.appId));
   revalidatePath("/");
+  revalidatePath("/deals");
+  revalidatePath("/categories", "layout");
+  revalidatePath("/apps/[slug]", "page");
+  revalidatePath("/dashboard", "layout");
+  revalidatePath("/sitemap.xml");
   revalidatePath(`/apps/${application.slug}`);
   revalidatePath("/dashboard");
   revalidatePath(`/dashboard/apps/${parsed.data.appId}`);

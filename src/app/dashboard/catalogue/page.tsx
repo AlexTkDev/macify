@@ -1,6 +1,7 @@
+import { PendingSubmitButton } from "@/components/pending-submit-button";
 import Image from "next/image";
 import Link from "next/link";
-import { desc, like, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, like, sql } from "drizzle-orm";
 import { AlertTriangle, CheckCircle2, GitBranch, PlusCircle, RefreshCcw } from "lucide-react";
 import { dismissCatalogueFailure, retryCatalogueFailure } from "@/app/dashboard/catalogue/actions";
 import { CatalogueBulkReview } from "@/components/catalogue-bulk-review";
@@ -19,6 +20,7 @@ export const dynamic = "force-dynamic";
 
 const errorMessages: Record<string, string> = {
   invalid: "That review request was invalid.",
+  "decision-failed": "The decision could not be completed. Open the revision for details and check its current state before retrying.",
   "not-pending": "That revision has already been reviewed.",
   "missing-app": "The application linked to this archive request no longer exists.",
   "invalid-manifest": "The stored manifest is invalid and cannot be published.",
@@ -28,6 +30,7 @@ const errorMessages: Record<string, string> = {
   "invalid-deal-manifest": "The stored deal manifest is invalid and cannot be published.",
   "stale-revision": "A newer revision exists for this application. Review the newest revision instead.",
   "not-failed": "That synchronization failure is no longer unresolved.",
+  "missing-retry-manifest": "This failure has no retryable manifest. Correct the file in GitHub and synchronize it again.",
   "retry-failed": "Synchronization failed again. Open the revision to review the latest error.",
   "invalid-selection": "Select at least one pending revision to continue.",
 };
@@ -37,7 +40,7 @@ type View = "pending" | "history" | "failed";
 export default async function CatalogueReviewPage({
   searchParams,
 }: {
-  searchParams: Promise<{ published?: string; rejected?: string; dismissed?: string; retried?: string; error?: string; view?: string; bulkIntent?: string; bulkCompleted?: string; bulkFailed?: string }>;
+  searchParams: Promise<{ published?: string; rejected?: string; dismissed?: string; retried?: string; error?: string; view?: string; bulkIntent?: string; bulkCompleted?: string; bulkFailed?: string; page?: string }>;
 }) {
   return <ReviewQueuePage kind="apps" searchParams={searchParams} />;
 }
@@ -47,7 +50,7 @@ export async function ReviewQueuePage({
   searchParams,
 }: {
   kind: "apps" | "deals";
-  searchParams: Promise<{ published?: string; rejected?: string; dismissed?: string; retried?: string; error?: string; view?: string; bulkIntent?: string; bulkCompleted?: string; bulkFailed?: string }>;
+  searchParams: Promise<{ published?: string; rejected?: string; dismissed?: string; retried?: string; error?: string; view?: string; bulkIntent?: string; bulkCompleted?: string; bulkFailed?: string; page?: string }>;
 }) {
   const query = await searchParams;
   const view: View = query.view === "history" || query.view === "failed" ? query.view : "pending";
@@ -55,8 +58,13 @@ export async function ReviewQueuePage({
   const sourcePattern = kind === "deals" ? "catalog/deals/%" : "catalog/apps/%";
   const queuePath = kind === "deals" ? "/dashboard/deals" : "/dashboard/catalogue";
   const queueLabel = kind === "deals" ? "Deal queue" : "App queue";
+  const requestedPage = Number(query.page);
+  const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 ? Math.min(requestedPage, 10000) : 1;
+  const viewCondition = view === "history"
+    ? inArray(catalogueRevisions.status, ["published", "rejected", "resolved", "dismissed", "superseded"])
+    : eq(catalogueRevisions.status, view);
   const [recentRevisions, countRows] = await Promise.all([
-    database.select().from(catalogueRevisions).where(like(catalogueRevisions.sourcePath, sourcePattern)).orderBy(desc(catalogueRevisions.createdAt)).limit(200),
+    database.select().from(catalogueRevisions).where(and(like(catalogueRevisions.sourcePath, sourcePattern), viewCondition)).orderBy(desc(catalogueRevisions.createdAt), desc(catalogueRevisions.id)).limit(101).offset((page - 1) * 100),
     database.select({
       pending: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' then 1 else 0 end), 0)`,
       create: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'pending' and ${catalogueRevisions.changeType} = 'create' then 1 else 0 end), 0)`,
@@ -64,11 +72,8 @@ export async function ReviewQueuePage({
       failed: sql<number>`coalesce(sum(case when ${catalogueRevisions.status} = 'failed' then 1 else 0 end), 0)`,
     }).from(catalogueRevisions).where(like(catalogueRevisions.sourcePath, sourcePattern)),
   ]);
-  const revisions = recentRevisions.filter((revision) => (
-    view === "pending" ? revision.status === "pending"
-      : view === "failed" ? revision.status === "failed"
-        : ["published", "rejected", "resolved", "dismissed", "superseded"].includes(revision.status)
-  )).slice(0, 100);
+  const hasNextPage = recentRevisions.length > 100;
+  const revisions = recentRevisions.slice(0, 100);
   const applications = await getCatalogueQueueApplications(
     revisions.flatMap(({ appId }) => appId ? [appId] : []),
   );
@@ -94,14 +99,14 @@ export async function ReviewQueuePage({
       {query.published === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Revision published.</div>}
       {query.rejected === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Revision rejected. The public listing was not changed.</div>}
       {query.dismissed === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Failure dismissed and retained in history.</div>}
-      {query.retried === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Synchronization succeeded. The revision is ready for review.</div>}
+      {query.retried === "1" && <div className="success-banner" role="status"><CheckCircle2 size={17} /> Synchronization succeeded. Check the pending queue for changes awaiting review.</div>}
       {query.bulkCompleted && Number(query.bulkCompleted) > 0 && (
         <div className="success-banner" role="status"><CheckCircle2 size={17} />
           {query.bulkCompleted} {query.bulkIntent === "reject" ? "rejected" : "published"} successfully.
-          {Number(query.bulkFailed) > 0 ? ` ${query.bulkFailed} could not be processed and remain pending.` : ""}
+          {Number(query.bulkFailed) > 0 ? ` ${query.bulkFailed} could not be processed. Open their revisions to check the current state and any errors.` : ""}
         </div>
       )}
-      {query.bulkCompleted === "0" && Number(query.bulkFailed) > 0 && <div className="form-error" role="alert">None of the selected revisions could be processed. They remain pending for individual review.</div>}
+      {query.bulkCompleted === "0" && Number(query.bulkFailed) > 0 && <div className="form-error" role="alert">None of the selected revisions could be processed. Open the revisions to check their current state and any errors.</div>}
       {query.error && <div className="form-error" role="alert">{errorMessages[query.error] ?? "The revision could not be reviewed."}</div>}
 
       <section className="dashboard-panel catalogue-queue-panel" aria-labelledby="revisions-heading">
@@ -119,7 +124,7 @@ export async function ReviewQueuePage({
         {revisions.length === 0 ? (
           <div className="catalogue-queue-empty">
             <CheckCircle2 aria-hidden="true" size={24} />
-            <strong>{view === "pending" ? "Everything is reviewed" : view === "failed" ? "No unresolved failures" : "No revisions in this view"}</strong>
+            <strong>{page > 1 ? "No revisions on this page" : view === "pending" ? "Everything is reviewed" : view === "failed" ? "No unresolved failures" : "No revisions in this view"}</strong>
             <span>{view === "pending"
               ? "New merged GitHub changes will appear here automatically."
               : view === "failed"
@@ -127,7 +132,7 @@ export async function ReviewQueuePage({
                 : "Choose another queue view to continue."}</span>
           </div>
         ) : (
-          <CatalogueBulkReview enabled={view === "pending"} itemCount={revisions.length} returnPath={queuePath}>
+          <CatalogueBulkReview key={`${view}-${page}-${revisions.map(({ id }) => id).join(",")}`} enabled={view === "pending"} itemCount={revisions.length} returnPath={queuePath}>
           <div className="catalogue-revision-list">
             {revisions.map((revision) => {
               const isDeal = revision.sourcePath.startsWith("catalog/deals/");
@@ -164,6 +169,7 @@ export async function ReviewQueuePage({
                       </div>
                       <h3>{manifest?.name ?? current?.name ?? revision.appSlug}</h3>
                       <p>{summary}</p>
+                      {revision.status === "pending" && revision.errors.length > 0 && <p role="alert">{revision.errors.join(" ")}</p>}
                       <small>{revision.createdAt.toLocaleString()} · commit {revision.sourceCommitSha.slice(0, 8)}</small>
                     </div>
                   </div>
@@ -174,12 +180,12 @@ export async function ReviewQueuePage({
                         <form action={retryCatalogueFailure}>
                           <input name="revisionId" type="hidden" value={revision.id} />
                           <input name="returnPath" type="hidden" value={queuePath} />
-                          <button className="button-primary" type="submit">Retry synchronization</button>
+                          <PendingSubmitButton className="button-primary" type="submit">Retry synchronization</PendingSubmitButton>
                         </form>
                         <form action={dismissCatalogueFailure}>
                           <input name="revisionId" type="hidden" value={revision.id} />
                           <input name="returnPath" type="hidden" value={queuePath} />
-                          <button className="button-secondary" type="submit">Dismiss failure</button>
+                          <PendingSubmitButton className="button-secondary" type="submit">Dismiss failure</PendingSubmitButton>
                         </form>
                       </>
                     )}
@@ -193,6 +199,11 @@ export async function ReviewQueuePage({
           </div>
           </CatalogueBulkReview>
         )}
+        {(page > 1 || hasNextPage) && <nav aria-label="Queue pages" className="catalogue-queue-toolbar">
+          {page > 1 && <Link className="button-secondary" href={`${queuePath}?view=${view}&page=${page - 1}`}>Previous page</Link>}
+          <span>Page {page}</span>
+          {hasNextPage && <Link className="button-secondary" href={`${queuePath}?view=${view}&page=${page + 1}`}>Next page</Link>}
+        </nav>}
       </section>
     </DashboardShell>
   );

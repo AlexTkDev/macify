@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, isNull, lte, ne } from "drizzle-orm";
+import { and, desc, eq, isNull, lte, ne } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { apps, catalogueRevisions, deals, mediaAssets } from "@/db/schema";
 import type { CataloguePreparedMedia } from "@/db/schema-catalogue";
@@ -121,16 +121,14 @@ async function ingestApplicationItem(
   const canonicalManifest = JSON.stringify(parsed.data);
   const manifestHash = await sha256Hex(canonicalManifest);
   const unchanged = await database
-    .select({ id: catalogueRevisions.id, createdAt: catalogueRevisions.createdAt })
+    .select({ id: catalogueRevisions.id, createdAt: catalogueRevisions.createdAt, manifestHash: catalogueRevisions.manifestHash, status: catalogueRevisions.status })
     .from(catalogueRevisions)
     .where(and(
       eq(catalogueRevisions.sourcePath, item.path),
-      eq(catalogueRevisions.manifestHash, manifestHash),
-      inArray(catalogueRevisions.status, ["pending", "published", "rejected", "dismissed"]),
     ))
     .orderBy(desc(catalogueRevisions.createdAt))
     .limit(1);
-  if (unchanged[0]) {
+  if (unchanged[0]?.manifestHash === manifestHash && ["pending", "published", "rejected", "dismissed"].includes(unchanged[0].status)) {
     await resolveOlderFailures(database, item.path, unchanged[0].createdAt);
     return { ok: true, ignored: true, reason: "Manifest content is unchanged." } as const;
   }
@@ -276,13 +274,11 @@ async function ingestDealItem(
 
   const canonicalManifest = JSON.stringify(parsed.data);
   const manifestHash = await sha256Hex(canonicalManifest);
-  const unchanged = await database.select({ id: catalogueRevisions.id, createdAt: catalogueRevisions.createdAt }).from(catalogueRevisions)
+  const unchanged = await database.select({ id: catalogueRevisions.id, createdAt: catalogueRevisions.createdAt, manifestHash: catalogueRevisions.manifestHash, status: catalogueRevisions.status }).from(catalogueRevisions)
     .where(and(
       eq(catalogueRevisions.sourcePath, item.path),
-      eq(catalogueRevisions.manifestHash, manifestHash),
-      inArray(catalogueRevisions.status, ["pending", "published", "rejected", "dismissed"]),
     )).orderBy(desc(catalogueRevisions.createdAt)).limit(1);
-  if (unchanged[0]) {
+  if (unchanged[0]?.manifestHash === manifestHash && ["pending", "published", "rejected", "dismissed"].includes(unchanged[0].status)) {
     await resolveOlderFailures(database, item.path, unchanged[0].createdAt);
     return { ok: true, ignored: true, reason: "Deal manifest content is unchanged." } as const;
   }
@@ -414,7 +410,13 @@ async function prepareRevisionMedia(
       }
     }
   } catch (error) {
-    if (newlyStoredKeys.length) await env.MEDIA.delete(newlyStoredKeys);
+    if (newlyStoredKeys.length) {
+      try {
+        await env.MEDIA.delete(newlyStoredKeys);
+      } catch (cleanupError) {
+        console.error("Media preparation failed and cleanup also failed.", { revisionId, cleanupError });
+      }
+    }
     return { ok: false, error: error instanceof Error ? error.message : "Media preparation failed." } as const;
   }
   return { ok: true, media: prepared, storedKeys: newlyStoredKeys } as const;

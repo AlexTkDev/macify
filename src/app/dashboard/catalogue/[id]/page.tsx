@@ -1,3 +1,4 @@
+import { PendingSubmitButton } from "@/components/pending-submit-button";
 import Link from "next/link";
 import { and, desc, eq, isNull, like, lt } from "drizzle-orm";
 import { notFound } from "next/navigation";
@@ -110,8 +111,8 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
               <form action={decideCatalogueRevision} className="catalogue-review-decision">
                 <input name="revisionId" type="hidden" value={revision.id} />
                 <input name="returnPath" type="hidden" value="/dashboard/catalogue" />
-                <button className="button-primary" name="intent" type="submit" value="publish">{publishActionLabels[revision.changeType]}</button>
-                <button className="button-secondary button-danger" name="intent" type="submit" value="reject">Reject revision</button>
+                <PendingSubmitButton className="button-primary" name="intent" type="submit" value="publish">{publishActionLabels[revision.changeType]}</PendingSubmitButton>
+                <PendingSubmitButton className="button-secondary button-danger" name="intent" type="submit" value="reject">Reject revision</PendingSubmitButton>
               </form>
             )}
             {revision.status === "failed" && (
@@ -119,12 +120,12 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
                 <form action={retryCatalogueFailure}>
                   <input name="revisionId" type="hidden" value={revision.id} />
                   <input name="returnPath" type="hidden" value="/dashboard/catalogue" />
-                  <button className="button-primary" type="submit">Retry synchronization</button>
+                  <PendingSubmitButton className="button-primary" type="submit">Retry synchronization</PendingSubmitButton>
                 </form>
                 <form action={dismissCatalogueFailure}>
                   <input name="revisionId" type="hidden" value={revision.id} />
                   <input name="returnPath" type="hidden" value="/dashboard/catalogue" />
-                  <button className="button-secondary" type="submit">Dismiss failure</button>
+                  <PendingSubmitButton className="button-secondary" type="submit">Dismiss failure</PendingSubmitButton>
                 </form>
               </div>
             )}
@@ -244,8 +245,8 @@ async function DealRevisionPage({
               <form action={decideCatalogueRevision} className="catalogue-review-decision">
                 <input name="revisionId" type="hidden" value={revision.id} />
                 <input name="returnPath" type="hidden" value="/dashboard/deals" />
-                <button className="button-primary" name="intent" type="submit" value="publish">{publishLabel}</button>
-                <button className="button-secondary button-danger" name="intent" type="submit" value="reject">Reject revision</button>
+                <PendingSubmitButton className="button-primary" name="intent" type="submit" value="publish">{publishLabel}</PendingSubmitButton>
+                <PendingSubmitButton className="button-secondary button-danger" name="intent" type="submit" value="reject">Reject revision</PendingSubmitButton>
               </form>
             )}
             {revision.status === "failed" && (
@@ -253,12 +254,12 @@ async function DealRevisionPage({
                 <form action={retryCatalogueFailure}>
                   <input name="revisionId" type="hidden" value={revision.id} />
                   <input name="returnPath" type="hidden" value="/dashboard/deals" />
-                  <button className="button-primary" type="submit">Retry synchronization</button>
+                  <PendingSubmitButton className="button-primary" type="submit">Retry synchronization</PendingSubmitButton>
                 </form>
                 <form action={dismissCatalogueFailure}>
                   <input name="revisionId" type="hidden" value={revision.id} />
                   <input name="returnPath" type="hidden" value="/dashboard/deals" />
-                  <button className="button-secondary" type="submit">Dismiss failure</button>
+                  <PendingSubmitButton className="button-secondary" type="submit">Dismiss failure</PendingSubmitButton>
                 </form>
               </div>
             )}

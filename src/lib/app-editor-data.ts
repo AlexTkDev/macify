@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, inArray, isNull, like, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, inArray, isNull, like, or, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import {
   appCategories,
@@ -45,34 +45,42 @@ export async function getApplicationsDashboardData() {
   ]);
 
   const applicationIds = records.map(({ id }) => id);
-  const iconRows = applicationIds.length > 0
+  const mediaRowsForApplications = applicationIds.length > 0
     ? await database
       .select({
         appId: mediaAssets.appId,
+        role: mediaAssets.role,
         storageKey: mediaAssets.storageKey,
         altText: mediaAssets.altText,
       })
       .from(mediaAssets)
       .where(and(
         inArray(mediaAssets.appId, applicationIds),
-        eq(mediaAssets.role, "icon"),
+        or(eq(mediaAssets.role, "icon"), eq(mediaAssets.role, "preview_image")),
       ))
       .orderBy(desc(mediaAssets.createdAt))
     : [];
-  const iconsByApplication = new Map<string, (typeof iconRows)[number]>();
-  for (const icon of iconRows) {
-    if (icon.appId && !iconsByApplication.has(icon.appId)) {
-      iconsByApplication.set(icon.appId, icon);
+  const iconsByApplication = new Map<string, (typeof mediaRowsForApplications)[number]>();
+  const previewsByApplication = new Map<string, (typeof mediaRowsForApplications)[number]>();
+  for (const asset of mediaRowsForApplications) {
+    if (asset.appId && asset.role === "icon" && !iconsByApplication.has(asset.appId)) {
+      iconsByApplication.set(asset.appId, asset);
+    }
+    if (asset.appId && asset.role === "preview_image" && !previewsByApplication.has(asset.appId)) {
+      previewsByApplication.set(asset.appId, asset);
     }
   }
 
   return {
     applications: records.map((record) => {
       const icon = iconsByApplication.get(record.id);
+      const preview = previewsByApplication.get(record.id);
       return {
         ...record,
         iconStorageKey: icon?.storageKey ?? null,
         iconAltText: icon?.altText ?? null,
+        previewStorageKey: preview?.storageKey ?? null,
+        previewAltText: preview?.altText ?? null,
       };
     }),
     stats: statsRows[0] ?? { total: 0, published: 0 },

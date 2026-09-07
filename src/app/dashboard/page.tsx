@@ -75,6 +75,17 @@ export default async function DashboardPage() {
                   <tr key={app.id} role="row">
                     <td role="cell">
                       <Link className="table-app table-app-link" href={`/dashboard/apps/${app.id}`}>
+                        <span className="dashboard-app-card-media">
+                          {app.previewStorageKey ? (
+                            <Image
+                              alt={app.previewAltText ?? `${app.name} preview`}
+                              fill
+                              sizes="(max-width: 720px) 100vw, 32vw"
+                              src={`/dashboard/media/${app.previewStorageKey.split("/").map(encodeURIComponent).join("/")}`}
+                              unoptimized
+                            />
+                          ) : <span aria-hidden="true">{app.name}</span>}
+                        </span>
                         {app.iconStorageKey ? (
                           <Image
                             alt={app.iconAltText ?? `${app.name} icon`}

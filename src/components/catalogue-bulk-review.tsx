@@ -58,14 +58,14 @@ export function CatalogueBulkReview({ children, enabled, itemCount, returnPath }
 }
 
 function BulkActionButtons({ selectedCount }: { selectedCount: number }) {
-  const { pending } = useFormStatus();
+  const { pending, data } = useFormStatus();
   return (
     <div>
       <button className="button-primary" disabled={pending || selectedCount === 0} name="intent" type="submit" value="publish">
-        {pending ? "Processing…" : `Publish selected${selectedCount > 0 ? ` (${selectedCount})` : ""}`}
+        {pending && data?.get("intent") === "publish" ? "Publishing…" : `Publish selected${selectedCount > 0 ? ` (${selectedCount})` : ""}`}
       </button>
       <button className="button-secondary button-danger" disabled={pending || selectedCount === 0} name="intent" type="submit" value="reject">
-        Reject selected{selectedCount > 0 ? ` (${selectedCount})` : ""}
+        {pending && data?.get("intent") === "reject" ? "Rejecting…" : `Reject selected${selectedCount > 0 ? ` (${selectedCount})` : ""}`}
       </button>
     </div>
   );

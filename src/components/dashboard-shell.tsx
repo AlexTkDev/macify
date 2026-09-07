@@ -10,14 +10,13 @@ import {
 } from "lucide-react";
 import { logoutAdmin } from "@/app/dashboard/logout-action";
 import { MacifyLogo } from "@/components/macify-logo";
-import { DashboardStylePicker } from "@/components/dashboard-appearance";
 import { cn } from "@/lib/utils";
 
 const navigation = [
   { id: "applications", label: "Applications", description: "Published app listings", icon: AppWindow, href: "/dashboard", tone: "blue" },
   { id: "catalogue", label: "App queue", description: "Review application updates", icon: GitPullRequest, href: "/dashboard/catalogue", tone: "mint" },
-  { id: "deals", label: "Deal queue", description: "Review deal updates", icon: TicketPercent, href: "/dashboard/deals", tone: "mint" },
-  { id: "media", label: "Media", description: "Inspect synchronized artwork", icon: ImageIcon, href: "/dashboard/media", tone: "mint" },
+  { id: "deals", label: "Deal queue", description: "Review deal updates", icon: TicketPercent, href: "/dashboard/deals", tone: "orange" },
+  { id: "media", label: "Media", description: "Inspect synchronized artwork", icon: ImageIcon, href: "/dashboard/media", tone: "lilac" },
 ] as const;
 
 export function DashboardShell({
@@ -58,7 +57,7 @@ export function DashboardShell({
             <span className="dashboard-current-icon" data-tone={current.tone}><CurrentIcon aria-hidden="true" size={16} strokeWidth={1.8} /></span>
             <span><small>Macify dashboard</small><strong>{current.label}</strong></span>
           </div>
-          <DashboardStylePicker />
+          <span className="dashboard-workspace-label">Curate useful Mac apps.</span>
           <Link className="dashboard-site-link dashboard-site-link-mobile" href="/">Open Macify <ArrowUpRight aria-hidden="true" size={15} /></Link>
         </header>
         <main className="dashboard-main" id="main-content">{children}</main>
