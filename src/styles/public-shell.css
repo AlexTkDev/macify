@@ -530,8 +530,17 @@
   white-space: nowrap;
 }
 
-.public-github-link:hover {
-  border-color: #111318;
+.public-github-link {
+  transition: transform 150ms ease;
+}
+
+.public-github-link:active {
+  transform: translateY(0.12rem) scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-github-link { transition: none; }
+  .public-github-link:active { transform: none; }
 }
 
 .public-github-link:focus-visible {
