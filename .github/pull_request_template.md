@@ -1,10 +1,16 @@
-## Catalogue record
+<!--
+Public pull requests may only add one new catalog/apps/<slug>.json or catalog/deals/<slug>.json file and
+change nothing else. For bugs, ideas, code, documentation, design, or changes
+to an existing listing, open an issue instead.
+-->
 
-Explain what the application or deal is and why it belongs on Macify.
+## Application or deal
+
+Explain what the application or deal offers and why it belongs on Macify.
 
 ## Sources
 
-Link the official sources used to verify the listing or offer.
+Link official sources for its features, pricing, privacy, requirements, and media.
 
 ## Checklist
 

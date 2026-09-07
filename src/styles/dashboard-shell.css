@@ -1,3 +1,35 @@
+.dashboard-loading {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.dashboard-loading p {
+  color: var(--muted);
+}
+
+.dashboard-loading-heading,
+.dashboard-loading-stats span,
+.dashboard-loading-rows span {
+  display: block;
+  border-radius: 8px;
+  background: var(--line);
+}
+
+.dashboard-loading-heading {
+  width: min(16rem, 70%);
+  height: 2.5rem;
+}
+
+.dashboard-loading-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.dashboard-loading-stats span { height: 5rem; }
+.dashboard-loading-rows { display: grid; gap: 1rem; }
+.dashboard-loading-rows span { height: 6rem; }
+
 .dashboard-shell {
   --canvas: #f6f7f9;
   --paper: #f6f7f9;

@@ -1,10 +1,10 @@
-# Homepage curation
+# 🏠 Homepage curation
 
-The homepage is an editorial selection, not the complete catalogue. Search, categories, and application pages cover the wider published directory.
+The homepage combines curated fallback selections with Hot, Trending, and Latest views. Search, categories, and application pages cover the wider published directory.
 
-## Source of truth
+## 📍 Source of truth
 
-`HOMEPAGE_CURATED_SLUGS` in [`src/lib/directory-search-data.ts`](../src/lib/directory-search-data.ts) contains the approved pool. Homepage requests select up to 30 eligible applications from that list.
+`HOMEPAGE_CURATED_SLUGS` in [`src/lib/directory-search-data.ts`](../src/lib/directory-search-data.ts) contains the curated fallback pool. Hot and Trending use analytics-ranked published applications when available, then fill remaining places from this pool, up to 30 entries. Latest selects up to 30 published applications by creation date, newest first.
 
 An eligible application must be published, not deleted, and have:
 
@@ -12,14 +12,14 @@ An eligible application must be published, not deleted, and have:
 - a usable wide preview;
 - a concise name and tagline.
 
-Missing media should be fixed in the record. Do not fill the homepage with unapproved catalogue entries. Removing a slug from the pool does not unpublish or delete the application.
+Missing media should be fixed in the record. Keep curated fallback entries in this approved pool; analytics-ranked and Latest entries are selected independently. Removing a slug from the pool does not unpublish or delete the application.
 
-## Change the pool
+## 🔄 Changing the pool
 
 1. Confirm the exact catalogue slug and publication state.
 2. Verify the icon, preview, name, and tagline.
 3. Add or remove the unique slug in `HOMEPAGE_CURATED_SLUGS`.
 4. Run the relevant TypeScript and lint checks.
-5. Confirm the homepage contains only approved eligible entries.
+5. Confirm the curated fallback contains only approved eligible entries, and check Hot, Trending, and Latest independently.
 
-If fewer than 30 approved applications are eligible, show the eligible subset rather than using catalogue-wide fallback entries.
+If fewer than 30 curated applications are eligible, use that subset for the curated fallback rather than adding arbitrary catalogue entries.

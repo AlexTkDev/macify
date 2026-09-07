@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { decideCatalogueRevision, dismissCatalogueFailure, retryCatalogueFailure } from "@/app/dashboard/catalogue/actions";
 import { CatalogueChangeReview } from "@/components/catalogue-change-review";
-import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
 import { apps, catalogueRevisions, deals } from "@/db/schema";
 import { getChangedManifestFields } from "@/lib/catalogue-diff";
@@ -48,7 +47,7 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
     : revision.preparedMedia.length;
 
   return (
-    <DashboardShell active="catalogue">
+    <>
       <nav className="dashboard-breadcrumbs" aria-label="Breadcrumb">
         <Link href="/dashboard/catalogue">Review queue</Link><ChevronRight size={14} aria-hidden="true" />
         <span aria-current="page">{revision.appSlug}</span>
@@ -143,7 +142,7 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
           </aside>
         </aside>
       </div>
-    </DashboardShell>
+    </>
   );
 }
 
@@ -176,7 +175,7 @@ async function DealRevisionPage({
   ] as const;
 
   return (
-    <DashboardShell active="deals">
+    <>
       <nav className="dashboard-breadcrumbs" aria-label="Breadcrumb">
         <Link href="/dashboard/deals">Deal queue</Link><ChevronRight size={14} aria-hidden="true" />
         <span aria-current="page">{revision.appSlug} deal</span>
@@ -268,7 +267,7 @@ async function DealRevisionPage({
           </section>
         </aside>
       </div>
-    </DashboardShell>
+    </>
   );
 }
 

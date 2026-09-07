@@ -5,7 +5,6 @@ import { and, desc, eq, inArray, like, sql } from "drizzle-orm";
 import { AlertTriangle, CheckCircle2, GitBranch } from "lucide-react";
 import { dismissCatalogueFailure, retryCatalogueFailure } from "@/app/dashboard/catalogue/actions";
 import { CatalogueBulkReview } from "@/components/catalogue-bulk-review";
-import { DashboardShell } from "@/components/dashboard-shell";
 import { getDatabase } from "@/db/client";
 import { catalogueRevisions } from "@/db/schema";
 import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
@@ -79,7 +78,7 @@ export async function ReviewQueuePage({
   const counts = countRows[0] ?? { pending: 0, reviewed: 0, failed: 0 };
 
   return (
-    <DashboardShell active={kind === "deals" ? "deals" : "catalogue"}>
+    <>
       <header className="editor-header editor-header-row">
         <div>
           <h1>{queueLabel}</h1>
@@ -113,9 +112,9 @@ export async function ReviewQueuePage({
             <p>{viewDescription(view)}</p>
           </div>
           <nav className="catalogue-view-tabs" aria-label={`${queueLabel} views`}>
-            <Link className={cn(view === "pending" && "active")} href={queuePath}>Pending <span>{counts.pending}</span></Link>
-            <Link className={cn(view === "history" && "active")} href={`${queuePath}?view=history`}>History</Link>
-            <Link className={cn(view === "failed" && "active")} href={`${queuePath}?view=failed`}>Failed <span>{counts.failed}</span></Link>
+            <Link prefetch={true} className={cn(view === "pending" && "active")} href={queuePath}>Pending <span>{counts.pending}</span></Link>
+            <Link prefetch={true} className={cn(view === "history" && "active")} href={`${queuePath}?view=history`}>History</Link>
+            <Link prefetch={true} className={cn(view === "failed" && "active")} href={`${queuePath}?view=failed`}>Failed <span>{counts.failed}</span></Link>
           </nav>
         </div>
         {revisions.length === 0 ? (
@@ -202,7 +201,7 @@ export async function ReviewQueuePage({
           {hasNextPage && <Link className="button-secondary" href={`${queuePath}?view=${view}&page=${page + 1}`}>Next page</Link>}
         </nav>}
       </section>
-    </DashboardShell>
+    </>
   );
 }
 

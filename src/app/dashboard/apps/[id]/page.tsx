@@ -4,7 +4,6 @@ import { ArrowLeft, ExternalLink, SlidersHorizontal } from "lucide-react";
 import { ApplicationHero } from "@/components/application-detail/application-hero";
 import { ApplicationOverview } from "@/components/application-detail/application-overview";
 import { RelatedApplications } from "@/components/application-detail/related-applications";
-import { DashboardShell } from "@/components/dashboard-shell";
 import { getDashboardApplicationDetail } from "@/lib/app-editor-data";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +19,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
   const dealStatus = deal ? deal.startsAt > now ? "Scheduled offer" : deal.endsAt < now ? "Expired offer" : "Current offer" : null;
 
   return (
-    <DashboardShell active="applications">
+    <>
       <div className="dashboard-listing-toolbar">
         <nav className="dashboard-breadcrumbs" aria-label="Breadcrumb">
           <Link href="/dashboard"><ArrowLeft aria-hidden="true" size={14} /> Applications</Link>
@@ -54,6 +53,6 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           {deal && <div><dt>{dealStatus}</dt><dd><a href={deal.url} rel="noreferrer" target="_blank">{deal.discountPercent}% off <ExternalLink aria-hidden="true" size={13} /></a>{deal.code && <span>Code: <code>{deal.code}</code></span>}<span>{deal.startsAt.toLocaleDateString("en-US", { timeZone: "UTC" })} to {deal.endsAt.toLocaleDateString("en-US", { timeZone: "UTC" })}</span></dd></div>}
         </dl>
       </section>
-    </DashboardShell>
+    </>
   );
 }

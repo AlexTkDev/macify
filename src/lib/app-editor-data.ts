@@ -14,7 +14,7 @@ import {
 
 export async function getApplicationsDashboardData() {
   const database = await getDatabase();
-  const [records, statsRows, mediaRows, revisionRows] = await Promise.all([
+  const [records, statsRows, revisionRows] = await Promise.all([
     database
       .select({
         id: apps.id,
@@ -40,9 +40,6 @@ export async function getApplicationsDashboardData() {
       })
       .from(apps)
       .where(isNull(apps.deletedAt)),
-    database
-      .select({ count: count(), bytes: sql<number>`coalesce(sum(${mediaAssets.byteSize}), 0)` })
-      .from(mediaAssets),
     database.select({ count: count() }).from(catalogueRevisions).where(and(
       eq(catalogueRevisions.status, "pending"),
       like(catalogueRevisions.sourcePath, "catalog/apps/%"),
@@ -93,7 +90,6 @@ export async function getApplicationsDashboardData() {
       };
     }),
     stats: statsRows[0] ?? { total: 0, published: 0 },
-    media: mediaRows[0] ?? { count: 0, bytes: 0 },
     pendingRevisions: revisionRows[0]?.count ?? 0,
   };
 }

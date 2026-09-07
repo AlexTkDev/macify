@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, ExternalLink, GitBranch, Star } from "lucide-react";
 import { setApplicationPublication, setFeaturedApplication } from "@/app/dashboard/editorial-actions";
-import { DashboardShell } from "@/components/dashboard-shell";
 import { getApplicationEditorData } from "@/lib/apps-data";
 
 export const dynamic = "force-dynamic";
@@ -38,7 +37,7 @@ export default async function EditApplicationPage({
   const isPublished = application.status === "published";
 
   return (
-    <DashboardShell active="applications">
+    <>
       <nav className="dashboard-breadcrumbs" aria-label="Breadcrumb">
         <Link href="/dashboard">Applications</Link>
         <ChevronRight size={14} aria-hidden="true" />
@@ -137,6 +136,6 @@ export default async function EditApplicationPage({
           </div>
         )}
       </section>
-    </DashboardShell>
+    </>
   );
 }

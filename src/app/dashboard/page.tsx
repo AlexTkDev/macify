@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { GitPullRequest, Star, SlidersHorizontal } from "lucide-react";
-import { DashboardShell } from "@/components/dashboard-shell";
 import { getApplicationsDashboardData } from "@/lib/apps-data";
 import { mediaUrl } from "@/components/public-app-card";
 import { cn } from "@/lib/utils";
@@ -12,7 +11,7 @@ export default async function DashboardPage() {
   const { applications, stats, pendingRevisions } = await getApplicationsDashboardData();
 
   return (
-    <DashboardShell active="applications">
+    <>
       <header className="dashboard-header">
         <div><h1>Applications</h1><p>Review your listings and manage where they appear.</p></div>
         <Link className="button-primary" href="/dashboard/catalogue"><GitPullRequest size={16} /> Review app updates</Link>
@@ -56,6 +55,6 @@ export default async function DashboardPage() {
           </ul>
         )}
       </section>
-    </DashboardShell>
+    </>
   );
 }

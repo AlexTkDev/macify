@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { DashboardShell } from "@/components/dashboard-shell";
 import { getMediaManagementData } from "@/lib/dashboard-data";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +9,7 @@ const bytes = (value: number) => value < 1024 * 1024 ? `${Math.max(1, Math.round
 export default async function MediaPage() {
   const { records, totals } = await getMediaManagementData();
   return (
-    <DashboardShell active="media">
+    <>
       <header className="dashboard-header"><div><p>R2 asset inventory</p><h1>Media</h1></div><div className="dashboard-actions"><span className="storage-summary">{totals.count} files · {bytes(Number(totals.bytes))}</span></div></header>
       <section className="dashboard-panel media-management-panel" aria-labelledby="media-list-heading">
         <div className="panel-toolbar"><div><h2 id="media-list-heading">Stored application media</h2><p>Read-only inventory synchronized from reviewed GitHub manifests.</p></div></div>
@@ -26,6 +25,6 @@ export default async function MediaPage() {
           </div>
         )}
       </section>
-    </DashboardShell>
+    </>
   );
 }

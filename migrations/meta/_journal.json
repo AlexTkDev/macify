@@ -6,14 +6,7 @@
       "idx": 0,
       "version": "6",
       "when": 1785735608591,
-      "tag": "0000_lucky_ben_grimm",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1785738000000,
-      "tag": "0001_seed_categories",
+      "tag": "0000_create_initial_directory_schema",
       "breakpoints": true
     },
     {
@@ -27,63 +20,63 @@
       "idx": 3,
       "version": "6",
       "when": 1785756000000,
-      "tag": "0003_rename_preview_image",
+      "tag": "0003_rename_media_role_to_preview_image",
       "breakpoints": true
     },
     {
       "idx": 4,
       "version": "6",
       "when": 1785742451728,
-      "tag": "0004_sync_drizzle_snapshot",
+      "tag": "0004_sync_youtube_url_schema_snapshot",
       "breakpoints": true
     },
     {
       "idx": 5,
       "version": "6",
       "when": 1785744788167,
-      "tag": "0005_pretty_iron_fist",
+      "tag": "0005_normalize_pricing_and_remove_legacy_app_fields",
       "breakpoints": true
     },
     {
       "idx": 6,
       "version": "6",
       "when": 1785822026460,
-      "tag": "0006_unknown_leader",
+      "tag": "0006_drop_original_category_tables",
       "breakpoints": true
     },
     {
       "idx": 7,
       "version": "6",
       "when": 1786287510343,
-      "tag": "0007_condemned_katie_power",
+      "tag": "0007_add_admin_login_attempt_tracking",
       "breakpoints": true
     },
     {
       "idx": 8,
       "version": "6",
       "when": 1788702070951,
-      "tag": "0008_military_nico_minoru",
+      "tag": "0008_replace_tags_with_categories",
       "breakpoints": true
     },
     {
       "idx": 9,
       "version": "6",
       "when": 1788712575803,
-      "tag": "0009_blushing_dreaming_celestial",
+      "tag": "0009_add_catalogue_revisions_deals_and_featured_apps",
       "breakpoints": true
     },
     {
       "idx": 10,
       "version": "6",
       "when": 1788713938327,
-      "tag": "0010_smiling_sharon_ventura",
+      "tag": "0010_remove_processor_compatibility_fields",
       "breakpoints": true
     },
     {
       "idx": 11,
       "version": "6",
       "when": 1788714384529,
-      "tag": "0011_gigantic_susan_delgado",
+      "tag": "0011_remove_legacy_imports_redirects_and_metadata",
       "breakpoints": true
     }
   ]

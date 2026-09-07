@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
+const migrationScript = path.join(root, "scripts", "apply-database-migrations.mjs");
 const syncScript = path.join(root, "scripts", "sync-local-catalogue.mjs");
 const allowedArguments = new Set(["--fast", "--persist-to"]);
 
@@ -23,7 +23,7 @@ for (let index = 0; index < process.argv.slice(2).length; index += 1) {
 }
 
 const persistenceArguments = persistPath ? ["--persist-to", path.resolve(persistPath)] : [];
-execFileSync(wrangler, ["d1", "migrations", "apply", "DB", "--local", ...persistenceArguments], {
+execFileSync(process.execPath, [migrationScript, "--local", ...persistenceArguments], {
   cwd: root,
   stdio: "inherit",
   env: { ...process.env, CI: "true", NO_D1_WARNING: "true" },
