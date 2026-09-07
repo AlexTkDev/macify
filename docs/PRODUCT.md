@@ -2,7 +2,7 @@
 
 ## 🎯 Purpose
 
-Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. Each listing is reviewed for usefulness and accuracy.
+Macify is a curated directory of useful macOS applications. Each listing is reviewed for usefulness and accuracy.
 
 ## 🌐 Public experience
 

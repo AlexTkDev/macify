@@ -12,6 +12,7 @@ export default function PrivacyPage() {
   return (
     <PolicyLayout
       title="Privacy notice"
+      updatedAt="September 8, 2026"
       description="What happens to your data when you browse Macify."
     >
       <section id="information">
@@ -32,7 +33,7 @@ export default function PrivacyPage() {
       <section id="affiliate-links">
         <h2>Providers and outside links</h2>
         <p>Macify shares information only as needed with providers that host, secure, deliver, and measure the site, or when disclosure is required by law. These providers may process information in other countries under their own terms and any legally required transfer safeguards.</p>
-        <p>Links to application websites, app stores, videos, and other services take you to sites with their own privacy practices. Some links are affiliate links. Macify may earn a commission from a qualifying purchase, and the destination may receive an affiliate identifier along with standard request information.</p>
+        <p>Links to application websites, app stores, videos, and other services take you to sites with their own privacy practices. Some links may be affiliate links. A purchase through these links may earn Macify a commission at no additional cost to the buyer. The destination may receive an affiliate identifier along with standard request information.</p>
       </section>
       <section id="retention">
         <h2>Retention and security</h2>

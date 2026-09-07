@@ -12,12 +12,19 @@ export default function EditorialPolicyPage() {
   return (
     <PolicyLayout
       title="Editorial policy"
+      updatedAt="September 8, 2026"
       description="How applications earn and keep a place in the Macify directory."
     >
       <section id="selection">
         <h2>What we include</h2>
         <p>Macify features useful software built for macOS or offering a meaningful Mac experience. We look for a clear purpose, a trustworthy source, understandable pricing, and enough reliable information to explain the application properly.</p>
-        <p>This is a curated directory, not a complete catalogue. Popularity, a developer request, or a merged contribution does not guarantee publication. Macify may edit, decline, unpublish, or remove a listing when it is outdated, unsafe, misleading, unavailable, or no longer meets the directory’s standards.</p>
+        <p>Every submission is subject to editorial review before publication.</p>
+      </section>
+      <section id="quality">
+        <h2>Quality and editorial discretion</h2>
+        <p>Applications are evaluated for usefulness, reliability, trustworthiness, and maintenance.</p>
+        <p>We may decline or remove applications that are unfinished, misleading, unsafe, or insufficiently supported. Applications that no longer work reliably on the macOS versions they claim to support may also be excluded.</p>
+        <p>Macify retains final editorial discretion to accept, decline, edit, or remove any listing. Submission does not guarantee inclusion.</p>
       </section>
       <section id="research">
         <h2>How we research and write</h2>
@@ -29,10 +36,14 @@ export default function EditorialPolicyPage() {
         <p>Inclusion means Macify considers the application useful enough to feature. It is not a warranty, security certification, or promise that the application will suit every person or workflow. Check the developer’s current terms, privacy information, system requirements, and pricing before relying on an application.</p>
         <p>Product names, trademarks, and artwork belong to their respective owners. Their appearance on Macify does not imply that the developer endorses or sponsors Macify.</p>
       </section>
-      <section id="independence">
-        <h2>Commercial independence</h2>
-        <p>Rankings, favorable wording, featured placement, and related-application placement cannot be bought. Material sponsorships, affiliate relationships, or free access that could affect how a listing is understood will be disclosed clearly.</p>
-        <p>Macify may earn a commission from some outbound links. That does not increase the price paid by the visitor or give a developer control over the listing.</p>
+      <section id="featured">
+        <h2>Featured placements and disclosures</h2>
+        <p>Featured applications are marked with a “Featured” label in the directory.</p>
+        <p>Paid placements and sponsorships will be labelled separately from editorial selections.</p>
+      </section>
+      <section id="affiliate-disclosure">
+        <h2>Affiliate disclosure</h2>
+        <p>Some links on Macify may be affiliate links. If you make a purchase through one of these links, Macify may earn a commission at no additional cost to you.</p>
       </section>
       <section id="corrections">
         <h2>Corrections and concerns</h2>

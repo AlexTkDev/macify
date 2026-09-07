@@ -4,10 +4,9 @@ These ordered SQL files upgrade both local and production databases. Their numbe
 preserve execution order; their names describe the change. Older steps can describe
 features that a later step removes.
 
-Migration 0001 was removed because it only seeded the original category tables,
-which 0006 drops without using those seed records. The numbering gap is intentional.
-Existing databases may retain either historical 0001 filename in their applied
-history; leave those records alone. No schema change or history rewrite is needed.
+Migration 0001 seeded the original category tables and has been retired. Migration
+0006 removes those tables. Existing 0001 entries in applied migration history must
+be preserved.
 
 | File | Purpose |
 | --- | --- |

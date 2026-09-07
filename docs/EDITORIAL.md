@@ -17,7 +17,7 @@ Official sources establish facts. Independent sources provide experience. Paraph
 
 ## 🧱 Description structure
 
-Use this order as a suggested template. Adapt or omit sections, paragraph counts, and list lengths when another structure explains the application more clearly; these are not validation requirements:
+The following template covers the main information readers need. Contributors may adapt the headings and length to suit the application:
 
 1. Two or three untitled opening paragraphs, each no longer than three sentences.
 2. `## Features` followed by four to eight verified Markdown bullets.
@@ -49,11 +49,11 @@ Use this order as a suggested template. Adapt or omit sections, paragraph counts
 [Commercial model and concise current pricing context.]
 ```
 
-Descriptions must contain 40–20,000 characters. Use level-two Markdown headings for sections; raw HTML is skipped by the renderer. These format limits do not replace editorial review.
+Descriptions must contain 40–20,000 characters. Use level-two Markdown headings for sections; raw HTML is skipped by the renderer.
 
 Structured pricing uses `pricingType` (`free`, `freemium`, or `paid`) and `billingType` (`one_time`, `subscription`, or `null`). Free applications require `null`; freemium and paid applications require a billing type. Public pricing uses `pricingDetails` when present, otherwise the generated classification label. Keep those fields consistent with the description.
 
-Homepage inclusion is separate from publication; an application can remain in the directory without being featured on the homepage.
+Homepage placement is selected separately from catalogue publication.
 
 <a id="deal-verification"></a>
 

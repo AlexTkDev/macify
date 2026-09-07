@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import Script from "next/script";
-import { Plus, Shuffle } from "lucide-react";
+import { Plus, Shuffle, Star } from "lucide-react";
 import { InlineAppSearch } from "@/components/inline-app-search";
 import { LiveVisitorCount } from "@/components/live-visitor-count";
 import { PublicFooter } from "@/components/public-footer";
@@ -12,8 +12,20 @@ function PublicHeader() {
   return (
     <header className="public-header">
       <div className="public-header-inner">
-        <div className="public-brand-pill">
-          <LiveVisitorCount />
+        <div className="public-community-links">
+          <div className="public-brand-pill">
+            <LiveVisitorCount />
+          </div>
+          <a
+            className="public-brand-pill public-github-link"
+            href="https://github.com/Beingpax/macify"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Star Macify on GitHub (opens in a new tab)"
+          >
+            <Star size={15} aria-hidden="true" />
+            <span>Star on GitHub</span>
+          </a>
         </div>
         <nav className="public-navigation" aria-label="Primary navigation">
           <Link className="public-home-link" href="/">Home</Link>

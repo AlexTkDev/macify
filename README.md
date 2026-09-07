@@ -16,7 +16,7 @@ Macify brings together excellent macOS applications across a wide range of categ
 
 ![Macify homepage showing curated Mac apps and the featured Droppy application](docs/assets/macify-homepage.webp)
 
-The collection includes both free and paid software. It is focused entirely on applications made for macOS, so iPhone and iPad apps are not included.
+The collection includes free and paid software made for macOS.
 
 Browse the collection, search for a specific tool, or take the surprise route. Every listing explains what the app does, who it suits, what it costs, and what you should know before installing it.
 
@@ -37,7 +37,7 @@ Every contribution helps us build a better collection of high quality macOS appl
 
 Macify uses Next.js and TypeScript on Cloudflare Workers.
 
-Use Node.js 22, matching the repository’s CI workflows. To run it locally:
+Local development requires Node.js 22. To get started:
 
 ```bash
 npm install

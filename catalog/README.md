@@ -1,6 +1,6 @@
 # 🗂️ Macify catalogue
 
-This directory is the GitHub source for Macify's app listing information:
+This directory contains Macify’s application and deal manifests, contribution templates, and schemas:
 
 - [`apps/`](apps) contains one application manifest per application.
 - [`deals/`](deals) contains verified offers for existing applications.

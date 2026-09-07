@@ -7,10 +7,12 @@ export function PolicyLayout({
   children,
   description,
   title,
+  updatedAt = "September 7, 2026",
 }: {
   children: ReactNode;
   description: string;
   title: string;
+  updatedAt?: string;
 }) {
   return (
     <PublicShell>
@@ -19,7 +21,7 @@ export function PolicyLayout({
         <header className="policy-intro">
           <h1>{title}</h1>
           <p>{description}</p>
-          <small>Last updated September 7, 2026</small>
+          <small>Last updated {updatedAt}</small>
         </header>
         <article className="policy-content">{children}</article>
       </main>

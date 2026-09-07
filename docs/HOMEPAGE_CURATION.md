@@ -6,7 +6,7 @@ The homepage combines curated fallback selections with Hot, Trending, and Latest
 
 `HOMEPAGE_CURATED_SLUGS` in [`src/lib/directory-search-data.ts`](../src/lib/directory-search-data.ts) contains the curated fallback pool. Hot and Trending use analytics-ranked published applications when available, then fill remaining places from this pool, up to 30 entries. Latest selects up to 30 published applications by creation date, newest first.
 
-The queries select published, non-deleted applications. Editorially, each selection should also have:
+Homepage selections use published, non-deleted applications. Editorial requirements include:
 
 - an authentic icon;
 - a usable wide preview;
@@ -22,4 +22,4 @@ Missing media should be fixed in the record. Keep curated fallback entries in th
 4. Run the relevant TypeScript and lint checks.
 5. Confirm the curated fallback contains only approved eligible entries, and check Hot, Trending, and Latest independently.
 
-If fewer than 30 curated applications are eligible, use that subset for the curated fallback rather than adding arbitrary catalogue entries.
+The curated fallback contains up to 30 eligible applications from the approved pool.

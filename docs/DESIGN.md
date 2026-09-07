@@ -30,7 +30,7 @@ Approved references:
 
 The desktop hero is a two-column composition. The left side carries “Mac apps worth making room for.” in three authored rows with real app icons woven into the words. The supporting sentence remains separate. The right side uses one naturally proportioned application preview and a compact identity label.
 
-The directory uses wide previews with the authentic icon, name, and short tagline beneath. It uses three columns on wide screens, two on tablets, and one on phones. Pricing, badges, and classification stay off this quick-browsing surface.
+The directory uses wide previews with the authentic icon, name, and short tagline beneath. It uses three columns on wide screens, two on tablets, and one on phones. Pricing and classification stay off this quick-browsing surface. Featured applications carry a “Featured” label.
 
 ## 🖥️ Application page
 

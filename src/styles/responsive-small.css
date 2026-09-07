@@ -224,3 +224,13 @@
   .policy-page { width: min(calc(100% - 2rem), 62rem); }
   .policy-intro h1 { font-size: clamp(3.2rem, 16vw, 4.8rem); }
 }
+
+@media (max-width: 52rem) {
+  .public-header-inner {
+    grid-template-areas: "brand controls" "navigation navigation";
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0.65rem;
+  }
+  .public-community-links { flex-wrap: nowrap; }
+  .public-navigation { justify-self: center; }
+}
