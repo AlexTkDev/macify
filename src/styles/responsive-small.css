@@ -87,6 +87,16 @@
 
   .application-directory { padding-bottom: 4.5rem; }
   .deals-page { width: min(calc(100% - 2rem), var(--content-width)); padding: 0 0 4.5rem; }
+  .deals-section-empty { min-height: 0; }
+  .deals-empty-state { padding: 4rem 0 2rem; gap: 2rem; }
+  .deals-empty-copy h1 { font-size: clamp(3rem, 15vw, 4.2rem); }
+  .deals-empty-copy > p { margin-top: 1.1rem; font-size: 0.95rem; }
+  .deals-empty-actions { align-items: flex-start; flex-direction: column; gap: 0.75rem; }
+  .deals-empty-art { min-height: 18rem; }
+  .deals-empty-ticket { width: 9.5rem; }
+  .deals-empty-ticket-1 { top: 1rem; left: 2%; }
+  .deals-empty-ticket-2 { top: 6.5rem; right: 1%; }
+  .deals-empty-ticket-3 { bottom: 0.5rem; left: 18%; }
   .deals-hero { padding: 0 0 1.8rem; }
   .deals-hero-stage { padding: 4.5rem 0 3.75rem; gap: 2.75rem; }
   .deals-hero-copy h1 { max-width: none; }

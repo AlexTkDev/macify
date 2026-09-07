@@ -30,7 +30,7 @@ An application record includes:
 - mutual related-application links;
 - one icon, one main preview, and optional screenshots.
 
-The data model and public interface include preliminary support for verified, time-bounded deals. Deals are not currently available in production; local development uses sample offers to exercise the interface. Homepage inclusion is an independent editorial decision and does not affect whether an application remains listed.
+The data model and public interface include preliminary support for verified, time-bounded deals. When no verified offer is active, the deals page presents an explicit empty state. Homepage inclusion is an independent editorial decision and does not affect whether an application remains listed.
 
 ## Media
 

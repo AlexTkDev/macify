@@ -8,7 +8,32 @@ type ActiveDeal = Awaited<ReturnType<typeof getActiveDeals>>[number];
 const heroTicketSlugs = ["cleanshot-x", "bettertouchtool", "daisydisk"];
 
 export function DealsSection({ deals }: { deals: ActiveDeal[] }) {
-  if (!deals.length) return null;
+  if (!deals.length) {
+    return (
+      <section aria-labelledby="deals-title" className="deals-section deals-section-empty">
+        <div className="deals-empty-state">
+          <div className="deals-empty-copy">
+            <h1 id="deals-title">No deals right now.</h1>
+            <p>Macify only lists offers that are current and verified. The shelf is empty today, but the app collection is always open.</p>
+            <div className="deals-empty-actions">
+              <Link className="deals-hero-action" href="/#all-apps">
+                Browse Mac apps <ArrowRight aria-hidden="true" size={19} />
+              </Link>
+              <a className="deals-empty-surprise" href="/surprise">Surprise me</a>
+            </div>
+          </div>
+          <div aria-hidden="true" className="deals-empty-art">
+            <span className="deals-empty-ticket deals-empty-ticket-1"><i /></span>
+            <span className="deals-empty-ticket deals-empty-ticket-2"><i /></span>
+            <span className="deals-empty-ticket deals-empty-ticket-3"><i /></span>
+            <span className="deals-empty-star deals-empty-star-1">✦</span>
+            <span className="deals-empty-star deals-empty-star-2">✦</span>
+            <span className="deals-empty-loop">↝</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
   const heroDeals = deals.slice(0, 3);
   const preferredTicketDeals = heroTicketSlugs
     .map((slug) => deals.find((deal) => deal.slug === slug))

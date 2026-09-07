@@ -11,7 +11,6 @@ import { MAX_APPLICATION_MEDIA_BYTES, prepareLocalMedia } from "./lib/local-medi
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalogueDirectory = path.join(root, "catalog", "apps");
-const localDealsPath = path.join(root, "scripts", "fixtures", "local-deals.json");
 const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
 const wranglerConfigPath = path.join(root, "wrangler.jsonc");
 const now = Date.now();
@@ -158,19 +157,6 @@ const manifests = readdirSync(catalogueDirectory)
   .filter((file) => file.endsWith(".json"))
   .sort()
   .map((file) => JSON.parse(readFileSync(path.join(catalogueDirectory, file), "utf8")));
-const dealManifests = JSON.parse(readFileSync(localDealsPath, "utf8")).map((deal) => {
-  if (!deal.appSlug || !Number.isInteger(deal.discountPercent)
-    || deal.discountPercent < 1 || deal.discountPercent > 99
-    || !deal.url || !Number.isInteger(deal.durationDays) || deal.durationDays < 1) {
-    throw new Error(`Invalid local deal fixture for ${deal.appSlug ?? "unknown application"}.`);
-  }
-  return {
-    ...deal,
-    startsAt: new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    endsAt: new Date(now + deal.durationDays * 24 * 60 * 60 * 1000).toISOString(),
-  };
-});
-
 const existingApps = query("SELECT id, slug FROM apps");
 const appIds = new Map(existingApps.map(({ id, slug }) => [slug, id]));
 for (const manifest of manifests) {
@@ -208,26 +194,7 @@ for (const manifest of manifests) {
     updated_at = excluded.updated_at;`);
 }
 
-const dealAppIds = dealManifests.map(({ appSlug }) => appIds.get(appSlug));
-if (dealAppIds.some((appId) => !appId)) throw new Error("Every local deal fixture must reference a catalogue application.");
-statements.push(dealAppIds.length > 0
-  ? `DELETE FROM deals WHERE app_id NOT IN (${dealAppIds.map(sql).join(", ")});`
-  : "DELETE FROM deals;");
-for (const deal of dealManifests) {
-  const appId = appIds.get(deal.appSlug);
-  statements.push(`INSERT INTO deals (
-    id, app_id, discount_percent, code, url, starts_at, ends_at, created_at, updated_at
-  ) VALUES (
-    ${sql(stableId("local-deal", deal.appSlug))}, ${sql(appId)}, ${sql(deal.discountPercent)},
-    ${sql(deal.code)}, ${sql(deal.url)}, ${Date.parse(deal.startsAt)}, ${Date.parse(deal.endsAt)}, ${now}, ${now}
-  ) ON CONFLICT(app_id) DO UPDATE SET
-    discount_percent = excluded.discount_percent,
-    code = excluded.code,
-    url = excluded.url,
-    starts_at = excluded.starts_at,
-    ends_at = excluded.ends_at,
-    updated_at = excluded.updated_at;`);
-}
+statements.push("DELETE FROM deals;");
 
 const manifestSlugs = manifests.map(({ slug }) => slug);
 statements.push(`UPDATE apps SET status = 'archived', updated_at = ${now}
@@ -407,11 +374,11 @@ const expectedMedia = manifests.reduce((total, manifest) => total + manifestMedi
 if (Number(summary.published) !== manifests.length
   || Number(summary.with_privacy) !== manifests.length
   || Number(summary.with_pricing) !== manifests.length
-  || Number(dealSummary.count) !== dealManifests.length
+  || Number(dealSummary.count) !== 0
   || Number(mediaSummary.count) !== expectedMedia) {
   throw new Error(`Local catalogue verification failed: ${JSON.stringify({ summary, dealSummary, mediaSummary })}`);
 }
 
-console.log(`Synchronized ${manifests.length} applications and ${dealManifests.length} local preview deals into local D1.`);
+console.log(`Synchronized ${manifests.length} applications and cleared local deal data.`);
 console.log(`Media: ${reusedMedia} reused, ${storedMedia} stored, ${removedMedia} removed from local R2.`);
 console.log(`Backup: ${path.relative(root, backupPath)}`);
