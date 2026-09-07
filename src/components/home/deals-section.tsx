@@ -1,39 +1,58 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { DealCodeButton } from "@/components/deal-code-button";
 import { PublicAppIcon } from "@/components/public-app-card";
 import type { getActiveDeals } from "@/lib/deals-data";
 
 type ActiveDeal = Awaited<ReturnType<typeof getActiveDeals>>[number];
-const heroDiscounts = [25, 40, 65, 55, 30];
+const heroTicketSlugs = ["cleanshot-x", "bettertouchtool", "daisydisk"];
 
 export function DealsSection({ deals }: { deals: ActiveDeal[] }) {
   if (!deals.length) return null;
   const heroDeals = deals.slice(0, 3);
+  const preferredTicketDeals = heroTicketSlugs
+    .map((slug) => deals.find((deal) => deal.slug === slug))
+    .filter((deal): deal is ActiveDeal => Boolean(deal));
+  const ticketDeals = preferredTicketDeals.length === 3 ? preferredTicketDeals : heroDeals;
 
   return (
     <section aria-labelledby="deals-title" className="deals-section">
       <header className="deals-hero">
         <div className="deals-hero-stage">
-          <div aria-hidden="true" className="deals-hero-art">
-            {heroDeals.map((deal, index) => (
-              <span className={`deals-orbit-icon deals-orbit-icon-${index + 1}`} key={`icon-${deal.id}`}>
-                <PublicAppIcon app={deal} decorative priority={index === 0} size={96} />
-              </span>
-            ))}
-            {heroDiscounts.map((discount, index) => (
-              <span className={`deals-coupon deals-coupon-${index + 1}`} key={discount}>
-                <span><b>{discount}%</b><small>off</small></span>
-              </span>
-            ))}
-          </div>
           <div className="deals-hero-copy">
             <h1 id="deals-title">
               <span>Great Mac apps.</span>
               <span>Now for less.</span>
             </h1>
-            <p>A curated shelf of worthwhile macOS deals. No bundles, no detours—just useful Mac apps at friendlier prices.</p>
-            <a className="deals-hero-action" href="#handpicked-deals">View deals</a>
+            <p>A curated shelf of worthwhile macOS deals. No bundles, no detours, just useful Mac apps at friendlier prices.</p>
+            <a className="deals-hero-action" href="#handpicked-deals">
+              Browse deals <ArrowRight aria-hidden="true" size={19} />
+            </a>
+            <p className="deals-hero-disclaimer">
+              <span aria-hidden="true">✳</span>
+              Discounts and terms should be confirmed on the developer website.
+            </p>
+          </div>
+          <div className="deals-ticket-stage" aria-label="Highlighted deals">
+            {ticketDeals.map((deal, index) => (
+              <Link className={`deals-ticket deals-ticket-${index + 1}`} href={`/apps/${deal.slug}`} key={deal.id} prefetch={false}>
+                <PublicAppIcon app={deal} decorative priority={index === 0} size={96} />
+                <span className="deals-ticket-copy">
+                  <b>{deal.name}</b>
+                  <small>{deal.tagline}</small>
+                </span>
+                <span aria-hidden="true" className="deals-ticket-perforation" />
+                <strong className="deals-ticket-discount">
+                  <span>{deal.discountPercent}% <small>off</small></span>
+                </strong>
+              </Link>
+            ))}
+            <span aria-hidden="true" className="deals-ticket-arrow">
+              <svg viewBox="0 0 88 72">
+                <path d="M76 8 C82 31 68 46 45 47 C30 48 17 54 10 65" />
+                <path d="M12 49 L9 66 L26 61" />
+              </svg>
+            </span>
           </div>
         </div>
         <div className="deals-featured" aria-label="Featured deals">

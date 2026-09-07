@@ -25,7 +25,7 @@
     margin: 0 auto;
     padding: 0;
     grid-template-areas: "brand navigation controls";
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     gap: 0.35rem;
     border: 0;
     border-radius: 0;
@@ -90,19 +90,30 @@
   .application-directory { padding-bottom: 4.5rem; }
   .deals-page { width: min(calc(100% - 2rem), var(--content-width)); padding: 0 0 4.5rem; }
   .deals-hero { padding: 0 0 1.8rem; }
-  .deals-hero-stage { padding: 8rem 0 3.5rem; }
+  .deals-hero-stage { padding: 4.5rem 0 3.75rem; gap: 2.75rem; }
   .deals-hero-copy h1 { max-width: none; }
-  .deals-hero-copy h1 > span:first-child { font-size: clamp(2.1rem, 11.4vw, 3.8rem); }
-  .deals-hero-copy h1 > span:last-child { font-size: clamp(2.1rem, 10.8vw, 4rem); }
-  .deals-hero-copy > p { margin-top: 1rem; font-size: 1.35rem; }
-  .deals-hero-action { min-height: 2.8rem; }
-  .deals-hero-art { height: auto; }
-  .deals-orbit-icon-1 { top: 0.8rem; }
-  .deals-orbit-icon-3 { display: none; }
-  .deals-coupon-2 { min-width: 6.3rem; min-height: 3.1rem; top: 0.9rem; right: 5%; }
-  .deals-coupon > span { min-height: 2.4rem; padding-inline: 0.4rem; }
-  .deals-coupon b,
-  .deals-coupon small { font-size: 1rem; }
+  .deals-hero-copy h1 > span { font-size: clamp(2.55rem, 11.8vw, 3.8rem); }
+  .deals-hero-copy > p { margin-top: 1.25rem; font-size: 0.98rem; line-height: 1.5; }
+  .deals-hero-action { min-height: 3rem; }
+  .deals-hero-copy > .deals-hero-disclaimer { margin-top: 1rem; font-size: 0.72rem; }
+  .deals-ticket-stage { padding: 0.8rem 0.75rem 1rem 0.25rem; }
+  .deals-ticket {
+    --ticket-padding-block: 0.78rem;
+    width: calc(100% - 1rem);
+    min-height: 6.65rem;
+    padding-inline: 0.75rem 0.35rem;
+    grid-template-columns: auto minmax(0, 1fr) 0.08rem 1.95rem;
+    gap: 0;
+    transform: rotate(2deg);
+  }
+  .deals-ticket-2 { width: calc(100% - 0.5rem); margin-top: -0.3rem; margin-left: -0.15rem; transform: rotate(-1.5deg); }
+  .deals-ticket-3 { width: calc(100% - 0.9rem); margin-top: -0.3rem; margin-left: 0.25rem; transform: rotate(1deg); }
+  .deals-ticket .public-app-icon { width: 3.8rem; height: 3.8rem; }
+  .deals-ticket .public-app-icon,
+  .deals-ticket-copy { margin-right: 0.58rem; }
+  .deals-ticket-copy b { font-size: 0.9rem; }
+  .deals-ticket-copy small { font-size: 0.64rem; -webkit-line-clamp: 2; }
+  .deals-ticket-discount > span { font-size: clamp(1.05rem, 4.6vw, 1.45rem); }
   .deals-featured { margin-top: 0; }
   .deals-featured-app { min-height: 5.55rem; padding: 0.8rem 0.3rem; }
   .deals-featured-identity { gap: 0.7rem; }
