@@ -2,7 +2,7 @@ node_modules/
 .next/
 .open-next/
 .wrangler/
-.dev.vars
+.dev.vars*
 .env*
 !.env.example
 !.dev.vars.example
@@ -10,4 +10,3 @@ cloudflare-env.d.ts
 *.tsbuildinfo
 .DS_Store
 npm-debug.log*
-

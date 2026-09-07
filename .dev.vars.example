@@ -1,7 +1,8 @@
-NEXTJS_ENV=development
-ADMIN_EMAIL=editor@example.com
-ADMIN_PASSWORD=replace-with-a-long-unique-password
-ADMIN_SESSION_SECRET=replace-with-at-least-32-random-characters
-DATAFAST_API_KEY=df_replace-with-a-website-api-key
-CATALOG_SYNC_SECRET=replace-with-at-least-32-random-characters
-CATALOG_REPOSITORY=owner/macify
+# Dashboard authentication
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+ADMIN_SESSION_SECRET=
+
+# Optional local integrations
+DATAFAST_API_KEY=
+CATALOG_SYNC_SECRET=

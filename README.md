@@ -2,7 +2,7 @@
   <img src="src/app/icon.svg" alt="Macify" width="88" height="88">
   <h1>Macify</h1>
   <p><strong>Mac apps worth making room for.</strong></p>
-  <p>A curated collection of the best macOS software.</p>
+  <p>A curated directory of useful macOS software.</p>
   <p>
     <a href="https://macify.app"><kbd>⌘&nbsp; Browse apps</kbd></a>&nbsp;
     <a href="CONTRIBUTING.md"><kbd>🌱&nbsp; Suggest an app</kbd></a>&nbsp;
@@ -10,32 +10,17 @@
   </p>
 </div>
 
-## 🔎 Find your next favourite Mac app
+## About
 
-Macify brings together excellent macOS applications across a wide range of categories. Every app is selected for its quality, usefulness, and ability to make the Mac experience better.
+Macify helps people discover useful Mac applications through a curated homepage, search, categories, and detailed editorial listings. It includes free and paid software built for macOS.
 
-The collection includes both free and paid software. It is focused entirely on applications made for macOS, so iPhone and iPad apps are not included.
+GitHub manifests are the source for application and deal content. Approved revisions are published to Cloudflare D1, while optimized application artwork is stored in R2.
 
-Browse the collection, search for a specific tool, or take the surprise route. Every listing explains what the app does, who it suits, what it costs, and what you should know before installing it.
+## Contribute
 
-## 💡 Know a good one?
+Read [CONTRIBUTING.md](CONTRIBUTING.md) to propose one new application or verified deal. Use [GitHub Issues](https://github.com/Beingpax/macify/issues/new/choose) for corrections, bugs, or product ideas.
 
-Made a Mac app you are proud of? Know a great app that belongs in the collection but is not here yet? You are welcome to suggest it.
-
-Read the [contribution guidelines](CONTRIBUTING.md) to learn how to add an application or a verified deal. Each public contribution can introduce one new catalogue record. If an existing record needs a correction, or you have an idea for Macify itself, [open an issue](https://github.com/Beingpax/macify/issues/new/choose).
-
-You can also help the project grow:
-
-- ⭐ Star the repository so more Mac users can discover it.
-- 🔀 Fork the repository when you are ready to contribute.
-
-Every contribution helps us build a better collection of high quality macOS applications.
-
-## 🛠️ Make it run locally
-
-Macify uses Next.js and TypeScript on Cloudflare Workers. Reviewed application and deal state lives in D1, while application artwork lives in R2. GitHub manifests remain the source for listing and deal content.
-
-To run it locally:
+## Run locally
 
 ```bash
 npm install
@@ -45,11 +30,16 @@ npm run db:migrate:local
 npm run dev
 ```
 
-The development server checks and syncs the local catalogue when it starts. To refresh catalogue changes while it is already running, use `npm run catalogue:sync:local`.
+`npm run dev` validates and synchronizes the local catalogue before starting. Use `npm run catalogue:sync:local` to refresh it separately.
 
-Before changing product behavior, interface design, or catalogue copy, read [`docs/PRODUCT.md`](docs/PRODUCT.md), [`docs/DESIGN.md`](docs/DESIGN.md), and [`docs/EDITORIAL.md`](docs/EDITORIAL.md). Operational and release details live in [`docs/OPERATIONS.md`](docs/OPERATIONS.md) and [`docs/RELEASE.md`](docs/RELEASE.md).
+## Project guides
 
-Before submitting changes, run the checks that match your work:
+- [Product](docs/PRODUCT.md)
+- [Design](docs/DESIGN.md)
+- [Editorial](docs/EDITORIAL.md)
+- [Homepage curation](docs/HOMEPAGE_CURATION.md)
+- [Operations](docs/OPERATIONS.md)
+- [Release](docs/RELEASE.md)
 
 ```bash
 npm run typecheck

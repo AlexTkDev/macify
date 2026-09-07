@@ -1,60 +1,56 @@
-# 🧭 Product
+# Product
 
-## 🎯 Purpose
+## Purpose
 
-Macify helps people find useful macOS applications without relying on promotional listicles or cluttered download directories. GitHub manifests hold application listings and deals; editors review merged revisions and control publication and placement through a protected dashboard.
+Macify is a curated macOS application directory. GitHub manifests hold application and deal content; a protected dashboard reviews revisions and controls publication and placement.
 
-## 🌐 Public experience
+## Public experience
 
 The public website provides:
 
-- a curated homepage;
-- published application pages;
-- category-based discovery;
-- inline search across names, taglines, and categories;
-- related applications and a random-app route;
-- a GitHub contribution path for proposing new applications;
+- curated homepage and published application pages;
+- category discovery, search, related applications, and a random-app route;
+- GitHub contribution flow;
 - canonical metadata, structured data, sitemap, robots rules, and social cards.
 
 The homepage headline is “Mac apps worth making room for.” Its supporting copy is “A curated list of the most useful macOS applications.”
 
-Each application page presents the official identity, tagline, pricing, relevant categories, source status when open source, editorial description, media, optional demo, official website, and related applications.
+Application pages include identity, tagline, pricing, categories, source status when open source, editorial copy, media, optional demo, official website, and related applications.
 
-## 🗃️ Editorial dashboard
+## Dashboard
 
-The dashboard supports GitHub revision review and publication, featured placement, application inspection, and a read-only R2 media inventory. Application and deal content is never authored or edited directly in D1. The dashboard uses single-administrator authentication, signed sessions, and persistent login throttling. Every dashboard route and mutation requires server-side authorization.
+The single-administrator dashboard reviews and publishes GitHub revisions, controls featured placement, inspects applications, and exposes a read-only R2 inventory. Listing and deal content cannot be authored there. Every route and mutation requires server-side authorization; sessions are signed and login throttling is persistent.
 
-## 🧩 Content model
+## Content model
 
 An application record includes:
 
 - name, slug, website, and tagline;
 - researched Markdown description;
-- free, freemium, or paid access classification;
-- one-time or subscription billing where applicable;
+- access and billing classification;
 - source status;
 - one to 12 focused categories;
 - optional YouTube URL;
 - mutual related-application links;
 - one icon, one main preview, and optional screenshots.
 
-Application listing information is stored as one public JSON manifest per application. Time-bounded deals are stored as separate JSON manifests keyed by application slug. Merged application and deal changes become pending D1 revisions and require dashboard approval. Existing published content remains live until its replacement is approved. Featured state is controlled only in the dashboard and is never accepted from public manifests.
+Each application has one public JSON manifest; each optional time-bounded deal has a separate manifest keyed by application slug. Merged changes become pending D1 revisions. Published content stays live until a replacement is approved. Featured state is dashboard-only.
 
 Markdown is rendered as sanitized semantic HTML. Raw HTML is never executed.
 
-## 🖼️ Media
+## Media
 
-Binary media is stored in private R2 objects; D1 stores metadata and storage keys. URL ingestion is size-limited, MIME-checked, signature-validated, optimized through Cloudflare Images, and served through Macify-controlled routes. Remote ingestion rejects private networks, unsafe redirects, invalid formats, and oversized responses.
+R2 stores private media objects; D1 stores metadata and keys. Ingestion validates URL safety, redirects, size, MIME type, file signatures, and checksums before optimizing through Cloudflare Images. Macify-controlled routes serve the result.
 
-Public manifests contain HTTPS source URLs, not image binaries. During ingestion, unchanged source URLs reuse existing R2 objects; changed sources are validated and optimized before a revision can be reviewed.
+Manifests contain HTTPS source URLs, not binaries. Unchanged sources reuse R2 objects; changed sources are prepared before review.
 
 The homepage has one static 1200×630 social image. Each application has a generated social card using its preview and the line `App Name — tagline | Macify`.
 
-## 🚧 Boundaries
+## Boundaries
 
 Macify does not currently provide public accounts, saved applications, payments, subscriptions, an in-site submission form, or multi-user editorial roles. Audio and application binaries are not stored.
 
-## 🧠 Principles
+## Principles
 
 - Lead with utility and verifiable information.
 - Keep editorial judgment independent and specific.

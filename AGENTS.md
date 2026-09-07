@@ -2,32 +2,32 @@
 
 ## Product
 
-Macify is a curated macOS application directory. Read `docs/PRODUCT.md` before changing behavior, `docs/DESIGN.md` before changing the public interface, and `docs/EDITORIAL.md` before editing catalogue copy.
+Macify is a curated macOS application directory. Before changing behavior, public UI, or catalogue copy, read `docs/PRODUCT.md`, `docs/DESIGN.md`, or `docs/EDITORIAL.md` respectively.
 
-The protected dashboard uses single-administrator authentication. Preserve server-side authorization on every dashboard page, handler, and mutation. Public accounts, saved applications, submissions, payments, and subscriptions are outside the current scope unless explicitly requested.
+The single-administrator dashboard requires server-side authorization on every page, handler, and mutation. Public accounts, saved applications, submissions, payments, and subscriptions are out of scope unless requested.
 
 ## Platform
 
 - Next.js App Router runs on Cloudflare Workers through OpenNext.
 - Use D1 through the `DB` binding and Drizzle ORM.
-- Use R2 through the `MEDIA` binding; store binary media in R2 and metadata in D1.
+- Use the `MEDIA` R2 binding for binaries and D1 for metadata.
 - Keep bindings, compatibility settings, and environments in `wrangler.jsonc`.
 - Run `npm run cf-typegen` after changing bindings.
-- Generate migrations with `npm run db:generate` and review their SQL.
+- Generate migrations with `npm run db:generate`, then review the SQL.
 
 ## Safety
 
-- Local commands are the default. `--remote` and deployment commands can change Cloudflare resources.
+- Default to local commands; `--remote` and deployment commands change Cloudflare resources.
 - Never deploy, migrate production, replace remote data, change DNS, create resources, or add secrets without explicit approval.
 - Never expose D1 or R2 bindings to browser code.
 - Never commit secrets, `.dev.vars`, exports, backups, or Wrangler state.
-- Back up D1 before production migrations, bulk catalogue synchronization, restoration, or destructive operations.
+- Back up D1 before production migrations, bulk synchronization, restoration, or destructive work.
 - Validate catalogue manifests, remote image size, MIME type, signature, checksum, and URL safety.
 
 ## Quality
 
 - Prefer server components for public content and keep client JavaScript limited to necessary interaction.
-- Public application pages require canonical metadata, Open Graph data, structured data, semantic headings, and crawlable links.
+- Public application pages require canonical and Open Graph metadata, structured data, semantic headings, and crawlable links.
 - Use indexed, bounded D1 queries and avoid request-specific module globals.
 - Run typecheck and lint after material TypeScript changes. Use preview for material Workers-runtime changes.
 
@@ -35,7 +35,7 @@ The protected dashboard uses single-administrator authentication. Preserve serve
 
 - Preserve the direction and accessibility rules in `docs/DESIGN.md`.
 - Avoid generic gradients, glass effects, excessive pills, nested cards, low contrast, and decorative motion.
-- Follow `docs/EDITORIAL.md`; research each application independently and verify changing facts.
+- Follow `docs/EDITORIAL.md`; research each application and verify changing facts.
 - Never alter a remote application record without explicit approval.
 
 ## Release
