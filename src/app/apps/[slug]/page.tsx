@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { ApplicationHero } from "@/components/application-detail/application-hero";
-import { ApplicationDeal } from "@/components/application-detail/application-deal";
 import { ApplicationOverview } from "@/components/application-detail/application-overview";
 import { RelatedApplications } from "@/components/application-detail/related-applications";
 import { PublicShell } from "@/components/public-site";
@@ -56,7 +55,6 @@ export default async function ApplicationPage({ params }: { params: Promise<{ sl
     <PublicShell>
       <main className="application-page" id="main-content">
         <ApplicationHero application={application} icon={icon} visitors={visitors} />
-        <ApplicationDeal deal={application.deal} />
         <ApplicationOverview application={application} preview={preview} screenshots={screenshots} />
         <RelatedApplications applications={application.related} />
       </main>
