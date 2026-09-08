@@ -1,7 +1,7 @@
 import { and, desc, eq, isNull, lte, ne } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { apps, catalogueRevisions, deals, mediaAssets } from "@/db/schema";
-import type { CataloguePreparedMedia } from "@/db/schema-catalogue";
+import type { CataloguePreparedMedia } from "@/db/schema";
 import {
   catalogueManifestSchema,
   manifestMediaSources,

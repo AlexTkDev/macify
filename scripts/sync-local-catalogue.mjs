@@ -8,6 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { MAX_APPLICATION_MEDIA_BYTES, prepareLocalMedia } from "./lib/local-media.mjs";
+import { parseLocalOptions } from "./lib/local-options.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalogueDirectory = path.join(root, "catalog", "apps");
@@ -16,21 +17,7 @@ const wrangler = path.join(root, "node_modules", ".bin", "wrangler");
 const wranglerConfigPath = path.join(root, "wrangler.jsonc");
 const now = Date.now();
 
-const arguments_ = process.argv.slice(2);
-let fast = false;
-let persistPath;
-for (let index = 0; index < arguments_.length; index += 1) {
-  const argument = arguments_[index];
-  if (argument === "--fast") fast = true;
-  else if (argument === "--persist-to") {
-    persistPath = arguments_[index + 1];
-    if (!persistPath || persistPath.startsWith("--")) throw new Error("--persist-to requires a directory.");
-    persistPath = path.resolve(persistPath);
-    index += 1;
-  } else throw new Error(`Unknown synchronization argument: ${argument}`);
-}
-
-const persistenceArguments = persistPath ? ["--persist-to", persistPath] : [];
+const { fast, persistPath, persistenceArguments } = parseLocalOptions(process.argv.slice(2), { allowFast: true });
 const backupDirectory = path.join(persistPath ?? path.join(root, ".wrangler"), "backups");
 const backupPath = path.join(backupDirectory, `catalogue-local-before-sync.${persistPath ? "sqlite" : "sql"}`);
 const wranglerConfig = JSON.parse(readFileSync(wranglerConfigPath, "utf8"));

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BadgeCheck, GitPullRequest, Star, SlidersHorizontal } from "lucide-react";
-import { getApplicationsDashboardData } from "@/lib/apps-data";
+import { getApplicationsDashboardData } from "@/lib/app-editor-data";
 import { mediaUrl } from "@/components/public-app-card";
 import { cn } from "@/lib/utils";
 

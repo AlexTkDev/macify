@@ -6,7 +6,7 @@ import { ApplicationOverview } from "@/components/application-detail/application
 import { RelatedApplications } from "@/components/application-detail/related-applications";
 import { PublicShell } from "@/components/public-site";
 import { mediaUrl } from "@/components/public-app-card";
-import { getPublishedApplicationBySlug } from "@/lib/apps-data";
+import { getPublishedApplicationBySlug } from "@/lib/published-app-data";
 import { ApplicationVisitors } from "@/components/application-detail/application-visitors";
 
 export const dynamic = "force-dynamic";

@@ -3,27 +3,13 @@
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseLocalOptions } from "./lib/local-options.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const migrationScript = path.join(root, "scripts", "apply-database-migrations.mjs");
+const initializeScript = path.join(root, "scripts", "initialize-database.mjs");
 const syncScript = path.join(root, "scripts", "sync-local-catalogue.mjs");
-const allowedArguments = new Set(["--fast", "--persist-to"]);
-
-let fast = false;
-let persistPath;
-for (let index = 0; index < process.argv.slice(2).length; index += 1) {
-  const argument = process.argv.slice(2)[index];
-  if (!allowedArguments.has(argument)) throw new Error(`Unknown setup argument: ${argument}`);
-  if (argument === "--fast") fast = true;
-  if (argument === "--persist-to") {
-    persistPath = process.argv.slice(2)[index + 1];
-    if (!persistPath || persistPath.startsWith("--")) throw new Error("--persist-to requires a directory.");
-    index += 1;
-  }
-}
-
-const persistenceArguments = persistPath ? ["--persist-to", path.resolve(persistPath)] : [];
-execFileSync(process.execPath, [migrationScript, "--local", ...persistenceArguments], {
+const { fast, persistenceArguments } = parseLocalOptions(process.argv.slice(2), { allowFast: true });
+execFileSync(process.execPath, [initializeScript, "--local", ...persistenceArguments], {
   cwd: root,
   stdio: "inherit",
   env: { ...process.env, CI: "true", NO_D1_WARNING: "true" },

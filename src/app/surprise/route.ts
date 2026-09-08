@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getPublishedApplicationSlugs } from "@/lib/apps-data";
+import { getPublishedApplicationSlugs } from "@/lib/published-app-data";
 
 export const dynamic = "force-dynamic";
 

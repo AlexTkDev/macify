@@ -14,8 +14,7 @@
   },
   "d1_databases": [
     {
-      "binding": "DB",
-      "migrations_dir": "migrations"
+      "binding": "DB"
     }
   ],
   "r2_buckets": [
@@ -59,8 +58,7 @@
         {
           "binding": "DB",
           "database_name": "macify-production-database",
-          "database_id": "603417fc-1404-4bc4-830c-a0532cbeacac",
-          "migrations_dir": "migrations"
+          "database_id": "603417fc-1404-4bc4-830c-a0532cbeacac"
         }
       ],
       "r2_buckets": [

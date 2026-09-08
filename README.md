@@ -42,7 +42,7 @@ Local development requires Node.js 22. To get started:
 ```bash
 npm install
 npm run cf-typegen
-npm run db:migrate:local
+npm run db:initialize:local
 npm run dev
 ```
 
@@ -53,5 +53,4 @@ Before submitting changes, run the checks that match your work:
 ```bash
 npm run typecheck
 npm run lint
-npm run db:check
 ```

@@ -3,16 +3,7 @@ import { Caprasimo, Caveat, Urbanist } from "next/font/google";
 import "./globals.css";
 import "../styles/tokens.css";
 import "../styles/base.css";
-import "../styles/public-shell.css";
-import "../styles/public-components.css";
-import "../styles/public-home.css";
-import "../styles/public-home-sections.css";
-import "../styles/public-application.css";
-import "../styles/public-markdown.css";
-import "../styles/public-policy.css";
-import "../styles/responsive.css";
-import "../styles/responsive-small.css";
-import "../styles/public-footer-variants.css";
+import "../styles/public.css";
 
 const urbanist = Urbanist({
   subsets: ["latin"],

@@ -17,7 +17,7 @@ Each contribution must add one new application manifest or one new deal manifest
 2. Copy [`catalog/examples/application.example.json`](catalog/examples/application.example.json) into [`catalog/apps`](catalog/apps).
 3. Rename the file with the application's lowercase, hyphenated slug. For example, use `catalog/apps/example-app.json` for “Example App.”
 4. Complete every field in the manifest. Use `null` or an empty array only where the example permits it, and add existing application slugs to `relatedAppSlugs` when useful. A relationship declared by either application appears on both application pages.
-5. Write a factual description using the adaptable template in [`docs/EDITORIAL.md`](docs/EDITORIAL.md). Explain what the application does, its useful features, who it suits, important tradeoffs, privacy and system requirements, and how it is priced.
+5. Write a factual description explaining what the application does, its useful features, who it suits, important tradeoffs, privacy and system requirements, and how it is priced.
 6. Add unique, direct public HTTPS URLs and descriptive alternative text for one icon, one preview, and up to eight screenshots. Use PNG, JPEG, WebP, or AVIF; ICO is also supported for icons. Keep each source within 10 MiB. Do not add image files to the repository.
 7. Run `npm run catalogue:validate` and fix every reported error.
 8. Open a pull request. Explain why the application would be valuable to Mac users and include links to the official sources used for the listing.
@@ -30,7 +30,7 @@ The pull request must add exactly one new file under `catalog/apps` and change n
 2. Copy [`catalog/examples/deal.example.json`](catalog/examples/deal.example.json) to `catalog/deals/<app-slug>.json`. Match `appSlug` and the filename to the existing application slug.
 3. Enter the verified integer discount percentage (1–100), the code (or `null` when no code is required), and the official HTTPS offer URL.
 4. Set `startsAt` and `endsAt` to the offer's actual availability dates using ISO 8601 timestamps with a timezone. The end must follow the start.
-5. Verify the terms against an official source and follow the [deal verification standard](docs/EDITORIAL.md#deal-verification).
+5. Verify the discount, dates, code requirements, and eligibility against an official source.
 6. Run `npm run catalogue:validate`.
 7. Open a pull request containing only the new deal manifest and cite the official source confirming the offer. Replace every example value with the actual offer details.
 

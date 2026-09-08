@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BadgeCheck, ChevronRight, ExternalLink, GitBranch, Star } from "lucide-react";
 import { setApplicationPublication, setEditorsPickApplication, setFeaturedApplication } from "@/app/dashboard/editorial-actions";
-import { getApplicationEditorData } from "@/lib/apps-data";
+import { getApplicationEditorData } from "@/lib/app-editor-data";
 
 export const dynamic = "force-dynamic";
 
