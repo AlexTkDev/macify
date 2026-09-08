@@ -10,7 +10,7 @@ function AppleBrandMark() {
 
 const contributionGuideUrl = "https://github.com/Beingpax/macify/blob/main/CONTRIBUTING.md";
 const githubUrl = "https://github.com/Beingpax/macify";
-const primaryLinks = [["Browse apps", "/#all-apps"], ["Deals", "/deals"], ["Categories", "/categories"], ["Surprise me", "/surprise"]] as const;
+const primaryLinks = [["Browse apps", "/#all-apps"], ["Deals", "/deals"], ["Categories", "/categories"], ["Blog", "/blog"], ["Surprise me", "/surprise"]] as const;
 const secondaryLinks = [["Home", "/"], ["Editorial policy", "/editorial-policy"], ["Privacy", "/privacy"]] as const;
 export function PublicFooter() {
   return (
