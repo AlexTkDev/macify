@@ -1,7 +1,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 const pagesAnalyticsUrl = "https://datafa.st/api/v1/analytics/pages";
-const applicationLimit = 30;
+const applicationLimit = 50;
 
 type DataFastEnv = CloudflareEnv & {
   DATAFAST_API_KEY?: string;

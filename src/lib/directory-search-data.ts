@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, inArray, isNull, sql, type SQL } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, inArray, isNull, sql, type SQL } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { appCategories, apps, categories } from "@/db/schema";
 import {
@@ -6,45 +6,15 @@ import {
   getCardMedia,
   type DirectorySearchFilters,
 } from "@/lib/directory-shared";
-import { getHotApplicationVisits, getTrendingApplicationVisits } from "@/lib/datafast-analytics";
+import { getTrendingApplicationVisits } from "@/lib/datafast-analytics";
+import {
+  HOMEPAGE_APPLICATION_SLUGS,
+  homepageApplicationPosition,
+} from "@/lib/homepage-application-order";
 
 type HomepageView = "hot" | "trending" | "latest";
-
-const HOMEPAGE_CURATED_SLUGS = [
-  "clop",
-  "lunar",
-  "dia",
-  "anybox",
-  "balance",
-  "wallspace",
-  "pieoneer",
-  "droppy",
-  "klack",
-  "antinote",
-  "orion",
-  "blip",
-  "monocle",
-  "lookaway",
-  "swish",
-  "alcove",
-  "proxyman",
-  "1password",
-  "wispr-flow",
-  "expenses",
-  "mimestream",
-  "xmind",
-  "raycast",
-  "sketch",
-  "compressx",
-  "dayflow",
-  "chronoid",
-  "bettertouchtool",
-  "daisydisk",
-  "session",
-];
-const HOMEPAGE_CURATED_ORDER = new Map(
-  HOMEPAGE_CURATED_SLUGS.map((slug, index) => [slug, index]),
-);
+const homepageApplicationLimit = 50;
+const latestApplicationWindowMs = 15 * 24 * 60 * 60 * 1000;
 
 function searchConditions(filters?: DirectorySearchFilters) {
   const conditions: SQL[] = [eq(apps.status, "published"), isNull(apps.deletedAt)];
@@ -69,41 +39,48 @@ function searchConditions(filters?: DirectorySearchFilters) {
 
 export async function getHomepageDirectoryData(filters?: DirectorySearchFilters, view: HomepageView = "hot") {
   const database = await getDatabase();
+  const latestPublishedAt = new Date(Date.now() - latestApplicationWindowMs);
   const [fallbackRecords, analyticsVisits, editorialRecords] = await Promise.all([
     view === "latest"
       ? database.select(cardFields).from(apps)
-        .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
-        .orderBy(desc(apps.createdAt), asc(apps.id)).limit(30)
+        .where(and(
+          eq(apps.status, "published"),
+          isNull(apps.deletedAt),
+          inArray(apps.slug, HOMEPAGE_APPLICATION_SLUGS),
+          gte(apps.publishedAt, latestPublishedAt),
+        ))
+        .orderBy(desc(apps.publishedAt), asc(apps.id)).limit(homepageApplicationLimit)
       : database.select(cardFields).from(apps).where(and(
-        eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, HOMEPAGE_CURATED_SLUGS),
-      )).limit(30),
-    view === "hot" ? getHotApplicationVisits() : view === "trending" ? getTrendingApplicationVisits() : Promise.resolve([]),
+        eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, HOMEPAGE_APPLICATION_SLUGS),
+      )).limit(homepageApplicationLimit),
+    view === "trending" ? getTrendingApplicationVisits() : Promise.resolve([]),
     database.select(cardFields).from(apps)
       .where(and(
         eq(apps.status, "published"),
         isNull(apps.deletedAt),
+        inArray(apps.slug, HOMEPAGE_APPLICATION_SLUGS),
         sql`(${apps.isFeatured} = 1 or ${apps.isEditorsPick} = 1)`,
       ))
       .orderBy(desc(apps.isFeatured), desc(apps.featuredAt), desc(apps.isEditorsPick), asc(apps.name), asc(apps.id))
-      .limit(30),
+      .limit(homepageApplicationLimit),
   ]);
 
   let records = fallbackRecords;
   if (analyticsVisits.length) {
     const rankedSlugs = analyticsVisits.map(({ slug }) => slug);
     const rankedRecords = await database.select(cardFields).from(apps).where(and(
-      eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, rankedSlugs),
-    )).limit(30);
+      eq(apps.status, "published"),
+      isNull(apps.deletedAt),
+      inArray(apps.slug, HOMEPAGE_APPLICATION_SLUGS),
+      inArray(apps.slug, rankedSlugs),
+    )).limit(homepageApplicationLimit);
     const bySlug = new Map(rankedRecords.map((record) => [record.slug, record]));
     const ranked = rankedSlugs.map((slug) => bySlug.get(slug)).filter((record): record is (typeof rankedRecords)[number] => Boolean(record));
     const rankedIds = new Set(ranked.map(({ id }) => id));
     const curatedRemainder = [...fallbackRecords]
       .filter(({ id }) => !rankedIds.has(id))
-      .sort((left, right) => (
-        (HOMEPAGE_CURATED_ORDER.get(left.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
-        - (HOMEPAGE_CURATED_ORDER.get(right.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
-      ));
-    records = [...ranked, ...curatedRemainder].slice(0, 30);
+      .sort((left, right) => homepageApplicationPosition(left.slug) - homepageApplicationPosition(right.slug));
+    records = [...ranked, ...curatedRemainder].slice(0, homepageApplicationLimit);
   }
 
   const page = filters?.page ?? 1;
@@ -123,18 +100,27 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
       .where(and(...conditions)),
   ]) : [[], [{ total: 0 }]];
 
-  const orderedRecords = view !== "latest" && !analyticsVisits.length ? [...records].sort((left, right) => (
-    (HOMEPAGE_CURATED_ORDER.get(left.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
-    - (HOMEPAGE_CURATED_ORDER.get(right.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
-  )) : records;
+  const orderedRecords = view !== "latest" && !analyticsVisits.length
+    ? [...records].sort((left, right) => homepageApplicationPosition(left.slug) - homepageApplicationPosition(right.slug))
+    : records;
   const promotedRecords = view === "hot"
     ? editorialRecords
-    : editorialRecords.filter(({ isFeatured }) => isFeatured);
+    : view === "trending"
+      ? editorialRecords.filter(({ isFeatured }) => isFeatured)
+      : [];
   const promotedIds = new Set(promotedRecords.map(({ id }) => id));
-  const directoryRecords = [
+  let directoryRecords = [
     ...promotedRecords,
     ...orderedRecords.filter(({ id }) => !promotedIds.has(id)),
-  ].slice(0, 30);
+  ].slice(0, homepageApplicationLimit);
+  if (view === "hot") {
+    directoryRecords = directoryRecords.sort((left, right) => {
+      const leftGroup = left.isFeatured ? 0 : left.isEditorsPick ? 1 : 2;
+      const rightGroup = right.isFeatured ? 0 : right.isEditorsPick ? 1 : 2;
+      return leftGroup - rightGroup
+        || homepageApplicationPosition(left.slug) - homepageApplicationPosition(right.slug);
+    });
+  }
   const appIds = [...new Set([...directoryRecords, ...searchRecords].map(({ id }) => id))];
   const { icons, previews } = await getCardMedia(appIds);
   return {
