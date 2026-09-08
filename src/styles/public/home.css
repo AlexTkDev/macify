@@ -1,0 +1,186 @@
+
+/* public-home.css */
+.home-hero,
+.home-section {
+  width: min(calc(100% - var(--public-page-inset)), var(--content-width));
+  margin-inline: auto;
+}
+
+.home-hero {
+  padding: clamp(3rem, 5vw, 5rem) 0 clamp(6rem, 9vw, 9rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.03fr) minmax(27rem, 0.97fr);
+  align-items: start;
+  gap: clamp(3rem, 5vw, 5.5rem);
+}
+
+.home-hero-copy {
+  min-width: 0;
+  padding-top: clamp(1.25rem, 3vw, 3rem);
+  container-type: inline-size;
+}
+
+.home-hero h1 {
+  margin: 0;
+  font-family: var(--font-caprasimo), var(--font-urbanist), "Avenir Next", sans-serif;
+  font-size: clamp(3.1rem, 12.2cqi, 6.8rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+}
+
+.home-title-art { display: grid; gap: 0.06em; }
+
+.home-title-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.12em;
+  white-space: nowrap;
+}
+
+.home-title-icon {
+  --home-icon-rotation: -5deg;
+  width: 0.88em;
+  height: 0.88em;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22%;
+  transform: rotate(var(--home-icon-rotation));
+}
+
+.home-title-icon-orange { --home-icon-rotation: 7deg; }
+.home-title-icon-yellow { --home-icon-rotation: -8deg; }
+
+@media (hover: hover) and (pointer: fine) {
+  .home-title-icon { transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .home-title-icon:hover { transform: rotate(0deg) translateY(-0.04em) scale(1.03); }
+}
+
+.home-title-icon:active { transform: rotate(0deg) scale(0.98); }
+
+.home-title-icon .public-app-icon {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0.14em 0.28em rgb(21 31 49 / 0.2), inset 0 0 0 1px rgb(255 255 255 / 0.42);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-title-icon { transition: none; }
+  .home-title-icon:hover { transform: rotate(var(--home-icon-rotation)); }
+}
+
+.home-hero-intro {
+  width: fit-content;
+  max-width: 100%;
+  margin: clamp(0.45rem, 0.8vw, 0.7rem) 0 0;
+  display: block;
+  position: relative;
+  color: #555e6b;
+  font-family: var(--font-caveat), cursive;
+  font-size: clamp(1.35rem, 1.75vw, 1.65rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.005em;
+  text-wrap: pretty;
+  white-space: nowrap;
+}
+
+.home-hero-intro-emphasis {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.44rem;
+  white-space: nowrap;
+}
+
+.home-hero-intro-squiggle {
+  width: 100%;
+  height: 0.48rem;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  overflow: visible;
+  color: var(--play-blue);
+}
+
+.home-hero-intro-squiggle path {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.home-feature-stage {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  color: var(--public-ink);
+}
+
+.home-feature-image {
+  min-width: 0;
+  order: -1;
+  overflow: hidden;
+  border-radius: 0.85rem;
+  background: #eff2f6;
+}
+
+.home-feature-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.home-feature-image > span {
+  min-height: 24rem;
+  display: grid;
+  place-items: center;
+  color: #6f7784;
+  font-size: 2rem;
+  font-weight: 850;
+}
+
+.home-feature-caption {
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  margin: -1.35rem 0 0 1.4rem;
+  padding: 0.65rem 1rem 0.65rem 0.65rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.9rem;
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.94);
+  box-shadow: 0 0.8rem 2.4rem rgb(21 31 49 / 0.12);
+}
+
+.home-feature-caption > span { min-width: 0; }
+
+.home-feature-caption strong {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 850;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.home-feature-caption p {
+  max-width: 18rem;
+  margin: 0.25rem 0 0;
+  overflow: hidden;
+  color: #69717d;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-feature-stage:hover .home-feature-caption strong { color: var(--play-blue); }
+
+/* public-home-sections.css */

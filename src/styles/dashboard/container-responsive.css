@@ -1,0 +1,36 @@
+
+/* Size layouts against their actual content area, not the browser window. */
+@container (max-width: 58rem) {
+  .dashboard-app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .catalogue-revision, .catalogue-revision[data-selectable] { grid-template-columns: 1.25rem minmax(0, 1fr); }
+  .catalogue-revision:not([data-selectable]) .catalogue-revision-identity { grid-column: 1 / -1; }
+  .catalogue-revision-actions { grid-column: 2; justify-content: flex-start; }
+  .catalogue-revision:not([data-selectable]) .catalogue-revision-actions { grid-column: 1 / -1; }
+  .catalogue-revision[data-selectable] .catalogue-revision-identity { width: auto; }
+  .catalogue-revision[data-selectable] .catalogue-revision-actions { width: auto; padding-left: 0; }
+  .dashboard-listing-preview .related-application-shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container (max-width: 34rem) {
+  .dashboard-app-grid { grid-template-columns: minmax(0, 1fr); }
+  .status-strip, .catalogue-queue-stats, .catalogue-review-summary { grid-template-columns: minmax(0, 1fr); }
+  .status-strip > div, .catalogue-queue-stats > div { min-height: 4.5rem; padding: 1rem; }
+  .dashboard-listing-record, .dashboard-listing-record dl { grid-template-columns: minmax(0, 1fr); }
+  .dashboard-listing-toolbar .dashboard-actions { width: 100%; flex-wrap: wrap; }
+  .dashboard-listing-toolbar .dashboard-actions > a { flex: 1; }
+  .catalogue-bulk-toolbar > div { width: 100%; flex-wrap: wrap; }
+  .catalogue-revision-actions { display: flex; flex-wrap: wrap; }
+  .catalogue-view-tabs { width: 100%; flex-wrap: wrap; }
+  .dashboard-listing-preview .related-application-shelf { grid-template-columns: minmax(0, 1fr); }
+}
+
+.dashboard-shell :is(.button-primary, .button-secondary) { min-height: 2.75rem; font-size: 0.85rem; line-height: 1.35; }
+.dashboard-shell :is(.panel-toolbar p, .editor-header > div > span, .media-editor-heading > div > span) { max-width: 65ch; font-size: 0.9rem; line-height: 1.5; }
+.dashboard-shell :is(.status-strip > div > span, .catalogue-queue-stats > div > span) { font-size: 0.8rem; }
+.dashboard-shell :is(.dashboard-header h1, .editor-header h1) { overflow-wrap: anywhere; }
+.dashboard-shell :is(.dashboard-header > div, .editor-header > div) { min-width: 0; }
+.editorial-control-card form { margin-top: auto; }
+
+.dashboard-header > div:first-child > p::before { content: none; }
+@media (max-width: 52rem) {
+  .dashboard-navigation { max-width: 100%; min-width: 0; flex-basis: 100%; }
+}
