@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Mac Mouse Fix",
   "slug": "mac-mouse-fix",
   "websiteUrl": "https://mousefix.org/",

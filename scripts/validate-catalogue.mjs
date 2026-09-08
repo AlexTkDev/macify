@@ -10,7 +10,7 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const allowedPricing = new Set(["free", "freemium", "paid"]);
 const allowedBilling = new Set(["one_time", "subscription"]);
 const allowedSource = new Set(["open_source", "closed_source"]);
-const requiredManifestKeys = ["$schema", "schemaVersion", "name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "categories", "relatedAppSlugs", "media"];
+const requiredManifestKeys = ["$schema", "schemaVersion", "isFeatured", "isEditorsPick", "name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "categories", "relatedAppSlugs", "media"];
 
 function isHttpUrl(value, httpsOnly = false) {
   if (typeof value !== "string" || value.length > 2_000) return false;
@@ -58,6 +58,9 @@ function validateManifest(manifest, expectedSlug) {
     if (typeof value !== "string" || value.trim().length < min || value.length > max) issues.push(`${key} must contain ${min} to ${max} characters.`);
   };
   if (manifest.schemaVersion !== 1) issues.push("schemaVersion must be 1.");
+  for (const key of ["isFeatured", "isEditorsPick"]) {
+    if (key in manifest && typeof manifest[key] !== "boolean") issues.push(`${key} must be a boolean when provided.`);
+  }
   if (manifest.$schema !== "../schema/application.schema.json") issues.push("$schema must reference ../schema/application.schema.json.");
   text("name", 2, 80);
   text("slug", 2, 90);

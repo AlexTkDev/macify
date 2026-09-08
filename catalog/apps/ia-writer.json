@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "iA Writer",
   "slug": "ia-writer",
   "websiteUrl": "https://ia.net/writer",
@@ -11,11 +13,24 @@
   "pricingDetails": "$49.99 one-time purchase",
   "sourceType": "closed_source",
   "youtubeUrl": null,
-  "categories": ["notes-writing", "text-utilities"],
-  "relatedAppSlugs": ["bear", "drafts", "obsidian"],
+  "categories": [
+    "notes-writing",
+    "text-utilities"
+  ],
+  "relatedAppSlugs": [
+    "bear",
+    "drafts",
+    "obsidian"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/dc/d3/f8/dcd3f8dc-49a1-ad86-3d90-afd50252a447/Writer-0-0-85-220-0-0-6-0-2x-sRGB-0-0-0.png/512x512bb.png", "altText": "iA Writer application icon"},
-    "preview": {"sourceUrl": "https://static.ia.net/2023/01/og-writer.webp", "altText": "iA Writer focused Markdown editor preview"},
+    "icon": {
+      "sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/dc/d3/f8/dcd3f8dc-49a1-ad86-3d90-afd50252a447/Writer-0-0-85-220-0-0-6-0-2x-sRGB-0-0-0.png/512x512bb.png",
+      "altText": "iA Writer application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://static.ia.net/2023/01/og-writer.webp",
+      "altText": "iA Writer focused Markdown editor preview"
+    },
     "screenshots": []
   }
 }

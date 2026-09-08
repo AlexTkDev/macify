@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "BetterTouchTool",
   "slug": "bettertouchtool",
   "websiteUrl": "https://folivora.ai/",

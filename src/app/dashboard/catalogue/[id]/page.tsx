@@ -315,6 +315,7 @@ async function getHistoricalBaseline(
       relatedAppSlugs: result.data.relatedAppSlugs,
       status: current?.status ?? "archived" as const,
       isFeatured: current?.isFeatured ?? false,
+      isEditorsPick: current?.isEditorsPick ?? false,
       media: candidate.preparedMedia,
     };
   }

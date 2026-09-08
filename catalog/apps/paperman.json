@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Paperman",
   "slug": "paperman",
   "websiteUrl": "https://paperman.cc/",
@@ -11,11 +13,23 @@
   "pricingDetails": "$8.99 one-time purchase",
   "sourceType": "closed_source",
   "youtubeUrl": null,
-  "categories": ["screen-wellbeing", "customization"],
-  "relatedAppSlugs": ["lookaway", "betterdisplay"],
+  "categories": [
+    "screen-wellbeing",
+    "customization"
+  ],
+  "relatedAppSlugs": [
+    "lookaway",
+    "betterdisplay"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/2f/f9/e9/2ff9e94d-a60d-6f7a-5add-4cdc22772965/icon.png/512x512bb.png", "altText": "Paperman application icon"},
-    "preview": {"sourceUrl": "https://paperman.cc/og-image.png", "altText": "Paperman paper-texture display overlay preview"},
+    "icon": {
+      "sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/2f/f9/e9/2ff9e94d-a60d-6f7a-5add-4cdc22772965/icon.png/512x512bb.png",
+      "altText": "Paperman application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://paperman.cc/og-image.png",
+      "altText": "Paperman paper-texture display overlay preview"
+    },
     "screenshots": []
   }
 }

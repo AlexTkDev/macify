@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Balance",
   "slug": "balance",
   "websiteUrl": "https://apps.apple.com/us/app/balance-focus-time-tracker/id1637311725?mt=12",

@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Subscription Day",
   "slug": "subscription-day",
   "websiteUrl": "https://subsday.appps.od.ua/",
@@ -11,11 +13,22 @@
   "pricingDetails": "$19.99 one-time purchase",
   "sourceType": "closed_source",
   "youtubeUrl": null,
-  "categories": ["personal-finance", "calendar-scheduling"],
-  "relatedAppSlugs": ["expenses"],
+  "categories": [
+    "personal-finance",
+    "calendar-scheduling"
+  ],
+  "relatedAppSlugs": [
+    "expenses"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/de/84/2b/de842bf2-62cc-15ca-67dc-38a8e0ad4251/SubscriptionDayIcon2-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg", "altText": "Subscription Day application icon"},
-    "preview": {"sourceUrl": "https://subsday.appps.od.ua/img/subscription-cover.jpg?v=1", "altText": "Subscription Day calendar and spending overview"},
+    "icon": {
+      "sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/de/84/2b/de842bf2-62cc-15ca-67dc-38a8e0ad4251/SubscriptionDayIcon2-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg",
+      "altText": "Subscription Day application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://subsday.appps.od.ua/img/subscription-cover.jpg?v=1",
+      "altText": "Subscription Day calendar and spending overview"
+    },
     "screenshots": []
   }
 }

@@ -31,6 +31,8 @@ export type CatalogueSnapshot = Pick<
   | "pricingDetails"
   | "sourceType"
   | "youtubeUrl"
+  | "isFeatured"
+  | "isEditorsPick"
 > & {
   categories: string[];
   relatedAppSlugs: string[];
@@ -44,6 +46,8 @@ type ManifestFieldKey =
   | "pricing"
   | "source"
   | "video"
+  | "featured"
+  | "editorsPick"
   | "categories"
   | "related"
   | "description";
@@ -52,9 +56,12 @@ const MAX_MATRIX_CELLS = 50_000;
 
 export function getChangedManifestFields(current: CatalogueSnapshot | null, proposed: CatalogueManifest) {
   if (!current) {
-    return new Set<ManifestFieldKey>([
+    const fields = new Set<ManifestFieldKey>([
       "name", "slug", "website", "tagline", "pricing", "source", "video", "categories", "related", "description",
     ]);
+    fields.add("featured");
+    fields.add("editorsPick");
+    return fields;
   }
 
   const changed = new Set<ManifestFieldKey>();
@@ -69,6 +76,8 @@ export function getChangedManifestFields(current: CatalogueSnapshot | null, prop
   ) changed.add("pricing");
   if (current.sourceType !== proposed.sourceType) changed.add("source");
   if (current.youtubeUrl !== proposed.youtubeUrl) changed.add("video");
+  if (current.isFeatured !== proposed.isFeatured) changed.add("featured");
+  if (current.isEditorsPick !== proposed.isEditorsPick) changed.add("editorsPick");
   if (!sameSet(current.categories, proposed.categories)) changed.add("categories");
   if (!sameSet(current.relatedAppSlugs, proposed.relatedAppSlugs)) changed.add("related");
   if (current.description !== proposed.description) changed.add("description");

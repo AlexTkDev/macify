@@ -22,12 +22,13 @@ const snapshotFields = {
   youtubeUrl: apps.youtubeUrl,
   status: apps.status,
   isFeatured: apps.isFeatured,
+  isEditorsPick: apps.isEditorsPick,
 };
 
 type QueueApplication = Pick<typeof apps.$inferSelect,
   | "id" | "name" | "slug" | "websiteUrl" | "tagline" | "description"
   | "pricingType" | "billingType" | "pricingDetails" | "sourceType" | "youtubeUrl"
-  | "status" | "isFeatured"
+  | "status" | "isFeatured" | "isEditorsPick"
 > & {
   media: Array<{
     appId: string | null;

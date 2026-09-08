@@ -301,6 +301,9 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
     sourceType: manifest.sourceType,
     youtubeUrl: manifest.youtubeUrl,
     status: "published" as const,
+    isFeatured: manifest.isFeatured,
+    isEditorsPick: manifest.isEditorsPick,
+    featuredAt: manifest.isFeatured ? now : null,
     publishedAt: now,
     updatedAt: now,
   };

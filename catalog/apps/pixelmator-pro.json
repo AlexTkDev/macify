@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Pixelmator Pro",
   "slug": "pixelmator-pro",
   "websiteUrl": "https://www.apple.com/pixelmator-pro/",
@@ -11,11 +13,21 @@
   "pricingDetails": "$49.99 one-time purchase",
   "sourceType": "closed_source",
   "youtubeUrl": null,
-  "categories": ["design-prototyping"],
-  "relatedAppSlugs": ["sketch"],
+  "categories": [
+    "design-prototyping"
+  ],
+  "relatedAppSlugs": [
+    "sketch"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/c6/63/4b/c6634b5c-2e96-8a86-be45-f4384d351bd9/PixelmatorPro-0-1x_U007epad-0-0-0-1-0-0-85-220-0.png/512x512bb.jpg", "altText": "Pixelmator Pro application icon"},
-    "preview": {"sourceUrl": "https://www.apple.com/v/pixelmator-pro/a/images/overview/meta/pixelmator__c4dlsmpcudw2_og.png?202603241546", "altText": "Pixelmator Pro image editing preview"},
+    "icon": {
+      "sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/c6/63/4b/c6634b5c-2e96-8a86-be45-f4384d351bd9/PixelmatorPro-0-1x_U007epad-0-0-0-1-0-0-85-220-0.png/512x512bb.jpg",
+      "altText": "Pixelmator Pro application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://www.apple.com/v/pixelmator-pro/a/images/overview/meta/pixelmator__c4dlsmpcudw2_og.png?202603241546",
+      "altText": "Pixelmator Pro image editing preview"
+    },
     "screenshots": []
   }
 }

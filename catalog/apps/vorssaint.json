@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Vorssaint",
   "slug": "vorssaint",
   "websiteUrl": "https://vorssaint.com/",
@@ -11,11 +13,24 @@
   "pricingDetails": null,
   "sourceType": "open_source",
   "youtubeUrl": null,
-  "categories": ["menu-bar-utilities", "automation", "customization"],
-  "relatedAppSlugs": ["supercharge", "raycast"],
+  "categories": [
+    "menu-bar-utilities",
+    "automation",
+    "customization"
+  ],
+  "relatedAppSlugs": [
+    "supercharge",
+    "raycast"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://vorssaint.com/favicon.ico", "altText": "Vorssaint application icon"},
-    "preview": {"sourceUrl": "https://raw.githubusercontent.com/vorssaint/vorssaint-utils/main/docs/assets/readme/features-hub.png", "altText": "Vorssaint Features settings showing utility bundles and window controls"},
+    "icon": {
+      "sourceUrl": "https://vorssaint.com/favicon.ico",
+      "altText": "Vorssaint application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://raw.githubusercontent.com/vorssaint/vorssaint-utils/main/docs/assets/readme/features-hub.png",
+      "altText": "Vorssaint Features settings showing utility bundles and window controls"
+    },
     "screenshots": []
   }
 }

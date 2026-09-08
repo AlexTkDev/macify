@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Drafts",
   "slug": "drafts",
   "websiteUrl": "https://getdrafts.com/",

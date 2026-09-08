@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": true,
   "name": "Raycast",
   "slug": "raycast",
   "websiteUrl": "https://www.raycast.com/",

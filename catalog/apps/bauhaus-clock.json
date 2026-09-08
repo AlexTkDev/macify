@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": true,
   "name": "Bauhaus Clock",
   "slug": "bauhaus-clock",
   "websiteUrl": "https://bauhausclock.com/",
@@ -20,7 +22,7 @@
   ],
   "media": {
     "icon": {
-      "sourceUrl": "https://framerusercontent.com/images/PnLfTd6MbiqZnB6y5igC4j7PEQ.png",
+      "sourceUrl": "https://framerusercontent.com/images/t0myTjz7RGyX5PWCF6aeVoFlIeU.jpg?width=340&height=340",
       "altText": "Bauhaus Clock icon"
     },
     "preview": {

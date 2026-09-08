@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Portal",
   "slug": "portal",
   "websiteUrl": "https://portal.app/mac",
@@ -11,11 +13,22 @@
   "pricingDetails": "$3.49/month, $34.99/year, or $99.99 one-time purchase",
   "sourceType": "closed_source",
   "youtubeUrl": null,
-  "categories": ["focus-tools", "wallpapers"],
-  "relatedAppSlugs": ["balance"],
+  "categories": [
+    "focus-tools",
+    "wallpapers"
+  ],
+  "relatedAppSlugs": [
+    "balance"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5b/48/95/5b4895f8-9ad4-f0c0-ce71-b92572a48a54/AppIcon-0-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg", "altText": "Portal application icon"},
-    "preview": {"sourceUrl": "https://images.portal.app/site/press/mac-product-images/01_Bluebells_Text.jpg", "altText": "Portal nature soundscape running on a Mac"},
+    "icon": {
+      "sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5b/48/95/5b4895f8-9ad4-f0c0-ce71-b92572a48a54/AppIcon-0-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg",
+      "altText": "Portal application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://images.portal.app/site/press/mac-product-images/01_Bluebells_Text.jpg",
+      "altText": "Portal nature soundscape running on a Mac"
+    },
     "screenshots": []
   }
 }

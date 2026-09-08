@@ -22,6 +22,7 @@ type CurrentReview = CatalogueSnapshot & {
   id: string;
   status: "draft" | "published" | "archived";
   isFeatured: boolean;
+  isEditorsPick: boolean;
   media: CurrentMedia[];
 };
 
@@ -33,6 +34,8 @@ const fieldLabels = {
   pricing: "Pricing",
   source: "Source",
   video: "Video",
+  featured: "Featured",
+  editorsPick: "Editor’s Pick",
   categories: "Categories",
   related: "Related applications",
 } as const;
@@ -51,6 +54,8 @@ export function CatalogueChangeReview({ current, manifest, preparedMedia }: {
     { key: "pricing" as const, before: current ? formatPricing(current) : undefined, after: formatPricing(manifest) },
     { key: "source" as const, before: current ? sourceLabel(current.sourceType) : undefined, after: sourceLabel(manifest.sourceType) },
     { key: "video" as const, before: current?.youtubeUrl ?? undefined, after: manifest.youtubeUrl ?? undefined },
+    { key: "featured" as const, before: current ? yesNo(current.isFeatured) : undefined, after: yesNo(manifest.isFeatured) },
+    { key: "editorsPick" as const, before: current ? yesNo(current.isEditorsPick) : undefined, after: yesNo(manifest.isEditorsPick) },
     { key: "categories" as const, before: current?.categories, after: manifest.categories },
     { key: "related" as const, before: current?.relatedAppSlugs, after: manifest.relatedAppSlugs },
   ];
@@ -271,6 +276,10 @@ function formatBytes(bytes: number) {
 
 function sourceLabel(value: "open_source" | "closed_source") {
   return value === "open_source" ? "Open source" : "Closed source";
+}
+
+function yesNo(value: boolean) {
+  return value ? "Yes" : "No";
 }
 
 function roleLabel(role: "icon" | "preview_image" | "screenshot") {

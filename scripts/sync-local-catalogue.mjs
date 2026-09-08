@@ -163,13 +163,14 @@ for (const manifest of manifests) {
   const appId = appIds.get(manifest.slug);
   statements.push(`INSERT INTO apps (
     id, slug, name, website_url, tagline, description, pricing_type, billing_type,
-    pricing_details, source_type, youtube_url, status, is_featured, published_at,
+    pricing_details, source_type, youtube_url, status, is_featured, is_editors_pick, featured_at, published_at,
     created_at, updated_at, deleted_at
   ) VALUES (
     ${sql(appId)}, ${sql(manifest.slug)}, ${sql(manifest.name)}, ${sql(manifest.websiteUrl)},
     ${sql(manifest.tagline)}, ${sql(manifest.description)}, ${sql(manifest.pricingType)},
     ${sql(manifest.billingType)}, ${sql(manifest.pricingDetails)}, ${sql(manifest.sourceType)},
-    ${sql(manifest.youtubeUrl)}, 'published', 0, ${now}, ${now}, ${now}, NULL
+    ${sql(manifest.youtubeUrl)}, 'published', ${sql(manifest.isFeatured ? 1 : 0)},
+    ${sql(manifest.isEditorsPick ? 1 : 0)}, ${manifest.isFeatured ? now : "NULL"}, ${now}, ${now}, ${now}, NULL
   ) ON CONFLICT(slug) DO UPDATE SET
     name = excluded.name,
     website_url = excluded.website_url,
@@ -180,6 +181,9 @@ for (const manifest of manifests) {
     pricing_details = excluded.pricing_details,
     source_type = excluded.source_type,
     youtube_url = excluded.youtube_url,
+    is_featured = excluded.is_featured,
+    is_editors_pick = excluded.is_editors_pick,
+    featured_at = excluded.featured_at,
     status = 'published',
     deleted_at = NULL,
     published_at = coalesce(apps.published_at, excluded.published_at),

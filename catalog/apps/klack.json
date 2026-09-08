@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": true,
   "name": "Klack",
   "slug": "klack",
   "websiteUrl": "https://apps.apple.com/us/app/klack/id6446206067?mt=12",

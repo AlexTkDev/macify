@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Liqoria",
   "slug": "liqoria",
   "websiteUrl": "https://www.liqoria.com/",
@@ -11,11 +13,22 @@
   "pricingDetails": "$8.90 one-time purchase",
   "sourceType": "closed_source",
   "youtubeUrl": null,
-  "categories": ["media-players", "customization"],
-  "relatedAppSlugs": ["iina"],
+  "categories": [
+    "media-players",
+    "customization"
+  ],
+  "relatedAppSlugs": [
+    "iina"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://framerusercontent.com/images/mOXGe88Z9E2aY8jRzcstltpixQ.png", "altText": "Liqoria application icon"},
-    "preview": {"sourceUrl": "https://framerusercontent.com/assets/THJfFE4FmjE8v24D22vLyzkk7N0.png", "altText": "Liqoria animated music artwork preview"},
+    "icon": {
+      "sourceUrl": "https://framerusercontent.com/images/mOXGe88Z9E2aY8jRzcstltpixQ.png",
+      "altText": "Liqoria application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://framerusercontent.com/assets/THJfFE4FmjE8v24D22vLyzkk7N0.png",
+      "altText": "Liqoria animated music artwork preview"
+    },
     "screenshots": []
   }
 }

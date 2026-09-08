@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "ForkLift",
   "slug": "forklift",
   "websiteUrl": "https://binarynights.com/",
@@ -11,11 +13,23 @@
   "pricingDetails": "From $19.95 one-time purchase",
   "sourceType": "closed_source",
   "youtubeUrl": null,
-  "categories": ["file-management", "file-transfer"],
-  "relatedAppSlugs": ["qspace", "dropover"],
+  "categories": [
+    "file-management",
+    "file-transfer"
+  ],
+  "relatedAppSlugs": [
+    "qspace",
+    "dropover"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://binarynights.com/images/icon_256x256.png", "altText": "ForkLift application icon"},
-    "preview": {"sourceUrl": "https://binarynights.com/images/forklift.png", "altText": "ForkLift dual-pane file manager preview"},
+    "icon": {
+      "sourceUrl": "https://binarynights.com/images/icon_256x256.png",
+      "altText": "ForkLift application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://binarynights.com/images/forklift.png",
+      "altText": "ForkLift dual-pane file manager preview"
+    },
     "screenshots": []
   }
 }

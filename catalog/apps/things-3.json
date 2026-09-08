@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Things 3",
   "slug": "things-3",
   "websiteUrl": "https://culturedcode.com/things/",

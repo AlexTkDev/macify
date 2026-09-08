@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Keeby",
   "slug": "keeby",
   "websiteUrl": "https://getkeeby.com/",
@@ -11,11 +13,22 @@
   "pricingDetails": "$4.99 one-time purchase",
   "sourceType": "closed_source",
   "youtubeUrl": null,
-  "categories": ["customization", "input-customization"],
-  "relatedAppSlugs": ["klack"],
+  "categories": [
+    "customization",
+    "input-customization"
+  ],
+  "relatedAppSlugs": [
+    "klack"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/ed/8c/c1/ed8cc133-7017-774c-5ce0-d0be797d6728/AppIcon-0-0-85-220-0-1-0-2x.png/512x512bb.png", "altText": "Keeby application icon"},
-    "preview": {"sourceUrl": "https://getkeeby.com/opengraph-image.png", "altText": "Keeby mechanical keyboard sound app preview"},
+    "icon": {
+      "sourceUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/ed/8c/c1/ed8cc133-7017-774c-5ce0-d0be797d6728/AppIcon-0-0-85-220-0-1-0-2x.png/512x512bb.png",
+      "altText": "Keeby application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://getkeeby.com/opengraph-image.png",
+      "altText": "Keeby mechanical keyboard sound app preview"
+    },
     "screenshots": []
   }
 }

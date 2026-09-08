@@ -1,6 +1,8 @@
 {
   "$schema": "../schema/application.schema.json",
   "schemaVersion": 1,
+  "isFeatured": false,
+  "isEditorsPick": false,
   "name": "Supercharge",
   "slug": "supercharge",
   "websiteUrl": "https://sindresorhus.com/supercharge",
@@ -11,11 +13,26 @@
   "pricingDetails": "$20 one-time purchase",
   "sourceType": "closed_source",
   "youtubeUrl": null,
-  "categories": ["automation", "customization", "file-management", "input-customization", "window-management"],
-  "relatedAppSlugs": ["bettertouchtool", "raycast"],
+  "categories": [
+    "automation",
+    "customization",
+    "file-management",
+    "input-customization",
+    "window-management"
+  ],
+  "relatedAppSlugs": [
+    "bettertouchtool",
+    "raycast"
+  ],
   "media": {
-    "icon": {"sourceUrl": "https://sindresorhus.com/apps/supercharge/icon.png", "altText": "Supercharge application icon"},
-    "preview": {"sourceUrl": "https://sindresorhus.com/og/supercharge.png", "altText": "Supercharge macOS enhancements preview"},
+    "icon": {
+      "sourceUrl": "https://sindresorhus.com/apps/supercharge/icon.png",
+      "altText": "Supercharge application icon"
+    },
+    "preview": {
+      "sourceUrl": "https://sindresorhus.com/og/supercharge.png",
+      "altText": "Supercharge macOS enhancements preview"
+    },
     "screenshots": []
   }
 }
