@@ -38,7 +38,7 @@ export default function EditorialPolicyPage() {
       </section>
       <section id="featured">
         <h2>Featured placements and disclosures</h2>
-        <p>Featured applications appear at the top of the homepage directory’s Hot view, followed by Editor’s Picks, and are marked with a gold check seal. Featured or Editor’s Pick status does not override the measured order in Trending or the chronological order in Latest.</p>
+        <p>Featured applications appear at the top of every homepage directory view and are marked with a gold check seal. Hot places Editor’s Picks immediately after Featured applications. Trending and Latest do not prioritize Editor’s Picks, so their remaining applications stay in measured or chronological order.</p>
         <p>Paid placements and sponsorships will be labelled separately from editorial selections.</p>
       </section>
       <section id="affiliate-disclosure">

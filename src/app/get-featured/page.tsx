@@ -15,7 +15,7 @@ export default function GetFeaturedPage() {
     <PolicyLayout title="Get Featured" description={description} updatedAt="September 8, 2026">
       <section>
         <h2>A place in the spotlight</h2>
-        <p>Featured applications appear first in the Hot view of Apps worth trying, followed by Editor’s Picks and the remaining curated applications. Trending remains ordered by measured interest, and Latest remains chronological. A gold check seal beside the application name identifies each featured listing.</p>
+        <p>Featured applications appear first in every Apps worth trying view. In Hot, they are followed by Editor’s Picks and the remaining hot applications. In Trending and Latest, only Featured status receives priority; all other applications retain their measured or chronological order. A gold check seal beside the application name identifies each featured listing.</p>
         <p>The seal indicates featured placement. It is not a security certification or a guarantee of performance.</p>
       </section>
       <section>

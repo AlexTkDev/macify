@@ -127,14 +127,14 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
     (HOMEPAGE_CURATED_ORDER.get(left.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
     - (HOMEPAGE_CURATED_ORDER.get(right.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
   )) : records;
-  const editorialIds = new Set(editorialRecords.map(({ id }) => id));
-  const directoryRecords = (view === "hot"
-    ? [
-        ...editorialRecords,
-        ...orderedRecords.filter(({ id }) => !editorialIds.has(id)),
-      ]
-    : orderedRecords
-  ).slice(0, 30);
+  const promotedRecords = view === "hot"
+    ? editorialRecords
+    : editorialRecords.filter(({ isFeatured }) => isFeatured);
+  const promotedIds = new Set(promotedRecords.map(({ id }) => id));
+  const directoryRecords = [
+    ...promotedRecords,
+    ...orderedRecords.filter(({ id }) => !promotedIds.has(id)),
+  ].slice(0, 30);
   const appIds = [...new Set([...directoryRecords, ...searchRecords].map(({ id }) => id))];
   const { icons, previews } = await getCardMedia(appIds);
   return {
