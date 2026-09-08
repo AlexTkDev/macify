@@ -46,6 +46,7 @@ export async function getPublishedApplicationBySlug(slug: string) {
         id: mediaAssets.id,
         role: mediaAssets.role,
         storageKey: mediaAssets.storageKey,
+        sourceUrl: mediaAssets.sourceUrl,
         mimeType: mediaAssets.mimeType,
         width: mediaAssets.width,
         height: mediaAssets.height,
