@@ -25,8 +25,8 @@
     min-height: 3rem;
     margin: 0 auto;
     padding: 0;
-    grid-template-areas: "menu controls";
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "menu";
+    grid-template-columns: auto;
     gap: 0.35rem;
     border: 0;
     border-radius: 0;
@@ -220,8 +220,7 @@
 
 @media (max-width: 52rem) {
   .public-header-inner {
-    grid-template-areas: "menu controls";
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "menu";
+    grid-template-columns: auto;
   }
 }
-
