@@ -69,7 +69,7 @@ function searchConditions(filters?: DirectorySearchFilters) {
 
 export async function getHomepageDirectoryData(filters?: DirectorySearchFilters, view: HomepageView = "hot") {
   const database = await getDatabase();
-  const [fallbackRecords, analyticsVisits, featuredRecords] = await Promise.all([
+  const [fallbackRecords, analyticsVisits, editorialRecords] = await Promise.all([
     view === "latest"
       ? database.select(cardFields).from(apps)
         .where(and(eq(apps.status, "published"), isNull(apps.deletedAt)))
@@ -79,8 +79,12 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
       )).limit(30),
     view === "hot" ? getHotApplicationVisits() : view === "trending" ? getTrendingApplicationVisits() : Promise.resolve([]),
     database.select(cardFields).from(apps)
-      .where(and(eq(apps.status, "published"), isNull(apps.deletedAt), eq(apps.isFeatured, true)))
-      .orderBy(desc(apps.featuredAt), asc(apps.name), asc(apps.id))
+      .where(and(
+        eq(apps.status, "published"),
+        isNull(apps.deletedAt),
+        sql`(${apps.isFeatured} = 1 or ${apps.isEditorsPick} = 1)`,
+      ))
+      .orderBy(desc(apps.isFeatured), desc(apps.featuredAt), desc(apps.isEditorsPick), asc(apps.name), asc(apps.id))
       .limit(30),
   ]);
 
@@ -123,11 +127,14 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
     (HOMEPAGE_CURATED_ORDER.get(left.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
     - (HOMEPAGE_CURATED_ORDER.get(right.slug) ?? HOMEPAGE_CURATED_SLUGS.length)
   )) : records;
-  const featuredIds = new Set(featuredRecords.map(({ id }) => id));
-  const directoryRecords = [
-    ...featuredRecords,
-    ...orderedRecords.filter(({ id }) => !featuredIds.has(id)),
-  ].slice(0, 30);
+  const editorialIds = new Set(editorialRecords.map(({ id }) => id));
+  const directoryRecords = (view === "hot"
+    ? [
+        ...editorialRecords,
+        ...orderedRecords.filter(({ id }) => !editorialIds.has(id)),
+      ]
+    : orderedRecords
+  ).slice(0, 30);
   const appIds = [...new Set([...directoryRecords, ...searchRecords].map(({ id }) => id))];
   const { icons, previews } = await getCardMedia(appIds);
   return {
