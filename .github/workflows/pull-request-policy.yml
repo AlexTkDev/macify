@@ -1,0 +1,110 @@
+name: Pull request policy
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+concurrency:
+  group: pull-request-policy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  enforce-public-contribution-boundary:
+    if: >-
+      github.event.pull_request.user.login != 'Beingpax' &&
+      github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close pull requests outside the public contribution policy
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const pull = context.payload.pull_request;
+            const { owner, repo } = context.repo;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number: pull.number,
+              per_page: 100,
+            });
+
+            const allowedPath = /^catalog\/(apps|deals)\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/;
+            const reasons = [];
+
+            if (files.length !== 1) {
+              reasons.push("Public pull requests may add exactly one catalogue manifest.");
+            }
+
+            const file = files[0];
+            if (file && (file.status !== "added" || !allowedPath.test(file.filename))) {
+              reasons.push("The only changed file must be a newly added `catalog/apps/<slug>.json` or `catalog/deals/<slug>.json` manifest.");
+            }
+
+            if (files.length === 1 && file?.status === "added" && allowedPath.test(file.filename)) {
+              try {
+                const response = await github.rest.repos.getContent({
+                  owner: pull.head.repo.owner.login,
+                  repo: pull.head.repo.name,
+                  path: file.filename,
+                  ref: pull.head.sha,
+                });
+
+                if (Array.isArray(response.data) || response.data.type !== "file" || !response.data.content) {
+                  reasons.push("The submitted manifest could not be inspected safely.");
+                } else {
+                  const manifest = JSON.parse(Buffer.from(response.data.content, "base64").toString("utf8"));
+                  const editorialKeys = [];
+                  const inspect = (value, path = []) => {
+                    if (!value || typeof value !== "object") return;
+                    if (Array.isArray(value)) {
+                      value.forEach((item, index) => inspect(item, [...path, String(index)]));
+                      return;
+                    }
+                    for (const [key, child] of Object.entries(value)) {
+                      const normalized = key.toLowerCase().replace(/[^a-z]/g, "");
+                      if (normalized === "featured" || normalized === "isfeatured" ||
+                          normalized === "editorspick" || normalized === "iseditorspick") {
+                        editorialKeys.push([...path, key].join("."));
+                      }
+                      inspect(child, [...path, key]);
+                    }
+                  };
+                  inspect(manifest);
+                  if (editorialKeys.length > 0) {
+                    reasons.push(`Editorial status is owner-controlled and cannot be submitted in a manifest (found: ${editorialKeys.map((key) => `\`${key}\``).join(", ")}).`);
+                  }
+                }
+              } catch (error) {
+                reasons.push(`The submitted manifest could not be parsed or inspected safely (${error.message}).`);
+              }
+            }
+
+            if (reasons.length === 0) {
+              core.info("Pull request is within the public contribution boundary.");
+              return;
+            }
+
+            const body = [
+              "This pull request was closed automatically because it is outside Macify's public contribution policy:",
+              "",
+              ...reasons.map((reason) => `- ${reason}`),
+              "",
+              "Featured placement and Editor’s Pick status are assigned only by the project owner after editorial review. For code, documentation, design, workflow, existing-listing, or other changes, please open an issue first.",
+            ].join("\n");
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: pull.number,
+              body,
+            });
+            await github.rest.pulls.update({
+              owner,
+              repo,
+              pull_number: pull.number,
+              state: "closed",
+            });

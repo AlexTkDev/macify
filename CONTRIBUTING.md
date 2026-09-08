@@ -4,6 +4,8 @@ If you develop a Mac application, or know one that is not yet listed and would b
 
 Each contribution must add one new application manifest or one new deal manifest. Do not include code, documentation, design, or changes to an existing listing in the same pull request.
 
+Featured placement, Editor's Pick status, publication state, and other editorial controls are assigned only by the project owner after review. Do not add editorial-control fields to a manifest. Pull requests from other authors that change anything outside one new catalogue manifest, or that attempt to set editorial status, are closed automatically. Open an issue first for every other kind of change.
+
 ## 🔎 Before you begin
 
 - Check [`catalog/apps`](catalog/apps) to make sure the application is not already listed.
