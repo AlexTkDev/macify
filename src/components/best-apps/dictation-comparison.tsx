@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Check, CircleHelp, Minus, X } from "lucide-react";
 import { PublicAppIcon, type PublicAppSummary } from "@/components/public-app-card";
-import { dictationComparisonRows, dictationEditorial, dictationRecommendations, type ComparisonValue, type DictationAppSlug } from "@/lib/best-dictation-apps";
+import { dictationComparisonRows, dictationEditorial, dictationRecommendations, type ComparisonValue, type DictationAppSlug } from "@/content/blog/posts/best-dictation-apps-for-mac/comparison";
 
 type DictationApp = PublicAppSummary & { slug: DictationAppSlug };
 
@@ -18,7 +18,7 @@ function Ledger({ apps }: { apps: DictationApp[] }) {
     <thead><tr><th scope="col">App</th>{dictationComparisonRows.map((row) => <th key={row.key} scope="col">{row.label}</th>)}</tr></thead>
     <tbody>{apps.map((app) => <tr key={app.id}>
       <th scope="row"><Link className="comparison-app-name" href={`#review-${app.slug}`}>
-        <PublicAppIcon app={app} decorative size={34} />
+        <PublicAppIcon app={app} decorative size={44} />
         <span>{app.name}</span>
       </Link></th>
       {dictationComparisonRows.map((row) => <td className={row.key === "price" ? undefined : "comparison-feature-cell"} key={row.key}><Status iconOnly={row.key !== "price"} value={row.values[app.slug]} /></td>)}

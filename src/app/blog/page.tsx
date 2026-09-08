@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { PublicShell } from "@/components/public-site";
-import { blogPosts } from "@/lib/blog-posts";
+import { getAllBlogPosts } from "@/content/blog";
 
 const canonical = "https://macify.app/blog";
 
@@ -25,6 +25,7 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
+  const blogPosts = getAllBlogPosts();
   const schema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -39,7 +40,7 @@ export default function BlogPage() {
         "@type": "ListItem",
         position: index + 1,
         name: post.title,
-        url: `https://macify.app/${post.slug}`,
+        url: `https://macify.app${post.path}`,
       })),
     },
   };
@@ -51,11 +52,11 @@ export default function BlogPage() {
       </header>
       <section className="blog-post-grid" aria-label="Blog posts">
         {blogPosts.map((post) => <article className="blog-post-card" key={post.slug}>
-          <Link aria-label={`Read ${post.title}`} className="blog-post-preview" href={`/${post.slug}`}>
-            <Image alt="" fill sizes="(max-width: 38rem) calc(100vw - 2rem), (max-width: 68rem) calc((100vw - 4rem) / 2), 27rem" src={`/${post.slug}/opengraph-image`} />
+          <Link aria-label={`Read ${post.title}`} className="blog-post-preview" href={post.path}>
+            <Image alt="" fill sizes="(max-width: 38rem) calc(100vw - 2rem), (max-width: 68rem) calc((100vw - 4rem) / 2), 27rem" src={post.image.path} />
           </Link>
           <div className="blog-post-meta"><span>{post.category}</span></div>
-          <h2><Link href={`/${post.slug}`}>{post.title}</Link></h2>
+          <h2><Link href={post.path}>{post.title}</Link></h2>
           <p>{post.description}</p>
         </article>)}
       </section>
