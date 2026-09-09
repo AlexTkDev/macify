@@ -4,11 +4,11 @@ import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 const isDevelopment = process.env.NODE_ENV !== "production";
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com${isDevelopment ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  `connect-src 'self'${isDevelopment ? " ws: wss:" : ""}`,
+  `connect-src 'self' https://cloudflareinsights.com${isDevelopment ? " ws: wss:" : ""}`,
   "media-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
@@ -41,6 +41,14 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
+  },
+  async redirects() {
+    return [{
+      source: "/:path*",
+      has: [{ type: "header", key: "x-forwarded-proto", value: "http" }],
+      destination: "https://macify.app/:path*",
+      permanent: true,
+    }];
   },
   async rewrites() {
     return [

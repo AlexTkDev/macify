@@ -26,7 +26,7 @@ export async function PublicShell({ children }: { children: ReactNode }) {
         data-domain="macify.app"
         data-website-id="dfid_Moyh2sl29BQAIQp2E4BmV"
         src="/js/script.js"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
       <a className="skip-link" href="#main-content">Skip to content</a>
       <PublicHeader />

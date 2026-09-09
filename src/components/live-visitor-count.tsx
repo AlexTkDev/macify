@@ -13,8 +13,12 @@ export function LiveVisitorCount() {
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
 
   useEffect(() => {
+    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") return;
+
     let active = true;
     let pending = false;
+    let interval: number | undefined;
+    let started = false;
     const controller = new AbortController();
 
     async function refreshVisitorCount() {
@@ -35,13 +39,21 @@ export function LiveVisitorCount() {
       }
     }
 
-    void refreshVisitorCount();
-    const interval = window.setInterval(refreshVisitorCount, refreshIntervalMs);
+    function start() {
+      if (started) return;
+      started = true;
+      void refreshVisitorCount();
+      interval = window.setInterval(refreshVisitorCount, refreshIntervalMs);
+    }
+
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
 
     return () => {
       active = false;
+      window.removeEventListener("load", start);
       controller.abort();
-      window.clearInterval(interval);
+      if (interval !== undefined) window.clearInterval(interval);
     };
   }, []);
 

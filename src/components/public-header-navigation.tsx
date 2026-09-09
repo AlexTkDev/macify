@@ -61,7 +61,7 @@ export function PublicHeaderNavigation({ contributionGuideUrl }: { contributionG
             target="_blank"
             rel="noreferrer"
             onClick={() => setOpen(false)}
-            aria-label="Submit an app on GitHub (opens in a new tab)"
+            aria-label="Submit app on GitHub (opens in a new tab)"
           >
             <span className="public-navigation-icon" aria-hidden="true"><Plus size={15} /></span>
             <span className="public-navigation-label">Submit app</span>

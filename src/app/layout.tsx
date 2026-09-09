@@ -31,6 +31,9 @@ const caprasimo = Caprasimo({
 });
 
 const caveat = Caveat({
+  // This decorative face is not part of the LCP. Let the hero image and
+  // primary UI fonts use the preload bandwidth first.
+  preload: false,
   subsets: ["latin"],
   variable: "--font-caveat",
   weight: "500",
