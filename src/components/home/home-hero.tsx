@@ -45,8 +45,9 @@ export function HomeHero({ applications }: { applications: HomeApp[] }) {
             {featured.preview ? (
               <Image
                 alt=""
+                fetchPriority="high"
                 height={featured.preview.height ?? 900}
-                preload
+                loading="eager"
                 quality={78}
                 sizes="(max-width: 38rem) calc(100vw - 2rem), (max-width: 52rem) min(calc(100vw - clamp(4rem, 6.4vw, 6rem)), 42rem), (max-width: 68rem) 45vw, min(48.5vw, 35rem)"
                 src={mediaUrl(featured.preview.storageKey)}

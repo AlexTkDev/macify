@@ -40,7 +40,7 @@ function searchConditions(filters?: DirectorySearchFilters) {
 export async function getHomepageDirectoryData(filters?: DirectorySearchFilters, view: HomepageView = "hot") {
   const database = await getDatabase();
   const latestPublishedAt = new Date(Date.now() - latestApplicationWindowMs);
-  const [fallbackRecords, analyticsVisits, editorialRecords] = await Promise.all([
+  const [fallbackRecords, analyticsVisits, trendingFeaturedRecords] = await Promise.all([
     view === "latest"
       ? database.select(cardFields).from(apps)
         .where(and(
@@ -54,15 +54,17 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
         eq(apps.status, "published"), isNull(apps.deletedAt), inArray(apps.slug, HOMEPAGE_APPLICATION_SLUGS),
       )).limit(homepageApplicationLimit),
     view === "trending" ? getTrendingApplicationVisits() : Promise.resolve([]),
-    database.select(cardFields).from(apps)
-      .where(and(
-        eq(apps.status, "published"),
-        isNull(apps.deletedAt),
-        inArray(apps.slug, HOMEPAGE_APPLICATION_SLUGS),
-        sql`(${apps.isFeatured} = 1 or ${apps.isEditorsPick} = 1)`,
-      ))
-      .orderBy(desc(apps.isFeatured), desc(apps.featuredAt), desc(apps.isEditorsPick), asc(apps.name), asc(apps.id))
-      .limit(homepageApplicationLimit),
+    view === "trending"
+      ? database.select(cardFields).from(apps)
+        .where(and(
+          eq(apps.status, "published"),
+          isNull(apps.deletedAt),
+          inArray(apps.slug, HOMEPAGE_APPLICATION_SLUGS),
+          eq(apps.isFeatured, true),
+        ))
+        .orderBy(desc(apps.featuredAt), desc(apps.isEditorsPick), asc(apps.name), asc(apps.id))
+        .limit(homepageApplicationLimit)
+      : Promise.resolve([]),
   ]);
 
   let records = fallbackRecords;
@@ -104,9 +106,9 @@ export async function getHomepageDirectoryData(filters?: DirectorySearchFilters,
     ? [...records].sort((left, right) => homepageApplicationPosition(left.slug) - homepageApplicationPosition(right.slug))
     : records;
   const promotedRecords = view === "hot"
-    ? editorialRecords
+    ? fallbackRecords.filter(({ isFeatured, isEditorsPick }) => isFeatured || isEditorsPick)
     : view === "trending"
-      ? editorialRecords.filter(({ isFeatured }) => isFeatured)
+      ? trendingFeaturedRecords
       : [];
   const promotedIds = new Set(promotedRecords.map(({ id }) => id));
   let directoryRecords = [
