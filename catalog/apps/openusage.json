@@ -26,8 +26,8 @@
       "altText": "OpenUsage application icon"
     },
     "preview": {
-      "sourceUrl": "https://github.com/robinebers/openusage/blob/main/assets/screenshot.jpg?raw=true",
-      "altText": "OpenUsage for macOS showing Codex, Claude, and Cursor usage limits in its menu-bar dashboard"
+      "sourceUrl": "https://macify.app/app-previews/openusage.webp",
+      "altText": "OpenUsage showing AI subscription limits and total spend in its macOS menu-bar dashboard"
     },
     "screenshots": []
   }
