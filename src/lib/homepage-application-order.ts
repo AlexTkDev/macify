@@ -4,6 +4,7 @@
  * order is preserved within each group.
  */
 export const HOMEPAGE_APPLICATION_SLUGS = [
+  "voiceink",
   "cleanshot-x",
   "openusage",
   "daisydisk",
@@ -39,7 +40,6 @@ export const HOMEPAGE_APPLICATION_SLUGS = [
   "anybox",
   "alcove",
   "glyph",
-  "voiceink",
   "pixelmator-pro",
   "raycast",
   "superwhisper",

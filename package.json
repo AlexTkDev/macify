@@ -18,7 +18,9 @@
     "setup": "node scripts/setup-local.mjs",
     "test:media-validation": "node --experimental-strip-types --test scripts/tests/media-validation.test.mjs",
     "catalogue:validate": "node scripts/validate-catalogue.mjs",
-    "catalogue:sync:local": "node scripts/sync-local-catalogue.mjs"
+    "catalogue:sync:local": "node scripts/sync-local-catalogue.mjs",
+    "readme:generate": "node scripts/generate-readme-apps.mjs",
+    "readme:check": "node scripts/generate-readme-apps.mjs --check"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "1.20.2",
