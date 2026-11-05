@@ -47,6 +47,14 @@ img {
   max-width: 100%;
 }
 
+.brand-mark-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
 ::selection {
   color: var(--paper-strong);
   background: var(--accent);
@@ -80,12 +88,15 @@ img {
   border-radius: var(--radius-sm);
   font-size: 0.8rem;
   font-weight: 650;
-  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+  transform-origin: center bottom;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease,
+    transform var(--button-motion);
 }
 
 .primary-button,
 .button-primary {
   border: 1px solid var(--ink);
+  border-radius: 999px;
   color: var(--paper-strong);
   background: var(--ink);
 }
@@ -96,10 +107,11 @@ img {
   background: var(--paper-strong);
 }
 
-.primary-button:hover,
-.button-primary:hover {
-  border-color: color-mix(in oklch, var(--ink) 90%, white);
-  background: color-mix(in oklch, var(--ink) 90%, white);
+.primary-button:not(:disabled):is(:hover, :focus-visible),
+.button-primary:not(:disabled):is(:hover, :focus-visible) {
+  color: var(--button-dark-hover-ink);
+  border-color: var(--button-dark-rest);
+  background: var(--button-dark-hover);
 }
 
 .button-secondary:hover {
@@ -111,7 +123,9 @@ img {
 .primary-button:active,
 .button-primary:active,
 .button-secondary:active {
-  transform: translateY(0.06rem);
+  transform: translateY(0.12rem) scale(0.98);
+  transition-duration: 80ms;
+  transition-timing-function: ease-out;
 }
 
 .button-primary:disabled,
@@ -144,3 +158,5 @@ img {
   .button-primary:active,
   .button-secondary:active { transform: none; }
 }
+
+.primary-button:not(:disabled):active, .button-primary:not(:disabled):active { color: var(--button-dark-hover-ink); background: var(--button-dark-active); border-color: var(--button-dark-rest); }

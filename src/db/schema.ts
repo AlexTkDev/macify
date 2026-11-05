@@ -104,7 +104,7 @@ export const deals = sqliteTable("deals", {
   code: text("code"),
   url: text("url").notNull(),
   startsAt: integer("starts_at", { mode: "timestamp_ms" }).notNull(),
-  endsAt: integer("ends_at", { mode: "timestamp_ms" }).notNull(),
+  endsAt: integer("ends_at", { mode: "timestamp_ms" }),
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 }, (table) => [

@@ -15,6 +15,7 @@ export type BlogPostDefinition = {
   kind: BlogPostKind;
   path: `/${string}`;
   publishedAt: `${number}-${number}-${number}`;
+  published?: boolean;
   readTimeMinutes: number;
   seo?: {
     description?: string;

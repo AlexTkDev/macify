@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { PublicShell } from "@/components/public-site";
+import { PublicShell } from "@/components/site/public-site";
 import { getAllBlogPosts } from "@/content/blog";
 
 const canonical = "https://macify.app/blog";
@@ -50,6 +50,7 @@ export default function BlogPage() {
       <header className="directory-heading blog-list-heading">
         <div><h1>Blog posts.</h1><p>Guides and comparisons for choosing better Mac apps.</p></div>
       </header>
+      {blogPosts.length === 0 && <div className="blog-empty"><h2>Coming soon.</h2><p>New Mac app guides and comparisons are on the way.</p></div>}
       <section className="blog-post-grid" aria-label="Blog posts">
         {blogPosts.map((post) => <article className="blog-post-card" key={post.slug}>
           <Link aria-label={`Read ${post.title}`} className="blog-post-preview" href={post.path}>

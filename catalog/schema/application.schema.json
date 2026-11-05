@@ -1,14 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://macify.app/schemas/application.schema.json",
+  "$id": "https://macify.app/catalog/schema/application.schema.json",
+  "$comment": "Run catalogue:validate as well: filename, catalogue references, public URL restrictions, trimmed text lengths, self-references, and media source URL uniqueness require additional checks.",
   "title": "Macify application manifest",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "$schema",
     "schemaVersion",
-    "isFeatured",
-    "isEditorsPick",
     "name",
     "slug",
     "websiteUrl",
@@ -20,24 +19,23 @@
     "sourceType",
     "youtubeUrl",
     "categories",
-    "relatedAppSlugs",
     "media"
   ],
   "properties": {
-    "$schema": { "type": "string" },
+    "$schema": { "const": "../schema/application.schema.json" },
     "schemaVersion": { "const": 1 },
-    "isFeatured": { "type": "boolean" },
-    "isEditorsPick": { "type": "boolean" },
+    "isFeatured": { "type": "boolean", "default": false },
+    "isEditorsPick": { "type": "boolean", "default": false },
     "name": { "type": "string", "minLength": 2, "maxLength": 80 },
     "slug": { "type": "string", "minLength": 2, "maxLength": 90, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-    "websiteUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "websiteUrl": { "type": "string", "format": "uri", "pattern": "^https://", "maxLength": 2000 },
     "tagline": { "type": "string", "minLength": 10, "maxLength": 140 },
     "description": { "type": "string", "minLength": 40, "maxLength": 20000 },
     "pricingType": { "enum": ["free", "freemium", "paid"] },
     "billingType": { "type": ["string", "null"], "enum": ["one_time", "subscription", null] },
     "pricingDetails": { "type": ["string", "null"], "maxLength": 240 },
     "sourceType": { "enum": ["open_source", "closed_source"] },
-    "youtubeUrl": { "type": ["string", "null"], "maxLength": 2000, "pattern": "^https://" },
+    "youtubeUrl": { "type": ["string", "null"], "format": "uri", "maxLength": 2000, "pattern": "^https://" },
     "categories": {
       "type": "array",
       "minItems": 1,
@@ -66,13 +64,20 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": { "properties": { "pricingType": { "const": "free" } }, "required": ["pricingType"] },
+      "then": { "properties": { "billingType": { "type": "null" } } },
+      "else": { "properties": { "billingType": { "enum": ["one_time", "subscription"] } } }
+    }
+  ],
   "$defs": {
     "mediaSource": {
       "type": "object",
       "additionalProperties": false,
       "required": ["sourceUrl", "altText"],
       "properties": {
-        "sourceUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "sourceUrl": { "type": "string", "format": "uri", "pattern": "^https://", "maxLength": 2000 },
         "altText": { "type": "string", "minLength": 3, "maxLength": 300 }
       }
     }

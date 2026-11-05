@@ -10,7 +10,8 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const allowedPricing = new Set(["free", "freemium", "paid"]);
 const allowedBilling = new Set(["one_time", "subscription"]);
 const allowedSource = new Set(["open_source", "closed_source"]);
-const requiredManifestKeys = ["$schema", "schemaVersion", "isFeatured", "isEditorsPick", "name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "categories", "relatedAppSlugs", "media"];
+const requiredManifestKeys = ["$schema", "schemaVersion", "name", "slug", "websiteUrl", "tagline", "description", "pricingType", "billingType", "pricingDetails", "sourceType", "youtubeUrl", "categories", "media"];
+const optionalManifestKeys = ["isFeatured", "isEditorsPick", "relatedAppSlugs"];
 
 function isHttpUrl(value, httpsOnly = false) {
   if (typeof value !== "string" || value.length > 2_000) return false;
@@ -50,7 +51,7 @@ function validateManifest(manifest, expectedSlug) {
   if (!manifest || typeof manifest !== "object" || Array.isArray(manifest)) {
     return ["manifest must be a JSON object."];
   }
-  const allowedKeys = new Set(requiredManifestKeys);
+  const allowedKeys = new Set([...requiredManifestKeys, ...optionalManifestKeys]);
   for (const key of requiredManifestKeys) if (!(key in manifest)) issues.push(`${key} is required.`);
   for (const key of Object.keys(manifest)) if (!allowedKeys.has(key)) issues.push(`${key} is not an allowed manifest field.`);
   const text = (key, min, max) => {
@@ -77,6 +78,7 @@ function validateManifest(manifest, expectedSlug) {
   if (manifest.youtubeUrl != null && !isHttpUrl(manifest.youtubeUrl, true)) issues.push("youtubeUrl must be null or a public HTTPS URL.");
   for (const [key, limit, minimum] of [["categories", 12, 1], ["relatedAppSlugs", 12, 0]]) {
     const values = manifest[key];
+    if (key === "relatedAppSlugs" && values === undefined) continue;
     if (!Array.isArray(values) || values.length < minimum || values.length > limit || values.some((item) => typeof item !== "string" || !slugPattern.test(item))) {
       issues.push(`${key} must contain ${minimum} to ${limit} valid slugs.`);
     } else if (new Set(values).size !== values.length) {
@@ -101,6 +103,19 @@ function validateManifest(manifest, expectedSlug) {
   return issues;
 }
 
+function isIsoTimestamp(value) {
+  if (typeof value !== "string") return false;
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/.exec(value);
+  if (!match || Number.isNaN(Date.parse(value))) return false;
+  const [, yearText, monthText, dayText] = match;
+  const year = Number(yearText);
+  const month = Number(monthText);
+  const day = Number(dayText);
+  const leapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const daysInMonth = [31, leapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  return month >= 1 && month <= 12 && day >= 1 && day <= daysInMonth[month - 1];
+}
+
 function validateDealManifest(manifest, expectedSlug) {
   const issues = [];
   const keys = ["$schema", "schemaVersion", "appSlug", "discountPercent", "code", "url", "startsAt", "endsAt"];
@@ -109,6 +124,9 @@ function validateDealManifest(manifest, expectedSlug) {
   for (const key of Object.keys(manifest)) if (!keys.includes(key)) issues.push(`${key} is not an allowed manifest field.`);
   if (manifest.$schema !== "../schema/deal.schema.json") issues.push("$schema must reference ../schema/deal.schema.json.");
   if (manifest.schemaVersion !== 1) issues.push("schemaVersion must be 1.");
+  if (typeof manifest.appSlug !== "string" || manifest.appSlug.trim().length < 2 || manifest.appSlug.length > 90) {
+    issues.push("appSlug must contain 2 to 90 characters.");
+  }
   if (!slugPattern.test(manifest.appSlug ?? "")) issues.push("appSlug must use lowercase letters, numbers, and hyphens.");
   if (manifest.appSlug !== expectedSlug) issues.push(`appSlug must match the filename (${expectedSlug}).`);
   if (!Number.isInteger(manifest.discountPercent) || manifest.discountPercent < 1 || manifest.discountPercent > 100) {
@@ -118,13 +136,13 @@ function validateDealManifest(manifest, expectedSlug) {
     issues.push("code must be null or contain 1 to 80 characters.");
   }
   if (!isHttpUrl(manifest.url, true)) issues.push("url must be a public HTTPS URL.");
-  const timestampPattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})$/;
   for (const key of ["startsAt", "endsAt"]) {
-    if (typeof manifest[key] !== "string" || !timestampPattern.test(manifest[key]) || Number.isNaN(Date.parse(manifest[key]))) {
+    if (key === "endsAt" && manifest[key] === null) continue;
+    if (!isIsoTimestamp(manifest[key])) {
       issues.push(`${key} must be an ISO 8601 date-time with a timezone.`);
     }
   }
-  if (!Number.isNaN(Date.parse(manifest.startsAt)) && !Number.isNaN(Date.parse(manifest.endsAt))
+  if (manifest.endsAt !== null && !Number.isNaN(Date.parse(manifest.startsAt)) && !Number.isNaN(Date.parse(manifest.endsAt))
     && Date.parse(manifest.endsAt) <= Date.parse(manifest.startsAt)) {
     issues.push("endsAt must be after startsAt.");
   }

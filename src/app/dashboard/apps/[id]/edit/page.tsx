@@ -1,10 +1,10 @@
-import { PendingSubmitButton } from "@/components/pending-submit-button";
+import { PendingSubmitButton } from "@/components/forms/pending-submit-button";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BadgeCheck, ChevronRight, ExternalLink, GitBranch, Star } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, ChevronRight, ExternalLink, GitBranch, Star } from "lucide-react";
 import { setApplicationPublication, setEditorsPickApplication, setFeaturedApplication } from "@/app/dashboard/editorial-actions";
-import { getApplicationEditorData } from "@/lib/app-editor-data";
+import { getApplicationEditorData } from "@/lib/dashboard/app-editor-data";
 
 export const dynamic = "force-dynamic";
 
@@ -53,10 +53,10 @@ export default async function EditApplicationPage({
           <span>Manage publication and homepage placement.</span>
         </div>
         <div className="editor-header-actions">
-          <a className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">
-            Visit site <ExternalLink size={15} />
+          <a data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" href={application.websiteUrl} rel="noreferrer" target="_blank">
+            Visit site <ArrowUpRight aria-hidden="true" size={15} strokeWidth={1.8} />
           </a>
-          <a className="button-secondary" href={`https://github.com/Beingpax/macify/edit/main/catalog/apps/${application.slug}.json`} rel="noreferrer" target="_blank">
+          <a data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" href={`https://github.com/Beingpax/macify/edit/main/catalog/apps/${application.slug}.json`} rel="noreferrer" target="_blank">
             Edit in GitHub <GitBranch size={15} />
           </a>
         </div>

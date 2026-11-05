@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Check, CircleHelp, Minus, X } from "lucide-react";
-import { PublicAppIcon, type PublicAppSummary } from "@/components/public-app-card";
+import { PublicAppIcon, type PublicAppSummary } from "@/components/site/public-app-card";
 import { dictationComparisonRows, dictationEditorial, dictationRecommendations, type ComparisonValue, type DictationAppSlug } from "@/content/blog/posts/best-dictation-apps-for-mac/comparison";
 
 type DictationApp = PublicAppSummary & { slug: DictationAppSlug };
@@ -30,10 +30,9 @@ export function DictationGuide({ apps, reviewedAt }: { apps: DictationApp[]; rev
   return <div className="dictation-guide">
     <header className="best-apps-hero dictation-hero-quiet dictation-hero-final">
       <div className="best-apps-hero-copy">
-        <p className="best-apps-breadcrumb"><Link href="/">Mac apps</Link><span aria-hidden="true">/</span><Link href="/categories/dictation">Dictation</Link></p>
         <h1>Best dictation apps for Mac<span>.</span></h1>
         <p>Mac dictation apps differ widely in price, privacy, accuracy, and how they process your voice. We compared six options to explain these differences and help you choose the one that best fits the way you work.</p>
-        <div className="best-apps-meta"><span>{apps.length} apps compared</span><time dateTime="2026-09-08">Reviewed {reviewedAt}</time></div>
+        <div aria-label="Article details" className="best-apps-meta" tabIndex={0}><span>{apps.length} apps compared</span><time dateTime="2026-09-08">Reviewed {reviewedAt}</time></div>
       </div>
     </header>
 
@@ -56,9 +55,9 @@ export function DictationGuide({ apps, reviewedAt }: { apps: DictationApp[]; rev
           <ul>{editorial.strengths.map((strength) => <li key={strength}>{strength}</li>)}</ul>
           <h3>What to consider</h3>
           {editorial.considerations.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-          <a aria-label={`Visit ${app.name} official site`} className="application-website" href={editorial.sourceUrl} rel="noreferrer" target="_blank">
+          <a data-ui-button="" data-variant="primary" data-size="md" aria-label={`Visit ${app.name} official site (opens in a new tab)`} className="application-website site-action site-action--primary" href={editorial.sourceUrl} rel="noreferrer" target="_blank">
             Visit site
-            <ArrowUpRight aria-hidden="true" size={19} strokeWidth={1.8} />
+            <ArrowUpRight aria-hidden="true" size={17} strokeWidth={1.8} />
           </a>
         </div>
       </section>; })}

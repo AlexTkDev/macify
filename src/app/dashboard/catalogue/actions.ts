@@ -15,11 +15,12 @@ import {
   deals,
   mediaAssets,
 } from "@/db/schema";
-import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
-import { ingestCatalogueItem } from "@/lib/catalogue-ingestion";
-import { dealManifestSchema } from "@/lib/deal-manifest";
-import { publicationStatus } from "@/lib/catalogue-publication-guard";
-import { requireAdmin } from "@/lib/admin-auth";
+import { catalogueManifestSchema } from "@/lib/catalogue/catalogue-manifest";
+import { ingestCatalogueItem } from "@/lib/catalogue/catalogue-ingestion";
+import { dealManifestSchema } from "@/lib/deals/deal-manifest";
+import { publicationStatus } from "@/lib/catalogue/catalogue-publication-guard";
+import { requireAdmin } from "@/lib/auth/admin-auth";
+import { invalidatePublicCatalogueCache } from "@/lib/shared/public-cache";
 
 const decisionSchema = z.object({
   revisionId: z.uuid(),
@@ -30,6 +31,7 @@ const bulkDecisionSchema = z.object({
   revisionIds: z.array(z.uuid()).min(1).max(100),
   intent: z.enum(["publish", "reject"]),
 });
+const bulkReviewQueryBatchSize = 75;
 
 type DecisionIntent = z.infer<typeof decisionSchema>["intent"];
 
@@ -137,15 +139,21 @@ export async function decideCatalogueRevisions(formData: FormData) {
   if (!parsed.success) redirect(`${queuePath}?error=invalid-selection`);
 
   const database = await getDatabase();
-  const selected = await database.select({
-    id: catalogueRevisions.id,
-    sourcePath: catalogueRevisions.sourcePath,
-    createdAt: catalogueRevisions.createdAt,
-  }).from(catalogueRevisions).where(and(
-    inArray(catalogueRevisions.id, parsed.data.revisionIds),
-    eq(catalogueRevisions.status, "pending"),
-    like(catalogueRevisions.sourcePath, reviewSourcePattern(queuePath)),
-  ));
+  const sourcePattern = reviewSourcePattern(queuePath);
+  const selected: Array<Pick<typeof catalogueRevisions.$inferSelect, "id" | "sourcePath" | "createdAt">> = [];
+  for (let offset = 0; offset < parsed.data.revisionIds.length; offset += bulkReviewQueryBatchSize) {
+    const revisionIds = parsed.data.revisionIds.slice(offset, offset + bulkReviewQueryBatchSize);
+    const batch = await database.select({
+      id: catalogueRevisions.id,
+      sourcePath: catalogueRevisions.sourcePath,
+      createdAt: catalogueRevisions.createdAt,
+    }).from(catalogueRevisions).where(and(
+      inArray(catalogueRevisions.id, revisionIds),
+      eq(catalogueRevisions.status, "pending"),
+      like(catalogueRevisions.sourcePath, sourcePattern),
+    ));
+    selected.push(...batch);
+  }
 
   const selectedIds = new Set(selected.map(({ id }) => id));
   let failed = parsed.data.revisionIds.length - selectedIds.size;
@@ -155,31 +163,16 @@ export async function decideCatalogueRevisions(formData: FormData) {
     const rightIsDeal = right.sourcePath.startsWith("catalog/deals/");
     return Number(leftIsDeal) - Number(rightIsDeal) || left.createdAt.getTime() - right.createdAt.getTime();
   });
-  let remaining = ordered.map(({ id }) => id);
 
-  // Each productive pass resolves another dependency level; stop when no progress is possible.
-  for (let pass = 0; pass < ordered.length && remaining.length > 0; pass += 1) {
-    const retry: string[] = [];
-    for (const revisionId of remaining) {
-      try {
-        await applyCatalogueDecision(revisionId, parsed.data.intent, reviewSourcePattern(queuePath));
-        completed += 1;
-      } catch (error) {
-        await recordDecisionFailure(revisionId, parsed.data.intent, error);
-        if (error instanceof CatalogueDecisionError && error.code === "missing-related-app") {
-          retry.push(revisionId);
-        } else {
-          failed += 1;
-        }
-      }
+  for (const { id } of ordered) {
+    try {
+      await applyCatalogueDecision(id, parsed.data.intent, sourcePattern);
+      completed += 1;
+    } catch (error) {
+      await recordDecisionFailure(id, parsed.data.intent, error);
+      failed += 1;
     }
-    if (retry.length === remaining.length) {
-      remaining = retry;
-      break;
-    }
-    remaining = retry;
   }
-  failed += remaining.length;
 
   revalidateCataloguePaths();
   const params = new URLSearchParams({
@@ -245,7 +238,7 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
         code: manifest.code,
         url: manifest.url,
         startsAt: new Date(manifest.startsAt),
-        endsAt: new Date(manifest.endsAt),
+        endsAt: manifest.endsAt === null ? null : new Date(manifest.endsAt),
         updatedAt: reviewedAt,
       };
       await database.batch([
@@ -282,7 +275,6 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
     ? await database.select({ id: apps.id, slug: apps.slug }).from(apps)
       .where(and(inArray(apps.slug, relatedSlugs), isNull(apps.deletedAt)))
     : [];
-  if (related.length !== relatedSlugs.length) throw new CatalogueDecisionError("missing-related-app");
   if (!revision.preparedMedia.some((asset) => asset.role === "icon")
     || !revision.preparedMedia.some((asset) => asset.role === "preview_image")) {
     throw new CatalogueDecisionError("missing-media");
@@ -301,15 +293,19 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
     sourceType: manifest.sourceType,
     youtubeUrl: manifest.youtubeUrl,
     status: "published" as const,
-    isFeatured: manifest.isFeatured,
-    isEditorsPick: manifest.isEditorsPick,
-    featuredAt: manifest.isFeatured ? now : null,
     publishedAt: now,
     updatedAt: now,
   };
   const normalizedCategories = normalizeManifestCategories(manifest.categories);
   const appQuery = revision.changeType === "create"
-    ? database.insert(apps).values({ id: appId, ...appValues, createdAt: now })
+    ? database.insert(apps).values({
+      id: appId,
+      ...appValues,
+      isFeatured: manifest.isFeatured,
+      isEditorsPick: manifest.isEditorsPick,
+      featuredAt: manifest.isFeatured ? now : null,
+      createdAt: now,
+    })
     : database.update(apps).set({ ...appValues, publishedAt: sql`coalesce(${apps.publishedAt}, ${now.getTime()})` }).where(and(eq(apps.id, appId), isNull(apps.deletedAt)));
 
   await database.batch([
@@ -340,6 +336,27 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
       altText: asset.altText,
       createdAt: now,
     })),
+    // A published app may have named this slug before it existed. Complete those
+    // relationships now, using only each source app's latest published manifest.
+    database.insert(appRelationships).select(sql`
+      select lower(hex(randomblob(16))), source.id, ${appId}, ${now.getTime()}
+      from catalogue_revisions as revision
+      join apps as source on source.id = revision.app_id
+      where revision.status = 'published'
+        and source.status = 'published'
+        and source.deleted_at is null
+        and source.id <> ${appId}
+        and revision.id = (
+          select newest.id from catalogue_revisions as newest
+          where newest.app_id = source.id and newest.status = 'published'
+          order by newest.reviewed_at desc, newest.created_at desc, newest.id desc
+          limit 1
+        )
+        and exists (
+          select 1 from json_each(revision.manifest, '$.relatedAppSlugs') as related
+          where related.value = ${manifest.slug}
+        )
+    `).onConflictDoNothing(),
     database.update(catalogueRevisions).set({ appId, status: publicationStatus(revision.id, revision.sourcePath, revision.createdAt), errors: [], reviewedAt: now })
       .where(eq(catalogueRevisions.id, revision.id)),
   ]);
@@ -350,6 +367,7 @@ async function applyCatalogueDecision(revisionId: string, intent: DecisionIntent
 }
 
 function revalidateCataloguePaths() {
+  invalidatePublicCatalogueCache();
   revalidatePath("/");
   revalidatePath("/deals");
   revalidatePath("/dashboard", "layout");

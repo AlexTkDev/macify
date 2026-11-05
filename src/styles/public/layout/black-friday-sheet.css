@@ -1,0 +1,84 @@
+.black-friday-sheet {
+  position: fixed;
+  inset: 0;
+  width: min(60rem, calc(100% - 3rem));
+  max-width: none;
+  max-height: calc(100dvh - 3rem);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 16px;
+  background: var(--public-canvas);
+  color: var(--public-ink);
+  font-family: var(--font-body);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 16%);
+}
+.black-friday-sheet[open] { animation: black-friday-sheet-arrive 440ms cubic-bezier(.22, 1, .36, 1) both; }
+.black-friday-sheet::backdrop { background: rgb(20 22 26 / 28%); backdrop-filter: blur(5px); animation: black-friday-backdrop-arrive 260ms ease-out both; }
+.black-friday-sheet-surface { position: relative; isolation: isolate; overflow: hidden; padding: 4.5rem 6rem 2rem; }
+.black-friday-sheet-close { position: absolute; z-index: 2; top: 1rem; right: 1rem; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: 50%; background: #e9e9ed; color: #4d4e57; cursor: pointer; }
+.black-friday-sheet-close:hover { background: #dddde3; color: #16171b; }
+.black-friday-sheet-apps { pointer-events: none; }
+.black-friday-sheet-app { position: absolute; object-fit: contain; filter: drop-shadow(0 8px 8px rgb(0 0 0 / 8%)); }
+.black-friday-sheet-app-one { top: 3rem; left: 3rem; transform: rotate(-12deg); }
+.black-friday-sheet-app-two { top: 5rem; right: 3rem; transform: rotate(12deg); }
+.black-friday-sheet-app-three { bottom: 3rem; left: 4rem; transform: rotate(9deg); }
+.black-friday-sheet-app-four { bottom: 3rem; right: 3rem; transform: rotate(-10deg); }
+.black-friday-sheet-app-five { top: 48%; left: 1.25rem; transform: rotate(-8deg); }
+.black-friday-sheet-app-six { top: 48%; right: 1.25rem; transform: rotate(8deg); }
+.black-friday-sheet-content { position: relative; max-width: 39rem; margin-inline: auto; text-align: center; }
+.black-friday-sheet h2 { margin: 0; color: var(--public-ink); font-family: var(--public-display-font); font-size: clamp(2.3rem, 6vw, 4.2rem); line-height: 1.02; font-weight: 400; letter-spacing: -.025em; text-wrap: balance; }
+.black-friday-sheet h2 span { color: inherit; }
+.black-friday-sheet-content > p { max-width: 44ch; margin: 1.25rem auto 1.75rem; color: var(--public-note-color); font-family: var(--public-note-font); font-size: var(--public-note-size); font-weight: 500; line-height: 1.25; letter-spacing: .005em; text-wrap: pretty; }
+.black-friday-sheet-form { margin-top: 1.5rem; text-align: left; }
+.black-friday-sheet-form .black-friday-form-row { display: flex; gap: .65rem; }
+.black-friday-sheet-form input { flex: 1; width: 100%; min-width: 0; min-height: 2.875rem; padding: .65rem 1.1rem; border: 1px solid var(--public-line); border-radius: 999px; background: var(--color-white); color: var(--public-ink); font: inherit; font-size: .95rem; }
+.black-friday-sheet-form input::placeholder { color: var(--public-text-secondary); }
+.black-friday-sheet-form button { display: inline-flex; flex: none; align-items: center; justify-content: center; gap: .5rem; min-height: 2.875rem; padding: .65rem 1.1rem; border: 0; border-radius: 999px; background: var(--public-ink); color: var(--color-white); font: inherit; font-size: .9rem; font-weight: 650; cursor: pointer; }
+.black-friday-sheet-form button:hover { background: var(--button-dark-hover); color: var(--button-dark-hover-ink); }
+.black-friday-sheet-form button:disabled { opacity: .7; cursor: wait; }
+.black-friday-sheet-content > .black-friday-sheet-note { max-width: none; margin: 1rem 0 0; font-family: var(--font-body); font-size: .75rem; line-height: 1.5; }
+.black-friday-sheet-form .signup-feedback { margin: .75rem 0 0; color: #923326; font-size: .82rem; line-height: 1.5; }
+.black-friday-sheet-form .signup-feedback a { color: inherit; text-decoration: underline; }
+.black-friday-sheet-content > .black-friday-sheet-success { color: #285b3b; font-size: .85rem; }
+.black-friday-sheet-footer { position: relative; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem .75rem; margin-top: 1.25rem; }
+.black-friday-sheet-footer > button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; min-height: 2.75rem; padding: .55rem 1rem; border: 0; border-radius: 999px; background: transparent; color: var(--public-text-secondary); font: inherit; font-size: .78rem; font-weight: 550; cursor: pointer; }
+.black-friday-sheet-footer button:hover { background: var(--color-surface-soft); color: var(--public-ink); }
+.black-friday-sheet :focus-visible { outline: 2px solid var(--play-blue); outline-offset: 3px; }
+@keyframes black-friday-sheet-arrive { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes black-friday-backdrop-arrive { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 760px) {
+  .black-friday-sheet-surface { padding: 5rem 2rem 1.5rem; }
+  .black-friday-sheet-app { width: 30px; height: 30px; top: 1.5rem; bottom: auto; right: auto; }
+  .black-friday-sheet-app-one { left: 1.25rem; }
+  .black-friday-sheet-app-two { left: 3.65rem; }
+  .black-friday-sheet-app-three { left: 6.05rem; }
+  .black-friday-sheet-app-four { left: 8.45rem; }
+  .black-friday-sheet-app-five { left: 10.85rem; }
+  .black-friday-sheet-app-six { left: 13.25rem; }
+}
+@media (max-width: 480px) {
+  .black-friday-sheet { width: calc(100% - 1.5rem); max-height: calc(100dvh - 1.5rem); }
+  .black-friday-sheet-surface { padding-inline: 1.25rem; }
+  .black-friday-sheet-form .black-friday-form-row { flex-direction: column; }
+  .black-friday-sheet-content > p { font-size: 1.3rem; }
+  .black-friday-sheet-content > .black-friday-sheet-note { font-size: .75rem; }
+}
+@media (prefers-reduced-motion: reduce) { .black-friday-sheet[open] { animation: none; } .black-friday-sheet::backdrop { animation: none; backdrop-filter: none; } }
+
+.public-site .black-friday-sheet-explore {
+  --action-rest: color-mix(in srgb, var(--play-blue) 7%, var(--public-canvas));
+  --action-hover: color-mix(in srgb, var(--play-blue) 13%, var(--public-canvas));
+  --action-active: color-mix(in srgb, var(--play-blue) 19%, var(--public-canvas));
+  --action-ink: var(--play-blue);
+  --action-hover-ink: var(--play-blue);
+  --action-border: transparent;
+  --action-radius: 999px;
+}
+.public-site :is(.black-friday-form, .black-friday-sheet-form) :is(input, button[type="submit"]) {
+  box-sizing: border-box;
+  height: 2.875rem;
+  min-height: 2.875rem;
+  padding-block: .65rem;
+}

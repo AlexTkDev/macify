@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://macify.app/catalog/schema/deal.schema.json",
+  "$comment": "Run catalogue:validate as well: filename, existing application, public URL restrictions, trimmed code length, and end date after start date require additional checks.",
   "title": "Macify deal manifest",
   "type": "object",
   "additionalProperties": false,
@@ -22,6 +23,6 @@
     "code": { "type": ["string", "null"], "minLength": 1, "maxLength": 80 },
     "url": { "type": "string", "format": "uri", "pattern": "^https://", "maxLength": 2000 },
     "startsAt": { "type": "string", "format": "date-time" },
-    "endsAt": { "type": "string", "format": "date-time" }
+    "endsAt": { "type": ["string", "null"], "format": "date-time", "description": "Offer end timestamp, or null for no scheduled expiry." }
   }
 }

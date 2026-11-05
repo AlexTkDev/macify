@@ -4,7 +4,7 @@ import { ArrowLeft, ExternalLink, SlidersHorizontal } from "lucide-react";
 import { ApplicationHero } from "@/components/application-detail/application-hero";
 import { ApplicationOverview } from "@/components/application-detail/application-overview";
 import { RelatedApplications } from "@/components/application-detail/related-applications";
-import { getDashboardApplicationDetail } from "@/lib/app-editor-data";
+import { getDashboardApplicationDetail } from "@/lib/dashboard/app-editor-data";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +16,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
   const preview = media.find((asset) => asset.role === "preview_image");
   const screenshots = media.filter((asset) => asset.role === "screenshot");
   const now = new Date();
-  const dealStatus = deal ? deal.startsAt > now ? "Scheduled offer" : deal.endsAt < now ? "Expired offer" : "Current offer" : null;
+  const dealStatus = deal ? deal.startsAt > now ? "Scheduled offer" : deal.endsAt !== null && deal.endsAt < now ? "Expired offer" : "Current offer" : null;
 
   return (
     <>
@@ -26,8 +26,8 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           <span aria-current="page">{application.name}</span>
         </nav>
         <div className="dashboard-actions">
-          {application.status === "published" && <Link className="button-secondary" href={`/apps/${application.slug}`}>View public page <ExternalLink aria-hidden="true" size={15} /></Link>}
-          <Link className="button-primary" href={`/dashboard/apps/${application.id}/edit`}><SlidersHorizontal aria-hidden="true" size={15} /> Manage listing</Link>
+          {application.status === "published" && <Link data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" href={`/apps/${application.slug}`}>View public page <ExternalLink aria-hidden="true" size={15} /></Link>}
+          <Link data-ui-button="" data-variant="primary" data-size="md" className="button-primary" href={`/dashboard/apps/${application.id}/edit`}><SlidersHorizontal aria-hidden="true" size={15} /> Manage listing</Link>
         </div>
       </div>
 
@@ -39,7 +39,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
 
       <article className="application-page application-presentation dashboard-listing-preview" aria-label="Application listing preview">
         <ApplicationHero application={application} icon={icon} mediaScope="dashboard" />
-        <ApplicationOverview application={application} preview={preview} screenshots={screenshots} mediaScope="dashboard" />
+        <ApplicationOverview application={application} deal={deal} preview={preview} screenshots={screenshots} mediaScope="dashboard" />
         <RelatedApplications applications={related} mediaScope="dashboard" />
       </article>
 
@@ -51,7 +51,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           {application.billingType && <div><dt>Billing</dt><dd>{application.billingType === "subscription" ? "Subscription" : "One-time purchase"}</dd></div>}
           <div><dt>First published</dt><dd>{application.publishedAt ? application.publishedAt.toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "UTC" }) : "Not yet published"}</dd></div>
           <div><dt>Last updated</dt><dd>{application.updatedAt.toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "UTC" })}</dd></div>
-          {deal && <div><dt>{dealStatus}</dt><dd><a href={deal.url} rel="noreferrer" target="_blank">{deal.discountPercent}% off <ExternalLink aria-hidden="true" size={13} /></a>{deal.code && <span>Code: <code>{deal.code}</code></span>}<span>{deal.startsAt.toLocaleDateString("en-US", { timeZone: "UTC" })} to {deal.endsAt.toLocaleDateString("en-US", { timeZone: "UTC" })}</span></dd></div>}
+          {deal && <div><dt>{dealStatus}</dt><dd><a href={deal.url} rel="noreferrer" target="_blank">{deal.discountPercent}% off <ExternalLink aria-hidden="true" size={13} /></a>{deal.code && <span>Code: <code>{deal.code}</code></span>}<span>From {deal.startsAt.toLocaleDateString("en-US", { timeZone: "UTC" })}{deal.endsAt === null ? " · No scheduled end date" : ` to ${deal.endsAt.toLocaleDateString("en-US", { timeZone: "UTC" })}`}</span></dd></div>}
         </dl>
       </section>
     </>

@@ -12,7 +12,7 @@ export function LoginForm() {
       {state.error && <p className="editor-login-error" role="alert">{state.error}</p>}
       <label><span>Email address</span><input autoComplete="username" inputMode="email" name="email" required type="email" /></label>
       <label><span>Password</span><input autoComplete="current-password" name="password" required type="password" /></label>
-      <button disabled={pending} type="submit">{pending ? "Signing in…" : "Sign in"}</button>
+      <button data-ui-button="" data-variant="primary" data-size="lg" data-pending={pending ? "true" : undefined} aria-busy={pending} disabled={pending} type="submit">{pending ? "Signing in…" : "Sign in"}</button>
     </form>
   );
 }

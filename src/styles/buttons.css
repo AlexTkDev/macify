@@ -1,0 +1,213 @@
+/* Shared action sizes, variants and interaction states. */
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant] {
+  --ui-button-height: 2.25rem;
+  --ui-button-padding: 1rem;
+  --ui-button-font-size: 0.875rem;
+  --ui-button-bg: #101217;
+  --ui-button-hover: #272a30;
+  --ui-button-pressed: #34383f;
+  --ui-button-ink: #fff;
+  --ui-button-border: transparent;
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--ui-button-height);
+  height: auto;
+  padding: 0.5rem var(--ui-button-padding);
+  border: 1px solid var(--ui-button-border);
+  border-radius: 1.5rem;
+  background: var(--ui-button-bg);
+  color: var(--ui-button-ink);
+  box-shadow: none;
+  font-family: var(--font-source-sans), var(--font-body);
+  font-size: var(--ui-button-font-size);
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  transform: none;
+  transform-origin: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1), background-color 100ms ease-out, border-color 100ms ease-out;
+}
+
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant="secondary"] {
+  --ui-button-bg: #eeeef0;
+  --ui-button-hover: #e2e2e6;
+  --ui-button-pressed: #d7d7dd;
+  --ui-button-ink: #17171b;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant="outline"] {
+  --ui-button-bg: transparent;
+  --ui-button-hover: #eeeef0;
+  --ui-button-pressed: #e2e2e6;
+  --ui-button-ink: #17171b;
+  --ui-button-border: var(--color-line-strong);
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant="ghost"] {
+  --ui-button-bg: transparent;
+  --ui-button-hover: #eeeef0;
+  --ui-button-pressed: #e2e2e6;
+  --ui-button-ink: #17171b;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant="danger-soft"] {
+  --ui-button-bg: #ffebe9;
+  --ui-button-hover: #ffdad6;
+  --ui-button-pressed: #ffc9c3;
+  --ui-button-ink: #a12018;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-size="sm"] {
+  --ui-button-height: 2rem;
+  --ui-button-padding: 0.75rem;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-size="lg"] {
+  --ui-button-height: 2.5rem;
+  --ui-button-font-size: 1rem;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-size="compact"] {
+  --ui-button-height: 2rem;
+  --ui-button-padding: 0.65rem;
+  --ui-button-font-size: 0.75rem;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-icon-only] {
+  width: var(--ui-button-height);
+  height: var(--ui-button-height);
+  min-width: var(--ui-button-height);
+  padding: 0;
+  flex: none;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant] > svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  :is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant]:not(:disabled):not([aria-disabled="true"]):hover {
+    background: var(--ui-button-hover);
+    color: var(--ui-button-ink);
+    border-color: var(--ui-button-border);
+    box-shadow: none;
+    transform: none;
+  }
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant]:focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 3px;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant]:not(:disabled):not([aria-disabled="true"]):active {
+  background: var(--ui-button-pressed);
+  color: var(--ui-button-ink);
+  transform: scale(0.97);
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant]:is(:disabled, [aria-disabled="true"]) {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-pending="true"] {
+  opacity: 0.75;
+  cursor: progress;
+}
+:is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-pending="true"]::before {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: button-pending-spin 700ms linear infinite;
+}
+@keyframes button-pending-spin { to { transform: rotate(360deg); } }
+
+/* Toggle groups retain their selected state; search keeps its 32px footprint. */
+.public-site .directory-view-tabs [data-ui-button][data-variant="ghost"][aria-current="page"] {
+  --ui-button-bg: #101217;
+  --ui-button-hover: #272a30;
+  --ui-button-pressed: #34383f;
+  --ui-button-ink: #fff;
+}
+.public-site .public-navigation [data-ui-button][data-variant] {
+  --ui-button-bg: transparent;
+  --ui-button-hover: transparent;
+  --ui-button-pressed: transparent;
+  --ui-button-ink: var(--color-ink);
+  background: transparent;
+  color: var(--color-ink);
+}
+.public-site .public-navigation [data-ui-button][aria-current="page"] {
+  font-weight: 750;
+}
+@media (min-width: 52.001rem) {
+  .public-site .public-navigation [data-ui-button][data-variant].public-submit-link {
+    --ui-button-bg: #101217;
+    --ui-button-hover: #272a30;
+    --ui-button-pressed: #34383f;
+    --ui-button-ink: #fff;
+    padding-inline: 1rem;
+    background: var(--ui-button-bg);
+    color: var(--ui-button-ink);
+  }
+}
+.public-site .directory-search [data-ui-button][data-icon-only] {
+  --ui-button-height: calc(var(--directory-control-height) - 2px);
+}
+.public-site [data-ui-button][data-layout="coupon"] { padding: 0; }
+.public-site :is(.black-friday-form, .black-friday-sheet-form) .black-friday-form-row > input {
+  height: 2.5rem;
+  min-height: 2.5rem;
+  padding-block: 0.5rem;
+  border-radius: 1.5rem;
+}
+.public-site .black-friday-form-row > [data-ui-button][data-size] {
+  height: var(--ui-button-height);
+  min-height: var(--ui-button-height);
+  padding-block: 0.5rem;
+}
+.public-site [data-ui-button][data-layout="coupon"] :is(.deal-code-value, .deal-code-confirmation) {
+  min-height: calc(var(--ui-button-height) - 2px);
+  padding: 0 var(--ui-button-padding);
+  font-size: inherit;
+  font-weight: inherit;
+}
+@media (max-width: 48rem) {
+  .public-site :is(.black-friday-form, .black-friday-sheet-form) .black-friday-form-row > input { height: 2.75rem; min-height: 2.75rem; }
+  :is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant] { --ui-button-height: 2.5rem; }
+  :is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-size="sm"] { --ui-button-height: 2.25rem; }
+  :is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-size="lg"] { --ui-button-height: 2.75rem; }
+  :is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-size="compact"] { --ui-button-height: 2rem; }
+}
+@media (max-width: 52rem) {
+  .public-site .public-navigation [data-ui-button][data-variant] {
+    --ui-button-height: 2.75rem;
+    width: fit-content;
+    align-self: flex-start;
+    justify-content: flex-start;
+    padding: 0.55rem 0;
+    border-radius: 0.4rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-align: left;
+  }
+  .public-site .public-navigation [data-ui-button][data-variant].public-surprise-link { display: none; }
+  .public-site .public-navigation [data-ui-button][data-variant="ghost"][aria-current="page"] {
+    --ui-button-bg: transparent;
+    background: transparent;
+    font-weight: 750;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant] { transition: none; }
+  :is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-variant]:active { transform: none; }
+  :is(.public-site, .dashboard-shell, .editor-login-page) [data-ui-button][data-pending="true"]::before { animation: none; }
+}

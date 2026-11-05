@@ -87,7 +87,7 @@ CREATE TABLE `deals` (
   `code` text,
   `url` text NOT NULL,
   `starts_at` integer NOT NULL,
-  `ends_at` integer NOT NULL,
+  `ends_at` integer,
   `created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
   `updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
   FOREIGN KEY (`app_id`) REFERENCES `apps` (`id`) ON DELETE cascade
@@ -123,3 +123,13 @@ CREATE TABLE `admin_login_attempts` (
 );
 
 CREATE INDEX `admin_login_attempts_expires_idx` ON `admin_login_attempts` (`expires_at`);
+
+-- OpenNext on-demand cache invalidation metadata. Cache payloads live under
+-- the dedicated next-cache/ prefix in R2.
+CREATE TABLE `revalidations` (
+  `tag` text NOT NULL,
+  `revalidatedAt` integer NOT NULL,
+  `stale` integer,
+  `expire` integer,
+  UNIQUE (`tag`) ON CONFLICT REPLACE
+);

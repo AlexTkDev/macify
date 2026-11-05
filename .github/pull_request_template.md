@@ -1,6 +1,6 @@
 <!--
-Public pull requests may only add one new catalog/apps/<slug>.json or catalog/deals/<slug>.json file and
-change nothing else. For bugs, ideas, code, documentation, design, or changes
+Public pull requests may add one new app, one new deal, or a matching new app-and-deal pair,
+and change nothing else. For bugs, ideas, code, documentation, design, or changes
 to an existing listing, open an issue instead.
 -->
 
@@ -14,7 +14,9 @@ For an application, link official sources for its features, pricing, privacy, re
 
 ## Checklist
 
-- [ ] This pull request adds exactly one new `catalog/apps/<slug>.json` or `catalog/deals/<slug>.json` file and changes nothing else.
-- [ ] I completed every field and followed [`docs/EDITORIAL.md`](../docs/EDITORIAL.md), including deal verification when applicable.
+- [ ] This pull request adds one new app, one new deal, or matching new `catalog/apps/<slug>.json` and `catalog/deals/<slug>.json` files, and changes nothing else.
+- [ ] I followed the [contribution guidelines](../CONTRIBUTING.md), including deal verification when applicable.
+- [ ] For an application, `isFeatured` and `isEditorsPick` are `false` or omitted.
 - [ ] For an application, I used direct public HTTPS image source URLs and did not commit image binaries.
+- [ ] For a deal, I linked official confirmation of its discount, code, dates, and eligibility restrictions.
 - [ ] I ran `npm run catalogue:validate` successfully.

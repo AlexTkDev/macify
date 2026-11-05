@@ -1,0 +1,10 @@
+{
+  "$schema": "../schema/deal.schema.json",
+  "schemaVersion": 1,
+  "appSlug": "compressx",
+  "discountPercent": 40,
+  "code": "BFCM26",
+  "url": "https://compresto.app/",
+  "startsAt": "2026-11-02T00:00:00+05:45",
+  "endsAt": null
+}

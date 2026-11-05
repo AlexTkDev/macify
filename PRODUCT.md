@@ -1,9 +1,5 @@
 # Product
 
-## Register
-
-brand
-
 ## Users
 
 Mac users comparing software for a specific need, and developers presenting useful native applications to that audience.

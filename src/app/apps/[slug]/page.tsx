@@ -4,9 +4,9 @@ import { cache, Suspense } from "react";
 import { ApplicationHero } from "@/components/application-detail/application-hero";
 import { ApplicationOverview } from "@/components/application-detail/application-overview";
 import { RelatedApplications } from "@/components/application-detail/related-applications";
-import { PublicShell } from "@/components/public-site";
-import { mediaUrl } from "@/components/public-app-card";
-import { getPublishedApplicationBySlug } from "@/lib/published-app-data";
+import { PublicShell } from "@/components/site/public-site";
+import { mediaUrl } from "@/components/site/public-app-card";
+import { getPublishedApplicationBySlug } from "@/lib/directory/published-app-data";
 import { ApplicationVisitors } from "@/components/application-detail/application-visitors";
 
 export const dynamic = "force-dynamic";
@@ -60,7 +60,7 @@ export default async function ApplicationPage({ params }: { params: Promise<{ sl
             </Suspense>
           }
         />
-        <ApplicationOverview application={application} preview={preview} screenshots={screenshots} />
+        <ApplicationOverview application={application} deal={application.deal} preview={preview} screenshots={screenshots} />
         <RelatedApplications applications={application.related} />
       </main>
       <script dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} type="application/ld+json" />

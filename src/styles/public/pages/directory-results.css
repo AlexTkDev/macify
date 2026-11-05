@@ -1,0 +1,197 @@
+.directory-app-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 3.6rem 3rem;
+}
+
+.directory-app-row {
+  position: relative;
+  min-width: 0;
+  display: block;
+  text-align: left;
+}
+
+.directory-app-row:focus-visible {
+  border-radius: 0.45rem;
+  outline: 0.18rem solid var(--play-blue);
+  outline-offset: 0.3rem;
+}
+
+.directory-app-preview {
+  width: 100%;
+  aspect-ratio: 1200 / 630;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 0.75rem;
+  background: var(--color-black);
+}
+
+
+
+.directory-app-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-ink-strong) 13%, transparent) 0%,
+    color-mix(in srgb, var(--color-ink-strong) 8%, transparent) 100%
+  );
+}
+
+.directory-app-preview::after {
+  content: "";
+  width: 62%;
+  height: 220%;
+  position: absolute;
+  top: -60%;
+  left: -42%;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-action-soft) 1.5%, transparent) 18%,
+    color-mix(in srgb, var(--color-action-soft) 8%, transparent) 34%,
+    color-mix(in srgb, var(--color-white) 24%, transparent) 50%,
+    color-mix(in srgb, var(--color-action-soft) 8%, transparent) 66%,
+    color-mix(in srgb, var(--color-action-soft) 1.5%, transparent) 82%,
+    transparent 100%
+  );
+  transform: translate3d(0, 0, 0) rotate(18deg);
+}
+
+.directory-app-preview > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.directory-app-preview-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: var(--play-lilac);
+}
+
+.directory-app-identity {
+  margin-top: 1rem;
+  min-height: 4.35rem;
+  display: grid;
+  grid-template-columns: 3.75rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.9rem;
+}
+
+.directory-app-identity-icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+
+.directory-app-identity-icon > .public-app-icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  box-shadow: 0 0.28rem 0.6rem rgb(var(--shadow-color) / 0.17), inset 0 0 0 1px color-mix(in srgb, var(--color-white) 38%, transparent);
+}
+
+.directory-app-copy {
+  min-width: 0;
+  display: block;
+}
+
+.directory-app-copy strong {
+  display: block;
+  overflow: hidden;
+  color: var(--public-ink);
+  font-size: 1.08rem;
+  font-weight: 850;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.directory-app-copy > span:not(.directory-app-name) {
+  min-height: 3.1rem;
+  margin-top: 0.34rem;
+  display: block;
+  color: var(--public-text);
+  font-size: 1rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .directory-app-preview::before {
+    opacity: 1;
+  }
+
+  .directory-app-row:hover .directory-app-preview::after,
+  .directory-app-row:focus-visible .directory-app-preview::after {
+    animation: directory-preview-shimmer 1400ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+}
+
+@keyframes directory-preview-shimmer {
+  0% {
+    opacity: 0.28;
+    transform: translate3d(0, 0, 0) rotate(18deg);
+  }
+  10% { opacity: 1; }
+  86% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate3d(235%, 0, 0) rotate(18deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .directory-app-preview::before { opacity: 0; }
+  .directory-app-preview::after { display: none; }
+  .deal-code-button,
+  .deal-code-value,
+  .deal-code-confirmation,
+  .deals-hero-action,
+  .deal-card-action { transition: none; }
+  .deals-hero-action:active,
+  .deal-card-action:hover,
+  .deal-card-action:active { transform: none; }
+}
+
+.directory-loading-identity { display: block; height: 5rem; }
+
+.directory-loading-preview { background: var(--color-surface-muted); }
+
+/* Keep the card link and the featured control as separate interactive targets. */
+.directory-app-link::after { content: ""; position: absolute; inset: 0; }
+.directory-app-link:focus-visible { outline: none; }
+.directory-app-row:has(.directory-app-link:focus-visible) { outline: 0.18rem solid var(--play-blue); outline-offset: 0.3rem; border-radius: 0.45rem; }
+.directory-app-name { display: flex; align-items: center; gap: 0.35rem; min-height: 1.5rem; }
+.directory-app-link { min-width: 0; }
+.featured-seal { display: inline-flex; flex-shrink: 0; }
+.featured-seal-trigger { position: relative; z-index: 3; display: grid; place-items: center; width: 1.55rem; height: 1.55rem; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+.featured-seal-mark { width: 1.3rem; height: 1.3rem; overflow: visible; color: var(--color-offer-surface); filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--color-warning) 18%, transparent)); transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1); }
+.editors-pick-seal .featured-seal-mark { color: var(--color-green-bright); filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--color-green) 18%, transparent)); }
+.featured-seal-trigger:hover .featured-seal-mark { transform: scale(1.08); }
+.featured-seal-trigger:active { transform: translateY(1px); }
+.featured-seal-trigger:focus-visible { outline: 2px solid var(--play-blue); outline-offset: 2px; }
+.featured-seal-panel { position: absolute; z-index: 5; top: calc(100% - 2.8rem); left: 0; width: max-content; max-width: calc(100vw - 2rem); padding-top: 0.55rem; }
+.featured-seal-content { display: grid; gap: 0.6rem; padding: 0.8rem; border: 1px solid var(--color-line); border-radius: 0.65rem; background: var(--public-canvas); box-shadow: 0 0.25rem 0.5rem rgb(var(--shadow-color) / 0.1); color: var(--public-ink); }
+.featured-seal-description { display: block; font-size: 0.94rem; font-weight: 800; line-height: 1.3; white-space: nowrap; }
+.featured-seal-content a { width: fit-content; display: inline-flex; align-items: center; color: var(--color-action-deep); font-size: 0.84rem; font-weight: 800; line-height: 1.3; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.2em; transition: color 160ms ease; }
+.featured-seal-content a:hover { color: var(--color-action-dark); }
+.featured-seal-content a:focus-visible { outline: 2px solid var(--play-blue); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .featured-seal-mark, .featured-seal-content a { transition: none; } }

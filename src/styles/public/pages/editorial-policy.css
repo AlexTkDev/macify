@@ -1,0 +1,29 @@
+/* Editorial policy shares the submission page's visual system. */
+.editorial-hero h1 { max-width: none; }
+
+.editorial-hero .public-content-hero-copy > p:first-child {
+  color: var(--color-ink-soft);
+  font-size: clamp(1.15rem, 1.9vw, 1.45rem);
+}
+
+.editorial-hero small {
+  display: block;
+  margin-top: 1.5rem;
+  color: var(--public-text-secondary);
+  font-size: var(--public-small-size);
+}
+
+.editorial-page .public-content-feature-aside > p {
+  margin: 1.75rem 0 0;
+  color: var(--color-line-strong);
+  font-size: var(--public-reading-size);
+  line-height: 1.7;
+}
+
+.editorial-corrections a {
+  margin: 0;
+  display: inline;
+  color: var(--play-blue);
+  font-size: inherit;
+  font-weight: 700;
+}

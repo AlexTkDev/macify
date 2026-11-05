@@ -1,13 +1,30 @@
-import { descriptionParts } from "@/lib/application-description";
+import { descriptionParts } from "@/lib/shared/application-description";
 import Image from "next/image";
-import { ArrowUpRight, Play } from "lucide-react";
-import { MarkdownContent } from "@/components/markdown-content";
-import { mediaUrl } from "@/components/public-app-card";
-import type { ApplicationMedia, PublishedApplication } from "@/components/application-detail/types";
+import {
+  ApplicationSidebar,
+  type SidebarApplication,
+} from "./application-sidebar";
+import { MarkdownContent } from "@/components/site/markdown-content";
+import { mediaUrl } from "@/components/site/public-app-card";
+import type {
+  ApplicationMedia,
+  PublishedApplication,
+} from "@/components/application-detail/types";
 
-type OverviewApplication = Pick<PublishedApplication, "name" | "description" | "tagline" | "websiteUrl" | "youtubeUrl">;
+type OverviewApplication = SidebarApplication &
+  Pick<PublishedApplication, "description" | "tagline">;
 
-function EditorialImage({ application, media, preload = false, mediaScope }: { application: OverviewApplication; media: ApplicationMedia; preload?: boolean; mediaScope: "public" | "dashboard" }) {
+function EditorialImage({
+  application,
+  media,
+  preload = false,
+  mediaScope,
+}: {
+  application: OverviewApplication;
+  media: ApplicationMedia;
+  preload?: boolean;
+  mediaScope: "public" | "dashboard";
+}) {
   return (
     <Image
       alt={media.altText ?? `${application.name} application preview`}
@@ -28,19 +45,39 @@ export function ApplicationOverview({
   preview,
   screenshots,
   mediaScope = "public",
+  deal,
 }: {
   application: OverviewApplication;
+  deal?: PublishedApplication["deal"] | null;
   mediaScope?: "public" | "dashboard";
   preview?: ApplicationMedia;
   screenshots: ApplicationMedia[];
 }) {
-  const description = descriptionParts(application.description, application.tagline, application.name);
+  const description = descriptionParts(
+    application.description,
+    application.tagline,
+    application.name,
+  );
   return (
     <div className="application-overview">
-      {preview && <figure className="application-preview"><EditorialImage mediaScope={mediaScope} application={application} media={preview} preload /></figure>}
+      {preview && (
+        <figure className="application-preview">
+          <EditorialImage
+            mediaScope={mediaScope}
+            application={application}
+            media={preview}
+            preload
+          />
+        </figure>
+      )}
       <div className="application-body">
         <article className="application-story">
-          {description.lead && <div className="application-story-lead"><MarkdownContent>{description.lead}</MarkdownContent></div>}
+          <h2 className="application-about-title">About {application.name}</h2>
+          {description.lead && (
+            <div className="application-story-lead">
+              <MarkdownContent>{description.lead}</MarkdownContent>
+            </div>
+          )}
           {description.sections.length > 0 && (
             <div className="application-story-sections">
               {description.sections.map((section) => (
@@ -51,16 +88,23 @@ export function ApplicationOverview({
               ))}
             </div>
           )}
-          <a className="application-website" href={application.websiteUrl} rel="noreferrer" target="_blank">
-            Visit site
-            <ArrowUpRight aria-hidden="true" size={19} strokeWidth={1.8} />
-          </a>
         </article>
-        {application.youtubeUrl && <aside className="application-demo"><a href={application.youtubeUrl} rel="noreferrer" target="_blank"><span><Play size={15} /> Watch the demo</span><ArrowUpRight size={14} /></a></aside>}
+        <ApplicationSidebar application={application} deal={deal} />
       </div>
       {screenshots.length > 0 && (
-        <div className="application-screenshots" aria-label={`${application.name} screenshots`}>
-          {screenshots.map((screenshot) => <figure key={screenshot.id}><EditorialImage mediaScope={mediaScope} application={application} media={screenshot} /></figure>)}
+        <div
+          className="application-screenshots"
+          aria-label={`${application.name} screenshots`}
+        >
+          {screenshots.map((screenshot) => (
+            <figure key={screenshot.id}>
+              <EditorialImage
+                mediaScope={mediaScope}
+                application={application}
+                media={screenshot}
+              />
+            </figure>
+          ))}
         </div>
       )}
     </div>

@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BadgeCheck, GitPullRequest, Star, SlidersHorizontal } from "lucide-react";
-import { getApplicationsDashboardData } from "@/lib/app-editor-data";
-import { mediaUrl } from "@/components/public-app-card";
-import { cn } from "@/lib/utils";
+import { BadgeCheck, Download, GitPullRequest, Star, SlidersHorizontal } from "lucide-react";
+import { getApplicationsDashboardData } from "@/lib/dashboard/app-editor-data";
+import { mediaUrl } from "@/components/site/public-app-card";
+import { cn } from "@/lib/shared/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -14,12 +14,15 @@ export default async function DashboardPage() {
     <>
       <header className="dashboard-header">
         <div><h1>Applications</h1><p>Review your listings and manage where they appear.</p></div>
-        <Link className="button-primary" href="/dashboard/catalogue"><GitPullRequest size={16} /> Review app updates</Link>
+        <div className="dashboard-actions">
+          <a data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" download href="/dashboard/export"><Download aria-hidden="true" size={16} /> Export CSV</a>
+          <Link data-ui-button="" data-variant="primary" data-size="md" className="button-primary" href="/dashboard/catalogue"><GitPullRequest aria-hidden="true" size={16} /> Review app updates</Link>
+        </div>
       </header>
 
       <section className="status-strip" aria-label="Directory status">
         <div><span>Published</span><strong>{stats.published}</strong></div>
-        <div><span>Awaiting review</span><strong>{pendingRevisions}</strong></div>
+        <div><span>App updates awaiting review</span><strong>{pendingRevisions}</strong></div>
         <div><span>Unpublished</span><strong>{stats.total - stats.published}</strong></div>
       </section>
 
@@ -49,7 +52,7 @@ export default async function DashboardPage() {
                   <span className={cn(app.status === "published" ? "published-badge" : "draft-badge")}>{app.status === "published" ? "Published" : app.status === "archived" ? "Unpublished" : "Draft"}</span>
                   {app.isFeatured && <span className="featured-badge"><Star aria-hidden="true" size={12} /> Featured</span>}
                   {app.isEditorsPick && <span className="editors-pick-badge"><BadgeCheck aria-hidden="true" size={12} /> Editor’s Pick</span>}
-                  <Link className="dashboard-card-manage" href={`/dashboard/apps/${app.id}/edit`} aria-label={`Manage ${app.name}`}><SlidersHorizontal aria-hidden="true" size={15} /> Manage</Link>
+                  <Link data-ui-button="" data-variant="ghost" data-size="sm" className="dashboard-card-manage" href={`/dashboard/apps/${app.id}/edit`} aria-label={`Manage ${app.name}`}><SlidersHorizontal aria-hidden="true" size={15} /> Manage</Link>
                 </div>
               </li>
             ))}

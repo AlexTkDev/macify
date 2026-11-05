@@ -1,7 +1,7 @@
-import { and, asc, eq, isNull, sql } from "drizzle-orm";
+import { and, asc, count, eq, isNull, sql } from "drizzle-orm";
 import { getDatabase } from "@/db/client";
 import { appCategories, apps, categories } from "@/db/schema";
-import { getAppIcons } from "@/lib/directory-shared";
+import { cardFields, getCardMedia } from "@/lib/directory/directory-shared";
 
 export const dynamic = "force-dynamic";
 
@@ -10,43 +10,50 @@ function escapeLikePattern(value: string) {
 }
 
 export async function GET(request: Request) {
-  const query = new URL(request.url).searchParams.get("q")?.trim().slice(0, 80) ?? "";
-  if (query.length < 2) return Response.json({ results: [] });
+  const params = new URL(request.url).searchParams;
+  const query = params.get("q")?.trim().slice(0, 80) ?? "";
+  const page = Math.max(1, Math.min(10000, Number.parseInt(params.get("page") ?? "1", 10) || 1));
+  const pageSize = 24;
+  if (!query) return Response.json({ results: [], applications: [], total: 0, page, pageSize });
 
   const database = await getDatabase();
   const term = query.toLowerCase();
   const escapedTerm = escapeLikePattern(term);
   const pattern = `%${escapedTerm}%`;
   const prefix = `${escapedTerm}%`;
-  const applicationRows = await database
-    .select({
-      id: apps.id,
-      slug: apps.slug,
-      name: apps.name,
-      tagline: apps.tagline,
-    })
+  const conditions = and(
+    eq(apps.status, "published"),
+    isNull(apps.deletedAt),
+    sql`(
+      lower(${apps.name}) like ${pattern} escape '!'
+      or lower(${apps.tagline}) like ${pattern} escape '!'
+      or lower(${apps.description}) like ${pattern} escape '!'
+      or exists (
+        select 1 from ${appCategories}
+        inner join ${categories} on ${categories.id} = ${appCategories.categoryId}
+        where ${appCategories.appId} = ${apps.id} and lower(${categories.name}) like ${pattern} escape '!'
+      )
+    )`,
+  );
+  const [applicationRows, countRows] = await Promise.all([database
+    .select(cardFields)
     .from(apps)
-    .where(and(
-      eq(apps.status, "published"),
-      isNull(apps.deletedAt),
-      sql`(
-        lower(${apps.name}) like ${pattern} escape '!'
-        or lower(${apps.tagline}) like ${pattern} escape '!'
-        or lower(${apps.description}) like ${pattern} escape '!'
-        or exists (
-          select 1 from ${appCategories}
-          inner join ${categories} on ${categories.id} = ${appCategories.categoryId}
-          where ${appCategories.appId} = ${apps.id} and lower(${categories.name}) like ${pattern} escape '!'
-        )
-      )`,
-    ))
+    .where(conditions)
     .orderBy(
       sql`case when lower(${apps.name}) = ${term} then 0 when lower(${apps.name}) like ${prefix} escape '!' then 1 else 2 end`,
       asc(apps.name),
     )
-    .limit(8);
+    .limit(pageSize)
+    .offset((page - 1) * pageSize),
+    database.select({ total: count() }).from(apps).where(conditions),
+  ]);
 
-  const icons = await getAppIcons(applicationRows.map(({ id }) => id));
+  const { icons, previews } = await getCardMedia(applicationRows.map(({ id }) => id));
+  const applications = applicationRows.map((application) => ({
+    ...application,
+    icon: icons.get(application.id) ?? null,
+    preview: previews.get(application.id) ?? null,
+  }));
   const results = applicationRows.map((application) => {
     const icon = icons.get(application.id);
     return {
@@ -57,7 +64,7 @@ export async function GET(request: Request) {
   });
 
   return Response.json(
-    { results },
+    { results, applications, total: Number(countRows[0]?.total ?? 0), page, pageSize },
     { headers: { "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=600" } },
   );
 }

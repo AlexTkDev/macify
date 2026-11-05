@@ -1,19 +1,19 @@
-import { PendingSubmitButton } from "@/components/pending-submit-button";
+import { PendingSubmitButton } from "@/components/forms/pending-submit-button";
 import Image from "next/image";
 import Link from "next/link";
 import { and, desc, eq, inArray, like, sql } from "drizzle-orm";
 import { AlertTriangle, CheckCircle2, GitBranch } from "lucide-react";
 import { dismissCatalogueFailure, retryCatalogueFailure } from "@/app/dashboard/catalogue/actions";
-import { CatalogueBulkReview } from "@/components/catalogue-bulk-review";
+import { CatalogueBulkReview } from "@/components/dashboard/catalogue-bulk-review";
 import { getDatabase } from "@/db/client";
 import { catalogueRevisions } from "@/db/schema";
-import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
-import type { CatalogueManifest } from "@/lib/catalogue-manifest";
-import { dealManifestSchema } from "@/lib/deal-manifest";
-import type { DealManifest } from "@/lib/deal-manifest";
-import { revisionChangeLabels, revisionStatusLabels } from "@/lib/catalogue-revision-labels";
-import { getCatalogueQueueApplications } from "@/lib/catalogue-review-data";
-import { cn } from "@/lib/utils";
+import { catalogueManifestSchema } from "@/lib/catalogue/catalogue-manifest";
+import type { CatalogueManifest } from "@/lib/catalogue/catalogue-manifest";
+import { dealManifestSchema } from "@/lib/deals/deal-manifest";
+import type { DealManifest } from "@/lib/deals/deal-manifest";
+import { revisionChangeLabels, revisionStatusLabels } from "@/lib/catalogue/catalogue-revision-labels";
+import { getCatalogueQueueApplications } from "@/lib/catalogue/catalogue-review-data";
+import { cn } from "@/lib/shared/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +23,6 @@ const errorMessages: Record<string, string> = {
   "not-pending": "That revision has already been reviewed.",
   "missing-app": "The application linked to this archive request no longer exists.",
   "invalid-manifest": "The stored manifest is invalid and cannot be published.",
-  "missing-related-app": "Publish the related applications first, or remove those relationships in GitHub.",
   "missing-media": "The revision is missing its required icon or preview image.",
   "missing-deal-app": "Publish the application before publishing its deal.",
   "invalid-deal-manifest": "The stored deal manifest is invalid and cannot be published.",
@@ -87,7 +86,7 @@ export async function ReviewQueuePage({
       </header>
 
       <section className="catalogue-queue-stats" aria-label="Review queue status">
-        <div><GitBranch size={18} /><span>Awaiting review</span><strong>{counts.pending}</strong></div>
+        <div><GitBranch aria-hidden="true" size={18} /><span>Awaiting review</span><strong>{counts.pending}</strong></div>
         <div><AlertTriangle aria-hidden="true" size={18} /><span>Needs attention</span><strong>{counts.failed}</strong></div>
         <div><CheckCircle2 aria-hidden="true" size={18} /><span>In history</span><strong>{counts.reviewed}</strong></div>
       </section>
@@ -185,7 +184,7 @@ export async function ReviewQueuePage({
                         </form>
                       </>
                     )}
-                    <Link className={revision.status === "pending" ? "button-primary" : "button-secondary"} href={`${queuePath}/${revision.id}`}>
+                    <Link data-ui-button="" data-variant={revision.status === "pending" ? "primary" : "secondary"} data-size="md" className={revision.status === "pending" ? "button-primary" : "button-secondary"} href={`${queuePath}/${revision.id}`}>
                       {revision.status === "pending" ? "Review changes" : "View revision"}
                     </Link>
                   </div>
@@ -196,9 +195,9 @@ export async function ReviewQueuePage({
           </CatalogueBulkReview>
         )}
         {(page > 1 || hasNextPage) && <nav aria-label="Queue pages" className="catalogue-queue-toolbar">
-          {page > 1 && <Link className="button-secondary" href={`${queuePath}?view=${view}&page=${page - 1}`}>Previous page</Link>}
+          {page > 1 && <Link data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" href={`${queuePath}?view=${view}&page=${page - 1}`}>Previous page</Link>}
           <span>Page {page}</span>
-          {hasNextPage && <Link className="button-secondary" href={`${queuePath}?view=${view}&page=${page + 1}`}>Next page</Link>}
+          {hasNextPage && <Link data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" href={`${queuePath}?view=${view}&page=${page + 1}`}>Next page</Link>}
         </nav>}
       </section>
     </>
@@ -250,7 +249,8 @@ function summarizeDealRevision(
   if (changeType === "archive") return "Remove this application's public deal.";
   if (!manifest) return "Deal removal or a revision without a valid deal manifest.";
   const code = manifest.code ? ` with code ${manifest.code}` : " without a code";
-  return `${manifest.discountPercent}% off${code}, ending ${new Date(manifest.endsAt).toLocaleString()}.`;
+  const expiry = manifest.endsAt === null ? "no scheduled end date" : `ending ${new Date(manifest.endsAt).toLocaleString()}`;
+  return `${manifest.discountPercent}% off${code}, ${expiry}.`;
 }
 
 function dealChangeLabel(changeType: "create" | "update" | "archive") {

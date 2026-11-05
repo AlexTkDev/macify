@@ -1,4 +1,4 @@
-import { PendingSubmitButton } from "@/components/pending-submit-button";
+import { PendingSubmitButton } from "@/components/forms/pending-submit-button";
 import Link from "next/link";
 import { and, desc, eq, isNull, like, lt } from "drizzle-orm";
 import { notFound } from "next/navigation";
@@ -12,14 +12,14 @@ import {
   TicketPercent,
 } from "lucide-react";
 import { decideCatalogueRevision, dismissCatalogueFailure, retryCatalogueFailure } from "@/app/dashboard/catalogue/actions";
-import { CatalogueChangeReview } from "@/components/catalogue-change-review";
+import { CatalogueChangeReview } from "@/components/dashboard/catalogue-change-review";
 import { getDatabase } from "@/db/client";
 import { apps, catalogueRevisions, deals } from "@/db/schema";
-import { getChangedManifestFields } from "@/lib/catalogue-diff";
-import { catalogueManifestSchema } from "@/lib/catalogue-manifest";
-import { dealManifestSchema } from "@/lib/deal-manifest";
-import { publishActionLabels, revisionChangeLabels, revisionStatusLabels } from "@/lib/catalogue-revision-labels";
-import { getCatalogueReviewSnapshot } from "@/lib/catalogue-review-data";
+import { getChangedManifestFields } from "@/lib/catalogue/catalogue-diff";
+import { catalogueManifestSchema } from "@/lib/catalogue/catalogue-manifest";
+import { dealManifestSchema } from "@/lib/deals/deal-manifest";
+import { publishActionLabels, revisionChangeLabels, revisionStatusLabels } from "@/lib/catalogue/catalogue-revision-labels";
+import { getCatalogueReviewSnapshot } from "@/lib/catalogue/catalogue-review-data";
 
 export const dynamic = "force-dynamic";
 
@@ -59,8 +59,8 @@ export default async function CatalogueRevisionPage({ params }: { params: Promis
           <span>Review every proposed change, then publish or reject this exact GitHub revision.</span>
         </div>
         <div className="editor-header-actions">
-          {manifest && <a className="button-secondary" href={editUrl} rel="noreferrer" target="_blank">Edit manifest <GitBranch size={15} /></a>}
-          <a className="button-secondary" href={sourceUrl} rel="noreferrer" target="_blank">Source commit <ExternalLink size={15} /></a>
+          {manifest && <a data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" href={editUrl} rel="noreferrer" target="_blank">Edit manifest <GitBranch size={15} /></a>}
+          <a data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" href={sourceUrl} rel="noreferrer" target="_blank">Source commit <ExternalLink size={15} /></a>
         </div>
       </header>
 
@@ -171,7 +171,7 @@ async function DealRevisionPage({
     ["Code", current?.code ?? null, manifest?.code ?? null],
     ["Destination", current?.url ?? null, manifest?.url ?? null],
     ["Starts", current ? current.startsAt.toLocaleString() : null, manifest ? new Date(manifest.startsAt).toLocaleString() : null],
-    ["Ends", current ? current.endsAt.toLocaleString() : null, manifest ? new Date(manifest.endsAt).toLocaleString() : null],
+    ["Ends", current ? current.endsAt?.toLocaleString() ?? "No scheduled end date" : null, manifest ? manifest.endsAt === null ? "No scheduled end date" : new Date(manifest.endsAt).toLocaleString() : null],
   ] as const;
 
   return (
@@ -187,8 +187,8 @@ async function DealRevisionPage({
           <span>Review the offer terms before making this deal public.</span>
         </div>
         <div className="editor-header-actions">
-          {manifest && <a className="button-secondary" href={editUrl} rel="noreferrer" target="_blank">Edit manifest <GitBranch size={15} /></a>}
-          <a className="button-secondary" href={sourceUrl} rel="noreferrer" target="_blank">Source commit <ExternalLink size={15} /></a>
+          {manifest && <a data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" href={editUrl} rel="noreferrer" target="_blank">Edit manifest <GitBranch size={15} /></a>}
+          <a data-ui-button="" data-variant="secondary" data-size="md" className="button-secondary" href={sourceUrl} rel="noreferrer" target="_blank">Source commit <ExternalLink size={15} /></a>
         </div>
       </header>
 
@@ -200,7 +200,7 @@ async function DealRevisionPage({
             <div className="catalogue-review-summary">
               <div><span>Application</span><strong>{application?.name ?? revision.appSlug}</strong><small>{application?.status ?? "Not published"}</small></div>
               <div><span>Discount</span><strong>{manifest ? `${manifest.discountPercent}%` : "—"}</strong><small>{manifest?.code ? `Code ${manifest.code}` : "No code"}</small></div>
-              <div><span>Public state</span><strong>{current ? "Published" : "Not published"}</strong><small>{current ? `Ends ${current.endsAt.toLocaleDateString()}` : "No current deal"}</small></div>
+              <div><span>Public state</span><strong>{current ? "Published" : "Not published"}</strong><small>{current ? current.endsAt === null ? "No scheduled end date" : `Ends ${current.endsAt.toLocaleDateString()}` : "No current deal"}</small></div>
             </div>
 
             {manifest ? (

@@ -1,0 +1,70 @@
+/**
+ * Applications eligible to appear in the homepage directory, in editorial
+ * order, with Swish first and Glyph last.
+ */
+export const HOMEPAGE_APPLICATION_SLUGS = [
+  "swish",
+  "cleanshot-x",
+  "openusage",
+  "daisydisk",
+  "voiceink",
+  "dayflow",
+  "cold-turkey-blocker",
+  "droppy",
+  "iina",
+  "klack",
+  "lookaway",
+  "mole",
+  "monocle",
+  "palmier",
+  "paperman",
+  "pieoneer",
+  "portal",
+  "sublime-text",
+  "supercharge",
+  "tinycast",
+  "wallspace",
+  "1password",
+  "orion",
+  "proxyman",
+  "obsidian",
+  "compressx",
+  "clop",
+  "chronoid",
+  "bloom",
+  "blip",
+  "bear",
+  "bauhaus-clock",
+  "balance",
+  "antinote",
+  "anybox",
+  "alcove",
+  "pixelmator-pro",
+  "raycast",
+  "superwhisper",
+  "xmind",
+  "mimestream",
+  "lunar",
+  "presentify",
+  "stats",
+  "dropover",
+  "dato",
+  "session",
+  "ghostty",
+  "noteplan",
+  "craft",
+  "helium-browser",
+  "bettertouchtool",
+  "dia",
+  "ardia",
+  "yet-another-browser",
+  "glyph",
+] as const;
+
+const homepageApplicationOrder = new Map<string, number>(
+  HOMEPAGE_APPLICATION_SLUGS.map((slug, index) => [slug, index]),
+);
+
+export function homepageApplicationPosition(slug: string) {
+  return homepageApplicationOrder.get(slug) ?? HOMEPAGE_APPLICATION_SLUGS.length;
+}

@@ -1,23 +1,34 @@
 import type { Metadata } from "next";
-import { Caprasimo, Caveat, Urbanist } from "next/font/google";
+import { Caprasimo, Caveat, Source_Sans_3, Urbanist } from "next/font/google";
+import Script from "next/script";
+import { themeCssVariables } from "@/lib/shared/theme-colors";
 import "./globals.css";
+import "../styles/color-theme.css";
 import "../styles/tokens.css";
 import "../styles/base.css";
-import "../styles/public/shell.css";
-import "../styles/public/footer.css";
-import "../styles/public/home.css";
-import "../styles/public/directory-heading.css";
-import "../styles/public/deals-hero.css";
-import "../styles/public/deals-list.css";
-import "../styles/public/category-index.css";
-import "../styles/public/directory-results.css";
-import "../styles/public/application-detail.css";
-import "../styles/public/markdown.css";
-import "../styles/public/policy.css";
-import "../styles/public/responsive-tablet.css";
-import "../styles/public/responsive-small.css";
-import "../styles/public/footer-variants.css";
-import "../styles/public/editorial-guides.css";
+import "../styles/public/layout/shell.css";
+import "../styles/public/layout/footer.css";
+import "../styles/public/pages/home.css";
+import "../styles/public/pages/black-friday.css";
+import "../styles/public/pages/directory-heading.css";
+import "../styles/public/pages/deals-hero.css";
+import "../styles/public/pages/deals-list.css";
+import "../styles/public/pages/category-index.css";
+import "../styles/public/pages/directory-results.css";
+import "../styles/public/pages/application-detail.css";
+import "../styles/public/layout/markdown.css";
+import "../styles/public/pages/policy.css";
+import "../styles/public/pages/featured-unavailable.css";
+import "../styles/public/pages/deals-how.css";
+import "../styles/public/pages/submission.css";
+import "../styles/public/pages/editorial-policy.css";
+import "../styles/public/responsive/responsive-tablet.css";
+import "../styles/public/responsive/responsive-small.css";
+import "../styles/public/layout/footer-variants.css";
+import "../styles/public/pages/editorial-guides.css";
+import "../styles/public/pages/surprise.css";
+import "../styles/public/layout/black-friday-sheet.css";
+import "../styles/buttons.css";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -39,6 +50,13 @@ const caveat = Caveat({
   weight: "500",
 });
 
+const sourceSans = Source_Sans_3({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-source-sans",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://macify.app"),
   title: {
@@ -48,6 +66,14 @@ export const metadata: Metadata = {
   description:
     "A considered directory of useful macOS applications, with clear pricing, related alternatives, and practical editorial context.",
   applicationName: "Macify",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -58,8 +84,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
+        width: 1730,
+        height: 909,
         alt: "Mac apps worth making room for. — Macify",
       },
     ],
@@ -74,8 +100,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html data-scroll-behavior="smooth" lang="en">
-      <body className={`${urbanist.variable} ${caprasimo.variable} ${caveat.variable}`}>{children}</body>
+    <html className={sourceSans.variable} data-scroll-behavior="smooth" lang="en" style={themeCssVariables}>
+      <body className={`${urbanist.variable} ${caprasimo.variable} ${caveat.variable}`}>
+        <Script id="datafast-queue" strategy="beforeInteractive">
+          {`window.datafast = window.datafast || function() { window.datafast.q = window.datafast.q || []; window.datafast.q.push(arguments); };`}
+        </Script>
+        {children}
+      </body>
     </html>
   );
 }

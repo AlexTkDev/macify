@@ -1,0 +1,207 @@
+/* responsive-small.css */
+@media (max-width: 38rem) {
+  .public-site {
+    --public-page-title-size: clamp(2.25rem, 11vw, 2.8rem);
+    --public-note-size: clamp(1.05rem, 5vw, 1.35rem);
+  }
+  .public-header-inner,
+  .home-hero,
+  .home-section,
+  .category-page,
+  .application-page { width: min(calc(100% - 2rem), var(--content-width)); }
+
+  .category-page { padding: 1.5rem 0 4.5rem; }
+  .category-page-header { margin-bottom: 3.25rem; }
+  .category-page-header h1 {
+    gap: 0.7rem;
+    line-height: 0.94;
+  }
+  .category-page-header p { margin: 1.1rem 0 0 1.95rem; }
+
+  .public-header {
+    min-height: 4.35rem;
+    padding: 0.45rem 0 0.2rem;
+  }
+  .public-header-inner {
+    width: min(calc(100% - 2rem), var(--content-width));
+    max-width: none;
+    min-height: 3rem;
+    margin: 0 auto;
+    padding: 0;
+    gap: 0.35rem;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .public-brand-pill { min-height: 2.4rem; padding: 0.15rem 0.65rem; }
+  .public-header .brand { min-width: 0; padding: 0; }
+  .public-header .brand-word { color: var(--color-ink-strong); font-size: 0.95rem; }
+  .public-header .brand-mark { width: 1.85rem; height: 1.85rem; }
+  .live-visitor-count > span:last-child { display: none; }
+  .header-search-field { min-height: 2.85rem; border-radius: 999px; }
+  .header-search-field:focus-within {
+    border-color: var(--color-action-mid);
+    background: var(--public-canvas);
+    box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-action) 16%, transparent);
+  }
+
+  .inline-app-search { width: 2.85rem; }
+  .inline-app-search:focus-within {
+    width: 100%;
+    position: absolute;
+    inset-inline: 0;
+    top: 0.45rem;
+    z-index: 2;
+  }
+
+  .public-footer { margin-top: 4rem; }
+  .public-footer-panel {
+    width: min(calc(100% - 2rem), var(--content-width));
+    padding: 2.5rem 0 1rem;
+  }
+  .public-footer-main { grid-template-columns: 1fr; gap: 2.25rem; }
+  .public-footer .brand-word { font-size: 1.35rem; }
+  .public-footer-identity > p { margin-top: 0.8rem; font-size: 0.9rem; line-height: 1.5; }
+  .public-footer-links { gap: 1.5rem; }
+  .public-footer-links a { font-size: 0.82rem; }
+  .public-footer-bottom {
+    margin-top: 1.4rem;
+    padding-top: 0.9rem;
+    align-items: flex-start;
+    flex-direction: column;
+    font-size: 0.7rem;
+  }
+  .inline-search-panel { position: fixed; top: 4.4rem; right: 0.5rem; left: 0.5rem; width: auto; }
+  .home-hero { padding: 3.1rem 0 5.25rem; gap: 2.7rem; }
+  .home-hero h1 { font-size: clamp(2.25rem, 12.4cqi, 2.8rem); line-height: 1; }
+  .home-title-icon { width: 0.98em; height: 0.98em; }
+  .home-hero-intro { max-width: 100%; margin-top: 0.5rem; letter-spacing: 0; white-space: normal; }
+  .home-feature-image { border-radius: 1rem; }
+  .home-feature-caption { max-width: calc(100% - 2rem); margin: -1.6rem 0 0 1.25rem; }
+
+  .application-directory { padding-bottom: 4.5rem; }
+  .deals-page { width: min(calc(100% - 2rem), var(--content-width)); padding: 0 0 4.5rem; }
+  .deals-section-empty { min-height: 0; }
+  .deals-empty-state { padding: 4rem 0 2rem; gap: 2rem; }
+  .deals-empty-copy h1 { max-width: 100%; }
+  .deals-empty-copy > p { margin-top: 1.1rem; font-size: 0.95rem; }
+  .deals-empty-actions { align-items: flex-start; flex-direction: column; gap: 0.75rem; }
+  .deals-empty-art { min-height: 18rem; }
+  .deals-empty-ticket { width: 9.5rem; }
+  .deals-empty-ticket-1 { top: 1rem; left: 2%; }
+  .deals-empty-ticket-2 { top: 6.5rem; right: 1%; }
+  .deals-empty-ticket-3 { bottom: 0.5rem; left: 18%; }
+  .deals-hero { padding: 0 0 1.8rem; }
+  .deals-hero-stage { padding: 4.5rem 0 3.75rem; gap: 2.75rem; }
+  .deals-hero-copy h1 { max-width: none; }
+  .deals-hero-copy h1 > span {
+    max-width: 100%;
+    text-wrap: balance;
+    white-space: normal;
+  }
+  .deals-hero-copy > p { margin-top: 1.25rem; font-size: 0.98rem; line-height: 1.5; }
+  .deals-hero-action { min-height: 3rem; }
+  .deals-hero-copy > .deals-hero-disclaimer { margin-top: 1rem; font-size: 0.72rem; }
+  .deals-ticket-stage { padding: 0.8rem 0.75rem 1rem 0.25rem; }
+  .deals-ticket {
+    --ticket-padding-block: 0.78rem;
+    width: calc(100% - 1rem);
+    min-height: 6.65rem;
+    padding-inline: 0.75rem 0.35rem;
+    grid-template-columns: auto minmax(0, 1fr) 0.08rem 1.95rem;
+    gap: 0;
+    transform: rotate(2deg);
+  }
+  .deals-ticket-2 { width: calc(100% - 0.5rem); margin-top: -0.3rem; margin-left: -0.15rem; transform: rotate(-1.5deg); }
+  .deals-ticket-3 { width: calc(100% - 0.9rem); margin-top: -0.3rem; margin-left: 0.25rem; transform: rotate(1deg); }
+  .deals-ticket .public-app-icon { width: 3.8rem; height: 3.8rem; }
+  .deals-ticket .public-app-icon,
+  .deals-ticket-copy { margin-right: 0.58rem; }
+  .deals-ticket-copy b { font-size: 0.9rem; }
+  .deals-ticket-copy small { font-size: 0.64rem; -webkit-line-clamp: 2; }
+  .deals-ticket-discount > span { font-size: clamp(1.05rem, 4.6vw, 1.45rem); }
+  .deals-featured { margin-top: 0; }
+  .deals-featured-app { min-height: 5.55rem; padding: 0.8rem 0.3rem; }
+  .deals-featured-identity { gap: 0.7rem; }
+  .deals-featured-identity .public-app-icon { width: 3.25rem; height: 3.25rem; }
+  .deals-featured-app strong { min-width: 4.7rem; }
+  .deals-featured-app strong > span { font-size: 0.68rem; }
+  .deals-heading { padding: 3.5rem 0 2rem; }
+  .deals-heading h2 { align-items: flex-start; flex-direction: column; gap: 0.55rem; }
+  .deals-heading h2 > span { font-size: clamp(2.1rem, 10vw, 3rem); }
+  .deals-heading h2 > em { font-size: clamp(1.3rem, 6vw, 1.8rem); }
+  .deals-grid { grid-template-columns: 1fr; }
+  .deal-card { min-height: 12.5rem; padding: 1.35rem; gap: 1.6rem; }
+  .directory-heading {
+    margin-bottom: 2rem;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.6rem;
+  }
+  .directory-heading h2 {
+    min-width: 0;
+    max-width: none;
+    font-size: clamp(1.35rem, 6.6vw, 1.75rem);
+    text-wrap: balance;
+  }
+  .directory-view-tabs {
+    display: none;
+  }
+  .category-index-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+  .category-index-grid a,
+  .category-index-grid a:nth-child(n) { min-height: 9.5rem; padding: 1.05rem; grid-column: span 1; }
+  .category-index-grid strong { font-size: 1rem; }
+  .category-app-gallery .public-app-icon { width: 2.65rem; height: 2.65rem; margin-inline-start: -0.8rem; }
+  .directory-app-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .directory-app-identity { margin-top: 0.78rem; }
+
+  .application-page { padding: 1rem 0 4rem; }
+  .application-hero { min-height: 0; }
+  .application-identity-copy { width: 100%; }
+  .application-identity-copy h1 {
+    --application-title-size: clamp(2.25rem, 10.5cqi, 2.8rem);
+    --application-tagline-size: clamp(1.45rem, 6.7cqi, 2rem);
+    max-width: 100%;
+  }
+  .application-title-line {
+    gap: 0.55rem 0.4rem;
+  }
+  .application-title-tagline { max-width: 24ch; }
+  .application-categories { margin-top: 1.4rem; gap: 0.42rem; }
+  .application-category { padding: 0.38rem 0.58rem; font-size: 0.76rem; }
+  .application-facts {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0.8rem;
+    padding: 0.25rem 0 0.5rem;
+    justify-content: safe center;
+    flex-wrap: nowrap;
+    gap: 0.9rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    scroll-snap-type: inline proximity;
+    font-size: 0.86rem;
+  }
+  .application-facts::-webkit-scrollbar { display: none; }
+  .application-fact { flex: 0 0 auto; scroll-snap-align: center; }
+  .application-website { margin-top: 2rem; font-size: 0.9rem; }
+  .application-overview { padding-top: 1.5rem; }
+  .application-preview,
+  .application-screenshots figure { border-radius: 1rem; }
+  .application-body { padding: 2.75rem 0 4.5rem; }
+  .application-story-lead .markdown-content { font-size: var(--public-reading-size); }
+  .application-story-sections { margin-top: 2.6rem; }
+  .application-story-sections > section + section { margin-top: 2.8rem; }
+  .application-story-sections h2 { font-size: 1.55rem; }
+  .application-story-sections .markdown-content { font-size: var(--public-reading-size); }
+  .related-applications { padding-top: 3.2rem; }
+  .related-applications-heading { margin-bottom: 1.5rem; }
+  .related-application-shelf { width: calc(100% + 1rem); padding: 0 1rem 1rem 0; display: flex; gap: 1.75rem; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity; }
+  .related-application-shelf::-webkit-scrollbar { display: none; }
+  .related-application-shelf > a { min-width: 5.1rem; flex-direction: column; align-items: flex-start; gap: 0.7rem; scroll-snap-align: start; }
+  .related-application-shelf strong { max-width: 5.2rem; font-size: 0.8rem; }
+}

@@ -181,9 +181,6 @@ for (const manifest of manifests) {
     pricing_details = excluded.pricing_details,
     source_type = excluded.source_type,
     youtube_url = excluded.youtube_url,
-    is_featured = excluded.is_featured,
-    is_editors_pick = excluded.is_editors_pick,
-    featured_at = excluded.featured_at,
     status = 'published',
     deleted_at = NULL,
     published_at = coalesce(apps.published_at, excluded.published_at),
@@ -197,7 +194,7 @@ for (const deal of dealManifests) {
     id, app_id, discount_percent, code, url, starts_at, ends_at, created_at, updated_at
   ) VALUES (
     ${sql(stableId("local-deal", deal.appSlug))}, ${sql(appId)}, ${deal.discountPercent},
-    ${sql(deal.code)}, ${sql(deal.url)}, ${Date.parse(deal.startsAt)}, ${Date.parse(deal.endsAt)}, ${now}, ${now}
+    ${sql(deal.code)}, ${sql(deal.url)}, ${Date.parse(deal.startsAt)}, ${deal.endsAt === null ? "NULL" : Date.parse(deal.endsAt)}, ${now}, ${now}
   );`);
 }
 
@@ -230,8 +227,10 @@ statements.push(`DELETE FROM app_relationships
 
 const relationshipPairs = new Set();
 for (const manifest of manifests) {
-  for (const relatedSlug of manifest.relatedAppSlugs) {
-    const pair = [appIds.get(manifest.slug), appIds.get(relatedSlug)].sort();
+  for (const relatedSlug of manifest.relatedAppSlugs ?? []) {
+    const relatedAppId = appIds.get(relatedSlug);
+    if (!relatedAppId) continue;
+    const pair = [appIds.get(manifest.slug), relatedAppId].sort();
     relationshipPairs.add(pair.join(":"));
   }
 }

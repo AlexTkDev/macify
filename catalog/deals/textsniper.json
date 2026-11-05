@@ -1,0 +1,10 @@
+{
+  "$schema": "../schema/deal.schema.json",
+  "schemaVersion": 1,
+  "appSlug": "textsniper",
+  "discountPercent": 75,
+  "code": "BFIM2026",
+  "url": "https://textsniper.app/",
+  "startsAt": "2026-11-27T00:00:00-08:00",
+  "endsAt": "2026-12-04T23:59:59-08:00"
+}

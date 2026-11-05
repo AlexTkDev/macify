@@ -2,6 +2,7 @@ import { dictationAppSlugs } from "./comparison";
 import type { BlogPostDefinition } from "../../types";
 
 export const bestDictationAppsPost = {
+  published: false,
   appSlugs: dictationAppSlugs,
   category: "App comparisons",
   description: "Six Mac dictation apps compared by price, privacy, offline support, meeting transcription, and everyday use.",
